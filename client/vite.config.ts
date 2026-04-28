@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [svgr(), react(), tailwindcss()],
   ssr: {
-    noExternal: ['zustand'],
+    noExternal: ['zustand', 'better-auth'],
     external: ['react', 'react-dom'],
   },
   resolve: {
@@ -23,6 +23,7 @@ export default defineConfig({
       '@types': '/src/types',
       '@locales': '/src/locales',
       '@pages': '/src/pages',
+      '@lib': '/src/lib',
     },
   },
 });

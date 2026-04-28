@@ -45,7 +45,7 @@ const ListPages = ({ sx, onPageChange }: Props) => {
     </ListItemStyle>
   );
 
-  const pageItems = pages.map(page => {
+  const pageItems = pages.filter(page => !page.hideFromNav).map(page => {
     const cssProps =
       location.pathname === normalizePath(page.path)
         ? {

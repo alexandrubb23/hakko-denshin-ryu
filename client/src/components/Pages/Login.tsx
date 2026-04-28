@@ -1,45 +1,208 @@
-import { useQuery } from '@tanstack/react-query';
-import { Box, CircularProgress, Container, Paper, Typography } from '@mui/material';
+import { zodResolver } from "@hookform/resolvers/zod";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  InputAdornment,
+  Paper,
+  SxProps,
+  TextField,
+  Theme,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Navigate, useNavigate } from "react-router";
+import { z } from "zod";
 
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
+import { authClient } from "@lib/auth-client";
 
-const fetchHealth = async (): Promise<{ status: string }> => {
-  const res = await fetch(`${API_URL}/api/health`);
-  if (!res.ok) throw new Error('Server unreachable');
-  return res.json();
+const loginSchema = z.object({
+  email: z.email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
+const PURPLE = "#AB96FF";
+
+const darkFieldSx: SxProps<Theme> = {
+  "& .MuiOutlinedInput-root": {
+    color: "#fff",
+    backgroundColor: "rgba(255,255,255,0.04)",
+    "& fieldset": { borderColor: "rgba(171,150,255,0.25)" },
+    "&:hover fieldset": { borderColor: "rgba(171,150,255,0.55)" },
+    "&.Mui-focused fieldset": { borderColor: PURPLE },
+  },
+  "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)" },
+  "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
+  "& .MuiSvgIcon-root": { color: "rgba(255,255,255,0.5)" },
 };
 
 const Login = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['health'],
-    queryFn: fetchHealth,
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const { data: session, isPending: isSessionLoading } =
+    authClient.useSession();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
   });
 
+  if (isSessionLoading) {
+    return (
+      <Box className="flex items-center justify-center min-h-dvh">
+        <CircularProgress sx={{ color: PURPLE }} />
+      </Box>
+    );
+  }
+
+  if (session) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  const onSubmit = async ({ email, password }: LoginFormData) => {
+    setServerError(null);
+
+    const { error } = await authClient.signIn.email({ email, password });
+
+    if (error) {
+      setServerError(
+        error.message ?? "Invalid email or password. Please try again."
+      );
+      return;
+    }
+
+    navigate("/dashboard", { replace: true });
+  };
+
   return (
-    <Container maxWidth='xs' className='flex items-center justify-center min-h-dvh'>
-      <Paper elevation={3} className='w-full p-8 flex flex-col gap-4'>
-        <Typography variant='h5' align='center' fontWeight={700}>
-          Log In
-        </Typography>
-
-        <Box className='mt-4 flex items-center gap-2'>
-          <Typography variant='body2' color='text.secondary'>
-            API status:
+    <Container
+      maxWidth="xs"
+      className="flex items-center justify-center min-h-dvh"
+    >
+      <Paper
+        elevation={0}
+        sx={{
+          width: "100%",
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          backgroundColor: "rgba(255,255,255,0.04)",
+          backdropFilter: "blur(20px)",
+          border: `1px solid rgba(171,150,255,0.2)`,
+          borderRadius: 2,
+        }}
+      >
+        <Box className="flex flex-col items-center gap-1">
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            sx={{ color: "#fff", letterSpacing: 1 }}
+          >
+            Log In
           </Typography>
+          <Box
+            sx={{
+              width: 40,
+              height: 2,
+              backgroundColor: PURPLE,
+              borderRadius: 1,
+            }}
+          />
+        </Box>
 
-          {isLoading && <CircularProgress size={14} />}
+        {serverError && (
+          <Alert
+            severity="error"
+            onClose={() => setServerError(null)}
+            sx={{
+              backgroundColor: "rgba(211,47,47,0.15)",
+              color: "#ff8a80",
+              border: "1px solid rgba(211,47,47,0.3)",
+              "& .MuiAlert-icon": { color: "#ff8a80" },
+            }}
+          >
+            {serverError}
+          </Alert>
+        )}
 
-          {isError && (
-            <Typography variant='body2' color='error'>
-              {(error as Error).message}
-            </Typography>
-          )}
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          noValidate
+        >
+          <TextField
+            label="Email"
+            type="email"
+            autoComplete="email"
+            fullWidth
+            {...register("email")}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            sx={darkFieldSx}
+          />
 
-          {data && (
-            <Typography variant='body2' color='success.main' fontWeight={600}>
-              {data.status}
-            </Typography>
-          )}
+          <TextField
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            fullWidth
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            sx={darkFieldSx}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                      sx={{
+                        color: "rgba(255,255,255,0.5)",
+                        "&:hover": { color: "#fff" },
+                      }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            fullWidth
+            disabled={isSubmitting}
+            startIcon={
+              isSubmitting ? (
+                <CircularProgress size={18} color="inherit" />
+              ) : null
+            }
+            sx={{ mt: 1 }}
+          >
+            {isSubmitting ? "Signing in…" : "Sign In"}
+          </Button>
         </Box>
       </Paper>
     </Container>
