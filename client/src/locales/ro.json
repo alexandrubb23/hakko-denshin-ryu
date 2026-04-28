@@ -7,6 +7,7 @@
   "header.menu.dojo": "Dojo",
   "header.menu.contact": "Contact",
   "header.menu.login": "Autentificare",
+  "header.menu.login.authenticated": "Contul Meu",
   "header.menu.dashboard": "Panou",
   "page.home.subtitle": "Locul in care iti purifici mintea si inima.",
   "page.contact.title": "Contactati-ne",

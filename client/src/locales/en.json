@@ -7,6 +7,7 @@
   "header.menu.dojo": "Dojo",
   "header.menu.contact": "Contact",
   "header.menu.login": "Log In",
+  "header.menu.login.authenticated": "My Account",
   "header.menu.dashboard": "Dashboard",
   "page.home.subtitle": "The place where you purify your mind and heart.",
   "page.contact.title": "Contact Us",

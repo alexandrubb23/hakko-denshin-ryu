@@ -1,5 +1,6 @@
 import FormattedMessage from '@components/FormattedMessage/FormattedMessage';
 import LanguageSwitcher from '@components/LanguageSwitcher/LanguageSwitcher';
+import { authClient } from '@lib/auth-client';
 import { List, ListItem, SxProps, Typography } from '@mui/material';
 import { styled, Theme } from '@mui/material/styles';
 import { normalizePath } from '@utils/routes';
@@ -33,6 +34,7 @@ const ListItemStyle = styled(ListItem)(({ sx }) => ({
 const ListPages = ({ sx, onPageChange }: Props) => {
   const isMobile = useIsMobile();
   const location = useLocation();
+  const { data: session } = authClient.useSession();
 
   const langItem = (
     <ListItemStyle
@@ -65,7 +67,13 @@ const ListPages = ({ sx, onPageChange }: Props) => {
           }}
         >
           <Link to={normalizePath(page.path)} onClick={onPageChange}>
-            <FormattedMessage id={`header.menu.${page.path}`} />
+            <FormattedMessage
+              id={
+                page.path === 'login' && session
+                  ? 'header.menu.login.authenticated'
+                  : `header.menu.${page.path}`
+              }
+            />
           </Link>
         </Typography>
       </ListItemStyle>
