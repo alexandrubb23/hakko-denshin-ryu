@@ -2,12 +2,13 @@ import React from 'react';
 
 import Contact from '@components/Pages/Contact/Contact';
 import Dojo from '@components/Pages/Dojo';
+import Login from '@components/Pages/Login';
 import Senshinkan from '@components/Pages/Senshinkan';
 
 import HakkoRyuRGB from '@components/Pages/HakkoRyu';
 import Home from '@components/Pages/Home';
 
-export type PagePath = 'home' | 'hakko-ryu' | 'senshinkan' | 'dojo' | 'contact';
+export type PagePath = 'home' | 'hakko-ryu' | 'senshinkan' | 'dojo' | 'contact' | 'login';
 
 export interface Page {
   path: PagePath;
@@ -42,5 +43,10 @@ export const pages: Page[] = [
     path: 'contact',
     component: Contact,
     title: 'Contact Senshinkan Romania - Hakko Denshin Ryu Jujutsu',
+  },
+  {
+    path: 'login',
+    component: Login,
+    title: 'Log In - Senshinkan Romania',
   },
 ] as const;

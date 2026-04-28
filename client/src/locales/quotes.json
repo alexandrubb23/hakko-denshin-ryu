@@ -60,6 +60,10 @@
       {
         "quote": "Words are just opinions. Actions are the real truth.",
         "author": "Marcus Aurelius"
+      },
+      {
+        "quote": "To live under constraint is a misfortune, but there is no constraint to live under constraint.",
+        "author": "Seneca"
       }
     ],
     "ro": [
@@ -122,6 +126,10 @@
       {
         "quote": "Cuvintele sunt doar opinii. Acțiunea este singurul adevărul.",
         "author": "Marcus Aurelius"
+      },
+      {
+        "quote": "A trăi sub constrângere este o nenorocire, dar nu există constrângere în a trăi sub constrângere.",
+        "author": "Seneca"
       }
     ]
   }
