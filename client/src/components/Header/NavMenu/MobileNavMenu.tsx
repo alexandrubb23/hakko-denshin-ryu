@@ -60,12 +60,12 @@ const BoxStyled = styled(Box)<{ open: boolean }>(({ open }) => ({
   marginTop: 'calc(var(--hamburger-margin) + var(--hamburger-margin) + 1rem)',
   minHeight: '100vh',
   overflow: 'hidden',
-  position: 'absolute',
-  top: -52,
+  position: 'fixed',
+  top: 0,
   transition:
     'transform var(--animation-timing), width var(--animation-timing)',
   transform: open ? 'translateX(0)' : 'translateX(100%)',
-  width: open ? '100vw' : '0',
+  width: open ? '100%' : '0',
 }));
 
 const MobileNavMenu = () => {

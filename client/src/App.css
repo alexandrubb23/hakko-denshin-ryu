@@ -1,4 +1,9 @@
 @import 'tailwindcss';
+
+html {
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
+}
 a,
 a:hover {
   text-decoration: none;
