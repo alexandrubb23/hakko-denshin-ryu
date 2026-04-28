@@ -17,6 +17,7 @@ export interface Page {
   bgImage?: string;
   hideFromNav?: boolean;
   protected?: boolean;
+  standalone?: boolean;
   loader?: () => Promise<unknown>;
   component: React.FC<{ data: any }>;
 }
@@ -51,6 +52,7 @@ export const pages: Page[] = [
     path: 'login',
     component: Login,
     title: 'Log In - Senshinkan Romania',
+    standalone: true,
   },
   {
     path: 'dashboard',

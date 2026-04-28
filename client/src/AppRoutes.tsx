@@ -9,11 +9,20 @@ interface AppRoutesProps {
 }
 
 export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
-  const publicPages = pages.filter(p => !p.protected);
+  const standalonePages = pages.filter(p => p.standalone);
+  const publicPages = pages.filter(p => !p.protected && !p.standalone);
   const protectedPages = pages.filter(p => p.protected);
 
   return (
     <Routes>
+      {standalonePages.map(({ path, component: Component }) => (
+        <Route
+          key={path}
+          path={normalizePath(path)}
+          element={<Component data={initialLoaderData} />}
+        />
+      ))}
+
       <Route element={<App />}>
         {publicPages.map(({ path, component: Component }, index) => (
           <Route

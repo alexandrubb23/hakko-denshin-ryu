@@ -16,3 +16,8 @@ a:hover {
     opacity: 1;
   }
 }
+
+@keyframes bgZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.15); }
+}
