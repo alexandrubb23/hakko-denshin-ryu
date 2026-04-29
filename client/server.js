@@ -1,45 +1,65 @@
-import fs from 'node:fs/promises';
-import express from 'express';
+import express from "express";
+import fs from "node:fs/promises";
 
 // Constants
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 const port = process.env.PORT || 5173;
-const base = process.env.BASE || '/';
+const base = process.env.BASE || "/";
 
 // Cached production assets
 const templateHtml = isProduction
-  ? await fs.readFile('./dist/client/index.html', 'utf-8')
-  : '';
+  ? await fs.readFile("./dist/client/index.html", "utf-8")
+  : "";
 
 // Create http server
 const app = express();
+
+const helmet = (await import("helmet")).default;
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        // MUI/Emotion injects critical CSS as inline styles — unsafe-inline is required
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+        fontSrc: ["'self'", "data:"],
+        connectSrc: [
+          "'self'",
+          process.env.VITE_API_URL || "http://localhost:3000",
+        ],
+      },
+    },
+  })
+);
 
 // Add Vite or respective production middlewares
 /** @type {import('vite').ViteDevServer | undefined} */
 let vite;
 if (!isProduction) {
-  const { createServer } = await import('vite');
+  const { createServer } = await import("vite");
   vite = await createServer({
     server: { middlewareMode: true },
-    appType: 'custom',
+    appType: "custom",
     base,
   });
   app.use(vite.middlewares);
 } else {
-  const compression = (await import('compression')).default;
-  const sirv = (await import('sirv')).default;
+  const compression = (await import("compression")).default;
+  const sirv = (await import("sirv")).default;
   app.use(compression());
-  app.use(base, sirv('./dist/client', { extensions: [] }));
+  app.use(base, sirv("./dist/client", { extensions: [] }));
 }
 
-app.use('/api', (req, res) => {
-  res.json({ message: 'Hello from API!' });
+app.use("/api", (req, res) => {
+  res.json({ message: "Hello from API!" });
 });
 
 // Serve HTML
-app.use('*all', async (req, res) => {
+app.use("*all", async (req, res) => {
   try {
-    const url = req.originalUrl.replace(base, '');
+    const url = req.originalUrl.replace(base, "");
 
     /** @type {string} */
     let template;
@@ -47,27 +67,31 @@ app.use('*all', async (req, res) => {
     let render;
     if (!isProduction) {
       // Always read fresh template in development
-      template = await fs.readFile('./index.html', 'utf-8');
+      template = await fs.readFile("./index.html", "utf-8");
       template = await vite.transformIndexHtml(url, template);
 
-      render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
+      render = (await vite.ssrLoadModule("/src/entry-server.jsx")).render;
     } else {
       template = templateHtml;
-      render = (await import('./dist/server/entry-server.js')).render;
+      render = (await import("./dist/server/entry-server.js")).render;
     }
 
     const rendered = await render(url);
 
     const html = template
-      .replace(`<!--app-head-->`, rendered.head ?? '')
-      .replace(`<!--app-html-->`, rendered.html ?? '')
-      .replace(`<!--app-title-->`, rendered.title ?? '');
+      .replace(`<!--app-head-->`, rendered.head ?? "")
+      .replace(`<!--app-html-->`, rendered.html ?? "")
+      .replace(`<!--app-title-->`, rendered.title ?? "");
 
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+    res.status(200).set({ "Content-Type": "text/html" }).send(html);
   } catch (e) {
     vite?.ssrFixStacktrace(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
+    console.error(e.stack);
+    if (isProduction) {
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.status(500).end(e.stack);
+    }
   }
 });
 

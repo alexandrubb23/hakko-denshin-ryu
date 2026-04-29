@@ -1,19 +1,34 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { Role } from "../generated/prisma/enums.js";
+import { ALLOWED_ORIGINS, env } from "../env.js";
 import { prisma } from "./prisma.js";
 
 export const auth = betterAuth({
   basePath: "/api/auth",
-  trustedOrigins: (process.env.TRUSTED_ORIGINS ?? "http://localhost:5173")
-    .split(",")
-    .map((origin) => origin.trim()),
+  secret: env.BETTER_AUTH_SECRET,
+  trustedOrigins: ALLOWED_ORIGINS,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 10,
+    storage: "memory",
+  },
   emailAndPassword: {
     enabled: true,
     disableSignUp: true,
+  },
+  advanced: {
+    cookiePrefix: "hakko",
+    defaultCookieAttributes: {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    },
   },
   user: {
     additionalFields: {

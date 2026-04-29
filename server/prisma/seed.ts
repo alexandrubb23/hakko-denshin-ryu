@@ -13,6 +13,12 @@ async function main() {
     throw new Error("SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD must be set in .env");
   }
 
+  if (password.length < 12) {
+    throw new Error(
+      "SEED_ADMIN_PASSWORD must be at least 12 characters. Please set a strong password in .env"
+    );
+  }
+
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     console.log(`Admin user already exists: ${email}`);
