@@ -200,6 +200,7 @@ const Login = () => {
               noValidate
             >
               <TextField
+                id="email"
                 label="Email"
                 type="email"
                 autoComplete="email"
@@ -211,6 +212,7 @@ const Login = () => {
               />
 
               <TextField
+                id="password"
                 label="Password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"

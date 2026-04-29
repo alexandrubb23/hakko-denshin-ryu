@@ -14,6 +14,7 @@ const TEST_CLIENT_URL = "http://localhost:5174";
 
 export default defineConfig({
   testDir: "./e2e",
+  outputDir: "./e2e/test-results",
 
   // Run test files sequentially — DB tests need isolation
   fullyParallel: false,
@@ -52,8 +53,9 @@ export default defineConfig({
       },
     },
     {
-      // Client SSR server — passes VITE_API_URL so Vite exposes it to browser code
-      command: "node client/server.js",
+      // Client SSR server — must run from client/ so relative paths (./index.html,
+      // ./dist/...) resolve correctly inside server.js
+      command: "cd client && node server.js",
       port: 5174,
       reuseExistingServer: !process.env.CI,
       timeout: 60_000,
