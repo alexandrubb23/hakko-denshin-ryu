@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { ApiRoutes } from "@lib/routes";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
@@ -11,14 +13,9 @@ export interface Student {
 }
 
 export const fetchStudents = async (): Promise<Student[]> => {
-  const res = await fetch(`${API_URL}${ApiRoutes.adminStudents}`, {
-    credentials: "include",
+  const { data } = await axios.get(`${API_URL}${ApiRoutes.adminStudents}`, {
+    withCredentials: true,
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch students");
-  }
-
-  const data = await res.json();
   return data.students;
 };

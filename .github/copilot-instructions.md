@@ -39,6 +39,7 @@ Admin manages all members, sessions, ranks, and events.
 | SSR            | Vite + Express        | 6 / 5     |
 | Routing        | React Router          | 7         |
 | Server state   | TanStack Query        | 5         |
+| HTTP client    | Axios                 | latest    |
 | Client state   | Zustand               | 5         |
 | UI components  | MUI (Material UI)     | 7         |
 | Utility styling| Tailwind CSS          | 4         |
@@ -74,6 +75,17 @@ Admin manages all members, sessions, ranks, and events.
 - CORS is handled via the `cors` npm package in `server/src/index.ts`; `ALLOWED_ORIGINS` (parsed from `TRUSTED_ORIGINS`) is passed as the `origin` option
 - Auth tables in DB: `user`, `session`, `account`, `verification` (managed by Better Auth / Prisma)
 - Rate limiting is **production-only** (`enabled: env.NODE_ENV === "production"`) — disabled in dev and test
+
+### Data Fetching
+
+- **Axios** is the HTTP client for all API calls in `client/src/api/`. Never use `fetch` directly.
+  - Use `withCredentials: true` (not `credentials: "include"`) for authenticated requests.
+  - Axios throws automatically on non-2xx responses — no manual `res.ok` checks needed.
+- **TanStack Query** (`useQuery`, `useMutation`) manages all server state — caching, loading, and error states.
+  - Never store server data in Zustand or local component state; use `useQuery`/`useMutation` instead.
+  - Query functions should call the corresponding function from `client/src/api/`.
+  - Always handle `isLoading` and `isError` states in components that consume queries.
+- Add `axios` to the Context7 library table when looking up docs: search name `Axios`.
 
 ### Validation
 
@@ -172,6 +184,7 @@ query: "nested routes loader data"
 | React 19          | `React`                     |
 | React Router 7    | `React Router`              |
 | TanStack Query 5  | `TanStack Query`            |
+| Axios             | `Axios`                     |
 | Zustand 5         | `Zustand`                   |
 | MUI 7             | `Material UI`               |
 | Tailwind CSS 4    | `Tailwind CSS`              |
