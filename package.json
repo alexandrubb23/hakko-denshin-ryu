@@ -9,10 +9,15 @@
     "start": "bun run --cwd server start",
     "build": "bun run --cwd client build",
     "preview": "NODE_ENV=production bun run --cwd server start",
-    "typecheck": "bun run --cwd server typecheck"
+    "typecheck": "bun run --cwd server typecheck",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {},
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "concurrently": "^9.2.1"
   },
   "engines": {

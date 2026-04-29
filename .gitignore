@@ -16,6 +16,11 @@ dist-ssr
 .env
 .env.*
 !.env.example
+!.env.test
+
+# Playwright
+playwright-report/
+test-results/
 
 # Editor directories and files
 .vscode/*

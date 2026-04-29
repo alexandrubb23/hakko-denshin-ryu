@@ -17,20 +17,24 @@ const app = express();
 const helmet = (await import("helmet")).default;
 app.use(
   helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        // MUI/Emotion injects critical CSS as inline styles — unsafe-inline is required
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https:"],
-        fontSrc: ["'self'", "data:"],
-        connectSrc: [
-          "'self'",
-          process.env.VITE_API_URL || "http://localhost:3000",
-        ],
-      },
-    },
+    contentSecurityPolicy: isProduction
+      ? {
+          directives: {
+            defaultSrc: ["'self'"],
+            // 'unsafe-inline' is required: entry-server.tsx injects
+            // window.__INITIAL_DATA__ as an inline <script> for SSR hydration
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            // MUI/Emotion injects critical CSS as inline styles
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            fontSrc: ["'self'", "data:"],
+            connectSrc: [
+              "'self'",
+              process.env.VITE_API_URL || "http://localhost:3000",
+            ],
+          },
+        }
+      : false, // Vite dev needs unsafe-eval + ws: — disable CSP in development
   })
 );
 
