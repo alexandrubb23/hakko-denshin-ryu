@@ -13,6 +13,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@assets': '/src/assets',
+      '@api': '/src/api',
       '@components': '/src/components',
       '@hooks': '/src/hooks',
       '@providers': '/src/providers',

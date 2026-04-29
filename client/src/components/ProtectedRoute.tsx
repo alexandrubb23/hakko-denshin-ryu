@@ -2,6 +2,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { Navigate, Outlet } from 'react-router';
 
 import { authClient } from '@lib/auth-client';
+import { Routes } from '@lib/routes';
 
 const ProtectedRoute = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -15,7 +16,7 @@ const ProtectedRoute = () => {
   }
 
   if (!session) {
-    return <Navigate to='/login' replace />;
+    return <Navigate to={Routes.login} replace />;
   }
 
   return <Outlet />;

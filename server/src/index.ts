@@ -4,7 +4,9 @@ import express from "express";
 import helmet from "helmet";
 import { ALLOWED_ORIGINS, env } from "./env.js";
 import { auth } from "./lib/auth.js";
+import { ApiRoutes } from "./lib/routes.js";
 import { requireAuth } from "./middleware/requireAuth.js";
+import studentsRouter from "./routes/students.js";
 
 const app = express();
 
@@ -25,18 +27,20 @@ app.use(
 );
 
 // Better Auth handler must be mounted before express.json()
-app.all("/api/auth/*splat", toNodeHandler(auth));
+app.all(ApiRoutes.authWildcard, toNodeHandler(auth));
 
 app.use(express.json());
 
-app.get("/api/health", (_req, res) => {
+app.get(ApiRoutes.health, (_req, res) => {
   res.json({ status: "ok" });
 });
 
-app.get("/api/me", requireAuth, (req, res) => {
+app.get(ApiRoutes.me, requireAuth, (req, res) => {
   const { id, name, email, role, image, emailVerified } = req.user;
   res.json({ user: { id, name, email, role, image, emailVerified } });
 });
+
+app.use(studentsRouter);
 
 app.listen(env.PORT, () => {
   console.log(`Server running at http://localhost:${env.PORT}`);

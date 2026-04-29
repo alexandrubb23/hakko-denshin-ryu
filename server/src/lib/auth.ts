@@ -3,9 +3,10 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { Role } from "../generated/prisma/enums.js";
 import { ALLOWED_ORIGINS, env } from "../env.js";
 import { prisma } from "./prisma.js";
+import { ApiRoutes } from "./routes.js";
 
 export const auth = betterAuth({
-  basePath: "/api/auth",
+  basePath: ApiRoutes.authBase,
   secret: env.BETTER_AUTH_SECRET,
   trustedOrigins: ALLOWED_ORIGINS,
   database: prismaAdapter(prisma, {

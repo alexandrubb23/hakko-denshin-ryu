@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router";
 
 import { authClient } from "@lib/auth-client";
 import { Role } from "@lib/role";
+import { Routes } from "@lib/routes";
 
 const AdminRoute = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -16,7 +17,7 @@ const AdminRoute = () => {
   }
 
   if (session?.user.role !== Role.admin) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to={Routes.dashboard} replace />;
   }
 
   return <Outlet />;

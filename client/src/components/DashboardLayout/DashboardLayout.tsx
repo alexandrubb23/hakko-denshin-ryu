@@ -23,12 +23,13 @@ import LogoIcon from '@assets/images/logo.webp';
 import useIsMobile from '@hooks/isMobile';
 import { authClient } from '@lib/auth-client';
 import { Role } from '@lib/role';
+import { Routes } from '@lib/routes';
 
 const DRAWER_WIDTH = 220;
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
-  { label: 'Students', path: '/students', icon: <PeopleIcon />, adminOnly: true },
+  { label: 'Dashboard', path: Routes.dashboard, icon: <DashboardIcon /> },
+  { label: 'Students', path: Routes.students, icon: <PeopleIcon />, adminOnly: true },
 ];
 
 const DARK_BG = "#0a0619";
@@ -57,7 +58,7 @@ const DashboardLayout = () => {
 
   const handleSignOut = async () => {
     await authClient.signOut();
-    navigate('/login', { replace: true });
+    navigate(Routes.login, { replace: true });
   };
 
   const visibleItems = NAV_ITEMS.filter(item => !item.adminOnly || isAdmin);

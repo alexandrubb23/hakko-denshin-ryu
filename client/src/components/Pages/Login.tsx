@@ -24,6 +24,7 @@ import { z } from "zod";
 import bgImage from "@assets/images/180.webp";
 import Header from "@components/Header/Header";
 import { authClient } from "@lib/auth-client";
+import { Routes } from "@lib/routes";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -77,7 +78,7 @@ const Login = () => {
   }
 
   if (session) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to={Routes.dashboard} replace />;
   }
 
   const onSubmit = async (data: LoginFormData) => {
@@ -92,7 +93,7 @@ const Login = () => {
       return;
     }
 
-    navigate("/dashboard", { replace: true });
+    navigate(Routes.dashboard, { replace: true });
   };
 
   return (
