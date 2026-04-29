@@ -127,39 +127,9 @@ All imports use Vite aliases resolving to `client/src/`:
 - **Events**: admin creates events (seminars, demos, camps), marks participation
 - **Student lifecycle**: students can be archived (soft-deleted); historical data preserved
 
-## E2E Testing (Playwright)
+## E2E Testing
 
-- **Framework**: `@playwright/test` installed at root; config at `playwright.config.ts`
-- **Test directory**: `e2e/` — test files go here; fixtures in `e2e/fixtures/index.ts`
-- **Separate test database**: `hakkoryu_test` (PostgreSQL) — isolated from the dev DB
-- **Test ports** (avoid conflicts with dev server):
-  - API server: `3001` (dev uses `3000`)
-  - Client SSR: `5174` (dev uses `5173`)
-- **Test env**: `server/.env.test` — committed to git (safe; test-only credentials)
-  - Bun auto-loads it when `NODE_ENV=test`, but Prisma CLI requires explicit passing (see global-setup)
-- **Global setup** (`e2e/global-setup.ts`): parses `server/.env.test` explicitly, runs `db:migrate:deploy` + `db:seed` against the test DB
-- **Global teardown** (`e2e/global-teardown.ts`): truncates all tables via `db:reset:test` for a clean next run
-- **Custom fixture**: `e2e/fixtures/index.ts` — extend `test` here (auth helpers, etc.) as the suite grows
-
-### Test DB scripts (run from `server/`)
-
-| Command                            | Description                         |
-|------------------------------------|-------------------------------------|
-| `NODE_ENV=test bun run db:migrate:deploy` | Apply migrations to test DB  |
-| `NODE_ENV=test bun run db:seed`    | Seed admin user into test DB        |
-| `NODE_ENV=test bun run db:reset:test` | Truncate all tables in test DB   |
-
-### Important: `prisma.config.ts` env loading
-
-`server/prisma.config.ts` uses `dotenv` with `override: true` for the `NODE_ENV`-specific file:
-```ts
-config();
-if (process.env.NODE_ENV) {
-  config({ path: `.env.${process.env.NODE_ENV}`, override: true });
-}
-```
-This ensures `NODE_ENV=test bun run db:migrate:*` uses `server/.env.test` (test DB) correctly.  
-The `global-setup`/`global-teardown` also parse `.env.test` and inject vars explicitly into child processes for reliability.
+When asked to write, create, or add E2E tests, always use the **`e2e-test-writer` agent** defined in `.github/agents/e2e-test-writer.agent.md`. Do not write Playwright tests without invoking that agent — it contains the full project-specific context, infrastructure details, and methodology required to produce reliable tests.
 
 ## Context7 — Up-to-date Documentation
 
