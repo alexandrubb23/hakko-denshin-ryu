@@ -121,7 +121,7 @@ Admin manages all members, sessions, ranks, and events.
 ### Path Aliases (client)
 
 All imports use Vite aliases resolving to `client/src/`:
-`@api`, `@assets`, `@components`, `@hooks`, `@providers`, `@utils`, `@style`, `@routes`, `@store`, `@types`, `@locales`, `@pages`, `@lib`
+`@api`, `@assets`, `@components`, `@hooks`, `@providers`, `@utils`, `@style`, `@routes`, `@store`, `@types`, `@locales`, `@pages`, `@lib`, `@test`
 
 
 ## UI Design Tokens
@@ -154,6 +154,93 @@ Consistent colors used across the dark-themed authenticated UI (Login, Dashboard
 - **Attendance**: admin creates training sessions, marks attendance after each session
 - **Events**: admin creates events (seminars, demos, camps), marks participation
 - **Student lifecycle**: students can be archived (soft-deleted); historical data preserved
+
+## Component Testing
+
+### Stack
+
+| Tool                          | Role                                     |
+|-------------------------------|------------------------------------------|
+| Vitest                        | Test runner (configured in `client/vitest.config.ts`) |
+| React Testing Library (RTL)   | Component rendering and querying         |
+| `@testing-library/jest-dom`   | Custom DOM matchers (`toBeInTheDocument`, etc.) |
+| `happy-dom`                   | DOM environment (do **not** use jsdom — v25+ has ESM incompatibility) |
+
+### Running tests
+
+Tests live in `client/`. Run them from the root:
+
+| Command              | Description                  |
+|----------------------|------------------------------|
+| `bun run test`       | Run all component tests once |
+| `bun run test:watch` | Watch mode                   |
+
+### File location and naming
+
+- Co-locate test files with the component: `src/components/Pages/Students.test.tsx`
+- Name the file `<ComponentName>.test.tsx`
+
+### `renderUi` helper
+
+All component tests must use `renderUi` from `@test/renderUi` instead of calling `render` directly.  
+It wraps the component with the MUI `ThemeProvider` and any other global providers.
+
+```tsx
+import renderUi from '@test/renderUi';
+renderUi(<MyComponent />);
+```
+
+Never call `render(...)` from `@testing-library/react` directly in test files.
+
+### Mocking hooks
+
+Use `vi.mock` to mock hooks that make network requests:
+
+```tsx
+import { vi } from 'vitest';
+import { useStudents } from '@hooks/useStudents';
+
+vi.mock('@hooks/useStudents', () => ({
+  useStudents: vi.fn(),
+}));
+
+const mockUseStudents = vi.mocked(useStudents);
+```
+
+**Always cast mock return values** to avoid TypeScript overlap errors:
+
+```tsx
+mockUseStudents.mockReturnValue({
+  data: undefined,
+  isLoading: true,
+  isError: false,
+} as unknown as ReturnType<typeof useStudents>);
+```
+
+Always call `vi.resetAllMocks()` in `beforeEach` to prevent test bleed.
+
+### Test structure
+
+Every page-level component test should cover all four query states:
+
+| `describe` block | `isLoading` | `isError` | `data`         |
+|------------------|-------------|-----------|----------------|
+| `loading state`  | `true`      | `false`   | `undefined`    |
+| `error state`    | `false`     | `true`    | `undefined`    |
+| `empty state`    | `false`     | `false`   | `[]`           |
+| `success state`  | `false`     | `false`   | `[...items]`   |
+
+Use `beforeEach` inside each `describe` block to mock the hook and render.
+
+### Querying
+
+Prefer accessible queries in this order: `getByRole` > `getByText` > `getByLabelText` > `queryBy*` (for absence checks).
+
+### What NOT to test
+
+- Implementation details (internal state, CSS classes)
+- Snapshot tests
+- The `renderUi` helper itself
 
 ## E2E Testing
 
@@ -195,6 +282,7 @@ query: "nested routes loader data"
 | Express 5         | `Express`                   |
 | Prisma            | `Prisma`                    |
 | Bun               | `Bun`                       |
+| Vitest            | `Vitest`                    |
 | react-intl        | `react-intl`                |
 
 > Always resolve the library ID first — IDs can change between versions.  

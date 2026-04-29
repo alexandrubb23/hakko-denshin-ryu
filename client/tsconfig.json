@@ -24,12 +24,13 @@
     /* React */
     "baseUrl": "./src",
     "paths": {
+      "@test/*": ["test/*"],
       "@assets/*": ["assets/*"],
       "@api/*": ["api/*"],
       "@components/*": ["components/*"],
       "@hooks/*": ["hooks/*"],
       "@providers/*": ["providers/*"],
-      "@styles/*": ["styles/*"],
+      "@style/*": ["style/*"],
       "@utils/*": ["utils/*"],
       "@store/*": ["store/*"],
       "@locales/*": ["locales/*"],
