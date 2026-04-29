@@ -13,6 +13,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Skeleton,
   Toolbar,
   Typography,
 } from '@mui/material';
@@ -52,9 +53,9 @@ const DashboardLayout = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
-  const isAdmin = session?.user.role === Role.admin;
+  const isAdmin = isPending || session?.user.role === Role.admin;
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -67,14 +68,21 @@ const DashboardLayout = () => {
     <>
       <Box>
         <Toolbar sx={{ justifyContent: 'center', py: 2 }}>
-          <Link to='/'>
+          {isPending ? (
             <Box className='flex flex-col items-center gap-1'>
-              <Box component='img' src={LogoIcon} height={40} />
-              <Typography variant='body2' fontWeight={700}>
-                Senshinkan
-              </Typography>
+              <Skeleton variant='circular' width={40} height={40} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
+              <Skeleton variant='text' width={80} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
             </Box>
-          </Link>
+          ) : (
+            <Link to='/'>
+              <Box className='flex flex-col items-center gap-1'>
+                <Box component='img' src={LogoIcon} height={40} />
+                <Typography variant='body2' fontWeight={700}>
+                  Senshinkan
+                </Typography>
+              </Box>
+            </Link>
+          )}
         </Toolbar>
 
         <Divider />
@@ -148,14 +156,21 @@ const DashboardLayout = () => {
               >
                 <MenuIcon />
               </IconButton>
-              <Link to='/'>
+              {isPending ? (
                 <Box className='flex items-center gap-2'>
-                  <Box component='img' src={LogoIcon} height={32} />
-                  <Typography variant='body2' fontWeight={700}>
-                    Senshinkan
-                  </Typography>
+                  <Skeleton variant='circular' width={32} height={32} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
+                  <Skeleton variant='text' width={80} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
                 </Box>
-              </Link>
+              ) : (
+                <Link to='/'>
+                  <Box className='flex items-center gap-2'>
+                    <Box component='img' src={LogoIcon} height={32} />
+                    <Typography variant='body2' fontWeight={700}>
+                      Senshinkan
+                    </Typography>
+                  </Box>
+                </Link>
+              )}
             </Toolbar>
           </AppBar>
 
