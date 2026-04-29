@@ -46,20 +46,23 @@ Admin manages all members, sessions, ranks, and events.
 
 ### Backend (`/server`)
 
-| Layer           | Tech                    | Notes                          |
-|-----------------|-------------------------|--------------------------------|
-| Runtime         | Bun                     | ≥ 1.1.0                       |
-| Server          | Express                 | 5                              |
-| ORM             | Prisma                  | TypeScript-first, migrations   |
-| Database        | PostgreSQL               | via Neon (serverless)          |
-| Password hashing| Argon2                  | Preferred over bcrypt          |
-| Email           | Resend                  | Invitations, password reset    |
+| Layer           | Tech                    | Notes                                      |
+|-----------------|-------------------------|--------------------------------------------|
+| Runtime         | Bun                     | ≥ 1.1.0                                   |
+| Server          | Express                 | 5                                          |
+| ORM             | Prisma                  | TypeScript-first, migrations               |
+| Database        | PostgreSQL               | via Neon (serverless)                      |
+| Auth            | Better Auth             | v1.6+, email+password only, sign-up disabled |
 
 ### Authentication
 
-- **Database sessions** via `express-session` + `connect-pg-simple`
-- Session stored in PostgreSQL; signed `httpOnly` cookie on client
-- Invitation tokens + password reset tokens stored in DB with 7-day expiry
+- **Better Auth** (`better-auth` package) handles all auth — sessions, cookies, and password hashing
+- Server: `betterAuth` instance configured in `server/src/lib/auth.ts` with `prismaAdapter`
+- Client: `createAuthClient` from `better-auth/react` in `client/src/lib/auth-client.ts`
+- Better Auth handler mounted at `/api/auth/*` — **must come before `express.json()`** in Express
+- `requireAuth` middleware uses `auth.api.getSession()` and injects typed `req.user` + `req.session`
+- Sign-up is **disabled** (`disableSignUp: true`) — users must be seeded or invited by admin
+- Auth tables in DB: `user`, `session`, `account`, `verification` (managed by Better Auth / Prisma)
 
 ### Validation
 
@@ -67,12 +70,38 @@ Admin manages all members, sessions, ranks, and events.
 - React Hook Form uses Zod resolvers on the client
 - Express route handlers use the same Zod schemas on the server
 
+### Routing
+
+- All pages declared in `client/src/pages.tsx` as a `pages` array — single source of truth
+- Page flags: `standalone` (no App layout), `protected` (requires auth), `hideFromNav` (excluded from nav)
+- `AppRoutes.tsx` reads the array and builds routes dynamically
+
+### SSR
+
+- Client SSR via `client/server.js` (Express + Vite middleware mode)
+- `client/src/entry-server.tsx` renders with `StaticRouter`, prefetches loader data, extracts Emotion critical CSS
+- Initial loader data injected as `window.__INITIAL_DATA__` for client hydration
+- All MUI components must work within the `CacheProvider` + `createEmotionServer` pipeline
+
+### i18n
+
+- Two locales: `ro` (default) and `en`
+- Message files: `client/src/locales/ro.json` and `en.json`
+- Language state persisted via Zustand (`useLangStore`) with localStorage key `lang-storage`
+
+### Path Aliases (client)
+
+All imports use Vite aliases resolving to `client/src/`:
+`@assets`, `@components`, `@hooks`, `@providers`, `@utils`, `@style`, `@routes`, `@store`, `@types`, `@locales`, `@pages`, `@lib`
+
 ## Roles
 
 - **Admin** — single administrator, seeded at deployment. Full CRUD on all data.
 - **Student** — can view only their own profile, rank history, attendance, and events.
 
 ## Domain Concepts
+
+> ⚠️ Domain models are **not yet implemented** in the DB schema. Only Better Auth tables exist currently. The concepts below represent the planned data model.
 
 - **Student categories**: Kids / Seniors
 - **Ranks**: kyu (colored belts) and dan (black belts); rank history stored per student
