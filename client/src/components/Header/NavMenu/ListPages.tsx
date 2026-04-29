@@ -1,6 +1,7 @@
 import FormattedMessage from '@components/FormattedMessage/FormattedMessage';
 import LanguageSwitcher from '@components/LanguageSwitcher/LanguageSwitcher';
 import { authClient } from '@lib/auth-client';
+import { Role } from '@lib/role';
 import { List, ListItem, SxProps, Typography } from '@mui/material';
 import { styled, Theme } from '@mui/material/styles';
 import { normalizePath } from '@utils/routes';
@@ -47,7 +48,9 @@ const ListPages = ({ sx, onPageChange }: Props) => {
     </ListItemStyle>
   );
 
-  const pageItems = pages.filter(page => !page.hideFromNav).map(page => {
+  const isAdmin = session?.user.role === Role.admin;
+
+  const pageItems = pages.filter(page => !page.hideFromNav || (page.adminOnly && isAdmin)).map(page => {
     const cssProps =
       location.pathname === normalizePath(page.path)
         ? {

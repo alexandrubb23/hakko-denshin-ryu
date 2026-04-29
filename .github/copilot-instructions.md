@@ -59,9 +59,14 @@ Admin manages all members, sessions, ranks, and events.
 - **Better Auth** (`better-auth` package) handles all auth — sessions, cookies, and password hashing
 - Server: `betterAuth` instance configured in `server/src/lib/auth.ts` with `prismaAdapter`
 - Client: `createAuthClient` from `better-auth/react` in `client/src/lib/auth-client.ts`
+  - Uses `inferAdditionalFields` plugin to expose the `role` field on `session.user`
+  - API URL read from `VITE_API_URL` env var (default: `http://localhost:3000`)
 - Better Auth handler mounted at `/api/auth/*` — **must come before `express.json()`** in Express
 - `requireAuth` middleware uses `auth.api.getSession()` and injects typed `req.user` + `req.session`
-- Sign-up is **disabled** (`disableSignUp: true`) — users must be seeded or invited by admin
+- Sign-up is **disabled** (`disableSignUp: true`) — admin is seeded via `server/prisma/seed.ts`
+  - Requires `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` env vars; seeding is idempotent
+- `trustedOrigins` reads from `TRUSTED_ORIGINS` env var (comma-separated); defaults to `http://localhost:5173`
+- CORS is handled manually in `server/src/index.ts` (no `cors` package); only `CLIENT_URL` origin is allowed with credentials
 - Auth tables in DB: `user`, `session`, `account`, `verification` (managed by Better Auth / Prisma)
 
 ### Validation
@@ -73,8 +78,14 @@ Admin manages all members, sessions, ranks, and events.
 ### Routing
 
 - All pages declared in `client/src/pages.tsx` as a `pages` array — single source of truth
-- Page flags: `standalone` (no App layout), `protected` (requires auth), `hideFromNav` (excluded from nav)
+- Page flags:
+  - `standalone` — renders outside `App` layout (e.g. Login)
+  - `protected` — wrapped in `ProtectedRoute`; redirects to `/login` if unauthenticated
+  - `adminOnly` — wrapped in `AdminRoute`; redirects to `/dashboard` if role ≠ `admin`
+  - `hideFromNav` — excluded from the nav menu
+- All `protected` and `adminOnly` routes share `DashboardLayout` for the authenticated UI chrome
 - `AppRoutes.tsx` reads the array and builds routes dynamically
+- Route nesting: `ProtectedRoute > DashboardLayout > (protected pages | AdminRoute > adminOnly pages)`
 
 ### SSR
 
@@ -98,6 +109,7 @@ All imports use Vite aliases resolving to `client/src/`:
 
 - **Admin** — single administrator, seeded at deployment. Full CRUD on all data.
 - **Student** — can view only their own profile, rank history, attendance, and events.
+- Role values (`admin` | `student`) are defined as a shared constant in `client/src/lib/role.ts` — always import from `@lib/role` instead of using inline strings.
 
 ## Domain Concepts
 

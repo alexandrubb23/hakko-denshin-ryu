@@ -5,11 +5,12 @@ import Dashboard from '@components/Pages/Dashboard';
 import Dojo from '@components/Pages/Dojo';
 import Login from '@components/Pages/Login';
 import Senshinkan from '@components/Pages/Senshinkan';
+import Students from '@components/Pages/Students';
 
 import HakkoRyuRGB from '@components/Pages/HakkoRyu';
 import Home from '@components/Pages/Home';
 
-export type PagePath = 'home' | 'hakko-ryu' | 'senshinkan' | 'dojo' | 'contact' | 'login' | 'dashboard';
+export type PagePath = 'home' | 'hakko-ryu' | 'senshinkan' | 'dojo' | 'contact' | 'login' | 'dashboard' | 'students';
 
 export interface Page {
   path: PagePath;
@@ -17,6 +18,7 @@ export interface Page {
   bgImage?: string;
   hideFromNav?: boolean;
   protected?: boolean;
+  adminOnly?: boolean;
   standalone?: boolean;
   loader?: () => Promise<unknown>;
   component: React.FC<{ data: any }>;
@@ -60,5 +62,13 @@ export const pages: Page[] = [
     title: 'Dashboard - Senshinkan Romania',
     hideFromNav: true,
     protected: true,
+  },
+  {
+    path: 'students',
+    component: Students,
+    title: 'Students - Senshinkan Romania',
+    hideFromNav: true,
+    protected: true,
+    adminOnly: true,
   },
 ] as const;

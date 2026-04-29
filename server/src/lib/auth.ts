@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { Role } from "../generated/prisma/enums.js";
 import { prisma } from "./prisma.js";
 
 export const auth = betterAuth({
@@ -13,5 +14,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     disableSignUp: true,
+  },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: Role.student,
+        input: false,
+      },
+    },
   },
 });

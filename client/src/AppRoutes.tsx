@@ -1,3 +1,5 @@
+import AdminRoute from '@components/AdminRoute';
+import DashboardLayout from '@components/DashboardLayout/DashboardLayout';
 import ProtectedRoute from '@components/ProtectedRoute';
 import { normalizePath } from '@utils/routes';
 import { Route, Routes } from 'react-router';
@@ -11,7 +13,8 @@ interface AppRoutesProps {
 export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
   const standalonePages = pages.filter(p => p.standalone);
   const publicPages = pages.filter(p => !p.protected && !p.standalone);
-  const protectedPages = pages.filter(p => p.protected);
+  const protectedPages = pages.filter(p => p.protected && !p.adminOnly);
+  const adminPages = pages.filter(p => p.adminOnly);
 
   return (
     <Routes>
@@ -32,8 +35,10 @@ export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
             element={<Component data={initialLoaderData} />}
           />
         ))}
+      </Route>
 
-        <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DashboardLayout />}>
           {protectedPages.map(({ path, component: Component }) => (
             <Route
               key={path}
@@ -41,6 +46,16 @@ export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
               element={<Component data={initialLoaderData} />}
             />
           ))}
+
+          <Route element={<AdminRoute />}>
+            {adminPages.map(({ path, component: Component }) => (
+              <Route
+                key={path}
+                path={normalizePath(path)}
+                element={<Component data={initialLoaderData} />}
+              />
+            ))}
+          </Route>
         </Route>
       </Route>
     </Routes>
