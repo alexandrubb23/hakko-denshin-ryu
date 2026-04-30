@@ -59,6 +59,26 @@ vi.mock("./EditStudentModal", () => ({
   },
 }));
 
+vi.mock("./DeleteStudentModal", () => ({
+  default: function MockDeleteModal({
+    open,
+    onClose,
+    student,
+  }: {
+    open: boolean;
+    onClose: () => void;
+    student: { name: string };
+  }) {
+    if (!open) return null;
+    return (
+      <div data-testid="delete-student-modal">
+        <span data-testid="deleting-student-name">{student.name}</span>
+        <button onClick={onClose}>Close delete modal</button>
+      </div>
+    );
+  },
+}));
+
 const mockUseStudents = vi.mocked(useStudents);
 
 const mockStudents: Student[] = [
@@ -232,6 +252,15 @@ describe("Students page", () => {
     it("does not show the edit modal by default", () => {
       expect(screen.queryByTestId("edit-student-modal")).not.toBeInTheDocument();
     });
+
+    it("renders a delete button for each student", () => {
+      const deleteButtons = screen.getAllByRole("button", { name: /delete student/i });
+      expect(deleteButtons).toHaveLength(mockStudents.length);
+    });
+
+    it("does not show the delete modal by default", () => {
+      expect(screen.queryByTestId("delete-student-modal")).not.toBeInTheDocument();
+    });
   });
 
   describe("modal interactions", () => {
@@ -307,6 +336,49 @@ describe("Students page", () => {
 
       fireEvent.click(screen.getByRole("button", { name: /close modal/i }));
       expect(screen.queryByTestId("edit-student-modal")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("delete modal interactions", () => {
+    beforeEach(() => {
+      mockUseStudents.mockReturnValue({
+        data: mockStudents,
+        isLoading: false,
+        isError: false,
+      } as unknown as ReturnType<typeof useStudents>);
+
+      renderStudents();
+    });
+
+    it("shows the delete modal when a delete button is clicked", () => {
+      const [firstDeleteBtn] = screen.getAllByRole("button", { name: /delete student/i });
+      fireEvent.click(firstDeleteBtn);
+      expect(screen.getByTestId("delete-student-modal")).toBeInTheDocument();
+    });
+
+    it("populates the modal with the correct student for the first row", () => {
+      const [firstDeleteBtn] = screen.getAllByRole("button", { name: /delete student/i });
+      fireEvent.click(firstDeleteBtn);
+      expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
+        mockStudents[0].name
+      );
+    });
+
+    it("populates the modal with the correct student for another row", () => {
+      const deleteButtons = screen.getAllByRole("button", { name: /delete student/i });
+      fireEvent.click(deleteButtons[1]);
+      expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
+        mockStudents[1].name
+      );
+    });
+
+    it("hides the delete modal when onClose is called", () => {
+      const [firstDeleteBtn] = screen.getAllByRole("button", { name: /delete student/i });
+      fireEvent.click(firstDeleteBtn);
+      expect(screen.getByTestId("delete-student-modal")).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole("button", { name: /close delete modal/i }));
+      expect(screen.queryByTestId("delete-student-modal")).not.toBeInTheDocument();
     });
   });
 });

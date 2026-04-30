@@ -1,4 +1,5 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import PeopleIcon from "@mui/icons-material/People";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
@@ -20,6 +21,7 @@ import {
 import { useState } from "react";
 
 import { type Student } from "@api/students";
+import DeleteStudentModal from "./DeleteStudentModal";
 import EditStudentModal from "./EditStudentModal";
 
 interface StudentsTableProps {
@@ -41,6 +43,7 @@ const getInitials = (name: string) =>
 
 const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => {
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
   if (isError) {
     return (
       <Typography color="error" mt={4}>
@@ -147,6 +150,14 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
                     sx={{ ...SKEL, ml: "auto" }}
                   />
                 </TableCell>
+                <TableCell align="right">
+                  <Skeleton
+                    variant="circular"
+                    width={30}
+                    height={30}
+                    sx={{ ...SKEL, ml: "auto" }}
+                  />
+                </TableCell>
               </TableRow>
             ))
           : students!.map((student) => (
@@ -217,6 +228,16 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
+                  <Tooltip title="Delete student">
+                    <IconButton
+                      aria-label="Delete student"
+                      size="small"
+                      onClick={() => setDeletingStudent(student)}
+                      sx={{ color: "#ef9a9a", "&:hover": { backgroundColor: "rgba(239,154,154,0.12)" } }}
+                    >
+                      <DeleteOutlineIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
@@ -229,6 +250,14 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
       open
       student={editingStudent}
       onClose={() => setEditingStudent(null)}
+    />
+  )}
+
+  {deletingStudent && (
+    <DeleteStudentModal
+      open
+      student={deletingStudent}
+      onClose={() => setDeletingStudent(null)}
     />
   )}
   </>

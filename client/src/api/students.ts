@@ -45,3 +45,9 @@ export const updateStudent = async (
 
   return data.student;
 };
+
+export const deleteStudent = async (id: string): Promise<void> => {
+  await axios.delete(`${API_URL}${ApiRoutes.adminStudent(id)}`, {
+    withCredentials: true,
+  });
+};

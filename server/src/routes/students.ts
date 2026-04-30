@@ -16,7 +16,7 @@ router.get(
   requireRole(Role.admin),
   async (_req, res) => {
     const students = await prisma.user.findMany({
-      where: { role: Role.student },
+      where: { role: Role.student, deletedAt: null },
       select: {
         id: true,
         name: true,
@@ -87,7 +87,7 @@ router.put(
     const id = req.params.id as string;
 
     const student = await prisma.user.findUnique({ where: { id } });
-    if (!student || student.role !== Role.student) {
+    if (!student || student.role !== Role.student || student.deletedAt !== null) {
       res.status(404).json({ error: "Student not found" });
       return;
     }
@@ -126,6 +126,36 @@ router.put(
     }
 
     res.json({ student: updated });
+  }
+);
+
+router.delete(
+  ApiRoutes.adminStudent,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const id = req.params.id as string;
+
+    const student = await prisma.user.findUnique({ where: { id } });
+    if (!student || student.deletedAt !== null) {
+      res.status(404).json({ error: "Student not found" });
+      return;
+    }
+
+    if (student.role === Role.admin) {
+      res.status(403).json({ error: "Admin users cannot be deleted" });
+      return;
+    }
+
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      }),
+      prisma.session.deleteMany({ where: { userId: id } }),
+    ]);
+
+    res.status(204).end();
   }
 );
 
