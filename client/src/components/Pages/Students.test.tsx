@@ -39,6 +39,26 @@ vi.mock("./CreateStudentModal", () => ({
   },
 }));
 
+vi.mock("./EditStudentModal", () => ({
+  default: function MockEditModal({
+    open,
+    onClose,
+    student,
+  }: {
+    open: boolean;
+    onClose: () => void;
+    student: { name: string };
+  }) {
+    if (!open) return null;
+    return (
+      <div data-testid="edit-student-modal">
+        <span data-testid="editing-student-name">{student.name}</span>
+        <button onClick={onClose}>Close modal</button>
+      </div>
+    );
+  },
+}));
+
 const mockUseStudents = vi.mocked(useStudents);
 
 const mockStudents: Student[] = [
@@ -203,6 +223,15 @@ describe("Students page", () => {
     it("does not show the modal by default", () => {
       expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
     });
+
+    it("renders an edit button for each student", () => {
+      const editButtons = screen.getAllByRole("button", { name: /edit student/i });
+      expect(editButtons).toHaveLength(mockStudents.length);
+    });
+
+    it("does not show the edit modal by default", () => {
+      expect(screen.queryByTestId("edit-student-modal")).not.toBeInTheDocument();
+    });
   });
 
   describe("modal interactions", () => {
@@ -235,6 +264,49 @@ describe("Students page", () => {
 
       fireEvent.keyDown(document, { key: "Escape" });
       expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("edit modal interactions", () => {
+    beforeEach(() => {
+      mockUseStudents.mockReturnValue({
+        data: mockStudents,
+        isLoading: false,
+        isError: false,
+      } as unknown as ReturnType<typeof useStudents>);
+
+      renderStudents();
+    });
+
+    it("shows the edit modal when an edit button is clicked", () => {
+      const [firstEditBtn] = screen.getAllByRole("button", { name: /edit student/i });
+      fireEvent.click(firstEditBtn);
+      expect(screen.getByTestId("edit-student-modal")).toBeInTheDocument();
+    });
+
+    it("populates the modal with the correct student for the first row", () => {
+      const [firstEditBtn] = screen.getAllByRole("button", { name: /edit student/i });
+      fireEvent.click(firstEditBtn);
+      expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
+        mockStudents[0].name
+      );
+    });
+
+    it("populates the modal with the correct student for another row", () => {
+      const editButtons = screen.getAllByRole("button", { name: /edit student/i });
+      fireEvent.click(editButtons[1]);
+      expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
+        mockStudents[1].name
+      );
+    });
+
+    it("hides the edit modal when onClose is called", () => {
+      const [firstEditBtn] = screen.getAllByRole("button", { name: /edit student/i });
+      fireEvent.click(firstEditBtn);
+      expect(screen.getByTestId("edit-student-modal")).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole("button", { name: /close modal/i }));
+      expect(screen.queryByTestId("edit-student-modal")).not.toBeInTheDocument();
     });
   });
 });

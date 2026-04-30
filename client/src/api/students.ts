@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { type CreateStudentInput } from "@hakko/core";
+import { type CreateStudentInput, type UpdateStudentInput } from "@hakko/core";
 import { ApiRoutes } from "@lib/routes";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
@@ -26,6 +26,19 @@ export const createStudent = async (
 ): Promise<Student> => {
   const { data } = await axios.post(
     `${API_URL}${ApiRoutes.adminStudents}`,
+    payload,
+    { withCredentials: true }
+  );
+
+  return data.student;
+};
+
+export const updateStudent = async (
+  id: string,
+  payload: UpdateStudentInput
+): Promise<Student> => {
+  const { data } = await axios.put(
+    `${API_URL}${ApiRoutes.adminStudent(id)}`,
     payload,
     { withCredentials: true }
   );

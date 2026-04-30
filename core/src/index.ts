@@ -1,1 +1,6 @@
-export { createStudentSchema, type CreateStudentInput } from "./schemas/students.js";
+export {
+  createStudentSchema,
+  type CreateStudentInput,
+  updateStudentSchema,
+  type UpdateStudentInput,
+} from "./schemas/students.js";

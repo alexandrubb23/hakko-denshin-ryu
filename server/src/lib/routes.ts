@@ -4,4 +4,5 @@ export const ApiRoutes = {
   health: "/api/health",
   me: "/api/me",
   adminStudents: "/api/admin/students",
+  adminStudent: "/api/admin/students/:id",
 } as const;

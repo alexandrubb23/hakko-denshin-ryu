@@ -1,8 +1,10 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import EditIcon from "@mui/icons-material/Edit";
 import PeopleIcon from "@mui/icons-material/People";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import {
   Avatar,
+  IconButton,
   Paper,
   Skeleton,
   Stack,
@@ -15,8 +17,10 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 
 import { type Student } from "@api/students";
+import EditStudentModal from "./EditStudentModal";
 
 interface StudentsTableProps {
   students: Student[] | undefined;
@@ -36,6 +40,7 @@ const getInitials = (name: string) =>
     .slice(0, 2);
 
 const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => {
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   if (isError) {
     return (
       <Typography color="error" mt={4}>
@@ -65,6 +70,7 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
   }
 
   return (
+  <>
   <TableContainer
     component={Paper}
     elevation={0}
@@ -89,6 +95,12 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
           </TableCell>
           <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
             Joined
+          </TableCell>
+          <TableCell
+            sx={{ fontWeight: 700, color: "text.secondary" }}
+            align="right"
+          >
+            Actions
           </TableCell>
         </TableRow>
       </TableHead>
@@ -126,6 +138,14 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
                 </TableCell>
                 <TableCell>
                   <Skeleton variant="text" width={80} sx={SKEL} />
+                </TableCell>
+                <TableCell align="right">
+                  <Skeleton
+                    variant="circular"
+                    width={30}
+                    height={30}
+                    sx={{ ...SKEL, ml: "auto" }}
+                  />
                 </TableCell>
               </TableRow>
             ))
@@ -186,11 +206,32 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
                     {new Date(student.createdAt).toLocaleDateString()}
                   </Typography>
                 </TableCell>
+                <TableCell align="right">
+                  <Tooltip title="Edit student">
+                    <IconButton
+                      aria-label="Edit student"
+                      size="small"
+                      onClick={() => setEditingStudent(student)}
+                      sx={{ color: "#AB96FF", "&:hover": { backgroundColor: "rgba(171,150,255,0.12)" } }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
               </TableRow>
             ))}
       </TableBody>
     </Table>
   </TableContainer>
+
+  {editingStudent && (
+    <EditStudentModal
+      open
+      student={editingStudent}
+      onClose={() => setEditingStudent(null)}
+    />
+  )}
+  </>
   );
 };
 

@@ -12,4 +12,5 @@ export const Routes = {
 export const ApiRoutes = {
   me: "/api/me",
   adminStudents: "/api/admin/students",
+  adminStudent: (id: string) => `/api/admin/students/${id}`,
 } as const;
