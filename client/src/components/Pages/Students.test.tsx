@@ -11,6 +11,11 @@ vi.mock("@hooks/useStudents", () => ({
   useStudents: vi.fn(),
 }));
 
+vi.mock("./CreateStudentModal", () => ({
+  default: ({ open }: { open: boolean }) =>
+    open ? <div data-testid="create-student-modal" /> : null,
+}));
+
 const mockUseStudents = vi.mocked(useStudents);
 
 const mockStudents: Student[] = [
@@ -71,6 +76,10 @@ describe("Students page", () => {
 
     it("does not show an error message", () => {
       expect(screen.queryByText(/failed to load/i)).not.toBeInTheDocument();
+    });
+
+    it("renders the Add Student button", () => {
+      expect(screen.getByRole("button", { name: /add student/i })).toBeInTheDocument();
     });
   });
 
@@ -162,6 +171,14 @@ describe("Students page", () => {
     it("does not show error or empty state", () => {
       expect(screen.queryByText(/failed to load/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/no students found/i)).not.toBeInTheDocument();
+    });
+
+    it("renders the Add Student button", () => {
+      expect(screen.getByRole("button", { name: /add student/i })).toBeInTheDocument();
+    });
+
+    it("does not show the modal by default", () => {
+      expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
     });
   });
 });

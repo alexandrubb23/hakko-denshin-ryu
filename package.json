@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "workspaces": ["client", "server"],
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
     "dev": "concurrently --names client,server --prefix-colors cyan,yellow \"bun run --cwd client dev\" \"bun run --cwd server dev\"",
     "start": "bun run --cwd server start",

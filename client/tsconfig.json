@@ -35,7 +35,7 @@
       "@store/*": ["store/*"],
       "@locales/*": ["locales/*"],
       "@pages/*": ["pages/*"],
-      "@lib/*": ["lib/*"],
+      "@lib/*": ["lib/*"]
     }
   },
   "include": ["src", "mui.d.ts"],

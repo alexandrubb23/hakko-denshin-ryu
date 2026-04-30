@@ -12,10 +12,28 @@ export interface Student {
   createdAt: string;
 }
 
+export interface CreateStudentPayload {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export const fetchStudents = async (): Promise<Student[]> => {
   const { data } = await axios.get(`${API_URL}${ApiRoutes.adminStudents}`, {
     withCredentials: true,
   });
 
   return data.students;
+};
+
+export const createStudent = async (
+  payload: CreateStudentPayload
+): Promise<Student> => {
+  const { data } = await axios.post(
+    `${API_URL}${ApiRoutes.adminStudents}`,
+    payload,
+    { withCredentials: true }
+  );
+
+  return data.student;
 };

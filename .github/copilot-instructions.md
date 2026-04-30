@@ -89,9 +89,10 @@ Admin manages all members, sessions, ranks, and events.
 
 ### Validation
 
-- **Zod** schemas defined once, shared between client and server
-- React Hook Form uses Zod resolvers on the client
-- Express route handlers use the same Zod schemas on the server
+- **Zod** schemas defined once per package (client or server) — define the schema where it's used.
+- React Hook Form uses Zod resolvers on the client — pass the schema directly to `zodResolver`.
+- Express route handlers use Zod schemas on the server via `schema.safeParse(req.body)`.
+- If a schema is needed on both sides, define it in each package independently (they are identical by convention).
 
 ### Routing
 
