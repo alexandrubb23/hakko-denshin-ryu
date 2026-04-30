@@ -1,4 +1,5 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { useEffect } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Student } from "@api/students";
@@ -12,8 +13,30 @@ vi.mock("@hooks/useStudents", () => ({
 }));
 
 vi.mock("./CreateStudentModal", () => ({
-  default: ({ open }: { open: boolean }) =>
-    open ? <div data-testid="create-student-modal" /> : null,
+  default: function MockModal({
+    open,
+    onClose,
+  }: {
+    open: boolean;
+    onClose: () => void;
+  }) {
+    useEffect(() => {
+      if (!open) return;
+      const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+      };
+      document.addEventListener("keydown", onKeyDown);
+      return () => document.removeEventListener("keydown", onKeyDown);
+    }, [open, onClose]);
+
+    if (!open) return null;
+
+    return (
+      <div data-testid="create-student-modal">
+        <div data-testid="modal-backdrop" onClick={onClose} />
+      </div>
+    );
+  },
 }));
 
 const mockUseStudents = vi.mocked(useStudents);
@@ -178,6 +201,39 @@ describe("Students page", () => {
     });
 
     it("does not show the modal by default", () => {
+      expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("modal interactions", () => {
+    beforeEach(() => {
+      mockUseStudents.mockReturnValue({
+        data: [],
+        isLoading: false,
+        isError: false,
+      } as unknown as ReturnType<typeof useStudents>);
+
+      renderStudents();
+    });
+
+    it("shows the modal when the Add Student button is clicked", () => {
+      fireEvent.click(screen.getByRole("button", { name: /add student/i }));
+      expect(screen.getByTestId("create-student-modal")).toBeInTheDocument();
+    });
+
+    it("hides the modal when clicking outside", () => {
+      fireEvent.click(screen.getByRole("button", { name: /add student/i }));
+      expect(screen.getByTestId("create-student-modal")).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId("modal-backdrop"));
+      expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
+    });
+
+    it("hides the modal when pressing Escape", () => {
+      fireEvent.click(screen.getByRole("button", { name: /add student/i }));
+      expect(screen.getByTestId("create-student-modal")).toBeInTheDocument();
+
+      fireEvent.keyDown(document, { key: "Escape" });
       expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
     });
   });
