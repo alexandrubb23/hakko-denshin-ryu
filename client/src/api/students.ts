@@ -13,41 +13,35 @@ export interface Student {
   createdAt: string;
 }
 
-export const fetchStudents = async (): Promise<Student[]> => {
-  const { data } = await axios.get(`${API_URL}${ApiRoutes.adminStudents}`, {
+class StudentsApi {
+  private readonly http = axios.create({
+    baseURL: API_URL,
     withCredentials: true,
   });
 
-  return data.students;
-};
+  async fetchStudents(): Promise<Student[]> {
+    const { data } = await this.http.get(ApiRoutes.adminStudents);
+    return data.students;
+  }
 
-export const createStudent = async (
-  payload: CreateStudentInput
-): Promise<Student> => {
-  const { data } = await axios.post(
-    `${API_URL}${ApiRoutes.adminStudents}`,
-    payload,
-    { withCredentials: true }
-  );
+  async createStudent(payload: CreateStudentInput): Promise<Student> {
+    const { data } = await this.http.post(ApiRoutes.adminStudents, payload);
+    return data.student;
+  }
 
-  return data.student;
-};
+  async fetchStudent(id: string): Promise<Student> {
+    const { data } = await this.http.get(ApiRoutes.adminStudent(id));
+    return data.student;
+  }
 
-export const updateStudent = async (
-  id: string,
-  payload: UpdateStudentInput
-): Promise<Student> => {
-  const { data } = await axios.put(
-    `${API_URL}${ApiRoutes.adminStudent(id)}`,
-    payload,
-    { withCredentials: true }
-  );
+  async updateStudent(id: string, payload: UpdateStudentInput): Promise<Student> {
+    const { data } = await this.http.put(ApiRoutes.adminStudent(id), payload);
+    return data.student;
+  }
 
-  return data.student;
-};
+  async deleteStudent(id: string): Promise<void> {
+    await this.http.delete(ApiRoutes.adminStudent(id));
+  }
+}
 
-export const deleteStudent = async (id: string): Promise<void> => {
-  await axios.delete(`${API_URL}${ApiRoutes.adminStudent(id)}`, {
-    withCredentials: true,
-  });
-};
+export const studentsApi = new StudentsApi();

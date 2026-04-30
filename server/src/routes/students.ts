@@ -31,6 +31,35 @@ router.get(
   }
 );
 
+router.get(
+  ApiRoutes.adminStudent,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const id = req.params.id as string;
+
+    const student = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        emailVerified: true,
+        createdAt: true,
+        role: true,
+        deletedAt: true,
+      },
+    });
+
+    if (!student || student.role !== Role.student || student.deletedAt !== null) {
+      res.status(404).json({ error: "Student not found" });
+      return;
+    }
+
+    res.json({ student });
+  }
+);
+
 router.post(
   ApiRoutes.adminStudents,
   requireAuth,

@@ -7,6 +7,7 @@ export const Routes = {
   login: "/login",
   dashboard: "/dashboard",
   students: "/students",
+  studentDetail: (id: string) => `/students/${id}`,
 } as const;
 
 export const ApiRoutes = {

@@ -42,12 +42,47 @@ test.describe("Student Management", () => {
       .waitFor({ state: "visible" });
   });
 
-  test("should list the students page with Add Student button", async ({
+  test("should navigate to student detail page when clicking a row", async ({
     adminPage,
   }) => {
+    const student = newStudent();
+    await createStudentViaUI(adminPage, student);
+
+    const row = adminPage.getByRole("row").filter({ hasText: student.email });
+    await row.click();
+
+    await adminPage.waitForURL(/\/students\/.+/);
     await expect(
-      adminPage.getByRole("button", { name: "Add Student" })
+      adminPage.getByRole("heading", { name: student.name })
     ).toBeVisible();
+  });
+
+  test("should not navigate when clicking the edit button on a row", async ({
+    adminPage,
+  }) => {
+    const student = newStudent();
+    await createStudentViaUI(adminPage, student);
+
+    const row = adminPage.getByRole("row").filter({ hasText: student.email });
+    await row.getByRole("button", { name: "Edit student" }).click();
+
+    await expect(adminPage).toHaveURL("/students");
+    await expect(adminPage.getByRole("dialog")).toBeVisible();
+    await adminPage.getByRole("button", { name: "Cancel" }).click();
+  });
+
+  test("should not navigate when clicking the delete button on a row", async ({
+    adminPage,
+  }) => {
+    const student = newStudent();
+    await createStudentViaUI(adminPage, student);
+
+    const row = adminPage.getByRole("row").filter({ hasText: student.email });
+    await row.getByRole("button", { name: "Delete student" }).click();
+
+    await expect(adminPage).toHaveURL("/students");
+    await expect(adminPage.getByRole("dialog")).toBeVisible();
+    await adminPage.getByRole("button", { name: "Cancel" }).click();
   });
 
   test("should create a new student and show them in the table", async ({

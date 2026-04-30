@@ -19,8 +19,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 import { type Student } from "@api/students";
+import { Routes } from "@lib/routes";
 import DeleteStudentModal from "./DeleteStudentModal";
 import EditStudentModal from "./EditStudentModal";
 
@@ -42,6 +44,7 @@ const getInitials = (name: string) =>
     .slice(0, 2);
 
 const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => {
+  const navigate = useNavigate();
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
   if (isError) {
@@ -163,7 +166,9 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
           : students!.map((student) => (
               <TableRow
                 key={student.id}
+                onClick={() => navigate(Routes.studentDetail(student.id))}
                 sx={{
+                  cursor: "pointer",
                   "& td": { borderBottomColor: "rgba(171,150,255,0.2)" },
                   "&:last-child td": { border: 0 },
                   "&:hover": {
@@ -222,7 +227,7 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
                     <IconButton
                       aria-label="Edit student"
                       size="small"
-                      onClick={() => setEditingStudent(student)}
+                      onClick={(e) => { e.stopPropagation(); setEditingStudent(student); }}
                       sx={{ color: "#AB96FF", "&:hover": { backgroundColor: "rgba(171,150,255,0.12)" } }}
                     >
                       <EditIcon fontSize="small" />
@@ -232,7 +237,7 @@ const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => 
                     <IconButton
                       aria-label="Delete student"
                       size="small"
-                      onClick={() => setDeletingStudent(student)}
+                      onClick={(e) => { e.stopPropagation(); setDeletingStudent(student); }}
                       sx={{ color: "#ef9a9a", "&:hover": { backgroundColor: "rgba(239,154,154,0.12)" } }}
                     >
                       <DeleteOutlineIcon fontSize="small" />

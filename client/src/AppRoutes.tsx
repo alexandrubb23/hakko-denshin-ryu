@@ -1,5 +1,6 @@
 import AdminRoute from '@components/AdminRoute';
 import DashboardLayout from '@components/DashboardLayout/DashboardLayout';
+import StudentDetail from '@components/Pages/StudentDetail';
 import ProtectedRoute from '@components/ProtectedRoute';
 import { normalizePath } from '@utils/routes';
 import { Route, Routes } from 'react-router';
@@ -55,6 +56,7 @@ export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
                 element={<Component data={initialLoaderData} />}
               />
             ))}
+            <Route path="/students/:id" element={<StudentDetail />} />
           </Route>
         </Route>
       </Route>

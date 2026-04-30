@@ -1,7 +1,7 @@
 import { type UpdateStudentInput } from "@hakko/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { updateStudent } from "@api/students";
+import { studentsApi } from "@api/students";
 
 type UpdateStudentPayload = { id: string } & UpdateStudentInput;
 
@@ -10,7 +10,7 @@ export const useUpdateStudent = () => {
 
   return useMutation({
     mutationFn: ({ id, ...payload }: UpdateStudentPayload) =>
-      updateStudent(id, payload),
+      studentsApi.updateStudent(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
     },
