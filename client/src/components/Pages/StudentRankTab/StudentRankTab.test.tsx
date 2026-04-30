@@ -1,9 +1,9 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { useEffect } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { type StudentRankEntry } from "@api/students";
 import { useStudentRanks } from "@hooks/useStudentRanks";
+import createModalMock from "@test/createModalMock";
 import renderUi from "@test/renderUi";
 
 import StudentRankTab from ".";
@@ -13,31 +13,16 @@ vi.mock("@hooks/useStudentRanks", () => ({
 }));
 
 vi.mock("./CreateStudentRankModal", () => ({
-  default: function MockCreateRankModal({
-    open,
-    onClose,
-  }: {
-    open: boolean;
-    onClose: () => void;
-    studentId: string;
-  }) {
-    useEffect(() => {
-      if (!open) return;
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onClose();
-      };
-      document.addEventListener("keydown", onKeyDown);
-      return () => document.removeEventListener("keydown", onKeyDown);
-    }, [open, onClose]);
+  default: createModalMock("create-rank-modal"),
+}));
 
-    if (!open) return null;
-
-    return (
-      <div data-testid="create-rank-modal">
-        <div data-testid="modal-backdrop" onClick={onClose} />
-      </div>
-    );
-  },
+vi.mock("./DeleteRankModal", () => ({
+  default: createModalMock<{ entry: StudentRankEntry }>(
+    "delete-rank-modal",
+    ({ entry }) => (
+      <span data-testid="delete-rank-name">{entry.rank.name}</span>
+    )
+  ),
 }));
 
 const mockUseStudentRanks = vi.mocked(useStudentRanks);
@@ -221,6 +206,55 @@ describe("StudentRankTab", () => {
         screen.queryByText(/no ranks assigned yet/i)
       ).not.toBeInTheDocument();
     });
+
+    it("renders a delete button for each rank row", () => {
+      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      expect(deleteButtons).toHaveLength(mockRanks.length);
+    });
+  });
+
+  describe("delete modal interactions", () => {
+    beforeEach(() => {
+      mockAndRender({ data: mockRanks, isLoading: false, isError: false });
+    });
+
+    it("does not show the delete modal by default", () => {
+      expect(screen.queryByTestId("delete-rank-modal")).not.toBeInTheDocument();
+    });
+
+    it("shows the delete modal with the correct rank name when delete is clicked", () => {
+      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      fireEvent.click(deleteButtons[0]);
+
+      expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
+      expect(screen.getByTestId("delete-rank-name")).toHaveTextContent("5 Kyu");
+    });
+
+    it("shows the delete modal for the correct row", () => {
+      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      fireEvent.click(deleteButtons[1]);
+
+      expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
+      expect(screen.getByTestId("delete-rank-name")).toHaveTextContent("4 Kyu");
+    });
+
+    it("hides the delete modal when clicking outside", () => {
+      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      fireEvent.click(deleteButtons[0]);
+      expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId("delete-rank-modal-backdrop"));
+      expect(screen.queryByTestId("delete-rank-modal")).not.toBeInTheDocument();
+    });
+
+    it("hides the delete modal when pressing Escape", () => {
+      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      fireEvent.click(deleteButtons[0]);
+      expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
+
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(screen.queryByTestId("delete-rank-modal")).not.toBeInTheDocument();
+    });
   });
 
   describe("modal interactions", () => {
@@ -241,7 +275,7 @@ describe("StudentRankTab", () => {
       fireEvent.click(screen.getByRole("button", { name: /assign rank/i }));
       expect(screen.getByTestId("create-rank-modal")).toBeInTheDocument();
 
-      fireEvent.click(screen.getByTestId("modal-backdrop"));
+      fireEvent.click(screen.getByTestId("create-rank-modal-backdrop"));
       expect(screen.queryByTestId("create-rank-modal")).not.toBeInTheDocument();
     });
 

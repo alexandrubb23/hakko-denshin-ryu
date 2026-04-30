@@ -1,8 +1,8 @@
-import { createTheme } from '@mui/material';
+import { createTheme } from "@mui/material";
 
-import Jarene from '@assets/fonts/Jarene.otf';
-import Rubik from '@assets/fonts/Rubik.ttf';
-import Inter from '@assets/fonts/Inter.ttf';
+import Inter from "@assets/fonts/Inter.ttf";
+import Jarene from "@assets/fonts/Jarene.otf";
+import Rubik from "@assets/fonts/Rubik.ttf";
 
 const theme = createTheme({
   breakpoints: {
@@ -15,66 +15,66 @@ const theme = createTheme({
     },
   },
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#AB96FF',
-      contrastText: '#0a0619',
+      main: "#AB96FF",
+      contrastText: "#0a0619",
     },
     secondary: {
-      main: '#ffd700',
-      contrastText: '#0a0619',
+      main: "#ffd700",
+      contrastText: "#0a0619",
     },
     background: {
-      default: '#0a0619',
-      paper: '#0f0b1e',
+      default: "#0a0619",
+      paper: "#0f0b1e",
     },
     text: {
-      primary: '#fff',
-      secondary: 'rgba(255,255,255,0.7)',
-      disabled: 'rgba(255,255,255,0.38)',
+      primary: "#fff",
+      secondary: "rgba(255,255,255,0.7)",
+      disabled: "rgba(255,255,255,0.38)",
     },
   },
   typography: {
-    fontFamily: 'Jarene, Arial, sans-serif',
+    fontFamily: "Jarene, Arial, sans-serif",
     h2Inter: {
-      fontFamily: 'Inter',
-      fontSize: 'clamp(1rem, calc(2vw + 1rem), 3rem)',
+      fontFamily: "Inter",
+      fontSize: "clamp(1rem, calc(2vw + 1rem), 3rem)",
       fontWeight: 400,
       lineHeight: 1.2,
       padding: 16,
       paddingBottom: 0,
       paddingTop: 0,
-      textShadow: '0 0 5px rgba(0, 0, 0, 0.7)',
+      textShadow: "0 0 5px rgba(0, 0, 0, 0.7)",
     },
     h1: {
       padding: 16,
-      fontSize: 'clamp(2rem, calc(3vw + 1rem), 3rem)',
+      fontSize: "clamp(2rem, calc(3vw + 1rem), 3rem)",
     },
     h2: {
       padding: 16,
-      fontSize: 'clamp(2rem, calc(3vw + 1rem), 3rem)',
+      fontSize: "clamp(2rem, calc(3vw + 1rem), 3rem)",
     },
     h3: {
       padding: 16,
-      fontSize: 'clamp(2rem, calc(7vw + 1rem), 2.375rem)',
+      fontSize: "clamp(2rem, calc(7vw + 1rem), 2.375rem)",
     },
     subtitle1: {
       padding: 16,
       lineHeight: 1.2,
-      fontSize: 'clamp(1rem, calc(2vw + 1rem), 3rem)',
+      fontSize: "clamp(1rem, calc(2vw + 1rem), 3rem)",
     },
     body1: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     body2: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
   },
   components: {
     MuiTypography: {
       defaultProps: {
         variantMapping: {
-          h2Inter: 'h2',
+          h2Inter: "h2",
         },
       },
     },

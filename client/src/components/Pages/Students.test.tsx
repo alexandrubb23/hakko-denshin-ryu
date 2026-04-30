@@ -1,9 +1,9 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { useEffect } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Student } from "@api/students";
 import { useStudents } from "@hooks/useStudents";
+import createModalMock from "@test/createModalMock";
 import renderUi from "@test/renderUi";
 
 import Students from "./Students";
@@ -13,30 +13,7 @@ vi.mock("@hooks/useStudents", () => ({
 }));
 
 vi.mock("./CreateStudentModal", () => ({
-  default: function MockModal({
-    open,
-    onClose,
-  }: {
-    open: boolean;
-    onClose: () => void;
-  }) {
-    useEffect(() => {
-      if (!open) return;
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onClose();
-      };
-      document.addEventListener("keydown", onKeyDown);
-      return () => document.removeEventListener("keydown", onKeyDown);
-    }, [open, onClose]);
-
-    if (!open) return null;
-
-    return (
-      <div data-testid="create-student-modal">
-        <div data-testid="modal-backdrop" onClick={onClose} />
-      </div>
-    );
-  },
+  default: createModalMock("create-student-modal"),
 }));
 
 vi.mock("./EditStudentModal", () => ({
@@ -283,7 +260,7 @@ describe("Students page", () => {
       fireEvent.click(screen.getByRole("button", { name: /add student/i }));
       expect(screen.getByTestId("create-student-modal")).toBeInTheDocument();
 
-      fireEvent.click(screen.getByTestId("modal-backdrop"));
+      fireEvent.click(screen.getByTestId("create-student-modal-backdrop"));
       expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
     });
 

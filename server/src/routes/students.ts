@@ -309,6 +309,29 @@ router.put(
 );
 
 router.delete(
+  ApiRoutes.adminStudentRank,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const studentId = req.params.id as string;
+    const rankEntryId = req.params.rankEntryId as string;
+
+    const student = await requireStudent(studentId, res);
+    if (!student) return;
+
+    const rankEntry = await requireRankEntry(rankEntryId, studentId, res);
+    if (!rankEntry) return;
+
+    await prisma.studentRank.update({
+      where: { id: rankEntryId },
+      data: { deletedAt: new Date() },
+    });
+
+    res.status(204).end();
+  }
+);
+
+router.delete(
   ApiRoutes.adminStudent,
   requireAuth,
   requireRole(Role.admin),

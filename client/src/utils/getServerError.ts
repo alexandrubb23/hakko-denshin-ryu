@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getServerError = (error: unknown, isError: boolean): string | null => {
+const getServerError = (error: unknown, isError = true): string | null => {
   if (!isError || !error) return null;
   if (axios.isAxiosError(error)) {
     const msg = error.response?.data?.error;

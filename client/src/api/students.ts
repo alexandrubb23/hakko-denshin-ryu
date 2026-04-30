@@ -65,6 +65,10 @@ class StudentsApi extends Http {
     return data.rank;
   }
 
+  async deleteStudentRank(studentId: string, rankEntryId: string): Promise<void> {
+    await this.http.delete(ApiRoutes.adminStudentRank(studentId, rankEntryId));
+  }
+
   async updateStudent(id: string, payload: UpdateStudentInput): Promise<Student> {
     const { data } = await this.http.put(ApiRoutes.adminStudent(id), payload);
     return data.student;

@@ -8,6 +8,7 @@ import { useStudentRanks } from "@hooks/useStudentRanks";
 import { BORDER_COLOR, PURPLE } from "@style/tokens";
 
 import CreateStudentRankModal from "./CreateStudentRankModal";
+import DeleteRankModal from "./DeleteRankModal";
 import EditStudentRankModal from "./EditStudentRankModal";
 import RankTable from "./RankTable";
 
@@ -19,6 +20,7 @@ const StudentRankTab = ({ studentId }: Props) => {
   const { data: ranks, isLoading, isError } = useStudentRanks(studentId);
   const [createOpen, setCreateOpen] = useState(false);
   const [editEntry, setEditEntry] = useState<StudentRankEntry | null>(null);
+  const [deleteEntry, setDeleteEntry] = useState<StudentRankEntry | null>(null);
 
   return (
     <>
@@ -53,6 +55,15 @@ const StudentRankTab = ({ studentId }: Props) => {
         />
       )}
 
+      {deleteEntry && (
+        <DeleteRankModal
+          studentId={studentId}
+          entry={deleteEntry}
+          open={true}
+          onClose={() => setDeleteEntry(null)}
+        />
+      )}
+
       {isError && (
         <Alert severity="error" sx={{ mt: 2 }}>
           Failed to load rank history. Please try again.
@@ -76,7 +87,12 @@ const StudentRankTab = ({ studentId }: Props) => {
       )}
 
       {(isLoading || (ranks && ranks.length > 0)) && (
-        <RankTable isLoading={isLoading} ranks={ranks} onEdit={setEditEntry} />
+        <RankTable
+          isLoading={isLoading}
+          ranks={ranks}
+          onEdit={setEditEntry}
+          onDelete={setDeleteEntry}
+        />
       )}
     </>
   );

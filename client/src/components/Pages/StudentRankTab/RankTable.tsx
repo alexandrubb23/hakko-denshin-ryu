@@ -19,9 +19,10 @@ interface Props {
   isLoading: boolean;
   ranks: StudentRankEntry[] | undefined;
   onEdit: (entry: StudentRankEntry) => void;
+  onDelete: (entry: StudentRankEntry) => void;
 }
 
-const RankTable = ({ isLoading, ranks, onEdit }: Props) => (
+const RankTable = ({ isLoading, ranks, onEdit, onDelete }: Props) => (
   <TableContainer
     sx={{
       mt: 2,
@@ -53,7 +54,9 @@ const RankTable = ({ isLoading, ranks, onEdit }: Props) => (
         {isLoading ? (
           <RankSkeletonRows />
         ) : (
-          ranks?.map((entry) => <RankRow key={entry.id} entry={entry} onEdit={onEdit} />)
+          ranks?.map((entry) => (
+            <RankRow key={entry.id} entry={entry} onEdit={onEdit} onDelete={onDelete} />
+          ))
         )}
       </TableBody>
     </Table>
