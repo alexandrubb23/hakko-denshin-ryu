@@ -1,4 +1,5 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { useEffect } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { type StudentRankEntry } from "@api/students";
@@ -12,7 +13,31 @@ vi.mock("@hooks/useStudentRanks", () => ({
 }));
 
 vi.mock("./CreateStudentRankModal", () => ({
-  default: () => null,
+  default: function MockCreateRankModal({
+    open,
+    onClose,
+  }: {
+    open: boolean;
+    onClose: () => void;
+    studentId: string;
+  }) {
+    useEffect(() => {
+      if (!open) return;
+      const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+      };
+      document.addEventListener("keydown", onKeyDown);
+      return () => document.removeEventListener("keydown", onKeyDown);
+    }, [open, onClose]);
+
+    if (!open) return null;
+
+    return (
+      <div data-testid="create-rank-modal">
+        <div data-testid="modal-backdrop" onClick={onClose} />
+      </div>
+    );
+  },
 }));
 
 const mockUseStudentRanks = vi.mocked(useStudentRanks);
@@ -187,6 +212,37 @@ describe("StudentRankTab", () => {
       expect(
         screen.queryByText(/no ranks assigned yet/i)
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("modal interactions", () => {
+    beforeEach(() => {
+      mockAndRender({ data: [], isLoading: false, isError: false });
+    });
+
+    it("does not show the modal by default", () => {
+      expect(screen.queryByTestId("create-rank-modal")).not.toBeInTheDocument();
+    });
+
+    it("shows the modal when Assign Rank is clicked", () => {
+      fireEvent.click(screen.getByRole("button", { name: /assign rank/i }));
+      expect(screen.getByTestId("create-rank-modal")).toBeInTheDocument();
+    });
+
+    it("hides the modal when clicking outside", () => {
+      fireEvent.click(screen.getByRole("button", { name: /assign rank/i }));
+      expect(screen.getByTestId("create-rank-modal")).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId("modal-backdrop"));
+      expect(screen.queryByTestId("create-rank-modal")).not.toBeInTheDocument();
+    });
+
+    it("hides the modal when pressing Escape", () => {
+      fireEvent.click(screen.getByRole("button", { name: /assign rank/i }));
+      expect(screen.getByTestId("create-rank-modal")).toBeInTheDocument();
+
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(screen.queryByTestId("create-rank-modal")).not.toBeInTheDocument();
     });
   });
 });
