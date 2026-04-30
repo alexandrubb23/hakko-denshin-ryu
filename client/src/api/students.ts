@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import { type CreateStudentInput } from "@hakko/core";
 import { ApiRoutes } from "@lib/routes";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
@@ -12,12 +13,6 @@ export interface Student {
   createdAt: string;
 }
 
-export interface CreateStudentPayload {
-  name: string;
-  email: string;
-  password: string;
-}
-
 export const fetchStudents = async (): Promise<Student[]> => {
   const { data } = await axios.get(`${API_URL}${ApiRoutes.adminStudents}`, {
     withCredentials: true,
@@ -27,7 +22,7 @@ export const fetchStudents = async (): Promise<Student[]> => {
 };
 
 export const createStudent = async (
-  payload: CreateStudentPayload
+  payload: CreateStudentInput
 ): Promise<Student> => {
   const { data } = await axios.post(
     `${API_URL}${ApiRoutes.adminStudents}`,

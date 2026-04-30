@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@hakko/core': path.resolve(__dirname, '../core/src'),
       '@test': '/src/test',
       '@assets': '/src/assets',
       '@api': '/src/api',

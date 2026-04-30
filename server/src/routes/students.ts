@@ -1,17 +1,11 @@
+import { createStudentSchema } from "@hakko/core";
 import { hashPassword } from "@better-auth/utils/password";
 import { Router } from "express";
-import { z } from "zod";
 import { Role } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
-
-const createStudentSchema = z.object({
-  name: z.string().trim().min(3, "Name must be at least 3 characters"),
-  email: z.email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
 
 const router = Router();
 

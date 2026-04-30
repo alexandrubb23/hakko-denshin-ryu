@@ -12,6 +12,7 @@ Admin manages all members, sessions, ranks, and events.
 /hakko-ryu-ssr          ← root (Bun workspaces)
   /client               ← React 19 + Vite SSR (runs with Node)
   /server               ← Express 5 + TypeScript (runs with Bun)
+  /core                 ← Shared TypeScript package (@hakko/core)
   /e2e                  ← Playwright E2E tests
 ```
 
@@ -87,12 +88,45 @@ Admin manages all members, sessions, ranks, and events.
   - Always handle `isLoading` and `isError` states in components that consume queries.
 - Add `axios` to the Context7 library table when looking up docs: search name `Axios`.
 
+### Shared Code (`/core`)
+
+The `@hakko/core` package (`core/`) is a shared TypeScript workspace package used by both client and server.
+
+**When to add something to `@hakko/core`:**
+- Zod schemas that are validated on the server **and** drive form validation on the client (e.g., `createStudentSchema`)
+- TypeScript types inferred from those schemas (e.g., `CreateStudentInput`)
+- Any other pure logic that must be identical on both sides
+
+**How to add a schema:**
+1. Create `core/src/schemas/<domain>.ts` — define the Zod schema and export the inferred type:
+   ```ts
+   import { z } from "zod";
+   export const createStudentSchema = z.object({ ... });
+   export type CreateStudentInput = z.infer<typeof createStudentSchema>;
+   ```
+2. Re-export from `core/src/index.ts`:
+   ```ts
+   export { createStudentSchema, type CreateStudentInput } from "./schemas/<domain>.js";
+   ```
+3. Import in client or server using the `@hakko/core` alias:
+   ```ts
+   import { createStudentSchema, type CreateStudentInput } from "@hakko/core";
+   ```
+
+**Important — workspace setup:**
+- `@hakko/core` is resolved via a path alias in `client/vite.config.ts`, `client/vitest.config.ts`, and TypeScript `paths` in both `client/tsconfig.json` and `server/tsconfig.json` — all pointing to `../core/src`.
+- After adding `core` to `package.json` workspaces, the symlink `node_modules/@hakko/core → ../../core` must exist. Create it manually with:
+  ```bash
+  mkdir -p node_modules/@hakko && ln -sfn "$(pwd)/core" node_modules/@hakko/core
+  ```
+  or run `bun install` (note: on some machines, `bun install` may replace the esbuild binary — verify the dev server still works after).
+
 ### Validation
 
-- **Zod** schemas defined once per package (client or server) — define the schema where it's used.
+- **Zod** schemas that are shared between client and server must be defined in `@hakko/core` (see above).
+- Schemas used only on the server can remain in the server route file.
 - React Hook Form uses Zod resolvers on the client — pass the schema directly to `zodResolver`.
 - Express route handlers use Zod schemas on the server via `schema.safeParse(req.body)`.
-- If a schema is needed on both sides, define it in each package independently (they are identical by convention).
 
 ### Routing
 

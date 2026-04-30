@@ -1,4 +1,5 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import PeopleIcon from "@mui/icons-material/People";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import {
   Avatar,
@@ -20,6 +21,7 @@ import { type Student } from "@api/students";
 interface StudentsTableProps {
   students: Student[] | undefined;
   isLoading: boolean;
+  isError: boolean;
 }
 
 const SKEL = { bgcolor: "rgba(171,150,255,0.12)" };
@@ -33,7 +35,36 @@ const getInitials = (name: string) =>
     .toUpperCase()
     .slice(0, 2);
 
-const StudentsTable = ({ students, isLoading }: StudentsTableProps) => (
+const StudentsTable = ({ students, isLoading, isError }: StudentsTableProps) => {
+  if (isError) {
+    return (
+      <Typography color="error" mt={4}>
+        Failed to load students. Please try again.
+      </Typography>
+    );
+  }
+
+  if (!isLoading && students?.length === 0) {
+    return (
+      <Paper
+        elevation={0}
+        sx={{
+          p: 6,
+          textAlign: "center",
+          backgroundColor: "rgba(255,255,255,0.04)",
+        }}
+      >
+        <PeopleIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
+        <Typography color="text.secondary">No students found.</Typography>
+      </Paper>
+    );
+  }
+
+  if (!isLoading && !students) {
+    return null;
+  }
+
+  return (
   <TableContainer
     component={Paper}
     elevation={0}
@@ -160,6 +191,7 @@ const StudentsTable = ({ students, isLoading }: StudentsTableProps) => (
       </TableBody>
     </Table>
   </TableContainer>
-);
+  );
+};
 
 export default StudentsTable;

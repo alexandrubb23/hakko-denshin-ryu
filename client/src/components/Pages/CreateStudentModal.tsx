@@ -1,3 +1,4 @@
+import { createStudentSchema, type CreateStudentInput } from "@hakko/core";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import {
@@ -14,23 +15,13 @@ import {
 import axios from "axios";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { useCreateStudent } from "@hooks/useCreateStudent";
-
-const createStudentSchema = z.object({
-  name: z.string().trim().min(3, "Name must be at least 3 characters"),
-  email: z.email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
-
-type FormValues = z.infer<typeof createStudentSchema>;
 
 const PURPLE = "#AB96FF";
 const SURFACE_BG = "rgba(255,255,255,0.04)";
 const BORDER_COLOR = "rgba(171,150,255,0.2)";
 const BORDER_HOVER = "rgba(171,150,255,0.55)";
-
 
 interface Props {
   open: boolean;
@@ -61,7 +52,9 @@ const CreateStudentModal = ({ open, onClose }: Props) => {
     handleSubmit,
     reset: resetForm,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(createStudentSchema) });
+  } = useForm<CreateStudentInput>({
+    resolver: zodResolver(createStudentSchema),
+  });
 
   useEffect(() => {
     if (!open) {
@@ -70,7 +63,7 @@ const CreateStudentModal = ({ open, onClose }: Props) => {
     }
   }, [open, resetForm, resetMutation]);
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = (values: CreateStudentInput) => {
     mutate(values, {
       onSuccess: () => {
         onClose();

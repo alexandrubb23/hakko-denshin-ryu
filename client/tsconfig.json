@@ -24,6 +24,7 @@
     /* React */
     "baseUrl": "./src",
     "paths": {
+      "@hakko/core": ["../core/src"],
       "@test/*": ["test/*"],
       "@assets/*": ["assets/*"],
       "@api/*": ["api/*"],
