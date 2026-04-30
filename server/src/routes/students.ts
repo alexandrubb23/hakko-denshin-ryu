@@ -1,4 +1,4 @@
-import { createStudentSchema, updateStudentSchema } from "@hakko/core";
+import { createStudentRankSchema, createStudentSchema, updateStudentSchema } from "@hakko/core";
 import { hashPassword } from "@better-auth/utils/password";
 import { Router } from "express";
 import { Role } from "../generated/prisma/enums.js";
@@ -9,6 +9,19 @@ import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
 
 const router = Router();
+
+router.get(
+  ApiRoutes.adminRanks,
+  requireAuth,
+  requireRole(Role.admin),
+  async (_req, res) => {
+    const ranks = await prisma.rank.findMany({
+      select: { id: true, name: true, belt: true, order: true },
+      orderBy: { order: "asc" },
+    });
+    res.json({ ranks });
+  }
+);
 
 router.get(
   ApiRoutes.adminStudents,
@@ -57,6 +70,99 @@ router.get(
     }
 
     res.json({ student });
+  }
+);
+
+router.get(
+  ApiRoutes.adminStudentRanks,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const id = req.params.id as string;
+
+    const student = await prisma.user.findUnique({
+      where: { id },
+      select: { role: true, deletedAt: true },
+    });
+
+    if (!student || student.role !== Role.student || student.deletedAt !== null) {
+      res.status(404).json({ error: "Student not found" });
+      return;
+    }
+
+    const ranks = await prisma.studentRank.findMany({
+      where: { userId: id, deletedAt: null },
+      select: {
+        id: true,
+        awardedAt: true,
+        notes: true,
+        rank: {
+          select: { name: true, belt: true, order: true },
+        },
+      },
+      orderBy: { awardedAt: "desc" },
+    });
+
+    res.json({ ranks });
+  }
+);
+
+router.post(
+  ApiRoutes.adminStudentRanks,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const id = req.params.id as string;
+
+    const student = await prisma.user.findUnique({
+      where: { id },
+      select: { role: true, deletedAt: true },
+    });
+
+    if (!student || student.role !== Role.student || student.deletedAt !== null) {
+      res.status(404).json({ error: "Student not found" });
+      return;
+    }
+
+    const parsed = validate(createStudentRankSchema, req.body, res);
+    if (!parsed) return;
+
+    const { rankId, awardedAt, notes } = parsed;
+
+    const targetRank = await prisma.rank.findUnique({ where: { id: rankId } });
+    if (!targetRank) {
+      res.status(404).json({ error: "Rank not found" });
+      return;
+    }
+
+    const currentTop = await prisma.studentRank.findFirst({
+      where: { userId: id, deletedAt: null },
+      orderBy: { rank: { order: "desc" } },
+      select: { rank: { select: { order: true } } },
+    });
+
+    const expectedOrder = currentTop ? currentTop.rank.order + 1 : 1;
+    if (targetRank.order !== expectedOrder) {
+      res.status(422).json({ error: "Rank must follow the student's current rank in sequence." });
+      return;
+    }
+
+    const rank = await prisma.studentRank.create({
+      data: {
+        userId: id,
+        rankId,
+        awardedAt: new Date(awardedAt),
+        notes: notes ?? null,
+      },
+      select: {
+        id: true,
+        awardedAt: true,
+        notes: true,
+        rank: { select: { name: true, belt: true, order: true } },
+      },
+    });
+
+    res.status(201).json({ rank });
   }
 );
 

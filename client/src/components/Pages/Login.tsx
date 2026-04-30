@@ -25,6 +25,7 @@ import bgImage from "@assets/images/180.webp";
 import Header from "@components/Header/Header";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
+import { PURPLE } from "@style/tokens";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -32,8 +33,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
-
-const PURPLE = "#AB96FF";
 
 const bgZoom = keyframes`
   from { transform: scale(1); }

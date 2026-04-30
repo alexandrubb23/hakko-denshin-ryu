@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import { type CreateStudentInput, type UpdateStudentInput } from "@hakko/core";
 import { ApiRoutes } from "@lib/routes";
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+import { Http } from "./http";
 
 export interface Student {
   id: string;
@@ -13,11 +11,18 @@ export interface Student {
   createdAt: string;
 }
 
-class StudentsApi {
-  private readonly http = axios.create({
-    baseURL: API_URL,
-    withCredentials: true,
-  });
+export interface StudentRankEntry {
+  id: string;
+  awardedAt: string;
+  notes: string | null;
+  rank: {
+    name: string;
+    belt: string;
+    order: number;
+  };
+}
+
+class StudentsApi extends Http {
 
   async fetchStudents(): Promise<Student[]> {
     const { data } = await this.http.get(ApiRoutes.adminStudents);
@@ -32,6 +37,19 @@ class StudentsApi {
   async fetchStudent(id: string): Promise<Student> {
     const { data } = await this.http.get(ApiRoutes.adminStudent(id));
     return data.student;
+  }
+
+  async fetchStudentRanks(id: string): Promise<StudentRankEntry[]> {
+    const { data } = await this.http.get(ApiRoutes.adminStudentRanks(id));
+    return data.ranks;
+  }
+
+  async createStudentRank(
+    studentId: string,
+    payload: { rankId: number; awardedAt: string; notes?: string }
+  ): Promise<StudentRankEntry> {
+    const { data } = await this.http.post(ApiRoutes.adminStudentRanks(studentId), payload);
+    return data.rank;
   }
 
   async updateStudent(id: string, payload: UpdateStudentInput): Promise<Student> {

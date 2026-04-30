@@ -25,6 +25,7 @@ import useIsMobile from '@hooks/isMobile';
 import { authClient } from '@lib/auth-client';
 import { Role } from '@lib/role';
 import { Routes } from '@lib/routes';
+import { BORDER_COLOR, DARK_BG, SURFACE_BG } from '@style/tokens';
 
 const DRAWER_WIDTH = 220;
 
@@ -33,9 +34,7 @@ const NAV_ITEMS = [
   { label: 'Students', path: Routes.students, icon: <PeopleIcon />, adminOnly: true },
 ];
 
-const DARK_BG = "#0a0619";
-const DRAWER_PAPER_BG = "rgba(255,255,255,0.04)";
-const BORDER_COLOR = "rgba(171,150,255,0.2)";
+const DRAWER_PAPER_BG = SURFACE_BG;
 
 const DRAWER_PAPER_SX = {
   width: DRAWER_WIDTH,

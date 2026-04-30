@@ -161,18 +161,74 @@ All imports use Vite aliases resolving to `client/src/`:
 
 ## UI Design Tokens
 
-Consistent colors used across the dark-themed authenticated UI (Login, DashboardLayout, dashboard pages):
+The MUI theme (`client/src/style/theme.ts`) is configured with **`mode: 'dark'`** and custom dark palette overrides. All authenticated pages use a consistent dark theme.
+
+### Token constants
+
+Declare these at the top of every component file that uses them:
+
+```ts
+const PURPLE       = "#AB96FF";
+const DARK_BG      = "#0a0619";
+const BORDER_COLOR = "rgba(171,150,255,0.2)";
+const BORDER_HOVER = "rgba(171,150,255,0.55)";
+const SURFACE_BG   = "rgba(255,255,255,0.04)";
+const BACKDROP_BLUR = "blur(20px)";
+```
 
 | Token | Value | Usage |
 |-------|-------|-------|
 | `PURPLE` | `#AB96FF` | Primary accent — buttons, focused inputs, active nav items, icons |
-| `DARK_BG` | `#0a0619` | Page/layout background |
-| `BORDER_COLOR` | `rgba(171,150,255,0.2)` | Borders on cards, drawers, and glass surfaces (default state) |
+| `DARK_BG` | `#0a0619` | Page/layout background; Dialog/Modal paper background |
+| `BORDER_COLOR` | `rgba(171,150,255,0.2)` | Borders on cards, drawers, modals, and glass surfaces (default state) |
 | `BORDER_HOVER` | `rgba(171,150,255,0.55)` | Input field border on hover |
-| `SURFACE_BG` | `rgba(255,255,255,0.04)` | Glass-effect surface background (Paper, cards, inputs) |
+| `SURFACE_BG` | `rgba(255,255,255,0.04)` | Glass-effect surface background (Paper, TableContainer, inputs) |
 | `BACKDROP_BLUR` | `blur(20px)` | Backdrop filter on all glass surfaces |
 
-> Always reuse these values when building new dashboard UI. Do **not** introduce new border or background colors without a strong reason.
+### Rules — always follow these
+
+- **Never use white or light backgrounds.** All surfaces must use `DARK_BG`, `SURFACE_BG`, or `rgba(255,255,255,0.04)`.
+- **All Dialog/Modal paper** must set `backgroundColor: DARK_BG`, `backgroundImage: "none"`, `border: \`1px solid ${BORDER_COLOR}\``, and `backdropFilter: "blur(20px)"` via `slotProps.paper.sx`.
+- **Select dropdowns** must pass `MenuProps` with `slotProps.paper.sx` to set `backgroundColor: DARK_BG`, `backgroundImage: "none"`, and dark hover/selected states for MenuItems.
+- **Input fields** must use `fieldSx` (or equivalent) for `backgroundColor: SURFACE_BG`, purple border colors on hover/focus.
+- **Dividers** inside modals must use `sx={{ borderColor: BORDER_COLOR }}`.
+- **Alerts** — info alerts use `backgroundColor: "rgba(171,150,255,0.08)"`, `color: PURPLE`, `border: \`1px solid ${BORDER_COLOR}\``. Error alerts use `backgroundColor: "rgba(211,47,47,0.12)"`, `color: "#f48fb1"`.
+- **Do not introduce new border or background colors** without a strong reason.
+
+### Reusable `fieldSx` pattern for input fields
+
+```ts
+const fieldSx = {
+  "& .MuiOutlinedInput-root": {
+    backgroundColor: SURFACE_BG,
+    "& fieldset": { borderColor: BORDER_COLOR },
+    "&:hover fieldset": { borderColor: BORDER_HOVER },
+    "&.Mui-focused fieldset": { borderColor: PURPLE },
+  },
+  "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
+};
+```
+
+### Select dropdown dark pattern
+
+```tsx
+<Select
+  MenuProps={{
+    slotProps: {
+      paper: {
+        sx: {
+          backgroundColor: DARK_BG,
+          backgroundImage: "none",
+          border: `1px solid ${BORDER_COLOR}`,
+          "& .MuiMenuItem-root:hover": { backgroundColor: "rgba(171,150,255,0.12)" },
+          "& .MuiMenuItem-root.Mui-selected": { backgroundColor: "rgba(171,150,255,0.18)" },
+          "& .MuiMenuItem-root.Mui-selected:hover": { backgroundColor: "rgba(171,150,255,0.25)" },
+        },
+      },
+    },
+  }}
+/>
+```
 
 ## Roles
 

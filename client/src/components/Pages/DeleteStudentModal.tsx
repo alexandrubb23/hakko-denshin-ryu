@@ -16,10 +16,7 @@ import { useState } from "react";
 
 import { type Student } from "@api/students";
 import { useDeleteStudent } from "@hooks/useDeleteStudent";
-
-const PURPLE = "#AB96FF";
-const SURFACE_BG = "rgba(255,255,255,0.04)";
-const BORDER_COLOR = "rgba(171,150,255,0.2)";
+import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
 
 interface Props {
   open: boolean;

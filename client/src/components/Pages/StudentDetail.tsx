@@ -18,10 +18,8 @@ import { useNavigate, useParams } from "react-router";
 
 import { useStudent } from "@hooks/useStudent";
 import { Routes } from "@lib/routes";
-
-const PURPLE = "#AB96FF";
-const BORDER_COLOR = "rgba(171,150,255,0.2)";
-const SURFACE_BG = "rgba(255,255,255,0.04)";
+import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import StudentDetailTabs from "./StudentDetailTabs";
 const SKEL = { bgcolor: "rgba(171,150,255,0.12)" };
 
 const getInitials = (name: string) =>
@@ -164,8 +162,11 @@ const StudentDetail = () => {
           </Stack>
         )}
       </Paper>
+
+      <StudentDetailTabs studentId={id!} />
     </Container>
   );
 };
 
 export default StudentDetail;
+

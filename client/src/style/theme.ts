@@ -15,18 +15,23 @@ const theme = createTheme({
     },
   },
   palette: {
+    mode: 'dark',
     primary: {
       main: '#AB96FF',
-      contrastText: '#fff',
+      contrastText: '#0a0619',
     },
     secondary: {
       main: '#ffd700',
-      contrastText: '#fff',
+      contrastText: '#0a0619',
+    },
+    background: {
+      default: '#0a0619',
+      paper: '#0f0b1e',
     },
     text: {
       primary: '#fff',
-      secondary: '#fff',
-      disabled: '#fff',
+      secondary: 'rgba(255,255,255,0.7)',
+      disabled: 'rgba(255,255,255,0.38)',
     },
   },
   typography: {

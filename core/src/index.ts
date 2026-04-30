@@ -4,3 +4,8 @@ export {
   updateStudentSchema,
   type UpdateStudentInput,
 } from "./schemas/students.js";
+
+export {
+  createStudentRankSchema,
+  type CreateStudentRankInput,
+} from "./schemas/ranks.js";

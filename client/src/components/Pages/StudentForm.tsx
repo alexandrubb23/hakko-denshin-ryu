@@ -25,11 +25,13 @@ import { useForm } from "react-hook-form";
 import { type Student } from "@api/students";
 import { useCreateStudent } from "@hooks/useCreateStudent";
 import { useUpdateStudent } from "@hooks/useUpdateStudent";
-
-const PURPLE = "#AB96FF";
-const SURFACE_BG = "rgba(255,255,255,0.04)";
-const BORDER_COLOR = "rgba(171,150,255,0.2)";
-const BORDER_HOVER = "rgba(171,150,255,0.55)";
+import {
+  BORDER_COLOR,
+  BORDER_HOVER,
+  DARK_BG,
+  PURPLE,
+  SURFACE_BG,
+} from "@style/tokens";
 
 const fieldSx = {
   "& .MuiOutlinedInput-root": {
@@ -48,11 +50,17 @@ export const StudentFormMode = {
   edit: "edit",
 } as const;
 
-export type StudentFormMode = (typeof StudentFormMode)[keyof typeof StudentFormMode];
+export type StudentFormMode =
+  (typeof StudentFormMode)[keyof typeof StudentFormMode];
 
 export type StudentFormProps =
   | { mode: typeof StudentFormMode.create; open: boolean; onClose: () => void }
-  | { mode: typeof StudentFormMode.edit; open: boolean; onClose: () => void; student: Student };
+  | {
+      mode: typeof StudentFormMode.edit;
+      open: boolean;
+      onClose: () => void;
+      student: Student;
+    };
 
 const modeConfig = {
   [StudentFormMode.create]: {
@@ -87,7 +95,8 @@ const StudentForm = (props: StudentFormProps) => {
     reset: resetMutation,
   } = mode === StudentFormMode.create ? createMutation : updateMutation;
 
-  const schema = mode === StudentFormMode.create ? createStudentSchema : updateStudentSchema;
+  const schema =
+    mode === StudentFormMode.create ? createStudentSchema : updateStudentSchema;
 
   const {
     register,
@@ -142,7 +151,7 @@ const StudentForm = (props: StudentFormProps) => {
       slotProps={{
         paper: {
           sx: {
-            backgroundColor: "#0f0b1e",
+            backgroundColor: DARK_BG,
             backgroundImage: "none",
             border: `1px solid ${BORDER_COLOR}`,
             backdropFilter: "blur(20px)",
