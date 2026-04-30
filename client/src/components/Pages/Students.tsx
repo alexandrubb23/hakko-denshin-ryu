@@ -1,5 +1,5 @@
 import { useStudents } from "@hooks/useStudents";
-import { Container } from "@mui/material";
+import { Box } from "@mui/material";
 import { useState } from "react";
 
 import CreateStudentModal from "./CreateStudentModal";
@@ -11,11 +11,11 @@ const Students = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <Container maxWidth="lg" className="py-8">
+    <Box className="py-8">
       <StudentsHeader count={students?.length} onAdd={() => setModalOpen(true)} />
       <CreateStudentModal open={modalOpen} onClose={() => setModalOpen(false)} />
       <StudentsTable students={students} isLoading={isLoading} isError={isError} />
-    </Container>
+    </Box>
   );
 };
 

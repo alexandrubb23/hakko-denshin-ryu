@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   Chip,
-  Container,
   Divider,
   Paper,
   Skeleton,
@@ -36,7 +35,7 @@ const StudentDetail = () => {
   const { data: student, isLoading, isError } = useStudent(id!);
 
   return (
-    <Container maxWidth="sm" sx={{ py: 4 }}>
+    <Box sx={{ py: 4 }}>
       <Button
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate(Routes.students)}
@@ -164,9 +163,8 @@ const StudentDetail = () => {
       </Paper>
 
       <StudentDetailTabs studentId={id!} />
-    </Container>
+    </Box>
   );
 };
 
 export default StudentDetail;
-
