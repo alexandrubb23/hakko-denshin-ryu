@@ -47,12 +47,14 @@ const STUDENT_ID = "student-123";
 const mockRanks: StudentRankEntry[] = [
   {
     id: "rank-1",
+    rankId: 2,
     awardedAt: "2024-03-01T00:00:00.000Z",
     notes: "Good progress",
     rank: { name: "5 Kyu", belt: "yellow", order: 2 },
   },
   {
     id: "rank-2",
+    rankId: 3,
     awardedAt: "2024-09-15T00:00:00.000Z",
     notes: null,
     rank: { name: "4 Kyu", belt: "orange", order: 3 },
@@ -95,7 +97,9 @@ describe("StudentRankTab", () => {
     });
 
     it("renders the Assign Rank button", () => {
-      expect(screen.getByRole("button", { name: /assign rank/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /assign rank/i })
+      ).toBeInTheDocument();
     });
 
     it("renders the table with column headers", () => {
@@ -137,7 +141,9 @@ describe("StudentRankTab", () => {
     });
 
     it("still renders the Assign Rank button", () => {
-      expect(screen.getByRole("button", { name: /assign rank/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /assign rank/i })
+      ).toBeInTheDocument();
     });
   });
 
@@ -147,9 +153,7 @@ describe("StudentRankTab", () => {
     });
 
     it("shows the empty state alert", () => {
-      expect(
-        screen.getByText(/no ranks assigned yet/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/no ranks assigned yet/i)).toBeInTheDocument();
     });
 
     it("does not render the table", () => {
@@ -163,7 +167,9 @@ describe("StudentRankTab", () => {
     });
 
     it("renders the Assign Rank button", () => {
-      expect(screen.getByRole("button", { name: /assign rank/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /assign rank/i })
+      ).toBeInTheDocument();
     });
   });
 
@@ -202,7 +208,9 @@ describe("StudentRankTab", () => {
     });
 
     it("renders the Assign Rank button", () => {
-      expect(screen.getByRole("button", { name: /assign rank/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /assign rank/i })
+      ).toBeInTheDocument();
     });
 
     it("does not show error or empty state alerts", () => {

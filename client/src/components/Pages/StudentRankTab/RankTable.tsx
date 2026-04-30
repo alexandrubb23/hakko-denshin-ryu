@@ -13,14 +13,15 @@ import { BACKDROP_BLUR, BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
 import RankRow from "./RankRow";
 import RankSkeletonRows from "./RankSkeletonRows";
 
-const TABLE_HEADERS = ["Belt", "Rank", "Awarded on", "Notes"];
+const TABLE_HEADERS = ["Belt", "Rank", "Awarded on", "Notes", "Actions"];
 
 interface Props {
   isLoading: boolean;
   ranks: StudentRankEntry[] | undefined;
+  onEdit: (entry: StudentRankEntry) => void;
 }
 
-const RankTable = ({ isLoading, ranks }: Props) => (
+const RankTable = ({ isLoading, ranks, onEdit }: Props) => (
   <TableContainer
     sx={{
       mt: 2,
@@ -52,7 +53,7 @@ const RankTable = ({ isLoading, ranks }: Props) => (
         {isLoading ? (
           <RankSkeletonRows />
         ) : (
-          ranks?.map((entry) => <RankRow key={entry.id} entry={entry} />)
+          ranks?.map((entry) => <RankRow key={entry.id} entry={entry} onEdit={onEdit} />)
         )}
       </TableBody>
     </Table>

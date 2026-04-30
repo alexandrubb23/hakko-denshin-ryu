@@ -8,4 +8,7 @@ export {
 export {
   createStudentRankSchema,
   type CreateStudentRankInput,
+  updateStudentRankSchema,
+  type UpdateStudentRankInput,
+  type RankFormBase,
 } from "./schemas/ranks.js";

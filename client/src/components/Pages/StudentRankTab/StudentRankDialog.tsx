@@ -1,0 +1,88 @@
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+} from "@mui/material";
+import type { ReactNode } from "react";
+
+import { BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
+
+const dialogPaperSx = {
+  backgroundColor: DARK_BG,
+  backgroundImage: "none",
+  border: `1px solid ${BORDER_COLOR}`,
+  backdropFilter: "blur(20px)",
+};
+
+const submitButtonSx = {
+  backgroundColor: PURPLE,
+  color: "#0a0619",
+  fontWeight: 700,
+  "&:hover": { backgroundColor: "#c4b4ff" },
+};
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
+  /** Icon + text rendered inside DialogTitle */
+  title: ReactNode;
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  isPending: boolean;
+  submitLabel: string;
+  /** Additional condition to disable the submit button beyond isPending */
+  submitDisabled?: boolean;
+  children: ReactNode;
+}
+
+const StudentRankDialog = ({
+  open,
+  onClose,
+  title,
+  onSubmit,
+  isPending,
+  submitLabel,
+  submitDisabled = false,
+  children,
+}: Props) => (
+  <Dialog
+    open={open}
+    onClose={onClose}
+    maxWidth="xs"
+    fullWidth
+    slotProps={{ paper: { sx: dialogPaperSx } }}
+  >
+    <DialogTitle
+      sx={{ display: "flex", alignItems: "center", gap: 1, color: PURPLE, fontWeight: 700 }}
+    >
+      {title}
+    </DialogTitle>
+
+    <Divider sx={{ borderColor: BORDER_COLOR }} />
+
+    <Box component="form" onSubmit={onSubmit} noValidate>
+      <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: 3 }}>
+        {children}
+      </DialogContent>
+
+      <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
+        <Button onClick={onClose} disabled={isPending} sx={{ color: "text.secondary" }}>
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isPending || submitDisabled}
+          sx={submitButtonSx}
+        >
+          {submitLabel}
+        </Button>
+      </DialogActions>
+    </Box>
+  </Dialog>
+);
+
+export default StudentRankDialog;

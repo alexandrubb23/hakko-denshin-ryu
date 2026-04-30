@@ -3,10 +3,12 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Alert, Box, Button } from "@mui/material";
 import { useState } from "react";
 
+import { type StudentRankEntry } from "@api/students";
 import { useStudentRanks } from "@hooks/useStudentRanks";
 import { BORDER_COLOR, PURPLE } from "@style/tokens";
 
 import CreateStudentRankModal from "./CreateStudentRankModal";
+import EditStudentRankModal from "./EditStudentRankModal";
 import RankTable from "./RankTable";
 
 interface Props {
@@ -15,7 +17,8 @@ interface Props {
 
 const StudentRankTab = ({ studentId }: Props) => {
   const { data: ranks, isLoading, isError } = useStudentRanks(studentId);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [editEntry, setEditEntry] = useState<StudentRankEntry | null>(null);
 
   return (
     <>
@@ -23,7 +26,7 @@ const StudentRankTab = ({ studentId }: Props) => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => setModalOpen(true)}
+          onClick={() => setCreateOpen(true)}
           sx={{
             backgroundColor: PURPLE,
             color: "#0a0619",
@@ -37,9 +40,18 @@ const StudentRankTab = ({ studentId }: Props) => {
 
       <CreateStudentRankModal
         studentId={studentId}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
       />
+
+      {editEntry && (
+        <EditStudentRankModal
+          studentId={studentId}
+          entry={editEntry}
+          open={true}
+          onClose={() => setEditEntry(null)}
+        />
+      )}
 
       {isError && (
         <Alert severity="error" sx={{ mt: 2 }}>
@@ -64,7 +76,7 @@ const StudentRankTab = ({ studentId }: Props) => {
       )}
 
       {(isLoading || (ranks && ranks.length > 0)) && (
-        <RankTable isLoading={isLoading} ranks={ranks} />
+        <RankTable isLoading={isLoading} ranks={ranks} onEdit={setEditEntry} />
       )}
     </>
   );

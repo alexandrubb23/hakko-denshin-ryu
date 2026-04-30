@@ -13,6 +13,7 @@ export interface Student {
 
 export interface StudentRankEntry {
   id: string;
+  rankId: number;
   awardedAt: string;
   notes: string | null;
   rank: {
@@ -49,6 +50,18 @@ class StudentsApi extends Http {
     payload: { rankId: number; awardedAt: string; notes?: string }
   ): Promise<StudentRankEntry> {
     const { data } = await this.http.post(ApiRoutes.adminStudentRanks(studentId), payload);
+    return data.rank;
+  }
+
+  async updateStudentRank(
+    studentId: string,
+    rankEntryId: string,
+    payload: { awardedAt: string; notes?: string }
+  ): Promise<StudentRankEntry> {
+    const { data } = await this.http.put(
+      ApiRoutes.adminStudentRank(studentId, rankEntryId),
+      payload
+    );
     return data.rank;
   }
 

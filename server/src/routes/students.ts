@@ -1,6 +1,6 @@
-import { createStudentRankSchema, createStudentSchema, updateStudentSchema } from "@hakko/core";
+import { createStudentRankSchema, updateStudentRankSchema, createStudentSchema, updateStudentSchema } from "@hakko/core";
 import { hashPassword } from "@better-auth/utils/password";
-import { Router } from "express";
+import { Router, type Response } from "express";
 import { Role } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
 import { ApiRoutes } from "../lib/routes.js";
@@ -9,6 +9,27 @@ import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
 
 const router = Router();
+
+const requireStudent = async (id: string, res: Response) => {
+  const student = await prisma.user.findUnique({
+    where: { id },
+    select: { role: true, deletedAt: true, email: true },
+  });
+  if (!student || student.role !== Role.student || student.deletedAt !== null) {
+    res.status(404).json({ error: "Student not found" });
+    return null;
+  }
+  return student;
+};
+
+const requireRankEntry = async (rankEntryId: string, studentId: string, res: Response) => {
+  const rankEntry = await prisma.studentRank.findUnique({ where: { id: rankEntryId } });
+  if (!rankEntry || rankEntry.userId !== studentId || rankEntry.deletedAt !== null) {
+    res.status(404).json({ error: "Rank entry not found" });
+    return null;
+  }
+  return rankEntry;
+};
 
 router.get(
   ApiRoutes.adminRanks,
@@ -80,20 +101,14 @@ router.get(
   async (req, res) => {
     const id = req.params.id as string;
 
-    const student = await prisma.user.findUnique({
-      where: { id },
-      select: { role: true, deletedAt: true },
-    });
-
-    if (!student || student.role !== Role.student || student.deletedAt !== null) {
-      res.status(404).json({ error: "Student not found" });
-      return;
-    }
+    const student = await requireStudent(id, res);
+    if (!student) return;
 
     const ranks = await prisma.studentRank.findMany({
       where: { userId: id, deletedAt: null },
       select: {
         id: true,
+        rankId: true,
         awardedAt: true,
         notes: true,
         rank: {
@@ -114,15 +129,8 @@ router.post(
   async (req, res) => {
     const id = req.params.id as string;
 
-    const student = await prisma.user.findUnique({
-      where: { id },
-      select: { role: true, deletedAt: true },
-    });
-
-    if (!student || student.role !== Role.student || student.deletedAt !== null) {
-      res.status(404).json({ error: "Student not found" });
-      return;
-    }
+    const student = await requireStudent(id, res);
+    if (!student) return;
 
     const parsed = validate(createStudentRankSchema, req.body, res);
     if (!parsed) return;
@@ -156,6 +164,7 @@ router.post(
       },
       select: {
         id: true,
+        rankId: true,
         awardedAt: true,
         notes: true,
         rank: { select: { name: true, belt: true, order: true } },
@@ -163,6 +172,44 @@ router.post(
     });
 
     res.status(201).json({ rank });
+  }
+);
+
+router.put(
+  ApiRoutes.adminStudentRank,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const studentId = req.params.id as string;
+    const rankEntryId = req.params.rankEntryId as string;
+
+    const student = await requireStudent(studentId, res);
+    if (!student) return;
+
+    const rankEntry = await requireRankEntry(rankEntryId, studentId, res);
+    if (!rankEntry) return;
+
+    const parsed = validate(updateStudentRankSchema, req.body, res);
+    if (!parsed) return;
+
+    const { awardedAt, notes } = parsed;
+
+    const rank = await prisma.studentRank.update({
+      where: { id: rankEntryId },
+      data: {
+        awardedAt: new Date(awardedAt),
+        notes: notes ?? null,
+      },
+      select: {
+        id: true,
+        rankId: true,
+        awardedAt: true,
+        notes: true,
+        rank: { select: { name: true, belt: true, order: true } },
+      },
+    });
+
+    res.json({ rank });
   }
 );
 
@@ -221,11 +268,8 @@ router.put(
   async (req, res) => {
     const id = req.params.id as string;
 
-    const student = await prisma.user.findUnique({ where: { id } });
-    if (!student || student.role !== Role.student || student.deletedAt !== null) {
-      res.status(404).json({ error: "Student not found" });
-      return;
-    }
+    const student = await requireStudent(id, res);
+    if (!student) return;
 
     const parsed = validate(updateStudentSchema, req.body, res);
     if (!parsed) return;
