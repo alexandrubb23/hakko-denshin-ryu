@@ -27,6 +27,7 @@ export default defineConfig({
       '@locales': '/src/locales',
       '@pages': '/src/pages',
       '@lib': '/src/lib',
+      '@constants': '/src/constants',
     },
   },
 });

@@ -1,12 +1,16 @@
-import { createStudentRankSchema, updateStudentRankSchema, createStudentSchema, updateStudentSchema } from "@hakko/core";
 import { hashPassword } from "@better-auth/utils/password";
+import { createStudentRankSchema, createStudentSchema, updateStudentRankSchema, updateStudentSchema, toUtcDate } from "@hakko/core";
 import { Router, type Response } from "express";
+import { z } from "zod";
 import { Role } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
+
+const MIN_MONTH = 1; // January
+const MAX_MONTH = 12; // December
 
 const router = Router();
 
@@ -22,9 +26,19 @@ const requireStudent = async (id: string, res: Response) => {
   return student;
 };
 
-const requireRankEntry = async (rankEntryId: string, studentId: string, res: Response) => {
-  const rankEntry = await prisma.studentRank.findUnique({ where: { id: rankEntryId } });
-  if (!rankEntry || rankEntry.userId !== studentId || rankEntry.deletedAt !== null) {
+const requireRankEntry = async (
+  rankEntryId: string,
+  studentId: string,
+  res: Response
+) => {
+  const rankEntry = await prisma.studentRank.findUnique({
+    where: { id: rankEntryId },
+  });
+  if (
+    !rankEntry ||
+    rankEntry.userId !== studentId ||
+    rankEntry.deletedAt !== null
+  ) {
     res.status(404).json({ error: "Rank entry not found" });
     return null;
   }
@@ -85,7 +99,11 @@ router.get(
       },
     });
 
-    if (!student || student.role !== Role.student || student.deletedAt !== null) {
+    if (
+      !student ||
+      student.role !== Role.student ||
+      student.deletedAt !== null
+    ) {
       res.status(404).json({ error: "Student not found" });
       return;
     }
@@ -151,7 +169,9 @@ router.post(
 
     const expectedOrder = currentTop ? currentTop.rank.order + 1 : 1;
     if (targetRank.order !== expectedOrder) {
-      res.status(422).json({ error: "Rank must follow the student's current rank in sequence." });
+      res.status(422).json({
+        error: "Rank must follow the student's current rank in sequence.",
+      });
       return;
     }
 
@@ -358,6 +378,101 @@ router.delete(
     ]);
 
     res.status(204).end();
+  }
+);
+
+const upsertAttendanceSchema = z.object({
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, expected YYYY-MM-DD"),
+  attended: z.boolean(),
+});
+
+router.get(
+  ApiRoutes.adminStudentAttendance,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const id = req.params.id as string;
+
+    const student = await requireStudent(id, res);
+    if (!student) return;
+
+    const yearParam = req.query.year as string | undefined;
+    const monthParam = req.query.month as string | undefined;
+
+    const year = Number(yearParam);
+
+    if (!yearParam || isNaN(year)) {
+      res.status(400).json({
+        error: "year query parameter is required and must be a number",
+      });
+      return;
+    }
+
+    let from: Date;
+    let to: Date;
+
+    if (monthParam !== undefined) {
+      const month = Number(monthParam);
+      if (isNaN(month) || month < MIN_MONTH || month > MAX_MONTH) {
+        res
+          .status(400)
+          .json({
+            error: `month must be between ${MIN_MONTH} and ${MAX_MONTH}`,
+          });
+        return;
+      }
+      from = toUtcDate(year, month, 1);
+      to = toUtcDate(year, month + 1, 1);
+    } else {
+      from = toUtcDate(year, 1, 1);
+      to = toUtcDate(year + 1, 1, 1);
+    }
+
+    const records = await prisma.studentAttendance.findMany({
+      where: { userId: id, date: { gte: from, lt: to } },
+      select: { id: true, date: true, attended: true },
+      orderBy: { date: "asc" },
+    });
+
+    res.json({ records });
+  }
+);
+
+router.post(
+  ApiRoutes.adminStudentAttendance,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const id = req.params.id as string;
+
+    const student = await requireStudent(id, res);
+    if (!student) return;
+
+    const parsed = validate(upsertAttendanceSchema, req.body, res);
+    if (!parsed) return;
+
+    const { date: dateStr, attended } = parsed;
+
+    const date = new Date(`${dateStr}T00:00:00.000Z`);
+    const today = new Date();
+    today.setUTCHours(23, 59, 59, 999);
+    if (date > today) {
+      res
+        .status(422)
+        .json({ error: "Cannot mark attendance for future dates" });
+      return;
+    }
+
+    const record = await prisma.studentAttendance.upsert({
+      where: { userId_date: { userId: id, date } },
+      create: { userId: id, date, attended },
+      update: { attended },
+      select: { id: true, date: true, attended: true },
+    });
+
+    res.status(200).json({ record });
   }
 );
 

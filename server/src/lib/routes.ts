@@ -8,4 +8,5 @@ export const ApiRoutes = {
   adminStudent: "/api/admin/students/:id",
   adminStudentRanks: "/api/admin/students/:id/ranks",
   adminStudentRank: "/api/admin/students/:id/ranks/:rankEntryId",
+  adminStudentAttendance: "/api/admin/students/:id/attendance",
 } as const;

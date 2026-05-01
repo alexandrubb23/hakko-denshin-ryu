@@ -18,4 +18,6 @@ export const ApiRoutes = {
   adminStudentRanks: (id: string) => `/api/admin/students/${id}/ranks`,
   adminStudentRank: (studentId: string, rankEntryId: string) =>
     `/api/admin/students/${studentId}/ranks/${rankEntryId}`,
+  adminStudentAttendance: (studentId: string) =>
+    `/api/admin/students/${studentId}/attendance`,
 } as const;

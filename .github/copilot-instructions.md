@@ -230,6 +230,61 @@ const fieldSx = {
 />
 ```
 
+### Using `styled()` for stateful or repeated styles
+
+Use MUI's `styled()` utility (from `@mui/material/styles`) instead of module-level sx object constants when a component's styles depend on props or state, or when multiple constant objects would otherwise accumulate.
+
+- Always use `shouldForwardProp` to prevent custom props from reaching the DOM.
+- The styled component receives the custom prop in its callback; spread conditional styles with `...(prop && { ... })`.
+
+```tsx
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+
+const YesButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "active",
+})<{ active: boolean }>(({ active }) => ({
+  borderColor: active ? "#4caf50" : "rgba(76,175,80,0.3)",
+  color: active ? "#4caf50" : "rgba(76,175,80,0.5)",
+  ...(active && {
+    "&:hover": {
+      borderColor: "#66bb6a",
+      backgroundColor: "rgba(76,175,80,0.08)",
+    },
+  }),
+}));
+```
+
+**When to use `styled()` vs `sx`:**
+- Use `sx` for one-off, non-conditional styles on a single element.
+- Use `styled()` when styles depend on props/state or when you'd otherwise define multiple sx-object constants.
+
+### String enums for status and state values
+
+Use a TypeScript string enum (not a `const enum` — esbuild doesn't support those across modules) whenever a component or module defines a fixed set of string status/state values that are used in multiple places.
+
+- Define the enum in the same file as the primary consumer; export it as a value (not `export type`).
+- Always import the enum as a value when you need to reference its members at runtime.
+
+```ts
+enum AttendanceStatus {
+  present = "present",
+  absent = "absent",
+  unmarked = "unmarked",
+}
+
+export { AttendanceStatus };
+```
+
+```tsx
+// consumer
+import { AttendanceStatus } from "./AttendanceDayDot";
+
+return record.attended ? AttendanceStatus.present : AttendanceStatus.absent;
+```
+
+**Do not** scatter literal strings (`"present"`, `"absent"`, `"unmarked"`) across multiple files — centralise them in the enum.
+
 ## Roles
 
 - **Admin** — single administrator, seeded at deployment. Full CRUD on all data.

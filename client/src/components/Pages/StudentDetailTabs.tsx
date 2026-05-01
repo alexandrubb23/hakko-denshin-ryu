@@ -2,13 +2,16 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import EventIcon from "@mui/icons-material/Event";
 import { Box, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router";
 
 import { BORDER_COLOR, PURPLE } from "@style/tokens";
 
+import StudentAttendanceTab from "./StudentAttendanceTab";
 import StudentRankTab from "./StudentRankTab";
 
 interface TabConfig {
+  id: string;
   label: string;
   icon: React.ReactElement;
   component: React.ComponentType<{ studentId: string }>;
@@ -17,17 +20,19 @@ interface TabConfig {
 
 const STUDENT_TABS: TabConfig[] = [
   {
+    id: "ranks",
     label: "Ranks",
     icon: <EmojiEventsIcon sx={{ fontSize: 18 }} />,
     component: StudentRankTab,
   },
   {
+    id: "attendance",
     label: "Attendance",
     icon: <CalendarMonthIcon sx={{ fontSize: 18 }} />,
-    component: () => null,
-    disabled: true,
+    component: StudentAttendanceTab,
   },
   {
+    id: "events",
     label: "Events",
     icon: <EventIcon sx={{ fontSize: 18 }} />,
     component: () => null,
@@ -40,14 +45,25 @@ interface Props {
 }
 
 const StudentDetailTabs = ({ studentId }: Props) => {
-  const [activeTab, setActiveTab] = useState(0);
-  const ActiveComponent = STUDENT_TABS[activeTab].component;
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const activeTabIndex = useMemo(() => {
+    const tabParam = searchParams.get("tab");
+    const idx = STUDENT_TABS.findIndex((t) => t.id === tabParam);
+    return idx >= 0 ? idx : 0;
+  }, [searchParams]);
+
+  const handleTabChange = (_: React.SyntheticEvent, index: number) => {
+    setSearchParams({ tab: STUDENT_TABS[index].id }, { replace: true });
+  };
+
+  const ActiveComponent = STUDENT_TABS[activeTabIndex].component;
 
   return (
     <Box sx={{ mt: 3 }}>
       <Tabs
-        value={activeTab}
-        onChange={(_, v) => setActiveTab(v)}
+        value={activeTabIndex}
+        onChange={handleTabChange}
         sx={{
           borderBottom: `1px solid ${BORDER_COLOR}`,
           "& .MuiTab-root": {

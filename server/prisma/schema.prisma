@@ -30,18 +30,19 @@ enum Belt {
 }
 
 model User {
-  id            String        @id
-  name          String
-  email         String
-  emailVerified Boolean       @default(false)
-  image         String?
-  role          Role          @default(student)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  deletedAt     DateTime?
-  sessions      Session[]
-  accounts      Account[]
-  studentRanks  StudentRank[]
+  id                 String               @id
+  name               String
+  email              String
+  emailVerified      Boolean              @default(false)
+  image              String?
+  role               Role                 @default(student)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  deletedAt          DateTime?
+  sessions           Session[]
+  accounts           Account[]
+  studentRanks       StudentRank[]
+  attendanceRecords  StudentAttendance[]
 
   @@unique([email])
   @@map("user")
@@ -122,4 +123,18 @@ model StudentRank {
   @@index([userId])
   @@index([rankId])
   @@map("student_rank")
+}
+
+model StudentAttendance {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime @db.Date
+  attended  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@map("student_attendance")
 }

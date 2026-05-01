@@ -14,21 +14,21 @@ export async function render(url: string) {
   const { extractCriticalToChunks, constructStyleTagsFromChunks } =
     createEmotionServer(cache);
 
-  const normalizedUrl = normalizePath(url);
+  // url arrives without a leading slash (e.g. "students/abc?tab=attendance")
+  // Split pathname and search before normalizing
+  const [rawPathname, rawSearch] = url.split('?');
+  const normalizedPathname = normalizePath(rawPathname);
+  const search = rawSearch ? `?${rawSearch}` : '';
 
   const title =
-    pages.find(route => normalizePath(route.path) === normalizedUrl)?.title ||
+    pages.find(route => normalizePath(route.path) === normalizedPathname)?.title ||
     'Default Title';
 
-  const loaderData = await prefetch(normalizedUrl);
+  const loaderData = await prefetch(normalizedPathname);
 
   const html = renderToString(
     <Providers cache={cache}>
-      <StaticRouter
-        location={{
-          pathname: normalizedUrl,
-        }}
-      >
+      <StaticRouter location={`${normalizedPathname}${search}`}>
         <AppRoutes initialLoaderData={loaderData} />
       </StaticRouter>
     </Providers>
