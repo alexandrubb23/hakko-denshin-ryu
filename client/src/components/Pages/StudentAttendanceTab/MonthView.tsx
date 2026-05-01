@@ -95,7 +95,14 @@ const EmptyCell = styled("div")({ minHeight: 80 });
 
 const PurpleSpinner = styled(CircularProgress)({ color: PURPLE });
 
-const DayCell = ({ date, studentId, records, today, year, month }: DayCellProps) => {
+const DayCell = ({
+  date,
+  studentId,
+  records,
+  today,
+  year,
+  month,
+}: DayCellProps) => {
   const training = isTrainingDay(date);
   const isFuture = date > today;
   const dateKey = formatDateKey(date);
@@ -119,6 +126,7 @@ const DayCell = ({ date, studentId, records, today, year, month }: DayCellProps)
               attended={attended}
               onYes={() => mutate({ date: dateKey, attended: true })}
               onNo={() => mutate({ date: dateKey, attended: false })}
+              compact
             />
           )}
         </div>
@@ -141,11 +149,15 @@ const MonthView = ({ studentId, cursor, onCursorChange, records }: Props) => {
   const grid = getCalendarGrid(year, month);
 
   const prevMonth = () => {
-    onCursorChange(toUtcDate(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, 1));
+    onCursorChange(
+      toUtcDate(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, 1)
+    );
   };
 
   const nextMonth = () => {
-    onCursorChange(toUtcDate(month === 12 ? year + 1 : year, month === 12 ? 1 : month + 1, 1));
+    onCursorChange(
+      toUtcDate(month === 12 ? year + 1 : year, month === 12 ? 1 : month + 1, 1)
+    );
   };
 
   const isNextDisabled =

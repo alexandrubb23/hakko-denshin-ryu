@@ -55,25 +55,32 @@ const ChartTitle = styled(Typography)({
   fontSize: "0.7rem",
 });
 
-const StatsBadges = styled("div")({
+const StatsBadges = styled("div")(({ theme }) => ({
   display: "flex",
   gap: 8,
-});
+  [theme.breakpoints.down("sm")]: {
+    gap: 6,
+  },
+}));
 
 const StatBadge = styled("div", {
   shouldForwardProp: (prop) => prop !== "variant",
-})<{ variant: "present" | "absent" }>(({ variant }) => ({
+})<{ variant: "present" | "absent" }>(({ variant, theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: 5,
   fontSize: "0.7rem",
   fontWeight: 600,
   color: variant === "present" ? PURPLE : "rgba(211, 47, 47, 0.9)",
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.6rem",
+    gap: 3,
+  },
 }));
 
 const StatDot = styled("span", {
   shouldForwardProp: (prop) => prop !== "variant",
-})<{ variant: "present" | "absent" }>(({ variant }) => ({
+})<{ variant: "present" | "absent" }>(({ variant, theme }) => ({
   width: 10,
   height: 10,
   borderRadius: 2,
@@ -81,6 +88,10 @@ const StatDot = styled("span", {
   border: `1px solid ${variant === "present" ? PURPLE : "rgba(211, 47, 47, 0.9)"}`,
   backgroundColor:
     variant === "present" ? "rgba(171,150,255,0.18)" : "rgba(211,47,47,0.15)",
+  [theme.breakpoints.down("sm")]: {
+    width: 8,
+    height: 8,
+  },
 }));
 
 interface Props {

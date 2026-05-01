@@ -7,6 +7,7 @@ interface Props {
   onNo: () => void;
   disabled?: boolean;
   size?: "small" | "medium";
+  compact?: boolean;
 }
 
 const YesButton = styled(Button, {
@@ -47,9 +48,14 @@ const YesNoButtons = ({
   onNo,
   disabled = false,
   size = "small",
+  compact = false,
 }: Props) => {
+  const btnSx = compact
+    ? { padding: "1px 5px", fontSize: "0.65rem", lineHeight: 1.4 }
+    : undefined;
+
   return (
-    <Box sx={{ display: "flex", gap: 1 }}>
+    <Box sx={{ display: "flex", gap: compact ? 0.5 : 1 }}>
       <YesButton
         variant="outlined"
         size={size}
@@ -57,8 +63,10 @@ const YesNoButtons = ({
         onClick={onYes}
         active={attended === true}
         locked={attended === true}
+        aria-label="Yes"
+        sx={btnSx}
       >
-        Yes
+        {compact ? "Y" : "Yes"}
       </YesButton>
       <NoButton
         variant="outlined"
@@ -67,8 +75,10 @@ const YesNoButtons = ({
         onClick={onNo}
         active={attended === false}
         locked={attended === false}
+        aria-label="No"
+        sx={btnSx}
       >
-        No
+        {compact ? "N" : "No"}
       </NoButton>
     </Box>
   );

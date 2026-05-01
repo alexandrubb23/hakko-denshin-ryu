@@ -8,22 +8,29 @@ interface StudentsHeaderProps {
 }
 
 const StudentsHeader = ({ count, onAdd }: StudentsHeaderProps) => (
-  <Stack direction="row" alignItems="center" gap={1.5} mb={3}>
-    <PeopleIcon sx={{ color: "#AB96FF", fontSize: 32 }} />
-    <Typography variant="h4" fontWeight={700}>
-      Students
-    </Typography>
-    {count !== undefined && (
-      <Chip
-        label={count}
-        size="small"
-        sx={{
-          backgroundColor: "rgba(171,150,255,0.15)",
-          color: "#AB96FF",
-          fontWeight: 700,
-        }}
-      />
-    )}
+  <Stack
+    direction={{ xs: "column", sm: "row" }}
+    alignItems={{ xs: "flex-start", sm: "center" }}
+    gap={1.5}
+    mb={3}
+  >
+    <Stack direction="row" alignItems="center" gap={1.5}>
+      <PeopleIcon sx={{ color: "#AB96FF", fontSize: 32 }} />
+      <Typography variant="h4" fontWeight={700}>
+        Students
+      </Typography>
+      {count !== undefined && (
+        <Chip
+          label={count}
+          size="small"
+          sx={{
+            backgroundColor: "rgba(171,150,255,0.15)",
+            color: "#AB96FF",
+            fontWeight: 700,
+          }}
+        />
+      )}
+    </Stack>
     <Box flexGrow={1} />
     <Button
       variant="contained"

@@ -148,6 +148,7 @@ const DayCell = ({
               onYes={() => handleMark(true)}
               onNo={() => handleMark(false)}
               disabled={isFuture}
+              compact
             />
           )}
         </DayCellActions>

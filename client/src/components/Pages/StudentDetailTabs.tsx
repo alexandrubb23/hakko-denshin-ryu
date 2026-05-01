@@ -1,8 +1,8 @@
+import useUrlTab from "@hooks/useUrlTab";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import EventIcon from "@mui/icons-material/Event";
 import { Box, Tab, Tabs } from "@mui/material";
-import useUrlTab from "@hooks/useUrlTab";
 
 import { BORDER_COLOR, PURPLE } from "@style/tokens";
 
@@ -53,6 +53,9 @@ const StudentDetailTabs = ({ studentId }: Props) => {
       <Tabs
         value={activeTabIndex}
         onChange={handleTabChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile
         sx={{
           borderBottom: `1px solid ${BORDER_COLOR}`,
           "& .MuiTab-root": {
@@ -62,6 +65,7 @@ const StudentDetailTabs = ({ studentId }: Props) => {
           },
           "& .Mui-selected": { color: PURPLE },
           "& .MuiTabs-indicator": { backgroundColor: PURPLE },
+          "& .MuiTabs-scrollButtons": { color: PURPLE },
         }}
       >
         {STUDENT_TABS.map(({ label, icon, disabled }) => (

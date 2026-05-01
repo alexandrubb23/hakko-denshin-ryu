@@ -1,6 +1,12 @@
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
 import { type StudentRankEntry } from "@api/students";
 import { PURPLE } from "@style/tokens";
@@ -15,7 +21,7 @@ interface Props {
 
 const RankRow = ({ entry, onEdit, onDelete }: Props) => (
   <TableRow sx={{ "&:last-child td": { border: 0 } }}>
-    <TableCell sx={{ py: 2 }}>
+    <TableCell sx={{ py: 2, width: "1%", whiteSpace: "nowrap" }}>
       <BeltImage belt={entry.rank.belt} />
     </TableCell>
     <TableCell>

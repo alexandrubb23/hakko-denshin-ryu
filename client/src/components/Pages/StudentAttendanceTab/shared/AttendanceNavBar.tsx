@@ -1,4 +1,4 @@
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { BORDER_COLOR, DARK_BG, PURPLE, SURFACE_BG } from "@style/tokens";
@@ -25,44 +25,64 @@ const NavBarRoot = styled("div")({
   marginBottom: 24,
 });
 
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+const StyledTabs = styled(Tabs)({
   backgroundColor: SURFACE_BG,
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 999,
-  overflow: "hidden",
   padding: 4,
-  gap: 8,
-  "& .MuiToggleButton-root": {
+  minHeight: "unset",
+  "& .MuiTabs-flexContainer": { gap: 8 },
+  "& .MuiTabs-indicator": {
+    height: "100%",
+    borderRadius: 999,
+    backgroundColor: PURPLE,
+    zIndex: 0,
+  },
+  "& .MuiTab-root": {
+    position: "relative",
+    zIndex: 1,
     border: "none",
     borderRadius: 999,
-    color: theme.palette.text.secondary,
+    color: "rgba(255,255,255,0.5)",
     textTransform: "none",
     fontWeight: 600,
     padding: "6px 20px",
+    minHeight: "unset",
+    minWidth: "unset",
+    transition: "color 0.2s",
     "&.Mui-selected": {
-      backgroundColor: PURPLE,
       color: DARK_BG,
-      "&:hover": { backgroundColor: "#c4b4ff" },
     },
-    "&:hover": { backgroundColor: "rgba(171,150,255,0.1)" },
+    "&:hover:not(.Mui-selected)": {
+      backgroundColor: "rgba(171,150,255,0.1)",
+    },
   },
-}));
+  "& .MuiTabs-scrollButtons": { color: PURPLE },
+});
 
-const AttendanceNavBar = ({ view, onChange }: Props) => (
-  <NavBarRoot>
-    <StyledToggleButtonGroup
-      value={view}
-      exclusive
-      onChange={(_, v) => v && onChange(v)}
-      size="small"
-    >
-      {VIEWS.map(({ value, label }) => (
-        <ToggleButton key={value} value={value}>
-          {label}
-        </ToggleButton>
-      ))}
-    </StyledToggleButtonGroup>
-  </NavBarRoot>
-);
+const AttendanceNavBar = ({ view, onChange }: Props) => {
+  const activeIndex = VIEWS.findIndex((v) => v.value === view);
+
+  return (
+    <NavBarRoot>
+      <StyledTabs
+        value={activeIndex}
+        onChange={(_, i) => onChange(VIEWS[i].value)}
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile
+        slotProps={{
+          indicator: {
+            children: <span />,
+          },
+        }}
+      >
+        {VIEWS.map(({ value, label }) => (
+          <Tab key={value} label={label} />
+        ))}
+      </StyledTabs>
+    </NavBarRoot>
+  );
+};
 
 export default AttendanceNavBar;

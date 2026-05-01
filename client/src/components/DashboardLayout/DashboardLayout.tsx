@@ -1,9 +1,9 @@
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import LogoutIcon from '@mui/icons-material/Logout';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import MenuIcon from '@mui/icons-material/Menu';
-import PeopleIcon from '@mui/icons-material/People';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import PeopleIcon from "@mui/icons-material/People";
 import {
   AppBar,
   Box,
@@ -18,37 +18,42 @@ import {
   Skeleton,
   Toolbar,
   Typography,
-} from '@mui/material';
-import { useState } from 'react';
-import { Outlet, Link, useNavigate, useLocation } from 'react-router';
+} from "@mui/material";
+import { useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 
-import LogoIcon from '@assets/images/logo.webp';
-import useIsMobile from '@hooks/isMobile';
-import { authClient } from '@lib/auth-client';
-import { Role } from '@lib/role';
-import { Routes } from '@lib/routes';
-import { BORDER_COLOR, DARK_BG, SURFACE_BG } from '@style/tokens';
+import LogoIcon from "@assets/images/logo.webp";
+import useIsMobile from "@hooks/isMobile";
+import { authClient } from "@lib/auth-client";
+import { Role } from "@lib/role";
+import { Routes } from "@lib/routes";
+import { BORDER_COLOR, DARK_BG, SURFACE_BG } from "@style/tokens";
 
 const DRAWER_WIDTH = 220;
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', path: Routes.dashboard, icon: <DashboardIcon /> },
-  { label: 'Techniques', path: Routes.techniques, icon: <MenuBookIcon /> },
-  { label: 'Kyu Program', path: Routes.kyuProgram, icon: <EmojiEventsIcon /> },
-  { label: 'Students', path: Routes.students, icon: <PeopleIcon />, adminOnly: true },
+  { label: "Dashboard", path: Routes.dashboard, icon: <DashboardIcon /> },
+  { label: "Techniques", path: Routes.techniques, icon: <MenuBookIcon /> },
+  { label: "Kyu Program", path: Routes.kyuProgram, icon: <EmojiEventsIcon /> },
+  {
+    label: "Students",
+    path: Routes.students,
+    icon: <PeopleIcon />,
+    adminOnly: true,
+  },
 ];
 
 const DRAWER_PAPER_BG = SURFACE_BG;
 
 const DRAWER_PAPER_SX = {
   width: DRAWER_WIDTH,
-  boxSizing: 'border-box' as const,
-  display: 'flex',
-  flexDirection: 'column' as const,
-  justifyContent: 'space-between',
+  boxSizing: "border-box" as const,
+  display: "flex",
+  flexDirection: "column" as const,
+  justifyContent: "space-between",
   backgroundColor: DRAWER_PAPER_BG,
-  backdropFilter: 'blur(20px)',
-  '& .MuiListItemIcon-root': { color: '#fff' },
+  backdropFilter: "blur(20px)",
+  "& .MuiListItemIcon-root": { color: "#fff" },
 };
 
 const DashboardLayout = () => {
@@ -65,22 +70,31 @@ const DashboardLayout = () => {
     navigate(Routes.login, { replace: true });
   };
 
-  const visibleItems = NAV_ITEMS.filter(item => !item.adminOnly || isAdmin);
+  const visibleItems = NAV_ITEMS.filter((item) => !item.adminOnly || isAdmin);
 
   const drawerContent = (
     <>
       <Box>
-        <Toolbar sx={{ justifyContent: 'center', py: 2 }}>
+        <Toolbar sx={{ justifyContent: "center", py: 2 }}>
           {isPending ? (
-            <Box className='flex flex-col items-center gap-1'>
-              <Skeleton variant='circular' width={40} height={40} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
-              <Skeleton variant='text' width={80} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
+            <Box className="flex flex-col items-center gap-1">
+              <Skeleton
+                variant="circular"
+                width={40}
+                height={40}
+                sx={{ bgcolor: "rgba(171,150,255,0.12)" }}
+              />
+              <Skeleton
+                variant="text"
+                width={80}
+                sx={{ bgcolor: "rgba(171,150,255,0.12)" }}
+              />
             </Box>
           ) : (
-            <Link to='/'>
-              <Box className='flex flex-col items-center gap-1'>
-                <Box component='img' src={LogoIcon} height={40} />
-                <Typography variant='body2' fontWeight={700}>
+            <Link to="/">
+              <Box className="flex flex-col items-center gap-1">
+                <Box component="img" src={LogoIcon} height={40} />
+                <Typography variant="body2" fontWeight={700}>
                   Senshinkan
                 </Typography>
               </Box>
@@ -101,14 +115,14 @@ const DashboardLayout = () => {
                   selected={active}
                   onClick={() => isMobile && setMobileOpen(false)}
                   sx={{
-                    '&.Mui-selected': {
-                      backgroundColor: 'rgba(171, 150, 255, 0.15)',
-                      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-                        color: '#AB96FF',
+                    "&.Mui-selected": {
+                      backgroundColor: "rgba(171, 150, 255, 0.15)",
+                      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+                        color: "#AB96FF",
                       },
                     },
-                    '&:hover': {
-                      backgroundColor: 'rgba(171, 150, 255, 0.08)',
+                    "&:hover": {
+                      backgroundColor: "rgba(171, 150, 255, 0.08)",
                     },
                   }}
                 >
@@ -129,7 +143,7 @@ const DashboardLayout = () => {
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary='Sign Out' />
+              <ListItemText primary="Sign Out" />
             </ListItemButton>
           </ListItem>
         </List>
@@ -138,37 +152,48 @@ const DashboardLayout = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100dvh', backgroundColor: DARK_BG }}>
+    <Box
+      sx={{ display: "flex", minHeight: "100dvh", backgroundColor: DARK_BG }}
+    >
       {isMobile ? (
         <>
           <AppBar
-            position='fixed'
+            position="fixed"
             elevation={0}
             sx={{
               backgroundColor: DRAWER_PAPER_BG,
-              backdropFilter: 'blur(20px)',
+              backdropFilter: "blur(20px)",
               borderBottom: `1px solid ${BORDER_COLOR}`,
             }}
           >
             <Toolbar sx={{ gap: 1 }}>
               <IconButton
-                edge='start'
-                onClick={() => setMobileOpen(prev => !prev)}
-                sx={{ color: '#fff' }}
-                aria-label='open navigation'
+                edge="start"
+                onClick={() => setMobileOpen((prev) => !prev)}
+                sx={{ color: "#fff" }}
+                aria-label="open navigation"
               >
                 <MenuIcon />
               </IconButton>
               {isPending ? (
-                <Box className='flex items-center gap-2'>
-                  <Skeleton variant='circular' width={32} height={32} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
-                  <Skeleton variant='text' width={80} sx={{ bgcolor: 'rgba(171,150,255,0.12)' }} />
+                <Box className="flex items-center gap-2">
+                  <Skeleton
+                    variant="circular"
+                    width={32}
+                    height={32}
+                    sx={{ bgcolor: "rgba(171,150,255,0.12)" }}
+                  />
+                  <Skeleton
+                    variant="text"
+                    width={80}
+                    sx={{ bgcolor: "rgba(171,150,255,0.12)" }}
+                  />
                 </Box>
               ) : (
-                <Link to='/'>
-                  <Box className='flex items-center gap-2'>
-                    <Box component='img' src={LogoIcon} height={32} />
-                    <Typography variant='body2' fontWeight={700}>
+                <Link to="/">
+                  <Box className="flex items-center gap-2">
+                    <Box component="img" src={LogoIcon} height={32} />
+                    <Typography variant="body2" fontWeight={700}>
                       Senshinkan
                     </Typography>
                   </Box>
@@ -178,12 +203,12 @@ const DashboardLayout = () => {
           </AppBar>
 
           <Drawer
-            variant='temporary'
+            variant="temporary"
             open={mobileOpen}
             onClose={() => setMobileOpen(false)}
             ModalProps={{ keepMounted: true }}
             sx={{
-              '& .MuiDrawer-paper': {
+              "& .MuiDrawer-paper": {
                 ...DRAWER_PAPER_SX,
                 borderRight: `1px solid ${BORDER_COLOR}`,
               },
@@ -192,18 +217,21 @@ const DashboardLayout = () => {
             {drawerContent}
           </Drawer>
 
-          <Box component='main' sx={{ flexGrow: 1, minWidth: 0, p: 3, mt: 8 }}>
+          <Box
+            component="main"
+            sx={{ flexGrow: 1, minWidth: 0, p: 1.5, mt: 8 }}
+          >
             <Outlet />
           </Box>
         </>
       ) : (
         <>
           <Drawer
-            variant='permanent'
+            variant="permanent"
             sx={{
               width: DRAWER_WIDTH,
               flexShrink: 0,
-              '& .MuiDrawer-paper': {
+              "& .MuiDrawer-paper": {
                 ...DRAWER_PAPER_SX,
                 borderRight: `1px solid ${BORDER_COLOR}`,
               },
@@ -212,7 +240,7 @@ const DashboardLayout = () => {
             {drawerContent}
           </Drawer>
 
-          <Box component='main' sx={{ flexGrow: 1, minWidth: 0, p: 3 }}>
+          <Box component="main" sx={{ flexGrow: 1, minWidth: 0, p: 1.5 }}>
             <Outlet />
           </Box>
         </>

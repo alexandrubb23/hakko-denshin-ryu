@@ -53,7 +53,7 @@ const renderTab = (initialUrl = "/", state: MockState = defaultState) => {
 };
 
 const clickView = (label: string) =>
-  fireEvent.click(screen.getByRole("button", { name: new RegExp(label, "i") }));
+  fireEvent.click(screen.getByRole("tab", { name: new RegExp(label, "i") }));
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
@@ -69,7 +69,7 @@ describe("StudentAttendanceTab", () => {
 
     it.each(["Day", "Week", "Month", "Year"])("renders the %s tab", (label) => {
       expect(
-        screen.getByRole("button", { name: new RegExp(`^${label}$`, "i") })
+        screen.getByRole("tab", { name: new RegExp(`^${label}$`, "i") })
       ).toBeInTheDocument();
     });
   });

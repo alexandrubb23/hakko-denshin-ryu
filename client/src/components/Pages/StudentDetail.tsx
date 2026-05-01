@@ -64,7 +64,12 @@ const StudentDetail = () => {
           </Typography>
         ) : (
           <Stack spacing={3}>
-            <Stack direction="row" alignItems="center" spacing={2.5}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              alignItems={{ xs: "center", sm: "center" }}
+              spacing={2.5}
+              sx={{ textAlign: { xs: "center", sm: "left" } }}
+            >
               {isLoading ? (
                 <Skeleton variant="circular" width={64} height={64} sx={SKEL} />
               ) : (
