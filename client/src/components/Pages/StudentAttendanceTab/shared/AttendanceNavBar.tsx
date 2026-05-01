@@ -3,13 +3,15 @@ import { styled } from "@mui/material/styles";
 
 import { BORDER_COLOR, DARK_BG, PURPLE, SURFACE_BG } from "@style/tokens";
 
-export type CalendarView = "day" | "week" | "month" | "year";
+import { CalendarView } from "./calendarView";
+
+export { CalendarView };
 
 const VIEWS: { value: CalendarView; label: string }[] = [
-  { value: "day", label: "Day" },
-  { value: "week", label: "Week" },
-  { value: "month", label: "Month" },
-  { value: "year", label: "Year" },
+  { value: CalendarView.day, label: "Day" },
+  { value: CalendarView.week, label: "Week" },
+  { value: CalendarView.month, label: "Month" },
+  { value: CalendarView.year, label: "Year" },
 ];
 
 interface Props {

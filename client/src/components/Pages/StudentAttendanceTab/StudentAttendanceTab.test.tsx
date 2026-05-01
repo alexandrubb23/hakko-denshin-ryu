@@ -5,6 +5,7 @@ import { useAttendanceByMonth } from "@hooks/useAttendance";
 import renderUi from "@test/renderUi";
 
 import StudentAttendanceTab from ".";
+import { CalendarView } from "./shared/calendarView";
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
@@ -92,9 +93,9 @@ describe("StudentAttendanceTab", () => {
 
   describe("URL initialisation", () => {
     it.each([
-      ["week", "week-view"],
-      ["month", "month-view"],
-      ["year", "year-view"],
+      [CalendarView.week, "week-view"],
+      [CalendarView.month, "month-view"],
+      [CalendarView.year, "year-view"],
     ] as const)("renders %sView when ?view=%s is in the URL", (view, testId) => {
       renderTab(`/?view=${view}`);
       expect(screen.getByTestId(testId)).toBeInTheDocument();

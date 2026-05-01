@@ -8,9 +8,11 @@ import { formatDateKey, getLatestTrainingDay, toUtcDate } from "@constants/train
 import { useAttendanceByMonth } from "@hooks/useAttendance";
 import { PURPLE } from "@style/tokens";
 
+import AttendanceChart from "./AttendanceChart";
 import DayView from "./DayView";
 import MonthView from "./MonthView";
-import AttendanceNavBar, { type CalendarView } from "./shared/AttendanceNavBar";
+import AttendanceNavBar from "./shared/AttendanceNavBar";
+import { CalendarView } from "./shared/calendarView";
 import WeekView from "./WeekView";
 import YearView from "./YearView";
 
@@ -25,13 +27,13 @@ interface ViewProps {
   records: AttendanceRecord[];
 }
 
-const VALID_VIEWS: CalendarView[] = ["day", "week", "month", "year"];
+const VALID_VIEWS = Object.values(CalendarView);
 
 const VIEW_COMPONENTS: Record<CalendarView, ComponentType<ViewProps>> = {
-  day: DayView,
-  week: WeekView,
-  month: MonthView,
-  year: YearView as ComponentType<ViewProps>, // YearView fetches its own yearly data
+  [CalendarView.day]: DayView,
+  [CalendarView.week]: WeekView,
+  [CalendarView.month]: MonthView,
+  [CalendarView.year]: YearView as ComponentType<ViewProps>, // YearView fetches its own yearly data
 };
 
 const TabRoot = styled("div")({ marginTop: 24 });
@@ -50,7 +52,7 @@ const StyledAlert = styled(Alert)({ marginTop: 16 });
 function parseView(param: string | null): CalendarView {
   return param && VALID_VIEWS.includes(param as CalendarView)
     ? (param as CalendarView)
-    : "day";
+    : CalendarView.day;
 }
 
 function parseCursor(param: string | null): Date {
@@ -86,7 +88,7 @@ const StudentAttendanceTab = ({ studentId }: Props) => {
   const handleViewChange = (newView: CalendarView) => {
     const latest = getLatestTrainingDay();
     const newCursor =
-      (newView === "day" || newView === "week") && cursor > latest ? latest : cursor;
+      (newView === CalendarView.day || newView === CalendarView.week) && cursor > latest ? latest : cursor;
     updateParams({ view: newView, date: formatDateKey(newCursor) });
   };
 
@@ -98,21 +100,28 @@ const StudentAttendanceTab = ({ studentId }: Props) => {
 
   return (
     <TabRoot>
+      <AttendanceChart
+        view={view}
+        cursor={cursor}
+        records={records}
+        studentId={studentId}
+      />
+
       <AttendanceNavBar view={view} onChange={handleViewChange} />
 
-      {isError && view !== "year" && (
+      {isError && view !== CalendarView.year && (
         <StyledAlert severity="error">
           Failed to load attendance data. Please try again.
         </StyledAlert>
       )}
 
-      {isLoading && view !== "year" && (
+      {isLoading && view !== CalendarView.year && (
         <LoadingContainer>
           <PurpleSpinner />
         </LoadingContainer>
       )}
 
-      {(!isLoading || view === "year") && (!isError || view === "year") && (
+      {(!isLoading || view === CalendarView.year) && (!isError || view === CalendarView.year) && (
         <ActiveView
           studentId={studentId}
           cursor={cursor}
