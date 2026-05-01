@@ -2,8 +2,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import EventIcon from "@mui/icons-material/Event";
 import { Box, Tab, Tabs } from "@mui/material";
-import { useMemo } from "react";
-import { useSearchParams } from "react-router";
+import useUrlTab from "@hooks/useUrlTab";
 
 import { BORDER_COLOR, PURPLE } from "@style/tokens";
 
@@ -45,17 +44,7 @@ interface Props {
 }
 
 const StudentDetailTabs = ({ studentId }: Props) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const activeTabIndex = useMemo(() => {
-    const tabParam = searchParams.get("tab");
-    const idx = STUDENT_TABS.findIndex((t) => t.id === tabParam);
-    return idx >= 0 ? idx : 0;
-  }, [searchParams]);
-
-  const handleTabChange = (_: React.SyntheticEvent, index: number) => {
-    setSearchParams({ tab: STUDENT_TABS[index].id }, { replace: true });
-  };
+  const { activeTabIndex, handleTabChange } = useUrlTab(STUDENT_TABS, "tab");
 
   const ActiveComponent = STUDENT_TABS[activeTabIndex].component;
 

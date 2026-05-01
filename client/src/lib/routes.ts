@@ -8,10 +8,12 @@ export const Routes = {
   dashboard: "/dashboard",
   students: "/students",
   studentDetail: (id: string) => `/students/${id}`,
+  techniques: "/techniques",
 } as const;
 
 export const ApiRoutes = {
   me: "/api/me",
+  techniques: "/api/techniques",
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: (id: string) => `/api/admin/students/${id}`,

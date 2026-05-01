@@ -7,6 +7,7 @@ import { auth } from "./lib/auth.js";
 import { ApiRoutes } from "./lib/routes.js";
 import { requireAuth } from "./middleware/requireAuth.js";
 import studentsRouter from "./routes/students.js";
+import techniquesRouter from "./routes/techniques.js";
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get(ApiRoutes.me, requireAuth, (req, res) => {
 });
 
 app.use(studentsRouter);
+app.use(techniquesRouter);
 
 app.listen(env.PORT, () => {
   console.log(`Server running at http://localhost:${env.PORT}`);

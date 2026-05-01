@@ -1,5 +1,6 @@
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import MenuIcon from '@mui/icons-material/Menu';
 import PeopleIcon from '@mui/icons-material/People';
 import {
@@ -31,6 +32,7 @@ const DRAWER_WIDTH = 220;
 
 const NAV_ITEMS = [
   { label: 'Dashboard', path: Routes.dashboard, icon: <DashboardIcon /> },
+  { label: 'Techniques', path: Routes.techniques, icon: <MenuBookIcon /> },
   { label: 'Students', path: Routes.students, icon: <PeopleIcon />, adminOnly: true },
 ];
 

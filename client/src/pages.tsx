@@ -1,16 +1,26 @@
-import React from 'react';
+import React from "react";
 
-import Contact from '@components/Pages/Contact/Contact';
-import Dashboard from '@components/Pages/Dashboard';
-import Dojo from '@components/Pages/Dojo';
-import Login from '@components/Pages/Login';
-import Senshinkan from '@components/Pages/Senshinkan';
-import Students from '@components/Pages/Students';
+import Contact from "@components/Pages/Contact/Contact";
+import Dashboard from "@components/Pages/Dashboard";
+import Dojo from "@components/Pages/Dojo";
+import Login from "@components/Pages/Login";
+import Senshinkan from "@components/Pages/Senshinkan";
+import Students from "@components/Pages/Students";
+import Techniques from "@components/Pages/Techniques/Techniques";
 
-import HakkoRyuRGB from '@components/Pages/HakkoRyu';
-import Home from '@components/Pages/Home';
+import HakkoRyuRGB from "@components/Pages/HakkoRyu";
+import Home from "@components/Pages/Home";
 
-export type PagePath = 'home' | 'hakko-ryu' | 'senshinkan' | 'dojo' | 'contact' | 'login' | 'dashboard' | 'students';
+export type PagePath =
+  | "home"
+  | "hakko-ryu"
+  | "senshinkan"
+  | "dojo"
+  | "contact"
+  | "login"
+  | "dashboard"
+  | "students"
+  | "techniques";
 
 export interface Page {
   path: PagePath;
@@ -27,48 +37,55 @@ export interface Page {
 export const pages: Page[] = [
   {
     component: Home,
-    path: 'home',
-    title: 'Home - Hakko Denshin Ryu Jujutsu',
+    path: "home",
+    title: "Home - Hakko Denshin Ryu Jujutsu",
   },
   {
     component: HakkoRyuRGB,
-    path: 'hakko-ryu',
-    title: 'Hakko Ryu - Hakko Denshin Ryu Jujutsu',
+    path: "hakko-ryu",
+    title: "Hakko Ryu - Hakko Denshin Ryu Jujutsu",
   },
   {
     component: Senshinkan,
-    path: 'senshinkan',
-    title: 'Senshinkan Romania - Hakko Denshin Ryu Jujutsu',
+    path: "senshinkan",
+    title: "Senshinkan Romania - Hakko Denshin Ryu Jujutsu",
   },
   {
     component: Dojo,
-    path: 'dojo',
-    title: 'Senshinkan Dojo - Hakko Denshin Ryu Jujutsu',
+    path: "dojo",
+    title: "Senshinkan Dojo - Hakko Denshin Ryu Jujutsu",
   },
   {
-    path: 'contact',
+    path: "contact",
     component: Contact,
-    title: 'Contact Senshinkan Romania - Hakko Denshin Ryu Jujutsu',
+    title: "Contact Senshinkan Romania - Hakko Denshin Ryu Jujutsu",
   },
   {
-    path: 'login',
+    path: "login",
     component: Login,
-    title: 'Log In - Senshinkan Romania',
+    title: "Log In - Senshinkan Romania",
     standalone: true,
   },
   {
-    path: 'dashboard',
+    path: "dashboard",
     component: Dashboard,
-    title: 'Dashboard - Senshinkan Romania',
+    title: "Dashboard - Senshinkan Romania",
     hideFromNav: true,
     protected: true,
   },
   {
-    path: 'students',
+    path: "students",
     component: Students,
-    title: 'Students - Senshinkan Romania',
+    title: "Students - Senshinkan Romania",
     hideFromNav: true,
     protected: true,
     adminOnly: true,
+  },
+  {
+    path: "techniques",
+    component: Techniques,
+    title: "Techniques - Senshinkan Romania",
+    hideFromNav: true,
+    protected: true,
   },
 ] as const;

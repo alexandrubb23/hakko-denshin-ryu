@@ -3,6 +3,7 @@ export const ApiRoutes = {
   authWildcard: "/api/auth/*splat",
   health: "/api/health",
   me: "/api/me",
+  techniques: "/api/techniques",
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: "/api/admin/students/:id",

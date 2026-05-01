@@ -259,6 +259,24 @@ const YesButton = styled(Button, {
 - Use `sx` for one-off, non-conditional styles on a single element.
 - Use `styled()` when styles depend on props/state or when you'd otherwise define multiple sx-object constants.
 
+### Co-locating styled components in a `.style.ts` module
+
+When a component has multiple `styled()` definitions, extract them into a co-located `<ComponentName>.style.ts` file in the same directory, then import from it.
+
+```
+Techniques/
+  Techniques.tsx               ← component
+  TechniquesSkeleton.style.ts  ← styled() exports for TechniquesSkeleton
+```
+
+- Name the file `<ComponentName>.style.ts` (matching the component it styles).
+- Export each styled component as a named export.
+- Import in the consuming component using a relative path:
+  ```ts
+  import { SkeletonWrapper, SkeletonTabBar } from "./TechniquesSkeleton.style";
+  ```
+- Styled components that are shared between multiple components in the same folder stay in the primary component file or in a shared `<Feature>.style.ts`.
+
 ### String enums for status and state values
 
 Use a TypeScript string enum (not a `const enum` — esbuild doesn't support those across modules) whenever a component or module defines a fixed set of string status/state values that are used in multiple places.
