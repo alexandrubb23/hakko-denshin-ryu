@@ -13,12 +13,20 @@ const FOLDER = "hakko-ryu/avatars";
  * Uploads a buffer to Cloudinary and returns the secure URL.
  * Uses a base64 data URI to avoid Node.js stream compatibility issues.
  * If the user already has an image, the old asset is deleted first.
+ *
+ * In test mode (NODE_ENV === "test") the Cloudinary API is never called.
+ * A deterministic fake URL is returned so that DB persistence is still
+ * exercised by the E2E test suite without requiring real credentials.
  */
 export async function uploadAvatar(
   buffer: Buffer,
   userId: string,
   existingImageUrl?: string | null
 ): Promise<string> {
+  if (env.NODE_ENV === "test") {
+    return `https://res.cloudinary.com/test/image/upload/v${Date.now()}/${FOLDER}/user_${userId}.jpg`;
+  }
+
   if (existingImageUrl) {
     const publicId = extractPublicId(existingImageUrl);
     if (publicId) {

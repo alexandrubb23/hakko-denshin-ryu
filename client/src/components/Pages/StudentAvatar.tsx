@@ -34,6 +34,7 @@ const StudentAvatar = ({
     <>
       <Tooltip title="Change profile photo" placement="right">
         <StyledAvatar
+          data-testid="student-avatar"
           src={imageUrl ?? undefined}
           onClick={() => setDialogOpen(true)}
         >
