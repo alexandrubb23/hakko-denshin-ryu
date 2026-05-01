@@ -13,7 +13,7 @@ vi.mock("@hooks/useTechniques", () => ({
   useTechniques: vi.fn(),
 }));
 
-vi.mock("./TechniquesSkeleton", () => ({
+vi.mock("@components/Pages/shared/TabbedPageLayout/TabPageSkeleton", () => ({
   default: () => <div data-testid="techniques-skeleton" />,
 }));
 
