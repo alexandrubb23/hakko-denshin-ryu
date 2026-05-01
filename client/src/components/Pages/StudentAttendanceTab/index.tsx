@@ -112,7 +112,7 @@ const StudentAttendanceTab = ({ studentId }: Props) => {
         </LoadingContainer>
       )}
 
-      {(!isLoading || view === "year") && !isError && (
+      {(!isLoading || view === "year") && (!isError || view === "year") && (
         <ActiveView
           studentId={studentId}
           cursor={cursor}

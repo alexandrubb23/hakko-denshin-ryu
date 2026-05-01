@@ -6,7 +6,11 @@ import { MemoryRouter } from 'react-router';
 
 import theme from '@style/theme';
 
-const renderUi = (ui: ReactElement) => {
+interface RenderUiOptions {
+  initialEntries?: string[];
+}
+
+const renderUi = (ui: ReactElement, { initialEntries }: RenderUiOptions = {}) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -15,7 +19,7 @@ const renderUi = (ui: ReactElement) => {
   });
 
   return render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={initialEntries}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>{ui}</ThemeProvider>
       </QueryClientProvider>

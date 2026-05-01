@@ -378,6 +378,23 @@ Every page-level component test should cover all four query states:
 
 Use `beforeEach` inside each `describe` block to mock the hook and render.
 
+### Parameterized tests
+
+Use `it.each` when multiple test cases share the same assertion pattern, differing only in input/output values. This eliminates repetition and makes the test table the single source of truth.
+
+```tsx
+it.each([
+  ["week", "week-view"],
+  ["month", "month-view"],
+  ["year", "year-view"],
+] as const)("renders %sView when ?view=%s is in the URL", (view, testId) => {
+  renderTab(`/?view=${view}`);
+  expect(screen.getByTestId(testId)).toBeInTheDocument();
+});
+```
+
+Keep unique test cases (different assertions, branching logic, interaction sequences) as individual `it` blocks — do not force them into `it.each`.
+
 ### Querying
 
 Prefer accessible queries in this order: `getByRole` > `getByText` > `getByLabelText` > `queryBy*` (for absence checks).
