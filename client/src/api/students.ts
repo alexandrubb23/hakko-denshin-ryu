@@ -9,6 +9,7 @@ export interface Student {
   email: string;
   emailVerified: boolean;
   createdAt: string;
+  image: string | null;
 }
 
 export interface StudentRankEntry {
@@ -24,7 +25,6 @@ export interface StudentRankEntry {
 }
 
 class StudentsApi extends Http {
-
   async fetchStudents(): Promise<Student[]> {
     const { data } = await this.http.get(ApiRoutes.adminStudents);
     return data.students;
@@ -49,7 +49,10 @@ class StudentsApi extends Http {
     studentId: string,
     payload: { rankId: number; awardedAt: string; notes?: string }
   ): Promise<StudentRankEntry> {
-    const { data } = await this.http.post(ApiRoutes.adminStudentRanks(studentId), payload);
+    const { data } = await this.http.post(
+      ApiRoutes.adminStudentRanks(studentId),
+      payload
+    );
     return data.rank;
   }
 
@@ -65,17 +68,27 @@ class StudentsApi extends Http {
     return data.rank;
   }
 
-  async deleteStudentRank(studentId: string, rankEntryId: string): Promise<void> {
+  async deleteStudentRank(
+    studentId: string,
+    rankEntryId: string
+  ): Promise<void> {
     await this.http.delete(ApiRoutes.adminStudentRank(studentId, rankEntryId));
   }
 
-  async updateStudent(id: string, payload: UpdateStudentInput): Promise<Student> {
+  async updateStudent(
+    id: string,
+    payload: UpdateStudentInput
+  ): Promise<Student> {
     const { data } = await this.http.put(ApiRoutes.adminStudent(id), payload);
     return data.student;
   }
 
   async deleteStudent(id: string): Promise<void> {
     await this.http.delete(ApiRoutes.adminStudent(id));
+  }
+
+  async uploadStudentImage(id: string, file: File): Promise<string> {
+    return this.uploadImage(ApiRoutes.adminStudentImage(id), file);
   }
 }
 

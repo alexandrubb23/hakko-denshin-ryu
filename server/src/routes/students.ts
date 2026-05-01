@@ -1,13 +1,21 @@
 import { hashPassword } from "@better-auth/utils/password";
-import { createStudentRankSchema, createStudentSchema, updateStudentRankSchema, updateStudentSchema, toUtcDate } from "@hakko/core";
+import {
+  createStudentRankSchema,
+  createStudentSchema,
+  toUtcDate,
+  updateStudentRankSchema,
+  updateStudentSchema,
+} from "@hakko/core";
 import { Router, type Response } from "express";
 import { z } from "zod";
 import { Role } from "../generated/prisma/enums.js";
+import { uploadAvatar } from "../lib/cloudinary.js";
 import { prisma } from "../lib/prisma.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
+import { uploadMiddleware } from "../middleware/upload.js";
 
 const MIN_MONTH = 1; // January
 const MAX_MONTH = 12; // December
@@ -94,6 +102,7 @@ router.get(
         email: true,
         emailVerified: true,
         createdAt: true,
+        image: true,
         role: true,
         deletedAt: true,
       },
@@ -416,11 +425,9 @@ router.get(
     if (monthParam !== undefined) {
       const month = Number(monthParam);
       if (isNaN(month) || month < MIN_MONTH || month > MAX_MONTH) {
-        res
-          .status(400)
-          .json({
-            error: `month must be between ${MIN_MONTH} and ${MAX_MONTH}`,
-          });
+        res.status(400).json({
+          error: `month must be between ${MIN_MONTH} and ${MAX_MONTH}`,
+        });
         return;
       }
       from = toUtcDate(year, month, 1);
@@ -473,6 +480,43 @@ router.post(
     });
 
     res.status(200).json({ record });
+  }
+);
+
+router.post(
+  ApiRoutes.adminStudentImage,
+  requireAuth,
+  requireRole(Role.admin),
+  uploadMiddleware,
+  async (req, res) => {
+    try {
+      const id = req.params.id as string;
+
+      const student = await requireStudent(id, res);
+      if (!student) return;
+
+      if (!req.file) {
+        res.status(400).json({ error: "No image file provided" });
+        return;
+      }
+
+      const existing = await prisma.user.findUnique({
+        where: { id },
+        select: { image: true },
+      });
+
+      const imageUrl = await uploadAvatar(req.file.buffer, id, existing?.image);
+
+      await prisma.user.update({
+        where: { id },
+        data: { image: imageUrl },
+      });
+
+      res.json({ image: imageUrl });
+    } catch (err) {
+      console.error("[POST /api/admin/students/:id/image] Error:", err);
+      res.status(500).json({ error: "Image upload failed" });
+    }
   }
 );
 

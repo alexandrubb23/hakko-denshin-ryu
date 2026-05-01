@@ -5,14 +5,27 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SxProps,
   TextField,
+  Theme,
 } from "@mui/material";
-import type { Control, FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import type {
+  Control,
+  FieldErrors,
+  FieldValues,
+  UseFormRegister,
+} from "react-hook-form";
 import { Controller } from "react-hook-form";
 
-import { BORDER_COLOR, BORDER_HOVER, DARK_BG, PURPLE, SURFACE_BG } from "@style/tokens";
+import {
+  BORDER_COLOR,
+  BORDER_HOVER,
+  DARK_BG,
+  PURPLE,
+  SURFACE_BG,
+} from "@style/tokens";
 
-const fieldSx = {
+const fieldSx: SxProps<Theme> = {
   "& .MuiOutlinedInput-root": {
     backgroundColor: SURFACE_BG,
     "& fieldset": { borderColor: BORDER_COLOR },
@@ -22,7 +35,7 @@ const fieldSx = {
   "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
 };
 
-const selectSx = {
+const selectSx: SxProps<Theme> = {
   ...fieldSx,
   "& .MuiSelect-icon": { color: PURPLE },
 };
@@ -34,9 +47,15 @@ const menuProps = {
         backgroundColor: DARK_BG,
         backgroundImage: "none",
         border: `1px solid ${BORDER_COLOR}`,
-        "& .MuiMenuItem-root:hover": { backgroundColor: "rgba(171,150,255,0.12)" },
-        "& .MuiMenuItem-root.Mui-selected": { backgroundColor: "rgba(171,150,255,0.18)" },
-        "& .MuiMenuItem-root.Mui-selected:hover": { backgroundColor: "rgba(171,150,255,0.25)" },
+        "& .MuiMenuItem-root:hover": {
+          backgroundColor: "rgba(171,150,255,0.12)",
+        },
+        "& .MuiMenuItem-root.Mui-selected": {
+          backgroundColor: "rgba(171,150,255,0.18)",
+        },
+        "& .MuiMenuItem-root.Mui-selected:hover": {
+          backgroundColor: "rgba(171,150,255,0.25)",
+        },
       },
     },
   },
@@ -107,7 +126,12 @@ const StudentRankFormFields = ({
     ) : (
       <FormControl fullWidth disabled sx={selectSx}>
         <InputLabel shrink>Rank</InputLabel>
-        <Select value={displayRankId ?? ""} label="Rank" notched MenuProps={menuProps}>
+        <Select
+          value={displayRankId ?? ""}
+          label="Rank"
+          notched
+          MenuProps={menuProps}
+        >
           {ranks.map((r) => (
             <MenuItem key={r.id} value={r.id}>
               {r.name}

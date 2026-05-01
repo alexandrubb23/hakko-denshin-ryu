@@ -168,12 +168,13 @@ The MUI theme (`client/src/style/theme.ts`) is configured with **`mode: 'dark'`*
 Declare these at the top of every component file that uses them:
 
 ```ts
-const PURPLE       = "#AB96FF";
-const DARK_BG      = "#0a0619";
-const BORDER_COLOR = "rgba(171,150,255,0.2)";
-const BORDER_HOVER = "rgba(171,150,255,0.55)";
-const SURFACE_BG   = "rgba(255,255,255,0.04)";
+const PURPLE        = "#AB96FF";
+const DARK_BG       = "#0a0619";
+const BORDER_COLOR  = "rgba(171,150,255,0.2)";
+const BORDER_HOVER  = "rgba(171,150,255,0.55)";
+const SURFACE_BG    = "rgba(255,255,255,0.04)";
 const BACKDROP_BLUR = "blur(20px)";
+const SKELETON_SX   = { bgcolor: "rgba(171,150,255,0.12)" } as const;
 ```
 
 | Token | Value | Usage |
@@ -184,6 +185,7 @@ const BACKDROP_BLUR = "blur(20px)";
 | `BORDER_HOVER` | `rgba(171,150,255,0.55)` | Input field border on hover |
 | `SURFACE_BG` | `rgba(255,255,255,0.04)` | Glass-effect surface background (Paper, TableContainer, inputs) |
 | `BACKDROP_BLUR` | `blur(20px)` | Backdrop filter on all glass surfaces |
+| `SKELETON_SX` | `{ bgcolor: "rgba(171,150,255,0.12)" }` | MUI `<Skeleton sx={SKELETON_SX}>` — the standard skeleton color; never repeat inline |
 
 ### Rules — always follow these
 
@@ -261,19 +263,21 @@ const YesButton = styled(Button, {
 
 ### Co-locating styled components in a `.style.ts` module
 
-When a component has multiple `styled()` definitions, extract them into a co-located `<ComponentName>.style.ts` file in the same directory, then import from it.
+Extract styles into a co-located `<ComponentName>.style.ts` file whenever a component has:
+- any `styled()` definition, or
+- module-level `sx` constants that are significant enough to clutter the component file.
 
 ```
-Techniques/
-  Techniques.tsx               ← component
-  TechniquesSkeleton.style.ts  ← styled() exports for TechniquesSkeleton
+Pages/
+  StudentAvatar.tsx            ← component
+  StudentAvatar.style.ts       ← StyledAvatar + SKEL_SX
 ```
 
 - Name the file `<ComponentName>.style.ts` (matching the component it styles).
-- Export each styled component as a named export.
+- Export each styled component and sx constant as a named export.
 - Import in the consuming component using a relative path:
   ```ts
-  import { SkeletonWrapper, SkeletonTabBar } from "./TechniquesSkeleton.style";
+  import { StyledAvatar, SKEL_SX } from "./StudentAvatar.style";
   ```
 - Styled components that are shared between multiple components in the same folder stay in the primary component file or in a shared `<Feature>.style.ts`.
 

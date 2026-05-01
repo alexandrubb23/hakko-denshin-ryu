@@ -65,6 +65,7 @@ const mockStudents: Student[] = [
     email: "john@example.com",
     emailVerified: true,
     createdAt: "2024-01-15T00:00:00.000Z",
+    image: null,
   },
   {
     id: "2",
@@ -72,6 +73,7 @@ const mockStudents: Student[] = [
     email: "jane@example.com",
     emailVerified: false,
     createdAt: "2024-02-20T00:00:00.000Z",
+    image: null,
   },
 ];
 
@@ -119,7 +121,9 @@ describe("Students page", () => {
     });
 
     it("renders the Add Student button", () => {
-      expect(screen.getByRole("button", { name: /add student/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /add student/i })
+      ).toBeInTheDocument();
     });
   });
 
@@ -214,29 +218,41 @@ describe("Students page", () => {
     });
 
     it("renders the Add Student button", () => {
-      expect(screen.getByRole("button", { name: /add student/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /add student/i })
+      ).toBeInTheDocument();
     });
 
     it("does not show the modal by default", () => {
-      expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("create-student-modal")
+      ).not.toBeInTheDocument();
     });
 
     it("renders an edit button for each student", () => {
-      const editButtons = screen.getAllByRole("button", { name: /edit student/i });
+      const editButtons = screen.getAllByRole("button", {
+        name: /edit student/i,
+      });
       expect(editButtons).toHaveLength(mockStudents.length);
     });
 
     it("does not show the edit modal by default", () => {
-      expect(screen.queryByTestId("edit-student-modal")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("edit-student-modal")
+      ).not.toBeInTheDocument();
     });
 
     it("renders a delete button for each student", () => {
-      const deleteButtons = screen.getAllByRole("button", { name: /delete student/i });
+      const deleteButtons = screen.getAllByRole("button", {
+        name: /delete student/i,
+      });
       expect(deleteButtons).toHaveLength(mockStudents.length);
     });
 
     it("does not show the delete modal by default", () => {
-      expect(screen.queryByTestId("delete-student-modal")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("delete-student-modal")
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -261,7 +277,9 @@ describe("Students page", () => {
       expect(screen.getByTestId("create-student-modal")).toBeInTheDocument();
 
       fireEvent.click(screen.getByTestId("create-student-modal-backdrop"));
-      expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("create-student-modal")
+      ).not.toBeInTheDocument();
     });
 
     it("hides the modal when pressing Escape", () => {
@@ -269,7 +287,9 @@ describe("Students page", () => {
       expect(screen.getByTestId("create-student-modal")).toBeInTheDocument();
 
       fireEvent.keyDown(document, { key: "Escape" });
-      expect(screen.queryByTestId("create-student-modal")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("create-student-modal")
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -285,13 +305,17 @@ describe("Students page", () => {
     });
 
     it("shows the edit modal when an edit button is clicked", () => {
-      const [firstEditBtn] = screen.getAllByRole("button", { name: /edit student/i });
+      const [firstEditBtn] = screen.getAllByRole("button", {
+        name: /edit student/i,
+      });
       fireEvent.click(firstEditBtn);
       expect(screen.getByTestId("edit-student-modal")).toBeInTheDocument();
     });
 
     it("populates the modal with the correct student for the first row", () => {
-      const [firstEditBtn] = screen.getAllByRole("button", { name: /edit student/i });
+      const [firstEditBtn] = screen.getAllByRole("button", {
+        name: /edit student/i,
+      });
       fireEvent.click(firstEditBtn);
       expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
         mockStudents[0].name
@@ -299,7 +323,9 @@ describe("Students page", () => {
     });
 
     it("populates the modal with the correct student for another row", () => {
-      const editButtons = screen.getAllByRole("button", { name: /edit student/i });
+      const editButtons = screen.getAllByRole("button", {
+        name: /edit student/i,
+      });
       fireEvent.click(editButtons[1]);
       expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
         mockStudents[1].name
@@ -307,12 +333,16 @@ describe("Students page", () => {
     });
 
     it("hides the edit modal when onClose is called", () => {
-      const [firstEditBtn] = screen.getAllByRole("button", { name: /edit student/i });
+      const [firstEditBtn] = screen.getAllByRole("button", {
+        name: /edit student/i,
+      });
       fireEvent.click(firstEditBtn);
       expect(screen.getByTestId("edit-student-modal")).toBeInTheDocument();
 
       fireEvent.click(screen.getByRole("button", { name: /close modal/i }));
-      expect(screen.queryByTestId("edit-student-modal")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("edit-student-modal")
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -328,13 +358,17 @@ describe("Students page", () => {
     });
 
     it("shows the delete modal when a delete button is clicked", () => {
-      const [firstDeleteBtn] = screen.getAllByRole("button", { name: /delete student/i });
+      const [firstDeleteBtn] = screen.getAllByRole("button", {
+        name: /delete student/i,
+      });
       fireEvent.click(firstDeleteBtn);
       expect(screen.getByTestId("delete-student-modal")).toBeInTheDocument();
     });
 
     it("populates the modal with the correct student for the first row", () => {
-      const [firstDeleteBtn] = screen.getAllByRole("button", { name: /delete student/i });
+      const [firstDeleteBtn] = screen.getAllByRole("button", {
+        name: /delete student/i,
+      });
       fireEvent.click(firstDeleteBtn);
       expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
         mockStudents[0].name
@@ -342,7 +376,9 @@ describe("Students page", () => {
     });
 
     it("populates the modal with the correct student for another row", () => {
-      const deleteButtons = screen.getAllByRole("button", { name: /delete student/i });
+      const deleteButtons = screen.getAllByRole("button", {
+        name: /delete student/i,
+      });
       fireEvent.click(deleteButtons[1]);
       expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
         mockStudents[1].name
@@ -350,12 +386,18 @@ describe("Students page", () => {
     });
 
     it("hides the delete modal when onClose is called", () => {
-      const [firstDeleteBtn] = screen.getAllByRole("button", { name: /delete student/i });
+      const [firstDeleteBtn] = screen.getAllByRole("button", {
+        name: /delete student/i,
+      });
       fireEvent.click(firstDeleteBtn);
       expect(screen.getByTestId("delete-student-modal")).toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole("button", { name: /close delete modal/i }));
-      expect(screen.queryByTestId("delete-student-modal")).not.toBeInTheDocument();
+      fireEvent.click(
+        screen.getByRole("button", { name: /close delete modal/i })
+      );
+      expect(
+        screen.queryByTestId("delete-student-modal")
+      ).not.toBeInTheDocument();
     });
   });
 });

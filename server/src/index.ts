@@ -5,8 +5,8 @@ import helmet from "helmet";
 import { ALLOWED_ORIGINS, env } from "./env.js";
 import { auth } from "./lib/auth.js";
 import { ApiRoutes } from "./lib/routes.js";
-import { requireAuth } from "./middleware/requireAuth.js";
 import kyuProgramRouter from "./routes/kyuProgram.js";
+import meRouter from "./routes/me.js";
 import studentsRouter from "./routes/students.js";
 import techniquesRouter from "./routes/techniques.js";
 
@@ -37,11 +37,7 @@ app.get(ApiRoutes.health, (_req, res) => {
   res.json({ status: "ok" });
 });
 
-app.get(ApiRoutes.me, requireAuth, (req, res) => {
-  const { id, name, email, role, image, emailVerified } = req.user;
-  res.json({ user: { id, name, email, role, image, emailVerified } });
-});
-
+app.use(meRouter);
 app.use(kyuProgramRouter);
 app.use(studentsRouter);
 app.use(techniquesRouter);

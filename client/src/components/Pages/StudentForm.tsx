@@ -16,7 +16,9 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  SxProps,
   TextField,
+  Theme,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
@@ -33,7 +35,7 @@ import {
   SURFACE_BG,
 } from "@style/tokens";
 
-const fieldSx = {
+const fieldSx: SxProps<Theme> = {
   "& .MuiOutlinedInput-root": {
     backgroundColor: SURFACE_BG,
     "& fieldset": { borderColor: BORDER_COLOR },

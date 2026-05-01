@@ -7,4 +7,13 @@ export abstract class Http {
     baseURL: API_URL,
     withCredentials: true,
   });
+
+  protected async uploadImage(url: string, file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append("image", file);
+    const { data } = await this.http.post(url, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return data.image as string;
+  }
 }

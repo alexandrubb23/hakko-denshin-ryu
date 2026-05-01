@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, SxProps, Theme } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 interface Props {
@@ -50,7 +50,7 @@ const YesNoButtons = ({
   size = "small",
   compact = false,
 }: Props) => {
-  const btnSx = compact
+  const btnSx: SxProps<Theme> | undefined = compact
     ? { padding: "1px 5px", fontSize: "0.65rem", lineHeight: 1.4 }
     : undefined;
 

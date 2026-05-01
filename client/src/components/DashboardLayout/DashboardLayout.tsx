@@ -16,6 +16,8 @@ import {
   ListItemIcon,
   ListItemText,
   Skeleton,
+  SxProps,
+  Theme,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -45,7 +47,7 @@ const NAV_ITEMS = [
 
 const DRAWER_PAPER_BG = SURFACE_BG;
 
-const DRAWER_PAPER_SX = {
+const DRAWER_PAPER_SX: SxProps<Theme> = {
   width: DRAWER_WIDTH,
   boxSizing: "border-box" as const,
   display: "flex",
@@ -91,14 +93,16 @@ const DashboardLayout = () => {
               />
             </Box>
           ) : (
-            <Link to="/">
-              <Box className="flex flex-col items-center gap-1">
-                <Box component="img" src={LogoIcon} height={40} />
-                <Typography variant="body2" fontWeight={700}>
-                  Senshinkan
-                </Typography>
-              </Box>
-            </Link>
+            <Box className="flex flex-col items-center gap-2">
+              <Link to="/">
+                <Box className="flex flex-col items-center gap-1">
+                  <Box component="img" src={LogoIcon} height={40} />
+                  <Typography variant="body2" fontWeight={700}>
+                    Senshinkan
+                  </Typography>
+                </Box>
+              </Link>
+            </Box>
           )}
         </Toolbar>
 

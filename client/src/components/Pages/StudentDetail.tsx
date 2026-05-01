@@ -1,9 +1,7 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import PersonIcon from "@mui/icons-material/Person";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import {
-  Avatar,
   Box,
   Button,
   Chip,
@@ -17,17 +15,9 @@ import { useNavigate, useParams } from "react-router";
 
 import { useStudent } from "@hooks/useStudent";
 import { Routes } from "@lib/routes";
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import { BORDER_COLOR, PURPLE, SKELETON_SX, SURFACE_BG } from "@style/tokens";
+import StudentAvatar from "./StudentAvatar";
 import StudentDetailTabs from "./StudentDetailTabs";
-const SKEL = { bgcolor: "rgba(171,150,255,0.12)" };
-
-const getInitials = (name: string) =>
-  name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
 
 const StudentDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,34 +60,24 @@ const StudentDetail = () => {
               spacing={2.5}
               sx={{ textAlign: { xs: "center", sm: "left" } }}
             >
-              {isLoading ? (
-                <Skeleton variant="circular" width={64} height={64} sx={SKEL} />
-              ) : (
-                <Avatar
-                  sx={{
-                    width: 64,
-                    height: 64,
-                    backgroundColor: "rgba(171,150,255,0.25)",
-                    fontSize: 22,
-                    fontWeight: 700,
-                    color: PURPLE,
-                  }}
-                >
-                  {student ? getInitials(student.name) : <PersonIcon />}
-                </Avatar>
-              )}
+              <StudentAvatar
+                studentId={id!}
+                name={student?.name}
+                imageUrl={student?.image}
+                isLoading={isLoading}
+              />
 
               <Box>
                 <Typography variant="h5" fontWeight={700}>
                   {isLoading ? (
-                    <Skeleton width={180} sx={SKEL} />
+                    <Skeleton width={180} sx={SKELETON_SX} />
                   ) : (
                     student?.name
                   )}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" mt={0.5}>
                   {isLoading ? (
-                    <Skeleton width={220} sx={SKEL} />
+                    <Skeleton width={220} sx={SKELETON_SX} />
                   ) : (
                     student?.email
                   )}
@@ -121,7 +101,7 @@ const StudentDetail = () => {
                     variant="rounded"
                     width={90}
                     height={24}
-                    sx={SKEL}
+                    sx={SKELETON_SX}
                   />
                 ) : student?.emailVerified ? (
                   <Chip
@@ -156,7 +136,7 @@ const StudentDetail = () => {
                 </Typography>
                 <Typography variant="body2">
                   {isLoading ? (
-                    <Skeleton width={100} sx={SKEL} />
+                    <Skeleton width={100} sx={SKELETON_SX} />
                   ) : (
                     student && new Date(student.createdAt).toLocaleDateString()
                   )}

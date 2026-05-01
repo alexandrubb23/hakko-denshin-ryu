@@ -1,22 +1,22 @@
 import { Skeleton, TableCell, TableRow } from "@mui/material";
 
-const SKEL = { bgcolor: "rgba(171,150,255,0.12)" };
+import { SKELETON_SX } from "@style/tokens";
 
 const RankSkeletonRows = () => (
   <>
     {[1, 2, 3].map((i) => (
       <TableRow key={i}>
         <TableCell>
-          <Skeleton variant="rounded" width={80} height={40} sx={SKEL} />
+          <Skeleton variant="rounded" width={80} height={40} sx={SKELETON_SX} />
         </TableCell>
         <TableCell>
-          <Skeleton width={60} sx={SKEL} />
+          <Skeleton width={60} sx={SKELETON_SX} />
         </TableCell>
         <TableCell>
-          <Skeleton width={90} sx={SKEL} />
+          <Skeleton width={90} sx={SKELETON_SX} />
         </TableCell>
         <TableCell>
-          <Skeleton width={120} sx={SKEL} />
+          <Skeleton width={120} sx={SKELETON_SX} />
         </TableCell>
       </TableRow>
     ))}

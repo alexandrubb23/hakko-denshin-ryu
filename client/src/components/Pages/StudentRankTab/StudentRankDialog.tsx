@@ -6,19 +6,21 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  SxProps,
+  Theme,
 } from "@mui/material";
 import type { ReactNode } from "react";
 
 import { BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
 
-const dialogPaperSx = {
+const dialogPaperSx: SxProps<Theme> = {
   backgroundColor: DARK_BG,
   backgroundImage: "none",
   border: `1px solid ${BORDER_COLOR}`,
   backdropFilter: "blur(20px)",
 };
 
-const submitButtonSx = {
+const submitButtonSx: SxProps<Theme> = {
   backgroundColor: PURPLE,
   color: "#0a0619",
   fontWeight: 700,
@@ -56,7 +58,13 @@ const StudentRankDialog = ({
     slotProps={{ paper: { sx: dialogPaperSx } }}
   >
     <DialogTitle
-      sx={{ display: "flex", alignItems: "center", gap: 1, color: PURPLE, fontWeight: 700 }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1,
+        color: PURPLE,
+        fontWeight: 700,
+      }}
     >
       {title}
     </DialogTitle>
@@ -64,12 +72,18 @@ const StudentRankDialog = ({
     <Divider sx={{ borderColor: BORDER_COLOR }} />
 
     <Box component="form" onSubmit={onSubmit} noValidate>
-      <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: 3 }}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: 3 }}
+      >
         {children}
       </DialogContent>
 
       <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
-        <Button onClick={onClose} disabled={isPending} sx={{ color: "text.secondary" }}>
+        <Button
+          onClick={onClose}
+          disabled={isPending}
+          sx={{ color: "text.secondary" }}
+        >
           Cancel
         </Button>
         <Button
