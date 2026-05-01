@@ -1,52 +1,11 @@
-import { type Page } from "@playwright/test";
-import { expect, test } from "./fixtures";
-
-/**
- * Returns unique student data on each call to avoid DB conflicts across runs.
- */
-function newStudent() {
-  const ts = Date.now();
-  return {
-    name: `E2E Rank Student ${ts}`,
-    email: `e2e.rank.${ts}@example.com`,
-    password: "Password123!",
-  };
-}
-
-/**
- * Opens the "Add Student" dialog, fills all fields, and submits.
- * Waits for the dialog to close before returning.
- */
-async function createStudentViaUI(
-  page: Page,
-  student: ReturnType<typeof newStudent>
-) {
-  await page.getByRole("button", { name: "Add Student" }).click();
-
-  const dialog = page.getByRole("dialog");
-  await dialog.waitFor({ state: "visible" });
-
-  await dialog.getByLabel("Name").fill(student.name);
-  await dialog.getByLabel("Email").fill(student.email);
-  await dialog.getByLabel("Password").fill(student.password);
-
-  await dialog.getByRole("button", { name: "Create Student" }).click();
-  await dialog.waitFor({ state: "hidden" });
-}
-
-/**
- * Clicks the student's row in the Students table and waits for the detail page.
- * The Ranks tab is active by default (index 0).
- */
-async function navigateToStudentDetail(
-  page: Page,
-  student: ReturnType<typeof newStudent>
-) {
-  const row = page.getByRole("row").filter({ hasText: student.email });
-  await row.click();
-  await page.waitForURL(/\/students\/.+/);
-  await page.getByRole("tab", { name: /ranks/i }).waitFor({ state: "visible" });
-}
+import { type Page } from "./fixtures";
+import {
+  createStudentViaUI,
+  expect,
+  navigateToStudentDetail,
+  newStudent,
+  test,
+} from "./fixtures";
 
 interface AssignRankOptions {
   rankName: string;
@@ -97,6 +56,7 @@ test.describe("Student Rank Management", () => {
       .waitFor({ state: "visible" });
     await createStudentViaUI(adminPage, student);
     await navigateToStudentDetail(adminPage, student);
+    await adminPage.getByRole("tab", { name: /ranks/i }).waitFor({ state: "visible" });
   });
 
   test("should show the Ranks tab active with Assign Rank button and empty state", async ({

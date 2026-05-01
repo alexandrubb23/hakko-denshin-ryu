@@ -1,4 +1,5 @@
 import { test as base, expect, type Browser, type Page } from "@playwright/test";
+export type { Page };
 import { execSync } from "child_process";
 import { readFileSync } from "fs";
 import path from "path";
@@ -57,6 +58,48 @@ export async function submitLoginForm(
 export async function logoutViaUi(page: Page): Promise<void> {
   await page.getByRole("button", { name: "Sign Out" }).click();
   await page.waitForURL("/login");
+}
+
+// ─── Student helpers ──────────────────────────────────────────────────────────
+
+/** Returns unique student data on each call to avoid DB conflicts across runs. */
+export function newStudent() {
+  const ts = Date.now();
+  return {
+    name: `E2E Student ${ts}`,
+    email: `e2e.student.${ts}@example.com`,
+    password: "Password123!",
+  };
+}
+
+/**
+ * Opens the "Add Student" dialog, fills all fields, and submits.
+ * Waits for the dialog to close before returning.
+ */
+export async function createStudentViaUI(
+  page: Page,
+  student: { name: string; email: string; password: string }
+): Promise<void> {
+  await page.getByRole("button", { name: "Add Student" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.waitFor({ state: "visible" });
+  await dialog.getByLabel("Name").fill(student.name);
+  await dialog.getByLabel("Email").fill(student.email);
+  await dialog.getByLabel("Password").fill(student.password);
+  await dialog.getByRole("button", { name: "Create Student" }).click();
+  await dialog.waitFor({ state: "hidden" });
+}
+
+/**
+ * Clicks the student's row in the Students table and waits for the detail page.
+ */
+export async function navigateToStudentDetail(
+  page: Page,
+  student: { email: string }
+): Promise<void> {
+  const row = page.getByRole("row").filter({ hasText: student.email });
+  await row.click();
+  await page.waitForURL(/\/students\/.+/);
 }
 
 async function loginViaUi(
