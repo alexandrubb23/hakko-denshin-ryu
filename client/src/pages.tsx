@@ -3,6 +3,7 @@ import React from "react";
 import Contact from "@components/Pages/Contact/Contact";
 import Dashboard from "@components/Pages/Dashboard";
 import Dojo from "@components/Pages/Dojo";
+import KyuProgram from "@components/Pages/KyuProgram/KyuProgram";
 import Login from "@components/Pages/Login";
 import Senshinkan from "@components/Pages/Senshinkan";
 import Students from "@components/Pages/Students";
@@ -20,7 +21,8 @@ export type PagePath =
   | "login"
   | "dashboard"
   | "students"
-  | "techniques";
+  | "techniques"
+  | "kyu-program";
 
 export interface Page {
   path: PagePath;
@@ -85,6 +87,13 @@ export const pages: Page[] = [
     path: "techniques",
     component: Techniques,
     title: "Techniques - Senshinkan Romania",
+    hideFromNav: true,
+    protected: true,
+  },
+  {
+    path: "kyu-program",
+    component: KyuProgram,
+    title: "Kyu Program - Senshinkan Romania",
     hideFromNav: true,
     protected: true,
   },

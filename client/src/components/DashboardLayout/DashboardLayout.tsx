@@ -1,4 +1,5 @@
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -33,6 +34,7 @@ const DRAWER_WIDTH = 220;
 const NAV_ITEMS = [
   { label: 'Dashboard', path: Routes.dashboard, icon: <DashboardIcon /> },
   { label: 'Techniques', path: Routes.techniques, icon: <MenuBookIcon /> },
+  { label: 'Kyu Program', path: Routes.kyuProgram, icon: <EmojiEventsIcon /> },
   { label: 'Students', path: Routes.students, icon: <PeopleIcon />, adminOnly: true },
 ];
 
@@ -190,7 +192,7 @@ const DashboardLayout = () => {
             {drawerContent}
           </Drawer>
 
-          <Box component='main' sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+          <Box component='main' sx={{ flexGrow: 1, minWidth: 0, p: 3, mt: 8 }}>
             <Outlet />
           </Box>
         </>
@@ -210,7 +212,7 @@ const DashboardLayout = () => {
             {drawerContent}
           </Drawer>
 
-          <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+          <Box component='main' sx={{ flexGrow: 1, minWidth: 0, p: 3 }}>
             <Outlet />
           </Box>
         </>

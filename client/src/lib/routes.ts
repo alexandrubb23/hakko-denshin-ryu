@@ -9,11 +9,13 @@ export const Routes = {
   students: "/students",
   studentDetail: (id: string) => `/students/${id}`,
   techniques: "/techniques",
+  kyuProgram: "/kyu-program",
 } as const;
 
 export const ApiRoutes = {
   me: "/api/me",
   techniques: "/api/techniques",
+  kyuProgram: "/api/kyu-program",
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: (id: string) => `/api/admin/students/${id}`,

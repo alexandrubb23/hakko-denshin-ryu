@@ -6,6 +6,7 @@ import { ALLOWED_ORIGINS, env } from "./env.js";
 import { auth } from "./lib/auth.js";
 import { ApiRoutes } from "./lib/routes.js";
 import { requireAuth } from "./middleware/requireAuth.js";
+import kyuProgramRouter from "./routes/kyuProgram.js";
 import studentsRouter from "./routes/students.js";
 import techniquesRouter from "./routes/techniques.js";
 
@@ -41,6 +42,7 @@ app.get(ApiRoutes.me, requireAuth, (req, res) => {
   res.json({ user: { id, name, email, role, image, emailVerified } });
 });
 
+app.use(kyuProgramRouter);
 app.use(studentsRouter);
 app.use(techniquesRouter);
 

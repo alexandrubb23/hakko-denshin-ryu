@@ -4,6 +4,7 @@ export const ApiRoutes = {
   health: "/api/health",
   me: "/api/me",
   techniques: "/api/techniques",
+  kyuProgram: "/api/kyu-program",
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: "/api/admin/students/:id",
