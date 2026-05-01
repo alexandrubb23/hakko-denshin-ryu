@@ -19,6 +19,7 @@ vi.mock("./MonthView", () => ({
 vi.mock("./YearView", () => ({
   default: () => <div data-testid="year-view" />,
 }));
+vi.mock("./AttendanceChart", () => ({ default: () => null }));
 
 vi.mock("@hooks/useAttendance", () => ({
   useAttendanceByMonth: vi.fn(),
@@ -96,11 +97,14 @@ describe("StudentAttendanceTab", () => {
       [CalendarView.week, "week-view"],
       [CalendarView.month, "month-view"],
       [CalendarView.year, "year-view"],
-    ] as const)("renders %sView when ?view=%s is in the URL", (view, testId) => {
-      renderTab(`/?view=${view}`);
-      expect(screen.getByTestId(testId)).toBeInTheDocument();
-      expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
-    });
+    ] as const)(
+      "renders %sView when ?view=%s is in the URL",
+      (view, testId) => {
+        renderTab(`/?view=${view}`);
+        expect(screen.getByTestId(testId)).toBeInTheDocument();
+        expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
+      }
+    );
 
     it("falls back to DayView for an invalid view param", () => {
       renderTab("/?view=invalid");
@@ -117,11 +121,14 @@ describe("StudentAttendanceTab", () => {
       ["Week", "week-view"],
       ["Month", "month-view"],
       ["Year", "year-view"],
-    ] as const)("switches to %sView when the %s tab is clicked", (label, testId) => {
-      clickView(label);
-      expect(screen.getByTestId(testId)).toBeInTheDocument();
-      expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
-    });
+    ] as const)(
+      "switches to %sView when the %s tab is clicked",
+      (label, testId) => {
+        clickView(label);
+        expect(screen.getByTestId(testId)).toBeInTheDocument();
+        expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
+      }
+    );
 
     it("returns to DayView when Day is clicked after switching", () => {
       clickView("Week");
