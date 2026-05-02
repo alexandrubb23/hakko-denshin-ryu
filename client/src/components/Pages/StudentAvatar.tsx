@@ -6,6 +6,7 @@ import AvatarUploadDialog from "@components/AvatarUploadDialog/AvatarUploadDialo
 import { useUploadStudentImage } from "@hooks/useUploadStudentImage";
 import { SKELETON_SX } from "@style/tokens";
 import { getInitials } from "@utils/string";
+import { type UseMutationResult } from "@tanstack/react-query";
 import { StyledAvatar } from "./StudentAvatar.style";
 
 interface StudentAvatarProps {
@@ -13,6 +14,7 @@ interface StudentAvatarProps {
   name?: string;
   imageUrl?: string | null;
   isLoading: boolean;
+  uploadMutation?: UseMutationResult<string, Error, File, unknown>;
 }
 
 const StudentAvatar = ({
@@ -20,9 +22,11 @@ const StudentAvatar = ({
   name,
   imageUrl,
   isLoading,
+  uploadMutation,
 }: StudentAvatarProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const uploadMutation = useUploadStudentImage(studentId);
+  const defaultMutation = useUploadStudentImage(studentId);
+  const mutation = uploadMutation ?? defaultMutation;
 
   if (isLoading) {
     return (
@@ -47,7 +51,7 @@ const StudentAvatar = ({
         onClose={() => setDialogOpen(false)}
         currentImageUrl={imageUrl}
         displayName={name}
-        uploadMutation={uploadMutation}
+        uploadMutation={mutation}
       />
     </>
   );

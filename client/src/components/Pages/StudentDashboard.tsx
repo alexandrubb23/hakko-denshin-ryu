@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router";
 
 import { useMe } from "@hooks/useMe";
+import { useUploadMyImage } from "@hooks/useUploadMyImage";
 import { Routes } from "@lib/routes";
 import {
   BACKDROP_BLUR,
@@ -37,6 +38,7 @@ const STUDENT_LINKS = [
 
 const StudentDashboard = () => {
   const { data: user, isLoading, isError } = useMe();
+  const uploadMutation = useUploadMyImage();
 
   return (
     <Box sx={{ py: 4 }}>
@@ -67,6 +69,7 @@ const StudentDashboard = () => {
                 name={user?.name}
                 imageUrl={user?.image}
                 isLoading={isLoading}
+                uploadMutation={uploadMutation}
               />
 
               <Box>
