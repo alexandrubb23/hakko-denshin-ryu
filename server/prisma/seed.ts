@@ -45,7 +45,8 @@ async function seedAdmin() {
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    console.log(`Admin user already exists: ${email}`);
+    await prisma.user.update({ where: { email }, data: { name } });
+    console.log(`Admin user updated: ${email}`);
     return;
   }
 

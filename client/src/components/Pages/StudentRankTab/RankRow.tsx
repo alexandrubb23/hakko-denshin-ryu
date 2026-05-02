@@ -17,9 +17,10 @@ interface Props {
   entry: StudentRankEntry;
   onEdit: (entry: StudentRankEntry) => void;
   onDelete: (entry: StudentRankEntry) => void;
+  readOnly?: boolean;
 }
 
-const RankRow = ({ entry, onEdit, onDelete }: Props) => (
+const RankRow = ({ entry, onEdit, onDelete, readOnly }: Props) => (
   <TableRow sx={{ "&:last-child td": { border: 0 } }}>
     <TableCell sx={{ py: 2, width: "1%", whiteSpace: "nowrap" }}>
       <BeltImage belt={entry.rank.belt} />
@@ -39,26 +40,28 @@ const RankRow = ({ entry, onEdit, onDelete }: Props) => (
         {entry.notes ?? "—"}
       </Typography>
     </TableCell>
-    <TableCell sx={{ py: 1 }}>
-      <Box sx={{ display: "flex", gap: 0.5 }}>
-        <IconButton
-          size="small"
-          onClick={() => onEdit(entry)}
-          aria-label="edit rank"
-          sx={{ color: PURPLE, opacity: 0.7, "&:hover": { opacity: 1 } }}
-        >
-          <EditIcon fontSize="small" />
-        </IconButton>
-        <IconButton
-          size="small"
-          onClick={() => onDelete(entry)}
-          aria-label="delete rank"
-          sx={{ color: "#d32f2f", opacity: 0.7, "&:hover": { opacity: 1 } }}
-        >
-          <DeleteOutlineIcon fontSize="small" />
-        </IconButton>
-      </Box>
-    </TableCell>
+    {!readOnly && (
+      <TableCell sx={{ py: 1 }}>
+        <Box sx={{ display: "flex", gap: 0.5 }}>
+          <IconButton
+            size="small"
+            onClick={() => onEdit(entry)}
+            aria-label="edit rank"
+            sx={{ color: PURPLE, opacity: 0.7, "&:hover": { opacity: 1 } }}
+          >
+            <EditIcon fontSize="small" />
+          </IconButton>
+          <IconButton
+            size="small"
+            onClick={() => onDelete(entry)}
+            aria-label="delete rank"
+            sx={{ color: "#d32f2f", opacity: 0.7, "&:hover": { opacity: 1 } }}
+          >
+            <DeleteOutlineIcon fontSize="small" />
+          </IconButton>
+        </Box>
+      </TableCell>
+    )}
   </TableRow>
 );
 

@@ -20,6 +20,7 @@ import { BORDER_COLOR, PURPLE, SKELETON_SX, SURFACE_BG } from "@style/tokens";
 
 import DashboardEventChart from "./DashboardEventChart";
 import DashboardStudentChart from "./DashboardStudentChart";
+import StudentDashboard from "./StudentDashboard";
 
 const ADMIN_LINKS = [
   { label: "Manage Students", to: Routes.students, Icon: GroupIcon },
@@ -35,6 +36,10 @@ const ADMIN_LINKS = [
 const Dashboard = () => {
   const { data: session, isPending } = authClient.useSession();
   const isAdmin = session?.user.role === Role.admin;
+
+  if (!isPending && session && !isAdmin) {
+    return <StudentDashboard />;
+  }
 
   return (
     <Paper elevation={3} className="w-full p-8 flex flex-col gap-6">

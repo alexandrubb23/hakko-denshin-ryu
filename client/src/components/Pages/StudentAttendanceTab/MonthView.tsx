@@ -15,6 +15,7 @@ import {
 import { useUpsertAttendance } from "@hooks/useUpsertAttendance";
 import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
 
+import AttendedChip from "../AttendedChip";
 import YesNoButtons from "./shared/YesNoButtons";
 
 interface DayCellProps {
@@ -24,6 +25,7 @@ interface DayCellProps {
   today: Date;
   year: number;
   month: number;
+  readOnly?: boolean;
 }
 
 const MonthViewRoot = styled("div")({ paddingTop: 24, paddingBottom: 24 });
@@ -102,6 +104,7 @@ const DayCell = ({
   today,
   year,
   month,
+  readOnly,
 }: DayCellProps) => {
   const training = isTrainingDay(date);
   const isFuture = date > today;
@@ -119,7 +122,9 @@ const DayCell = ({
 
       {training && !isFuture && (
         <div>
-          {isPending ? (
+          {readOnly ? (
+            <AttendedChip attended={attended} />
+          ) : isPending ? (
             <PurpleSpinner size={14} />
           ) : (
             <YesNoButtons
@@ -140,9 +145,16 @@ interface Props {
   cursor: Date;
   onCursorChange: (date: Date) => void;
   records: AttendanceRecord[];
+  readOnly?: boolean;
 }
 
-const MonthView = ({ studentId, cursor, onCursorChange, records }: Props) => {
+const MonthView = ({
+  studentId,
+  cursor,
+  onCursorChange,
+  records,
+  readOnly,
+}: Props) => {
   const year = cursor.getUTCFullYear();
   const month = cursor.getUTCMonth() + 1;
   const today = getLatestTrainingDay();
@@ -197,6 +209,7 @@ const MonthView = ({ studentId, cursor, onCursorChange, records }: Props) => {
               today={today}
               year={year}
               month={month}
+              readOnly={readOnly}
             />
           ) : (
             <EmptyCell key={`empty-${i}`} />

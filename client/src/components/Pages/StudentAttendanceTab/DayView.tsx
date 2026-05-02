@@ -14,6 +14,7 @@ import {
 import { useUpsertAttendance } from "@hooks/useUpsertAttendance";
 import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
 
+import AttendedChip from "../AttendedChip";
 import YesNoButtons from "./shared/YesNoButtons";
 
 interface Props {
@@ -21,6 +22,7 @@ interface Props {
   cursor: Date;
   onCursorChange: (date: Date) => void;
   records: AttendanceRecord[];
+  readOnly?: boolean;
 }
 
 const DayViewRoot = styled("div")({
@@ -84,7 +86,13 @@ const ActionLabel = styled(Typography)(({ theme }) => ({
 
 const PurpleSpinner = styled(CircularProgress)({ color: PURPLE });
 
-const DayView = ({ studentId, cursor, onCursorChange, records }: Props) => {
+const DayView = ({
+  studentId,
+  cursor,
+  onCursorChange,
+  records,
+  readOnly,
+}: Props) => {
   const today = getLatestTrainingDay();
   const isAtOrBeforeToday = cursor <= today;
 
@@ -108,7 +116,9 @@ const DayView = ({ studentId, cursor, onCursorChange, records }: Props) => {
   return (
     <DayViewRoot>
       <NavRow>
-        <NavIconButton onClick={() => onCursorChange(getPrevTrainingDay(cursor))}>
+        <NavIconButton
+          onClick={() => onCursorChange(getPrevTrainingDay(cursor))}
+        >
           <ChevronLeftIcon />
         </NavIconButton>
 
@@ -130,9 +140,13 @@ const DayView = ({ studentId, cursor, onCursorChange, records }: Props) => {
 
       <ActionSection>
         <ActionLabel variant="body2">
-          {attended === null ? "Mark attendance for this session:" : "Attendance marked:"}
+          {attended === null
+            ? "Mark attendance for this session:"
+            : "Attendance marked:"}
         </ActionLabel>
-        {isPending ? (
+        {readOnly ? (
+          <AttendedChip attended={attended} />
+        ) : isPending ? (
           <PurpleSpinner size={24} />
         ) : (
           <YesNoButtons

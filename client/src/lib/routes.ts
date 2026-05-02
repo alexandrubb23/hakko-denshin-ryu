@@ -17,6 +17,9 @@ export const Routes = {
 export const ApiRoutes = {
   me: "/api/me",
   meImage: "/api/me/image",
+  meRanks: "/api/me/ranks",
+  meAttendance: "/api/me/attendance",
+  meEvents: "/api/me/events",
   techniques: "/api/techniques",
   kyuProgram: "/api/kyu-program",
   events: "/api/events",

@@ -8,7 +8,11 @@ interface UseAttendanceByMonthParams {
   month: number;
 }
 
-export const useAttendanceByMonth = ({ studentId, year, month }: UseAttendanceByMonthParams) =>
+export const useAttendanceByMonth = ({
+  studentId,
+  year,
+  month,
+}: UseAttendanceByMonthParams) =>
   useQuery({
     queryKey: ["students", studentId, "attendance", year, month],
     queryFn: () => attendanceApi.getAttendanceByMonth(studentId, year, month),
@@ -18,10 +22,16 @@ export const useAttendanceByMonth = ({ studentId, year, month }: UseAttendanceBy
 interface UseAttendanceByYearParams {
   studentId: string;
   year: number;
+  enabled?: boolean;
 }
 
-export const useAttendanceByYear = ({ studentId, year }: UseAttendanceByYearParams) =>
+export const useAttendanceByYear = ({
+  studentId,
+  year,
+  enabled = true,
+}: UseAttendanceByYearParams) =>
   useQuery({
     queryKey: ["students", studentId, "attendance", year],
     queryFn: () => attendanceApi.getAttendanceByYear(studentId, year),
+    enabled,
   });

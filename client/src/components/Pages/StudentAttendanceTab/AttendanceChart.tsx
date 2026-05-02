@@ -98,7 +98,8 @@ interface Props {
   view: CalendarView;
   cursor: Date;
   records: AttendanceRecord[];
-  studentId: string;
+  studentId?: string;
+  yearData?: AttendanceRecord[];
 }
 
 enum SessionLabel {
@@ -324,7 +325,13 @@ const CHART_LABEL: Record<CalendarView, string> = {
   [CalendarView.year]: "Sessions per month",
 };
 
-const AttendanceChart = ({ view, cursor, records, studentId }: Props) => {
+const AttendanceChart = ({
+  view,
+  cursor,
+  records,
+  studentId,
+  yearData: yearDataProp,
+}: Props) => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -332,18 +339,21 @@ const AttendanceChart = ({ view, cursor, records, studentId }: Props) => {
 
   const year = cursor.getUTCFullYear();
 
-  const { data: yearData } = useAttendanceByYear({
-    studentId,
+  const { data: yearDataFromHook } = useAttendanceByYear({
+    studentId: studentId ?? "",
     year,
+    enabled: studentId !== undefined && view === CalendarView.year,
   });
+
+  const resolvedYearData = yearDataProp ?? yearDataFromHook?.records ?? [];
 
   const chartData = useMemo<ChartData>(() => {
     if (view === CalendarView.year)
-      return buildYearData(yearData?.records ?? [], year);
+      return buildYearData(resolvedYearData, year);
     if (view === CalendarView.month) return buildMonthData(cursor, records);
     if (view === CalendarView.day) return buildDayData(cursor, records);
     return buildWeekData(cursor, records);
-  }, [view, cursor, records, yearData]);
+  }, [view, cursor, records, resolvedYearData]);
 
   if (!mounted) return null;
 

@@ -4,6 +4,9 @@ export const ApiRoutes = {
   health: "/api/health",
   me: "/api/me",
   meImage: "/api/me/image",
+  meRanks: "/api/me/ranks",
+  meAttendance: "/api/me/attendance",
+  meEvents: "/api/me/events",
   techniques: "/api/techniques",
   kyuProgram: "/api/kyu-program",
   events: "/api/events",
@@ -20,6 +23,6 @@ export const ApiRoutes = {
   adminEvent: "/api/admin/events/:id",
   adminEventImage: "/api/admin/events/:id/image",
   adminEventParticipants: "/api/admin/events/:id/participants",
-  adminDashboardStudents: "/api/admin/dashboard/students",
+  adminDashboardStudents: "/api/admin/dashboard/stu dents",
   adminDashboardEvents: "/api/admin/dashboard/events",
 } as const;

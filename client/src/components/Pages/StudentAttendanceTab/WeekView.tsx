@@ -14,6 +14,7 @@ import {
 import { useUpsertAttendance } from "@hooks/useUpsertAttendance";
 import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
 
+import AttendedChip from "../AttendedChip";
 import YesNoButtons from "./shared/YesNoButtons";
 
 function getWeekDates(cursor: Date): Date[] {
@@ -35,6 +36,7 @@ interface DayCellProps {
   today: Date;
   year: number;
   month: number;
+  readOnly?: boolean;
 }
 
 const WeekViewRoot = styled("div")({
@@ -116,6 +118,7 @@ const DayCell = ({
   today,
   year,
   month,
+  readOnly,
 }: DayCellProps) => {
   const training = isTrainingDay(date);
   const isFuture = date > today;
@@ -140,7 +143,9 @@ const DayCell = ({
 
       {training && (
         <DayCellActions>
-          {isPending ? (
+          {readOnly ? (
+            <AttendedChip attended={isFuture ? null : attended} />
+          ) : isPending ? (
             <PurpleSpinner size={18} />
           ) : (
             <YesNoButtons
@@ -162,9 +167,16 @@ interface Props {
   cursor: Date;
   onCursorChange: (date: Date) => void;
   records: AttendanceRecord[];
+  readOnly?: boolean;
 }
 
-const WeekView = ({ studentId, cursor, onCursorChange, records }: Props) => {
+const WeekView = ({
+  studentId,
+  cursor,
+  onCursorChange,
+  records,
+  readOnly,
+}: Props) => {
   const today = getLatestTrainingDay();
   const weekDates = getWeekDates(cursor);
   const firstDay = weekDates[0];
@@ -217,6 +229,7 @@ const WeekView = ({ studentId, cursor, onCursorChange, records }: Props) => {
               today={today}
               year={year}
               month={month}
+              readOnly={readOnly}
             />
           );
         })}
