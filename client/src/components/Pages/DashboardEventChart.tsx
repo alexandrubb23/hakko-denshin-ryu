@@ -18,7 +18,38 @@ import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
-import { BORDER_COLOR, PURPLE, SKELETON_SX } from "@style/tokens";
+import {
+  CHART_GRID_COLOR,
+  CHART_TICK_COLOR,
+  CHART_TOOLTIP_BG,
+  CHART_TOOLTIP_TEXT,
+} from "@style/chart.tokens";
+import {
+  EVENT_CAMP_COLOR,
+  EVENT_DEMO_COLOR,
+  EVENT_OTHER_COLOR,
+  EVENT_SEMINAR_COLOR,
+} from "@style/events.tokens";
+import {
+  ERROR,
+  ERROR_ALPHA_12,
+  ERROR_ALPHA_40,
+  SUCCESS,
+  SUCCESS_ALPHA_12,
+  SUCCESS_ALPHA_40,
+} from "@style/status.tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_12,
+  PURPLE_ALPHA_25,
+  SKELETON_SX,
+  TEXT_MUTED,
+  TEXT_SUBTLE,
+  WHITE_ALPHA_10,
+  WHITE_ALPHA_25,
+  WHITE_ALPHA_60,
+} from "@style/tokens";
 
 import {
   ChartHeader,
@@ -30,14 +61,11 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
-const GRID_COLOR = "rgba(171, 150, 255, 0.08)";
-const TICK_COLOR = "rgba(255, 255, 255, 0.45)";
-
 const EVENT_TYPE_COLORS: Record<string, string> = {
-  seminar: "#1565c0",
-  demo: "#ef6c00",
-  camp: "#388e3c",
-  other: "rgba(171, 150, 255, 0.55)",
+  seminar: EVENT_SEMINAR_COLOR,
+  demo: EVENT_DEMO_COLOR,
+  camp: EVENT_CAMP_COLOR,
+  other: EVENT_OTHER_COLOR,
 };
 
 const EVENT_STATUS_COLORS: Record<
@@ -45,19 +73,19 @@ const EVENT_STATUS_COLORS: Record<
   { border: string; text: string; activeBg: string }
 > = {
   draft: {
-    border: "rgba(255,255,255,0.25)",
-    text: "rgba(255,255,255,0.5)",
-    activeBg: "rgba(255,255,255,0.1)",
+    border: WHITE_ALPHA_25,
+    text: TEXT_MUTED,
+    activeBg: WHITE_ALPHA_10,
   },
   published: {
-    border: "rgba(76,175,80,0.4)",
-    text: "#4caf50",
-    activeBg: "rgba(76,175,80,0.12)",
+    border: SUCCESS_ALPHA_40,
+    text: SUCCESS,
+    activeBg: SUCCESS_ALPHA_12,
   },
   cancelled: {
-    border: "rgba(244,67,54,0.4)",
-    text: "#f44336",
-    activeBg: "rgba(244,67,54,0.12)",
+    border: ERROR_ALPHA_40,
+    text: ERROR,
+    activeBg: ERROR_ALPHA_12,
   },
 };
 
@@ -78,8 +106,8 @@ const STATUS_OPTIONS: { value: EventStatusFilter; label: string }[] = [
 
 const chipSx = (active: boolean) => ({
   borderColor: active ? PURPLE : BORDER_COLOR,
-  color: active ? PURPLE : "rgba(255,255,255,0.6)",
-  backgroundColor: active ? "rgba(171,150,255,0.12)" : "transparent",
+  color: active ? PURPLE : WHITE_ALPHA_60,
+  backgroundColor: active ? PURPLE_ALPHA_12 : "transparent",
   "&:hover": { borderColor: PURPLE },
 });
 
@@ -94,14 +122,14 @@ const statusChipSx = (
   const isActive = active && activeStatus !== "all";
   return {
     borderColor: isActive ? colors.text : colors.border,
-    color: isActive ? colors.text : "rgba(255,255,255,0.5)",
+    color: isActive ? colors.text : TEXT_MUTED,
     backgroundColor: isActive ? colors.activeBg : "transparent",
     "&:hover": { borderColor: colors.text },
   };
 };
 
 function eventTypeColor(type: string): string {
-  return EVENT_TYPE_COLORS[type] ?? "rgba(171, 150, 255, 0.25)";
+  return EVENT_TYPE_COLORS[type] ?? PURPLE_ALPHA_25;
 }
 
 function filterEvents(
@@ -166,9 +194,9 @@ const DashboardEventChart = () => {
             ];
           },
         },
-        backgroundColor: "rgba(10, 6, 25, 0.92)",
+        backgroundColor: CHART_TOOLTIP_BG,
         titleColor: PURPLE,
-        bodyColor: "rgba(255,255,255,0.75)",
+        bodyColor: CHART_TOOLTIP_TEXT,
         borderColor: BORDER_COLOR,
         borderWidth: 1,
         padding: 10,
@@ -178,22 +206,22 @@ const DashboardEventChart = () => {
       x: {
         min: 0,
         max: maxX,
-        grid: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
         ticks: {
-          color: TICK_COLOR,
+          color: CHART_TICK_COLOR,
           font: { size: 11 },
           stepSize: 1,
           precision: 0,
         },
-        border: { color: GRID_COLOR },
+        border: { color: CHART_GRID_COLOR },
       },
       y: {
-        grid: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
         ticks: {
-          color: TICK_COLOR,
+          color: CHART_TICK_COLOR,
           font: { size: 11 },
         },
-        border: { color: GRID_COLOR },
+        border: { color: CHART_GRID_COLOR },
       },
     },
   };
@@ -278,7 +306,7 @@ const DashboardEventChart = () => {
       {filtered.length === 0 ? (
         <Typography
           variant="body2"
-          sx={{ color: "rgba(255,255,255,0.35)", textAlign: "center", py: 4 }}
+          sx={{ color: TEXT_SUBTLE, textAlign: "center", py: 4 }}
         >
           No events match the selected filters.
         </Typography>

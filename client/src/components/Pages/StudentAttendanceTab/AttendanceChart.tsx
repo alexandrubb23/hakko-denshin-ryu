@@ -19,17 +19,30 @@ import {
 import { useAttendanceByYear } from "@hooks/useAttendance";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import {
+  CHART_GRID_COLOR,
+  CHART_TICK_COLOR,
+  CHART_TOOLTIP_BG,
+  CHART_TOOLTIP_TEXT,
+} from "@style/chart.tokens";
+import {
+  ERROR_DARK_ALPHA_15,
+  ERROR_DARK_ALPHA_80,
+  ERROR_DARK_ALPHA_90,
+} from "@style/status.tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_18,
+  SURFACE_BG,
+} from "@style/tokens";
 
 import { CalendarView } from "./shared/calendarView";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const ATTENDED_COLOR = PURPLE;
-const ABSENT_COLOR = "rgba(211, 47, 47, 0.8)";
-const UNMARKED_COLOR = "rgba(171, 150, 255, 0.18)";
-const GRID_COLOR = "rgba(171, 150, 255, 0.08)";
-const TICK_COLOR = "rgba(255, 255, 255, 0.45)";
 
 const ChartRoot = styled("div")({
   marginBottom: 24,
@@ -37,7 +50,7 @@ const ChartRoot = styled("div")({
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 12,
   padding: "20px 16px 12px",
-  backdropFilter: "blur(20px)",
+  backdropFilter: BACKDROP_BLUR,
 });
 
 const ChartHeader = styled("div")({
@@ -71,7 +84,7 @@ const StatBadge = styled("div", {
   gap: 5,
   fontSize: "0.7rem",
   fontWeight: 600,
-  color: variant === "present" ? PURPLE : "rgba(211, 47, 47, 0.9)",
+  color: variant === "present" ? PURPLE : ERROR_DARK_ALPHA_90,
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.6rem",
     gap: 3,
@@ -85,9 +98,9 @@ const StatDot = styled("span", {
   height: 10,
   borderRadius: 2,
   flexShrink: 0,
-  border: `1px solid ${variant === "present" ? PURPLE : "rgba(211, 47, 47, 0.9)"}`,
+  border: `1px solid ${variant === "present" ? PURPLE : ERROR_DARK_ALPHA_90}`,
   backgroundColor:
-    variant === "present" ? "rgba(171,150,255,0.18)" : "rgba(211,47,47,0.15)",
+    variant === "present" ? PURPLE_ALPHA_18 : ERROR_DARK_ALPHA_15,
   [theme.breakpoints.down("sm")]: {
     width: 8,
     height: 8,
@@ -150,7 +163,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
     return makeSingleBarData(
       label,
       0.3,
-      UNMARKED_COLOR,
+      PURPLE_ALPHA_18,
       SessionLabel.NotYet,
       0,
       0
@@ -161,7 +174,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
     return makeSingleBarData(
       label,
       0.5,
-      UNMARKED_COLOR,
+      PURPLE_ALPHA_18,
       SessionLabel.Unmarked,
       0,
       0
@@ -175,7 +188,14 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
       1,
       0
     );
-  return makeSingleBarData(label, 1, ABSENT_COLOR, SessionLabel.Absent, 0, 1);
+  return makeSingleBarData(
+    label,
+    1,
+    ERROR_DARK_ALPHA_80,
+    SessionLabel.Absent,
+    0,
+    1
+  );
 }
 
 function buildWeekData(cursor: Date, records: AttendanceRecord[]): ChartData {
@@ -196,7 +216,7 @@ function buildWeekData(cursor: Date, records: AttendanceRecord[]): ChartData {
 
     if (isFuture) {
       data.push(0.3);
-      colors.push(UNMARKED_COLOR);
+      colors.push(PURPLE_ALPHA_18);
       tooltipLabels.push(SessionLabel.NotYet);
       return;
     }
@@ -204,7 +224,7 @@ function buildWeekData(cursor: Date, records: AttendanceRecord[]): ChartData {
     const record = records.find((r) => r.date.startsWith(key));
     if (!record) {
       data.push(0.5);
-      colors.push(UNMARKED_COLOR);
+      colors.push(PURPLE_ALPHA_18);
       tooltipLabels.push(SessionLabel.Unmarked);
       return;
     }
@@ -215,7 +235,7 @@ function buildWeekData(cursor: Date, records: AttendanceRecord[]): ChartData {
       tooltipLabels.push(SessionLabel.Present);
     } else {
       data.push(1);
-      colors.push(ABSENT_COLOR);
+      colors.push(ERROR_DARK_ALPHA_80);
       tooltipLabels.push(SessionLabel.Absent);
     }
   });
@@ -251,7 +271,7 @@ function buildMonthData(cursor: Date, records: AttendanceRecord[]): ChartData {
 
     if (isFuture) {
       data.push(0.3);
-      colors.push(UNMARKED_COLOR);
+      colors.push(PURPLE_ALPHA_18);
       tooltipLabels.push(SessionLabel.NotYet);
       return;
     }
@@ -259,7 +279,7 @@ function buildMonthData(cursor: Date, records: AttendanceRecord[]): ChartData {
     const record = records.find((r) => r.date.startsWith(key));
     if (!record) {
       data.push(0.5);
-      colors.push(UNMARKED_COLOR);
+      colors.push(PURPLE_ALPHA_18);
       tooltipLabels.push(SessionLabel.Unmarked);
       return;
     }
@@ -270,7 +290,7 @@ function buildMonthData(cursor: Date, records: AttendanceRecord[]): ChartData {
       tooltipLabels.push(SessionLabel.Present);
     } else {
       data.push(1);
-      colors.push(ABSENT_COLOR);
+      colors.push(ERROR_DARK_ALPHA_80);
       tooltipLabels.push(SessionLabel.Absent);
     }
   });
@@ -374,7 +394,7 @@ const AttendanceChart = ({
     ? {
         label: "Not attended",
         data: chartData.absentData,
-        backgroundColor: chartData.absentData.map(() => ABSENT_COLOR),
+        backgroundColor: chartData.absentData.map(() => ERROR_DARK_ALPHA_80),
         borderRadius: 4,
         borderSkipped: false as const,
         barPercentage: 0.65,
@@ -395,7 +415,7 @@ const AttendanceChart = ({
       legend: {
         display: isYearView,
         labels: {
-          color: TICK_COLOR,
+          color: CHART_TICK_COLOR,
           boxWidth: 12,
           boxHeight: 12,
           borderRadius: 3,
@@ -414,9 +434,9 @@ const AttendanceChart = ({
             return ` ${label}`;
           },
         },
-        backgroundColor: "rgba(10, 6, 25, 0.92)",
+        backgroundColor: CHART_TOOLTIP_BG,
         titleColor: PURPLE,
-        bodyColor: "rgba(255,255,255,0.75)",
+        bodyColor: CHART_TOOLTIP_TEXT,
         borderColor: BORDER_COLOR,
         borderWidth: 1,
         padding: 10,
@@ -425,20 +445,20 @@ const AttendanceChart = ({
     scales: {
       x: {
         stacked: isYearView,
-        grid: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
         ticks: {
-          color: TICK_COLOR,
+          color: CHART_TICK_COLOR,
           font: { size: 11 },
         },
-        border: { color: GRID_COLOR },
+        border: { color: CHART_GRID_COLOR },
       },
       y: {
         stacked: isYearView,
         min: 0,
         max: chartData.maxY,
-        grid: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
         ticks: {
-          color: TICK_COLOR,
+          color: CHART_TICK_COLOR,
           font: { size: 11 },
           stepSize: isYearView ? undefined : 0.5,
           callback: (value: number | string) => {
@@ -449,7 +469,7 @@ const AttendanceChart = ({
             return "";
           },
         },
-        border: { color: GRID_COLOR },
+        border: { color: CHART_GRID_COLOR },
       },
     },
   };

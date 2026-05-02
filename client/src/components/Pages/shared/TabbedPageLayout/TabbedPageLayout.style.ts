@@ -8,7 +8,17 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  PURPLE,
+  SURFACE_BG,
+  SURFACE_BG_02,
+  TEXT_MUTED,
+  WHITE_ALPHA_65,
+  WHITE_ALPHA_85,
+} from "@style/tokens";
 
 export const PageWrapper = styled(Box)({
   padding: "16px",
@@ -20,15 +30,15 @@ export const PageWrapper = styled(Box)({
 });
 
 export const ErrorAlert = styled(Alert)({
-  backgroundColor: "rgba(211,47,47,0.12)",
-  color: "#f48fb1",
+  backgroundColor: ERROR_DARK_ALPHA_12,
+  color: ERROR_DARK_TEXT,
   border: "1px solid rgba(211,47,47,0.3)",
 });
 
 export const ContentCard = styled(Paper)({
   width: "100%",
   backgroundColor: SURFACE_BG,
-  backdropFilter: "blur(20px)",
+  backdropFilter: BACKDROP_BLUR,
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 8,
   padding: "16px",
@@ -54,7 +64,7 @@ export const GroupsGrid = styled(Box)({
 });
 
 export const GroupCard = styled(Box)({
-  backgroundColor: "rgba(255,255,255,0.02)",
+  backgroundColor: SURFACE_BG_02,
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 6,
   padding: "12px",
@@ -62,7 +72,7 @@ export const GroupCard = styled(Box)({
 });
 
 export const GroupTitle = styled(Typography)({
-  color: "rgba(255,255,255,0.85)",
+  color: WHITE_ALPHA_85,
   fontWeight: 700,
   letterSpacing: 0.5,
   marginBottom: 12,
@@ -78,7 +88,7 @@ export const TechniqueList = styled(Box)({
 
 export const TechniqueItem = styled(Box)({
   fontSize: "0.82rem",
-  color: "rgba(255,255,255,0.65)",
+  color: WHITE_ALPHA_65,
   lineHeight: 1.6,
   "&::marker": { color: PURPLE, fontSize: "0.75rem" },
 }) as typeof Box;
@@ -88,7 +98,7 @@ export const PageTabs = styled(Tabs)({
   minWidth: 0,
   borderBottom: `1px solid ${BORDER_COLOR}`,
   "& .MuiTabs-indicator": { backgroundColor: PURPLE },
-  "& .MuiTabs-scrollButtons": { color: "rgba(255,255,255,0.5)" },
+  "& .MuiTabs-scrollButtons": { color: TEXT_MUTED },
   "& .MuiTabs-scroller": {
     WebkitOverflowScrolling: "touch",
     scrollbarWidth: "none",
@@ -100,7 +110,7 @@ export const PageTabs = styled(Tabs)({
 export const PageTab = styled(Tab, {
   shouldForwardProp: (prop) => prop !== "compact",
 })<{ compact?: boolean }>(({ compact }) => ({
-  color: "rgba(255,255,255,0.5)",
+  color: TEXT_MUTED,
   fontWeight: 600,
   letterSpacing: 0.5,
   fontSize: compact ? "0.7rem" : "0.75rem",

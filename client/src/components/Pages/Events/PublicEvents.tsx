@@ -15,7 +15,7 @@ import {
 
 import CenterSpinner from "@components/Spinner/CenterSpinner";
 import { useEvents } from "@hooks/useEvents";
-import { PURPLE } from "@style/tokens";
+import { PURPLE, PURPLE_ALPHA_30 } from "@style/tokens";
 import {
   CARD_CONTENT_SX,
   DetailsTypography,
@@ -91,7 +91,7 @@ const PublicEvents = () => {
                 ) : (
                   <ImagePlaceholder>
                     <EventNoteIcon
-                      sx={{ fontSize: 56, color: "rgba(171,150,255,0.3)" }}
+                      sx={{ fontSize: 56, color: PURPLE_ALPHA_30 }}
                     />
                   </ImagePlaceholder>
                 )}

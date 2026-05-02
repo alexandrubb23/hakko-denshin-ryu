@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { type StudentRankEntry } from "@api/students";
 import { useStudentRanks } from "@hooks/useStudentRanks";
-import { PURPLE } from "@style/tokens";
+import { DARK_BG, PURPLE, PURPLE_HOVER } from "@style/tokens";
 
 import InfoAlert from "../shared/InfoAlert";
 import CreateStudentRankModal from "./CreateStudentRankModal";
@@ -31,9 +31,9 @@ const StudentRankTab = ({ studentId }: Props) => {
           onClick={() => setCreateOpen(true)}
           sx={{
             backgroundColor: PURPLE,
-            color: "#0a0619",
+            color: DARK_BG,
             fontWeight: 700,
-            "&:hover": { backgroundColor: "#c4b4ff" },
+            "&:hover": { backgroundColor: PURPLE_HOVER },
           }}
         >
           Assign Rank

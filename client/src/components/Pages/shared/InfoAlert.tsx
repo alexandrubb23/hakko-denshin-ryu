@@ -1,14 +1,14 @@
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Alert, type AlertProps } from "@mui/material";
 
-import { BORDER_COLOR, PURPLE } from "@style/tokens";
+import { BORDER_COLOR, PURPLE, PURPLE_ALPHA_08 } from "@style/tokens";
 
 type Props = Omit<AlertProps, "severity" | "icon"> & {
   children: React.ReactNode;
 };
 
 const infoAlertSx = {
-  backgroundColor: "rgba(171,150,255,0.08)",
+  backgroundColor: PURPLE_ALPHA_08,
   color: PURPLE,
   border: `1px solid ${BORDER_COLOR}`,
   "& .MuiAlert-icon": { color: PURPLE },

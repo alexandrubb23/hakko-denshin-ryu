@@ -23,7 +23,12 @@ import useIsMobile from "@hooks/isMobile";
 import { authClient } from "@lib/auth-client";
 import { Role } from "@lib/role";
 import { Routes } from "@lib/routes";
-import { SKELETON_SX } from "@style/tokens";
+import {
+  PURPLE,
+  PURPLE_ALPHA_08,
+  PURPLE_ALPHA_15,
+  SKELETON_SX,
+} from "@style/tokens";
 
 const NAV_ITEMS = [
   { label: "Dashboard", path: Routes.dashboard, icon: <DashboardIcon /> },
@@ -45,13 +50,13 @@ const NAV_ITEMS = [
 
 const SELECTED_SX = {
   "&.Mui-selected": {
-    backgroundColor: "rgba(171, 150, 255, 0.15)",
+    backgroundColor: PURPLE_ALPHA_15,
     "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-      color: "#AB96FF",
+      color: PURPLE,
     },
   },
   "&:hover": {
-    backgroundColor: "rgba(171, 150, 255, 0.08)",
+    backgroundColor: PURPLE_ALPHA_08,
   },
 } as const;
 

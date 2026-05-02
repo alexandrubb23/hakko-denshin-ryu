@@ -25,9 +25,18 @@ import { useEventParticipants } from "@hooks/useEventParticipants";
 import { useStudents } from "@hooks/useStudents";
 import { useUpsertEventParticipation } from "@hooks/useUpsertEventParticipation";
 import {
+  SUCCESS,
+  SUCCESS_ALPHA_08,
+  SUCCESS_ALPHA_40,
+} from "@style/status.tokens";
+import {
+  BACKDROP_BLUR,
   BORDER_COLOR,
   DARK_BG,
   PURPLE,
+  PURPLE_ALPHA_08,
+  PURPLE_ALPHA_15,
+  PURPLE_ALPHA_25,
   SKELETON_SX,
   SURFACE_BG,
 } from "@style/tokens";
@@ -65,7 +74,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
             backgroundColor: DARK_BG,
             backgroundImage: "none",
             border: `1px solid ${BORDER_COLOR}`,
-            backdropFilter: "blur(20px)",
+            backdropFilter: BACKDROP_BLUR,
           },
         },
       }}
@@ -92,7 +101,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
           label={participants?.filter((p) => p.attended).length ?? 0}
           size="small"
           sx={{
-            backgroundColor: "rgba(171,150,255,0.15)",
+            backgroundColor: PURPLE_ALPHA_15,
             color: PURPLE,
             fontWeight: 700,
           }}
@@ -154,7 +163,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
                       startIcon={
                         attended ? (
                           <CheckCircleIcon
-                            sx={{ color: "#4caf50", fontSize: 16 }}
+                            sx={{ color: SUCCESS, fontSize: 16 }}
                           />
                         ) : (
                           <RadioButtonUncheckedIcon
@@ -163,16 +172,14 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
                         )
                       }
                       sx={{
-                        borderColor: attended
-                          ? "rgba(76,175,80,0.4)"
-                          : BORDER_COLOR,
-                        color: attended ? "#4caf50" : "text.secondary",
+                        borderColor: attended ? SUCCESS_ALPHA_40 : BORDER_COLOR,
+                        color: attended ? SUCCESS : "text.secondary",
                         minWidth: 110,
                         "&:hover": {
-                          borderColor: attended ? "#4caf50" : PURPLE,
+                          borderColor: attended ? SUCCESS : PURPLE,
                           backgroundColor: attended
-                            ? "rgba(76,175,80,0.08)"
-                            : "rgba(171,150,255,0.08)",
+                            ? SUCCESS_ALPHA_08
+                            : PURPLE_ALPHA_08,
                         },
                       }}
                     >
@@ -186,7 +193,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
                       sx={{
                         width: 36,
                         height: 36,
-                        backgroundColor: "rgba(171,150,255,0.25)",
+                        backgroundColor: PURPLE_ALPHA_25,
                         fontSize: 14,
                         fontWeight: 700,
                         color: PURPLE,

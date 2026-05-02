@@ -13,7 +13,14 @@ import {
 } from "@mui/material";
 import type { ReactNode } from "react";
 
-import { BORDER_COLOR, DARK_BG, PURPLE, SURFACE_BG } from "@style/tokens";
+import { ERROR_DARK, ERROR_DARK_HOVER, WARNING } from "@style/status.tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  DARK_BG,
+  PURPLE,
+  SURFACE_BG,
+} from "@style/tokens";
 
 interface Props {
   open: boolean;
@@ -46,7 +53,7 @@ const ConfirmDeleteModal = ({
           backgroundImage: "none",
           border: `1px solid ${BORDER_COLOR}`,
           borderRadius: 3,
-          backdropFilter: "blur(20px)",
+          backdropFilter: BACKDROP_BLUR,
         },
       },
     }}
@@ -77,7 +84,7 @@ const ConfirmDeleteModal = ({
           mb: error ? 2 : 0,
         }}
       >
-        <WarningAmberIcon sx={{ color: "#ff9800", mt: 0.25 }} />
+        <WarningAmberIcon sx={{ color: WARNING, mt: 0.25 }} />
         <Typography variant="body2" color="text.secondary">
           {message}
         </Typography>
@@ -116,8 +123,8 @@ const ConfirmDeleteModal = ({
         onClick={onConfirm}
         disabled={isPending}
         sx={{
-          backgroundColor: "#d32f2f",
-          "&:hover": { backgroundColor: "#b71c1c" },
+          backgroundColor: ERROR_DARK,
+          "&:hover": { backgroundColor: ERROR_DARK_HOVER },
           "&:disabled": { opacity: 0.5 },
         }}
       >

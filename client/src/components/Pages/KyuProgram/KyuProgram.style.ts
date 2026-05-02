@@ -1,13 +1,19 @@
 import { Box, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { BORDER_COLOR, PURPLE } from "@style/tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  TEXT_MUTED,
+  WHITE_ALPHA_35,
+  WHITE_ALPHA_90,
+} from "@style/tokens";
 
 export const KyuTabs = styled(Tabs)({
   width: "100%",
   minWidth: 0,
   borderBottom: `1px solid ${BORDER_COLOR}`,
   "& .MuiTabs-indicator": { backgroundColor: PURPLE },
-  "& .MuiTabs-scrollButtons": { color: "rgba(255,255,255,0.5)" },
+  "& .MuiTabs-scrollButtons": { color: TEXT_MUTED },
   "& .MuiTabs-scroller": {
     WebkitOverflowScrolling: "touch",
     scrollbarWidth: "none",
@@ -17,7 +23,7 @@ export const KyuTabs = styled(Tabs)({
 });
 
 export const KyuTab = styled(Tab)({
-  color: "rgba(255,255,255,0.5)",
+  color: TEXT_MUTED,
   fontWeight: 600,
   letterSpacing: 0.5,
   fontSize: "0.7rem",
@@ -62,6 +68,6 @@ export const LegendDot = styled(Box, {
   width: 8,
   height: 8,
   borderRadius: "50%",
-  backgroundColor: isKihon ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.35)",
+  backgroundColor: isKihon ? WHITE_ALPHA_90 : WHITE_ALPHA_35,
   flexShrink: 0,
 }));

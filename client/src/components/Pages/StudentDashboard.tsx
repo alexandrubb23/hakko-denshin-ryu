@@ -19,6 +19,7 @@ import { Link } from "react-router";
 import { useMe } from "@hooks/useMe";
 import { useUploadMyImage } from "@hooks/useUploadMyImage";
 import { Routes } from "@lib/routes";
+import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
 import {
   BACKDROP_BLUR,
   BORDER_COLOR,
@@ -114,9 +115,9 @@ const StudentDashboard = () => {
                     label="Verified"
                     size="small"
                     sx={{
-                      color: "#4caf50",
-                      borderColor: "#4caf50",
-                      backgroundColor: "rgba(76,175,80,0.1)",
+                      color: SUCCESS,
+                      borderColor: SUCCESS,
+                      backgroundColor: SUCCESS_ALPHA_10,
                     }}
                     variant="outlined"
                   />
@@ -167,7 +168,7 @@ const StudentDashboard = () => {
                       flex: "1 1 140px",
                       backgroundColor: SURFACE_BG,
                       border: `1px solid ${BORDER_COLOR}`,
-                      backdropFilter: "blur(20px)",
+                      backdropFilter: BACKDROP_BLUR,
                       backgroundImage: "none",
                       transition: "border-color 200ms",
                       "&:hover": { borderColor: PURPLE },

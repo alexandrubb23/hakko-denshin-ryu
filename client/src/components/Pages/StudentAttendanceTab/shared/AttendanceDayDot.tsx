@@ -1,5 +1,6 @@
 import { Box, Tooltip } from "@mui/material";
 
+import { ERROR, SUCCESS } from "@style/status.tokens";
 import { PURPLE } from "@style/tokens";
 
 enum AttendanceStatus {
@@ -15,8 +16,8 @@ interface Props {
 }
 
 const COLOR: Record<AttendanceStatus, string> = {
-  [AttendanceStatus.present]: "#4caf50",
-  [AttendanceStatus.absent]: "#f44336",
+  [AttendanceStatus.present]: SUCCESS,
+  [AttendanceStatus.absent]: ERROR,
   [AttendanceStatus.unmarked]: PURPLE,
 };
 

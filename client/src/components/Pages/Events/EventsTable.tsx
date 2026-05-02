@@ -20,7 +20,22 @@ import {
 import { useState } from "react";
 
 import type { Event } from "@api/events";
-import { BORDER_COLOR, PURPLE, SKELETON_SX, SURFACE_BG } from "@style/tokens";
+import {
+  ERROR_SOFT,
+  ERROR_SOFT_ALPHA_12,
+  ERROR_SOFT_TEXT,
+  ERROR_SOFT_TEXT_ALPHA_12,
+  SUCCESS,
+  SUCCESS_ALPHA_15,
+} from "@style/status.tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_04,
+  PURPLE_ALPHA_12,
+  SKELETON_SX,
+  SURFACE_BG,
+} from "@style/tokens";
 import { formatDate } from "@utils/time";
 import DeleteEventModal from "./DeleteEventModal";
 import EditEventModal from "./EditEventModal";
@@ -35,9 +50,9 @@ interface EventsTableProps {
 const SKELETON_ROWS = 5;
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
-  published: { bg: "rgba(76,175,80,0.15)", color: "#4caf50" },
-  draft: { bg: "rgba(171,150,255,0.12)", color: PURPLE },
-  cancelled: { bg: "rgba(239,83,80,0.12)", color: "#ef5350" },
+  published: { bg: SUCCESS_ALPHA_15, color: SUCCESS },
+  draft: { bg: PURPLE_ALPHA_12, color: PURPLE },
+  cancelled: { bg: ERROR_SOFT_ALPHA_12, color: ERROR_SOFT },
 };
 
 const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
@@ -160,7 +175,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                         ...cellBorder,
                         "&:last-child td": { border: 0 },
                         "&:hover": {
-                          backgroundColor: "rgba(171,150,255,0.04)",
+                          backgroundColor: PURPLE_ALPHA_04,
                         },
                       }}
                     >
@@ -217,7 +232,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                             sx={{
                               color: PURPLE,
                               "&:hover": {
-                                backgroundColor: "rgba(171,150,255,0.12)",
+                                backgroundColor: PURPLE_ALPHA_12,
                               },
                             }}
                           >
@@ -231,7 +246,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                             sx={{
                               color: PURPLE,
                               "&:hover": {
-                                backgroundColor: "rgba(171,150,255,0.12)",
+                                backgroundColor: PURPLE_ALPHA_12,
                               },
                             }}
                           >
@@ -243,9 +258,9 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                             size="small"
                             onClick={() => setDeletingEvent(event)}
                             sx={{
-                              color: "#ef9a9a",
+                              color: ERROR_SOFT_TEXT,
                               "&:hover": {
-                                backgroundColor: "rgba(239,154,154,0.12)",
+                                backgroundColor: ERROR_SOFT_TEXT_ALPHA_12,
                               },
                             }}
                           >

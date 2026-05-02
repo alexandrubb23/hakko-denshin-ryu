@@ -12,7 +12,20 @@ import type { StudentEvent } from "@api/events";
 import { useMyEvents } from "@hooks/useMyEvents";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
-import { BORDER_COLOR, PURPLE, SKELETON_SX } from "@style/tokens";
+import {
+  CHART_GRID_COLOR,
+  CHART_TICK_COLOR,
+  CHART_TOOLTIP_BG,
+  CHART_TOOLTIP_TEXT,
+} from "@style/chart.tokens";
+import { ERROR_DARK_ALPHA_80 } from "@style/status.tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_18,
+  SKELETON_SX,
+  TEXT_SUBTLE,
+} from "@style/tokens";
 
 import {
   ChartHeader,
@@ -24,16 +37,11 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
 const ATTENDED_COLOR = PURPLE;
-const NOT_ATTENDED_COLOR = "rgba(211, 47, 47, 0.8)";
-const UNMARKED_COLOR = "rgba(171, 150, 255, 0.18)";
-
-const GRID_COLOR = "rgba(171, 150, 255, 0.08)";
-const TICK_COLOR = "rgba(255, 255, 255, 0.45)";
 
 function eventColor(event: StudentEvent): string {
   if (event.attended === true) return ATTENDED_COLOR;
-  if (event.attended === false) return NOT_ATTENDED_COLOR;
-  return UNMARKED_COLOR;
+  if (event.attended === false) return ERROR_DARK_ALPHA_80;
+  return PURPLE_ALPHA_18;
 }
 
 const MyEventChart = () => {
@@ -69,9 +77,9 @@ const MyEventChart = () => {
             return ` ${status} · ${event.type}`;
           },
         },
-        backgroundColor: "rgba(10, 6, 25, 0.92)",
+        backgroundColor: CHART_TOOLTIP_BG,
         titleColor: PURPLE,
-        bodyColor: "rgba(255,255,255,0.75)",
+        bodyColor: CHART_TOOLTIP_TEXT,
         borderColor: BORDER_COLOR,
         borderWidth: 1,
         padding: 10,
@@ -81,14 +89,14 @@ const MyEventChart = () => {
       x: {
         min: 0,
         max: 1,
-        grid: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
         ticks: { display: false },
-        border: { color: GRID_COLOR },
+        border: { color: CHART_GRID_COLOR },
       },
       y: {
-        grid: { color: GRID_COLOR },
-        ticks: { color: TICK_COLOR, font: { size: 11 } },
-        border: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
+        ticks: { color: CHART_TICK_COLOR, font: { size: 11 } },
+        border: { color: CHART_GRID_COLOR },
       },
     },
   };
@@ -119,7 +127,7 @@ const MyEventChart = () => {
       {events.length === 0 ? (
         <Typography
           variant="body2"
-          sx={{ color: "rgba(255,255,255,0.35)", textAlign: "center", py: 4 }}
+          sx={{ color: TEXT_SUBTLE, textAlign: "center", py: 4 }}
         >
           No events yet.
         </Typography>

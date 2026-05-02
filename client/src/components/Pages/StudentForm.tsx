@@ -27,11 +27,14 @@ import { useForm } from "react-hook-form";
 import { type Student } from "@api/students";
 import { useCreateStudent } from "@hooks/useCreateStudent";
 import { useUpdateStudent } from "@hooks/useUpdateStudent";
+import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
+  BACKDROP_BLUR,
   BORDER_COLOR,
   BORDER_HOVER,
   DARK_BG,
   PURPLE,
+  PURPLE_HOVER,
   SURFACE_BG,
 } from "@style/tokens";
 
@@ -156,7 +159,7 @@ const StudentForm = (props: StudentFormProps) => {
             backgroundColor: DARK_BG,
             backgroundImage: "none",
             border: `1px solid ${BORDER_COLOR}`,
-            backdropFilter: "blur(20px)",
+            backdropFilter: BACKDROP_BLUR,
           },
         },
       }}
@@ -183,7 +186,10 @@ const StudentForm = (props: StudentFormProps) => {
           {serverErrorMessage && (
             <Alert
               severity="error"
-              sx={{ backgroundColor: "rgba(211,47,47,0.12)", color: "#f48fb1" }}
+              sx={{
+                backgroundColor: ERROR_DARK_ALPHA_12,
+                color: ERROR_DARK_TEXT,
+              }}
             >
               {serverErrorMessage}
             </Alert>
@@ -235,9 +241,9 @@ const StudentForm = (props: StudentFormProps) => {
             disabled={isPending}
             sx={{
               backgroundColor: PURPLE,
-              color: "#0a0619",
+              color: DARK_BG,
               fontWeight: 700,
-              "&:hover": { backgroundColor: "#c4b4ff" },
+              "&:hover": { backgroundColor: PURPLE_HOVER },
             }}
           >
             {isPending ? pendingLabel : submitLabel}

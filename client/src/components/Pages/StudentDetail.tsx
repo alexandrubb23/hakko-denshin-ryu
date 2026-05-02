@@ -15,7 +15,15 @@ import { useNavigate, useParams } from "react-router";
 
 import { useStudent } from "@hooks/useStudent";
 import { Routes } from "@lib/routes";
-import { BORDER_COLOR, PURPLE, SKELETON_SX, SURFACE_BG } from "@style/tokens";
+import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_08,
+  SKELETON_SX,
+  SURFACE_BG,
+} from "@style/tokens";
 import StudentAvatar from "./StudentAvatar";
 import StudentDetailTabs from "./StudentDetailTabs";
 
@@ -32,7 +40,7 @@ const StudentDetail = () => {
         sx={{
           color: PURPLE,
           mb: 3,
-          "&:hover": { backgroundColor: "rgba(171,150,255,0.08)" },
+          "&:hover": { backgroundColor: PURPLE_ALPHA_08 },
         }}
       >
         Back to Students
@@ -44,7 +52,7 @@ const StudentDetail = () => {
           backgroundColor: SURFACE_BG,
           border: `1px solid ${BORDER_COLOR}`,
           borderRadius: 3,
-          backdropFilter: "blur(20px)",
+          backdropFilter: BACKDROP_BLUR,
           p: 4,
         }}
       >
@@ -109,9 +117,9 @@ const StudentDetail = () => {
                     label="Verified"
                     size="small"
                     sx={{
-                      color: "#4caf50",
-                      borderColor: "#4caf50",
-                      backgroundColor: "rgba(76,175,80,0.1)",
+                      color: SUCCESS,
+                      borderColor: SUCCESS,
+                      backgroundColor: SUCCESS_ALPHA_10,
                     }}
                     variant="outlined"
                   />

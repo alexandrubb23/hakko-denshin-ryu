@@ -21,7 +21,21 @@ import { useNavigate } from "react-router";
 
 import { type Student } from "@api/students";
 import CenterSpinner from "@components/Spinner/CenterSpinner";
+
 import { Routes } from "@lib/routes";
+import {
+  ERROR_SOFT_TEXT,
+  ERROR_SOFT_TEXT_ALPHA_12,
+  SUCCESS,
+} from "@style/status.tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_05,
+  PURPLE_ALPHA_12,
+  PURPLE_ALPHA_25,
+  SURFACE_BG,
+} from "@style/tokens";
 import { getInitials } from "@utils/string";
 import DeleteStudentModal from "./DeleteStudentModal";
 import EditStudentModal from "./EditStudentModal";
@@ -58,7 +72,7 @@ const StudentsTable = ({
         sx={{
           p: 6,
           textAlign: "center",
-          backgroundColor: "rgba(255,255,255,0.04)",
+          backgroundColor: SURFACE_BG,
         }}
       >
         <PeopleIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
@@ -76,13 +90,11 @@ const StudentsTable = ({
       <TableContainer
         component={Paper}
         elevation={0}
-        sx={{ backgroundColor: "rgba(255,255,255,0.04)", borderRadius: 2 }}
+        sx={{ backgroundColor: SURFACE_BG, borderRadius: 2 }}
       >
         <Table>
           <TableHead>
-            <TableRow
-              sx={{ "& th": { borderBottomColor: "rgba(171,150,255,0.2)" } }}
-            >
+            <TableRow sx={{ "& th": { borderBottomColor: BORDER_COLOR } }}>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
                 Student
               </TableCell>
@@ -113,10 +125,10 @@ const StudentsTable = ({
                 onClick={() => navigate(Routes.studentDetail(student.id))}
                 sx={{
                   cursor: "pointer",
-                  "& td": { borderBottomColor: "rgba(171,150,255,0.2)" },
+                  "& td": { borderBottomColor: BORDER_COLOR },
                   "&:last-child td": { border: 0 },
                   "&:hover": {
-                    backgroundColor: "rgba(171,150,255,0.05)",
+                    backgroundColor: PURPLE_ALPHA_05,
                   },
                 }}
               >
@@ -125,10 +137,10 @@ const StudentsTable = ({
                     sx={{
                       width: 36,
                       height: 36,
-                      backgroundColor: "rgba(171,150,255,0.25)",
+                      backgroundColor: PURPLE_ALPHA_25,
                       fontSize: 14,
                       fontWeight: 700,
-                      color: "#AB96FF",
+                      color: PURPLE,
                       display: "inline-flex",
                       mr: 1.5,
                       verticalAlign: "middle",
@@ -158,7 +170,7 @@ const StudentsTable = ({
                   >
                     {student.emailVerified ? (
                       <CheckCircleOutlineIcon
-                        sx={{ color: "#4caf50", fontSize: 20 }}
+                        sx={{ color: SUCCESS, fontSize: 20 }}
                       />
                     ) : (
                       <RadioButtonUncheckedIcon
@@ -182,9 +194,9 @@ const StudentsTable = ({
                         setEditingStudent(student);
                       }}
                       sx={{
-                        color: "#AB96FF",
+                        color: PURPLE,
                         "&:hover": {
-                          backgroundColor: "rgba(171,150,255,0.12)",
+                          backgroundColor: PURPLE_ALPHA_12,
                         },
                       }}
                     >
@@ -200,9 +212,9 @@ const StudentsTable = ({
                         setDeletingStudent(student);
                       }}
                       sx={{
-                        color: "#ef9a9a",
+                        color: ERROR_SOFT_TEXT,
                         "&:hover": {
-                          backgroundColor: "rgba(239,154,154,0.12)",
+                          backgroundColor: ERROR_SOFT_TEXT_ALPHA_12,
                         },
                       }}
                     >

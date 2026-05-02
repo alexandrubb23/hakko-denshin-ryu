@@ -1,8 +1,10 @@
 import { BELT_IMAGES } from "@assets/beltImages";
 import TabbedContent from "@components/Pages/shared/TabbedPageLayout/TabbedContent";
+
 import TabbedPageLayout from "@components/Pages/shared/TabbedPageLayout/TabbedPageLayout";
 import { useKyuProgram } from "@hooks/useKyuProgram";
 import useUrlTab from "@hooks/useUrlTab";
+import { TEXT_MUTED, WHITE_ALPHA_90 } from "@style/tokens";
 import {
   BeltImage,
   KihonLegend,
@@ -43,16 +45,14 @@ const KyuProgram = () => {
                 <LegendDot isKihon />
                 <span>Kihon waza</span>
               </LegendItem>
-              <LegendItem sx={{ color: "rgba(255,255,255,0.5)" }}>
+              <LegendItem sx={{ color: TEXT_MUTED }}>
                 <LegendDot isKihon={false} />
                 <span>Henka</span>
               </LegendItem>
             </KihonLegend>
           )}
           getTechniqueItemSx={(technique) => ({
-            color: technique.isKihon
-              ? "rgba(255,255,255,0.9)"
-              : "rgba(255,255,255,0.5)",
+            color: technique.isKihon ? WHITE_ALPHA_90 : TEXT_MUTED,
             fontWeight: technique.isKihon ? 600 : 400,
           })}
         />

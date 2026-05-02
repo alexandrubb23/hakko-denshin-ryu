@@ -11,20 +11,26 @@ import {
 } from "@mui/material";
 import type { ReactNode } from "react";
 
-import { BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  DARK_BG,
+  PURPLE,
+  PURPLE_HOVER,
+} from "@style/tokens";
 
 const dialogPaperSx: SxProps<Theme> = {
   backgroundColor: DARK_BG,
   backgroundImage: "none",
   border: `1px solid ${BORDER_COLOR}`,
-  backdropFilter: "blur(20px)",
+  backdropFilter: BACKDROP_BLUR,
 };
 
 const submitButtonSx: SxProps<Theme> = {
   backgroundColor: PURPLE,
-  color: "#0a0619",
+  color: DARK_BG,
   fontWeight: 700,
-  "&:hover": { backgroundColor: "#c4b4ff" },
+  "&:hover": { backgroundColor: PURPLE_HOVER },
 };
 
 interface Props {

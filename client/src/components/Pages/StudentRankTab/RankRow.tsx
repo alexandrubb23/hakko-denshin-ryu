@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 
 import { type StudentRankEntry } from "@api/students";
+import { ERROR_DARK } from "@style/status.tokens";
 import { PURPLE } from "@style/tokens";
 
 import BeltImage from "./BeltImage";
@@ -55,7 +56,7 @@ const RankRow = ({ entry, onEdit, onDelete, readOnly }: Props) => (
             size="small"
             onClick={() => onDelete(entry)}
             aria-label="delete rank"
-            sx={{ color: "#d32f2f", opacity: 0.7, "&:hover": { opacity: 1 } }}
+            sx={{ color: ERROR_DARK, opacity: 0.7, "&:hover": { opacity: 1 } }}
           >
             <DeleteOutlineIcon fontSize="small" />
           </IconButton>

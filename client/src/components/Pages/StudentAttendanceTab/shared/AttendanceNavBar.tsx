@@ -1,7 +1,14 @@
 import { Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { BORDER_COLOR, DARK_BG, PURPLE, SURFACE_BG } from "@style/tokens";
+import {
+  BORDER_COLOR,
+  DARK_BG,
+  PURPLE,
+  PURPLE_ALPHA_10,
+  SURFACE_BG,
+  TEXT_MUTED,
+} from "@style/tokens";
 
 import { CalendarView } from "./calendarView";
 
@@ -43,7 +50,7 @@ const StyledTabs = styled(Tabs)({
     zIndex: 1,
     border: "none",
     borderRadius: 999,
-    color: "rgba(255,255,255,0.5)",
+    color: TEXT_MUTED,
     textTransform: "none",
     fontWeight: 600,
     padding: "6px 20px",
@@ -54,7 +61,7 @@ const StyledTabs = styled(Tabs)({
       color: DARK_BG,
     },
     "&:hover:not(.Mui-selected)": {
-      backgroundColor: "rgba(171,150,255,0.1)",
+      backgroundColor: PURPLE_ALPHA_10,
     },
   },
   "& .MuiTabs-scrollButtons": { color: PURPLE },

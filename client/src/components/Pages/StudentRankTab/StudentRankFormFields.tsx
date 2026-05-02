@@ -17,11 +17,15 @@ import type {
 } from "react-hook-form";
 import { Controller } from "react-hook-form";
 
+import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
   BORDER_COLOR,
   BORDER_HOVER,
   DARK_BG,
   PURPLE,
+  PURPLE_ALPHA_12,
+  PURPLE_ALPHA_18,
+  PURPLE_ALPHA_25,
   SURFACE_BG,
 } from "@style/tokens";
 
@@ -48,13 +52,13 @@ const menuProps = {
         backgroundImage: "none",
         border: `1px solid ${BORDER_COLOR}`,
         "& .MuiMenuItem-root:hover": {
-          backgroundColor: "rgba(171,150,255,0.12)",
+          backgroundColor: PURPLE_ALPHA_12,
         },
         "& .MuiMenuItem-root.Mui-selected": {
-          backgroundColor: "rgba(171,150,255,0.18)",
+          backgroundColor: PURPLE_ALPHA_18,
         },
         "& .MuiMenuItem-root.Mui-selected:hover": {
-          backgroundColor: "rgba(171,150,255,0.25)",
+          backgroundColor: PURPLE_ALPHA_25,
         },
       },
     },
@@ -91,7 +95,7 @@ const StudentRankFormFields = ({
     {serverError && (
       <Alert
         severity="error"
-        sx={{ backgroundColor: "rgba(211,47,47,0.12)", color: "#f48fb1" }}
+        sx={{ backgroundColor: ERROR_DARK_ALPHA_12, color: ERROR_DARK_TEXT }}
       >
         {serverError}
       </Alert>

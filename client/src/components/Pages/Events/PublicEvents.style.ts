@@ -3,20 +3,34 @@ import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { BORDER_COLOR, BORDER_HOVER, PURPLE, SURFACE_BG } from "@style/tokens";
+import {
+  EVENT_CAMP_BG,
+  EVENT_DEMO_BG,
+  EVENT_OTHER_BG,
+  EVENT_SEMINAR_BG,
+} from "@style/events.tokens";
+import {
+  BORDER_COLOR,
+  BORDER_HOVER,
+  DARK_BG_GRADIENT,
+  PURPLE,
+  PURPLE_ALPHA_06,
+  PURPLE_ALPHA_08,
+  PURPLE_ALPHA_30,
+  SURFACE_BG,
+} from "@style/tokens";
 
 export const TYPE_COLORS: Record<string, string> = {
-  seminar: "rgba(171,150,255,0.2)",
-  demo: "rgba(33,150,243,0.2)",
-  camp: "rgba(76,175,80,0.2)",
-  other: "rgba(255,255,255,0.1)",
+  seminar: EVENT_SEMINAR_BG,
+  demo: EVENT_DEMO_BG,
+  camp: EVENT_CAMP_BG,
+  other: EVENT_OTHER_BG,
 };
 
 export const PageWrapper = styled(Box)({
   minHeight: "60vh",
   padding: "64px 0",
-  background:
-    "linear-gradient(180deg, rgba(10,6,25,0) 0%, rgba(10,6,25,0.8) 100%)",
+  background: DARK_BG_GRADIENT,
 });
 
 export const EventCard = styled(Card)({
@@ -47,7 +61,7 @@ export const ImagePlaceholder = styled(Box)({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  backgroundColor: "rgba(171,150,255,0.06)",
+  backgroundColor: PURPLE_ALPHA_06,
 });
 
 export const DetailsTypography = styled(Typography)({
@@ -60,11 +74,11 @@ export const DetailsTypography = styled(Typography)({
 
 export const TICKET_BUTTON_SX = {
   mt: "auto",
-  borderColor: "rgba(171,150,255,0.3)",
+  borderColor: PURPLE_ALPHA_30,
   color: PURPLE,
   "&:hover": {
     borderColor: PURPLE,
-    backgroundColor: "rgba(171,150,255,0.08)",
+    backgroundColor: PURPLE_ALPHA_08,
   },
 } as const;
 

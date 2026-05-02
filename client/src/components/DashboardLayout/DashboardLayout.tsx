@@ -17,7 +17,13 @@ import LogoIcon from "@assets/images/logo.webp";
 import useIsMobile from "@hooks/isMobile";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
-import { BORDER_COLOR, DARK_BG, SURFACE_BG } from "@style/tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  DARK_BG,
+  PURPLE_ALPHA_12,
+  SURFACE_BG,
+} from "@style/tokens";
 
 import DrawerContent from "./DrawerContent";
 
@@ -30,7 +36,7 @@ const DRAWER_PAPER_SX: SxProps<Theme> = {
   flexDirection: "column" as const,
   justifyContent: "space-between",
   backgroundColor: SURFACE_BG,
-  backdropFilter: "blur(20px)",
+  backdropFilter: BACKDROP_BLUR,
   "& .MuiListItemIcon-root": { color: "#fff" },
 };
 
@@ -61,7 +67,7 @@ const DashboardLayout = () => {
             elevation={0}
             sx={{
               backgroundColor: SURFACE_BG,
-              backdropFilter: "blur(20px)",
+              backdropFilter: BACKDROP_BLUR,
               borderBottom: `1px solid ${BORDER_COLOR}`,
             }}
           >
@@ -80,12 +86,12 @@ const DashboardLayout = () => {
                     variant="circular"
                     width={32}
                     height={32}
-                    sx={{ bgcolor: "rgba(171,150,255,0.12)" }}
+                    sx={{ bgcolor: PURPLE_ALPHA_12 }}
                   />
                   <Skeleton
                     variant="text"
                     width={80}
-                    sx={{ bgcolor: "rgba(171,150,255,0.12)" }}
+                    sx={{ bgcolor: PURPLE_ALPHA_12 }}
                   />
                 </Box>
               ) : (

@@ -2,6 +2,8 @@ import PeopleIcon from "@mui/icons-material/People";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { Box, Button, Chip, Stack, Typography } from "@mui/material";
 
+import { DARK_BG, PURPLE, PURPLE_ALPHA_15, PURPLE_HOVER } from "@style/tokens";
+
 interface StudentsHeaderProps {
   count: number | undefined;
   onAdd: () => void;
@@ -15,7 +17,7 @@ const StudentsHeader = ({ count, onAdd }: StudentsHeaderProps) => (
     mb={3}
   >
     <Stack direction="row" alignItems="center" gap={1.5}>
-      <PeopleIcon sx={{ color: "#AB96FF", fontSize: 32 }} />
+      <PeopleIcon sx={{ color: PURPLE, fontSize: 32 }} />
       <Typography variant="h4" fontWeight={700}>
         Students
       </Typography>
@@ -24,8 +26,8 @@ const StudentsHeader = ({ count, onAdd }: StudentsHeaderProps) => (
           label={count}
           size="small"
           sx={{
-            backgroundColor: "rgba(171,150,255,0.15)",
-            color: "#AB96FF",
+            backgroundColor: PURPLE_ALPHA_15,
+            color: PURPLE,
             fontWeight: 700,
           }}
         />
@@ -37,10 +39,10 @@ const StudentsHeader = ({ count, onAdd }: StudentsHeaderProps) => (
       startIcon={<PersonAddIcon />}
       onClick={onAdd}
       sx={{
-        backgroundColor: "#AB96FF",
-        color: "#0a0619",
+        backgroundColor: PURPLE,
+        color: DARK_BG,
         fontWeight: 700,
-        "&:hover": { backgroundColor: "#c4b4ff" },
+        "&:hover": { backgroundColor: PURPLE_HOVER },
       }}
     >
       Add Student

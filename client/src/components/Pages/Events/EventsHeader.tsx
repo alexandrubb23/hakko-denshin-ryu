@@ -1,7 +1,7 @@
-import EventNoteIcon from "@mui/icons-material/EventNote";
 import AddIcon from "@mui/icons-material/Add";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import { Box, Button, Chip, Stack, Typography } from "@mui/material";
-import { PURPLE } from "@style/tokens";
+import { DARK_BG, PURPLE, PURPLE_ALPHA_15, PURPLE_HOVER } from "@style/tokens";
 
 interface EventsHeaderProps {
   count: number | undefined;
@@ -25,7 +25,7 @@ const EventsHeader = ({ count, onAdd }: EventsHeaderProps) => (
           label={count}
           size="small"
           sx={{
-            backgroundColor: "rgba(171,150,255,0.15)",
+            backgroundColor: PURPLE_ALPHA_15,
             color: PURPLE,
             fontWeight: 700,
           }}
@@ -39,9 +39,9 @@ const EventsHeader = ({ count, onAdd }: EventsHeaderProps) => (
       onClick={onAdd}
       sx={{
         backgroundColor: PURPLE,
-        color: "#0a0619",
+        color: DARK_BG,
         fontWeight: 700,
-        "&:hover": { backgroundColor: "#c4b4ff" },
+        "&:hover": { backgroundColor: PURPLE_HOVER },
       }}
     >
       Add Event

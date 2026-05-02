@@ -12,7 +12,7 @@ import {
 
 import type { StudentEvent } from "@api/events";
 import CenterSpinner from "@components/Spinner/CenterSpinner";
-import { BORDER_COLOR, SURFACE_BG } from "@style/tokens";
+import { BORDER_COLOR, PURPLE_ALPHA_04, SURFACE_BG } from "@style/tokens";
 import { formatDate } from "@utils/time";
 import AttendedChip from "./AttendedChip";
 
@@ -59,7 +59,7 @@ const StudentEventsTable = ({ events, isLoading }: Props) => {
               sx={{
                 ...cellBorder,
                 "&:last-child td": { border: 0 },
-                "&:hover": { backgroundColor: "rgba(171,150,255,0.04)" },
+                "&:hover": { backgroundColor: PURPLE_ALPHA_04 },
               }}
             >
               <TableCell>

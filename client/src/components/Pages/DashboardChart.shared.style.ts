@@ -1,7 +1,13 @@
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_12,
+  SURFACE_BG,
+} from "@style/tokens";
 
 export const ChartRoot = styled("div")({
   marginTop: 24,
@@ -9,7 +15,7 @@ export const ChartRoot = styled("div")({
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 12,
   padding: "20px 16px 16px",
-  backdropFilter: "blur(20px)",
+  backdropFilter: BACKDROP_BLUR,
 });
 
 export const ChartHeader = styled("div")({
@@ -31,7 +37,7 @@ export const CountBadge = styled("span")({
   fontSize: "0.7rem",
   fontWeight: 700,
   color: PURPLE,
-  backgroundColor: "rgba(171,150,255,0.12)",
+  backgroundColor: PURPLE_ALPHA_12,
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 20,
   padding: "2px 10px",

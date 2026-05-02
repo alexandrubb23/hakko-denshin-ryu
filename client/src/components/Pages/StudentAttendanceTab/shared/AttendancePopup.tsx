@@ -5,7 +5,7 @@ import { type AttendanceRecord } from "@api/attendance";
 import { MONTH_NAMES } from "@constants/dateNames";
 import { formatDateKey } from "@constants/trainingSchedule";
 import { useUpsertAttendance } from "@hooks/useUpsertAttendance";
-import { BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
+import { BACKDROP_BLUR, BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
 
 import YesNoButtons from "./YesNoButtons";
 
@@ -22,7 +22,7 @@ const StyledPopover = styled(Popover)({
     backgroundColor: DARK_BG,
     backgroundImage: "none",
     border: `1px solid ${BORDER_COLOR}`,
-    backdropFilter: "blur(20px)",
+    backdropFilter: BACKDROP_BLUR,
     padding: 16,
     minWidth: 160,
   },
@@ -46,7 +46,13 @@ const StatusCaption = styled(Typography)(({ theme }) => ({
 
 const PurpleSpinner = styled(CircularProgress)({ color: PURPLE });
 
-const AttendancePopup = ({ anchorEl, date, studentId, records, onClose }: Props) => {
+const AttendancePopup = ({
+  anchorEl,
+  date,
+  studentId,
+  records,
+  onClose,
+}: Props) => {
   const open = Boolean(anchorEl) && date !== null;
 
   const dateKey = date ? formatDateKey(date) : "";
@@ -77,7 +83,11 @@ const AttendancePopup = ({ anchorEl, date, studentId, records, onClose }: Props)
             {date.getUTCDate()} {MONTH_NAMES[date.getUTCMonth()]}
           </DateLabel>
           <StatusCaption variant="caption">
-            {attended === null ? "Mark attendance:" : attended ? "✓ Present" : "✗ Absent"}
+            {attended === null
+              ? "Mark attendance:"
+              : attended
+                ? "✓ Present"
+                : "✗ Absent"}
           </StatusCaption>
           {isPending ? (
             <PurpleSpinner size={20} />

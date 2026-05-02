@@ -1,6 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 
 import BlurredUpImage from "@components/Image/BlurredUpImage";
+import { PURPLE } from "@style/tokens";
 import { Section } from "./SectionsList";
 
 export const ImageTextSection = ({
@@ -36,7 +37,7 @@ export const ImageTextSection = ({
         flexDirection="column"
         gap={2}
         sx={{
-          a: { color: "#ab96ff" },
+          a: { color: PURPLE },
         }}
       >
         <Typography

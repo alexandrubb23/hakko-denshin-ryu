@@ -13,7 +13,12 @@ import {
   toUtcDate,
 } from "@constants/trainingSchedule";
 import { useUpsertAttendance } from "@hooks/useUpsertAttendance";
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_30,
+  SURFACE_BG,
+} from "@style/tokens";
 
 import AttendedChip from "../AttendedChip";
 import YesNoButtons from "./shared/YesNoButtons";
@@ -40,7 +45,7 @@ const ViewHeader = styled("div")({
 
 const NavIconButton = styled(IconButton)({
   color: PURPLE,
-  "&.Mui-disabled": { color: "rgba(171,150,255,0.3)" },
+  "&.Mui-disabled": { color: PURPLE_ALPHA_30 },
 });
 
 const MonthTitle = styled(Typography)({

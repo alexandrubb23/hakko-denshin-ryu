@@ -14,7 +14,13 @@ import {
   toUtcDate,
 } from "@constants/trainingSchedule";
 import { useAttendanceByYear } from "@hooks/useAttendance";
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_12,
+  PURPLE_ALPHA_30,
+  SURFACE_BG,
+} from "@style/tokens";
 
 import AttendanceDayDot, { AttendanceStatus } from "./shared/AttendanceDayDot";
 import AttendancePopup from "./shared/AttendancePopup";
@@ -42,7 +48,7 @@ const ViewHeader = styled("div")({
 
 const NavIconButton = styled(IconButton)({
   color: PURPLE,
-  "&.Mui-disabled": { color: "rgba(171,150,255,0.3)" },
+  "&.Mui-disabled": { color: PURPLE_ALPHA_30 },
 });
 
 const YearTitle = styled(Typography)({ fontWeight: 700, color: PURPLE });
@@ -99,7 +105,7 @@ const DayCell = styled("div", {
   height: 20,
   borderRadius: 2,
   cursor: clickable ? "pointer" : "default",
-  "&:hover": clickable ? { backgroundColor: "rgba(171,150,255,0.12)" } : {},
+  "&:hover": clickable ? { backgroundColor: PURPLE_ALPHA_12 } : {},
 }));
 
 const EmptyDayCell = styled("div")({ height: 20 });

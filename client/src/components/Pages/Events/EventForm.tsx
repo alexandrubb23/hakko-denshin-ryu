@@ -37,11 +37,17 @@ import ImageDropZone, {
 } from "@components/ImageDropZone/ImageDropZone";
 import { useCreateEvent } from "@hooks/useCreateEvent";
 import { useUpdateEvent } from "@hooks/useUpdateEvent";
+import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
+  BACKDROP_BLUR,
   BORDER_COLOR,
   BORDER_HOVER,
   DARK_BG,
   PURPLE,
+  PURPLE_ALPHA_12,
+  PURPLE_ALPHA_18,
+  PURPLE_ALPHA_25,
+  PURPLE_HOVER,
   SURFACE_BG,
 } from "@style/tokens";
 
@@ -63,13 +69,13 @@ const selectMenuProps = {
         backgroundImage: "none",
         border: `1px solid ${BORDER_COLOR}`,
         "& .MuiMenuItem-root:hover": {
-          backgroundColor: "rgba(171,150,255,0.12)",
+          backgroundColor: PURPLE_ALPHA_12,
         },
         "& .MuiMenuItem-root.Mui-selected": {
-          backgroundColor: "rgba(171,150,255,0.18)",
+          backgroundColor: PURPLE_ALPHA_18,
         },
         "& .MuiMenuItem-root.Mui-selected:hover": {
-          backgroundColor: "rgba(171,150,255,0.25)",
+          backgroundColor: PURPLE_ALPHA_25,
         },
       },
     },
@@ -283,7 +289,7 @@ const EventForm = (props: EventFormProps) => {
             backgroundColor: DARK_BG,
             backgroundImage: "none",
             border: `1px solid ${BORDER_COLOR}`,
-            backdropFilter: "blur(20px)",
+            backdropFilter: BACKDROP_BLUR,
           },
         },
       }}
@@ -310,7 +316,10 @@ const EventForm = (props: EventFormProps) => {
           {serverErrorMessage && (
             <Alert
               severity="error"
-              sx={{ backgroundColor: "rgba(211,47,47,0.12)", color: "#f48fb1" }}
+              sx={{
+                backgroundColor: ERROR_DARK_ALPHA_12,
+                color: ERROR_DARK_TEXT,
+              }}
             >
               {serverErrorMessage}
             </Alert>
@@ -496,8 +505,8 @@ const EventForm = (props: EventFormProps) => {
                 severity="error"
                 sx={{
                   mt: 1,
-                  backgroundColor: "rgba(211,47,47,0.12)",
-                  color: "#f48fb1",
+                  backgroundColor: ERROR_DARK_ALPHA_12,
+                  color: ERROR_DARK_TEXT,
                 }}
               >
                 {imageValidationError}
@@ -520,9 +529,9 @@ const EventForm = (props: EventFormProps) => {
             disabled={isBusy}
             sx={{
               backgroundColor: PURPLE,
-              color: "#0a0619",
+              color: DARK_BG,
               fontWeight: 700,
-              "&:hover": { backgroundColor: "#c4b4ff" },
+              "&:hover": { backgroundColor: PURPLE_HOVER },
             }}
           >
             {isUploadingImage

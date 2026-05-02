@@ -1,5 +1,18 @@
 import { Box, Button, SxProps, Theme } from "@mui/material";
+
 import { styled } from "@mui/material/styles";
+import {
+  ERROR,
+  ERROR_ALPHA_08,
+  ERROR_ALPHA_30,
+  ERROR_ALPHA_50,
+  ERROR_SOFT,
+  SUCCESS,
+  SUCCESS_ALPHA_08,
+  SUCCESS_ALPHA_30,
+  SUCCESS_ALPHA_50,
+  SUCCESS_HOVER,
+} from "@style/status.tokens";
 
 interface Props {
   attended: boolean | null; // null = not yet marked
@@ -14,14 +27,14 @@ const YesButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== "active" && prop !== "locked",
 })<{ active: boolean; locked: boolean }>(({ active, locked }) => ({
   minWidth: 0,
-  borderColor: active ? "#4caf50" : "rgba(76,175,80,0.3)",
-  color: active ? "#4caf50" : "rgba(76,175,80,0.5)",
+  borderColor: active ? SUCCESS : SUCCESS_ALPHA_30,
+  color: active ? SUCCESS : SUCCESS_ALPHA_50,
   ...(locked && { pointerEvents: "none", cursor: "default" }),
   ...(!locked &&
     active && {
       "&:hover": {
-        borderColor: "#66bb6a",
-        backgroundColor: "rgba(76,175,80,0.08)",
+        borderColor: SUCCESS_HOVER,
+        backgroundColor: SUCCESS_ALPHA_08,
       },
     }),
 }));
@@ -30,14 +43,14 @@ const NoButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== "active" && prop !== "locked",
 })<{ active: boolean; locked: boolean }>(({ active, locked }) => ({
   minWidth: 0,
-  borderColor: active ? "#f44336" : "rgba(244,67,54,0.3)",
-  color: active ? "#f44336" : "rgba(244,67,54,0.5)",
+  borderColor: active ? ERROR : ERROR_ALPHA_30,
+  color: active ? ERROR : ERROR_ALPHA_50,
   ...(locked && { pointerEvents: "none", cursor: "default" }),
   ...(!locked &&
     active && {
       "&:hover": {
-        borderColor: "#ef5350",
-        backgroundColor: "rgba(244,67,54,0.08)",
+        borderColor: ERROR_SOFT,
+        backgroundColor: ERROR_ALPHA_08,
       },
     }),
 }));

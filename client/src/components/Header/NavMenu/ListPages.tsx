@@ -4,6 +4,7 @@ import useIsMobile from "@hooks/isMobile";
 import { authClient } from "@lib/auth-client";
 import { List, ListItem, SxProps, Typography } from "@mui/material";
 import { styled, Theme } from "@mui/material/styles";
+import { PURPLE } from "@style/tokens";
 import { normalizePath } from "@utils/routes";
 import { Link, useLocation } from "react-router";
 import { pages } from "../../../pages";
@@ -23,7 +24,7 @@ const ListItemStyle = styled(ListItem)(({ sx }) => ({
   textAlign: "center",
   transition: "200ms ease-in-out",
   "&:hover": {
-    color: "#AB96FF",
+    color: PURPLE,
     cursor: "pointer",
     transform: "scale(1.1)",
   },
@@ -53,7 +54,7 @@ const ListPages = ({ sx, onPageChange }: Props) => {
       const cssProps =
         location.pathname === normalizePath(page.path)
           ? {
-              border: "1px solid #AB96FF",
+              border: `1px solid ${PURPLE}`,
               borderRadius: "20px",
               padding: "2px 15px",
             }

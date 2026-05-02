@@ -13,7 +13,29 @@ import { useDashboardStudents } from "@hooks/useDashboardStudents";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
-import { BORDER_COLOR, PURPLE, SKELETON_SX } from "@style/tokens";
+import {
+  CHART_GRID_COLOR,
+  CHART_TICK_COLOR,
+  CHART_TOOLTIP_BG,
+  CHART_TOOLTIP_TEXT,
+} from "@style/chart.tokens";
+import {
+  BELT_BLACK,
+  BELT_BLUE,
+  BELT_BROWN,
+  BELT_GREEN,
+  BELT_ORANGE,
+  BELT_UNRANKED,
+  BELT_WHITE,
+  BELT_YELLOW,
+} from "@style/ranks.tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_12,
+  SKELETON_SX,
+  WHITE_ALPHA_60,
+} from "@style/tokens";
 
 import BeltChipLabel from "./BeltChipLabel";
 import {
@@ -26,20 +48,15 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
-const GRID_COLOR = "rgba(171, 150, 255, 0.08)";
-const TICK_COLOR = "rgba(255, 255, 255, 0.45)";
-
 const BELT_COLORS: Record<string, string> = {
-  white: "rgba(255, 255, 255, 0.75)",
-  yellow: "#f9a825",
-  orange: "#ef6c00",
-  green: "#388e3c",
-  blue: "#1565c0",
-  brown: "#795548",
-  black: PURPLE,
+  white: BELT_WHITE,
+  yellow: BELT_YELLOW,
+  orange: BELT_ORANGE,
+  green: BELT_GREEN,
+  blue: BELT_BLUE,
+  brown: BELT_BROWN,
+  black: BELT_BLACK,
 };
-
-const UNRANKED_COLOR = "rgba(171, 150, 255, 0.25)";
 
 const ALL_RANK_FILTER = "all";
 const UNRANKED_FILTER = "unranked";
@@ -53,8 +70,8 @@ const PERIOD_OPTIONS: { value: AttendancePeriod; label: string }[] = [
 ];
 
 function beltColor(belt: string | null): string {
-  if (!belt) return UNRANKED_COLOR;
-  return BELT_COLORS[belt] ?? UNRANKED_COLOR;
+  if (!belt) return BELT_UNRANKED;
+  return BELT_COLORS[belt] ?? BELT_UNRANKED;
 }
 
 function filterStudents(
@@ -69,8 +86,8 @@ function filterStudents(
 
 const chipSx = (active: boolean) => ({
   borderColor: active ? PURPLE : BORDER_COLOR,
-  color: active ? PURPLE : "rgba(255,255,255,0.6)",
-  backgroundColor: active ? "rgba(171,150,255,0.12)" : "transparent",
+  color: active ? PURPLE : WHITE_ALPHA_60,
+  backgroundColor: active ? PURPLE_ALPHA_12 : "transparent",
   "&:hover": { borderColor: PURPLE },
 });
 
@@ -121,9 +138,9 @@ const DashboardStudentChart = () => {
             ];
           },
         },
-        backgroundColor: "rgba(10, 6, 25, 0.92)",
+        backgroundColor: CHART_TOOLTIP_BG,
         titleColor: PURPLE,
-        bodyColor: "rgba(255,255,255,0.75)",
+        bodyColor: CHART_TOOLTIP_TEXT,
         borderColor: BORDER_COLOR,
         borderWidth: 1,
         padding: 10,
@@ -133,22 +150,22 @@ const DashboardStudentChart = () => {
       x: {
         min: 0,
         max: maxX,
-        grid: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
         ticks: {
-          color: TICK_COLOR,
+          color: CHART_TICK_COLOR,
           font: { size: 11 },
           stepSize: 1,
           precision: 0,
         },
-        border: { color: GRID_COLOR },
+        border: { color: CHART_GRID_COLOR },
       },
       y: {
-        grid: { color: GRID_COLOR },
+        grid: { color: CHART_GRID_COLOR },
         ticks: {
-          color: TICK_COLOR,
+          color: CHART_TICK_COLOR,
           font: { size: 11 },
         },
-        border: { color: GRID_COLOR },
+        border: { color: CHART_GRID_COLOR },
       },
     },
   };

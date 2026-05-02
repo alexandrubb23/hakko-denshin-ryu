@@ -1,5 +1,13 @@
 import { Chip } from "@mui/material";
+
 import { styled } from "@mui/material/styles";
+import {
+  ERROR_SOFT,
+  ERROR_SOFT_ALPHA_12,
+  SUCCESS,
+  SUCCESS_ALPHA_15,
+} from "@style/status.tokens";
+import { PURPLE_ALPHA_50, WHITE_ALPHA_06 } from "@style/tokens";
 
 export enum AttendedStatus {
   yes = "yes",
@@ -12,15 +20,15 @@ export const StyledChip = styled(Chip, {
 })<{ attendedStatus: AttendedStatus }>(({ attendedStatus }) => ({
   fontWeight: 600,
   ...(attendedStatus === AttendedStatus.yes && {
-    backgroundColor: "rgba(76,175,80,0.15)",
-    color: "#4caf50",
+    backgroundColor: SUCCESS_ALPHA_15,
+    color: SUCCESS,
   }),
   ...(attendedStatus === AttendedStatus.no && {
-    backgroundColor: "rgba(239,83,80,0.12)",
-    color: "#ef5350",
+    backgroundColor: ERROR_SOFT_ALPHA_12,
+    color: ERROR_SOFT,
   }),
   ...(attendedStatus === AttendedStatus.unmarked && {
-    backgroundColor: "rgba(255,255,255,0.06)",
-    color: "rgba(171,150,255,0.5)",
+    backgroundColor: WHITE_ALPHA_06,
+    color: PURPLE_ALPHA_50,
   }),
 }));

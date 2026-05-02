@@ -25,7 +25,20 @@ import bgImage from "@assets/images/180.webp";
 import Header from "@components/Header/Header";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
-import { PURPLE } from "@style/tokens";
+import {
+  ERROR_DARK_ALPHA_15,
+  ERROR_DARK_TEXT_LIGHT,
+} from "@style/status.tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  BORDER_HOVER,
+  DARK_BG_OVERLAY,
+  PURPLE,
+  PURPLE_ALPHA_25,
+  SURFACE_BG,
+  TEXT_MUTED,
+} from "@style/tokens";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -42,14 +55,14 @@ const bgZoom = keyframes`
 const darkFieldSx: SxProps<Theme> = {
   "& .MuiOutlinedInput-root": {
     color: "#fff",
-    backgroundColor: "rgba(255,255,255,0.04)",
-    "& fieldset": { borderColor: "rgba(171,150,255,0.25)" },
-    "&:hover fieldset": { borderColor: "rgba(171,150,255,0.55)" },
+    backgroundColor: SURFACE_BG,
+    "& fieldset": { borderColor: PURPLE_ALPHA_25 },
+    "&:hover fieldset": { borderColor: BORDER_HOVER },
     "&.Mui-focused fieldset": { borderColor: PURPLE },
   },
-  "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.5)" },
+  "& .MuiInputLabel-root": { color: TEXT_MUTED },
   "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
-  "& .MuiSvgIcon-root": { color: "rgba(255,255,255,0.5)" },
+  "& .MuiSvgIcon-root": { color: TEXT_MUTED },
 };
 
 const Login = () => {
@@ -121,7 +134,7 @@ const Login = () => {
           sx={{
             position: "absolute",
             inset: 0,
-            backgroundColor: "rgba(10, 6, 25, 0.65)",
+            backgroundColor: DARK_BG_OVERLAY,
           }}
         />
       </Box>
@@ -154,9 +167,9 @@ const Login = () => {
               display: "flex",
               flexDirection: "column",
               gap: 3,
-              backgroundColor: "rgba(255,255,255,0.04)",
-              backdropFilter: "blur(20px)",
-              border: `1px solid rgba(171,150,255,0.2)`,
+              backgroundColor: SURFACE_BG,
+              backdropFilter: BACKDROP_BLUR,
+              border: `1px solid ${BORDER_COLOR}`,
               borderRadius: 2,
             }}
           >
@@ -183,10 +196,10 @@ const Login = () => {
                 severity="error"
                 onClose={() => setServerError(null)}
                 sx={{
-                  backgroundColor: "rgba(211,47,47,0.15)",
-                  color: "#ff8a80",
+                  backgroundColor: ERROR_DARK_ALPHA_15,
+                  color: ERROR_DARK_TEXT_LIGHT,
                   border: "1px solid rgba(211,47,47,0.3)",
-                  "& .MuiAlert-icon": { color: "#ff8a80" },
+                  "& .MuiAlert-icon": { color: ERROR_DARK_TEXT_LIGHT },
                 }}
               >
                 {serverError}
@@ -232,7 +245,7 @@ const Login = () => {
                           onClick={() => setShowPassword((prev) => !prev)}
                           edge="end"
                           sx={{
-                            color: "rgba(255,255,255,0.5)",
+                            color: TEXT_MUTED,
                             "&:hover": { color: "#fff" },
                           }}
                         >

@@ -16,7 +16,13 @@ import { Link } from "react-router";
 import { authClient } from "@lib/auth-client";
 import { Role } from "@lib/role";
 import { Routes } from "@lib/routes";
-import { BORDER_COLOR, PURPLE, SKELETON_SX, SURFACE_BG } from "@style/tokens";
+import {
+  BACKDROP_BLUR,
+  BORDER_COLOR,
+  PURPLE,
+  SKELETON_SX,
+  SURFACE_BG,
+} from "@style/tokens";
 
 import DashboardEventChart from "./DashboardEventChart";
 import DashboardStudentChart from "./DashboardStudentChart";
@@ -76,7 +82,7 @@ const Dashboard = () => {
                   flex: "1 1 160px",
                   backgroundColor: SURFACE_BG,
                   border: `1px solid ${BORDER_COLOR}`,
-                  backdropFilter: "blur(20px)",
+                  backdropFilter: BACKDROP_BLUR,
                   backgroundImage: "none",
                   transition: "border-color 200ms",
                   "&:hover": { borderColor: PURPLE },
