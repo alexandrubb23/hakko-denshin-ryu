@@ -11,10 +11,13 @@ import { CalendarView } from "./calendarView";
 
 const VALID_VIEWS = Object.values(CalendarView);
 
-export function parseView(param: string | null): CalendarView {
+export function parseView(
+  param: string | null,
+  defaultView: CalendarView = CalendarView.day
+): CalendarView {
   return param && VALID_VIEWS.includes(param as CalendarView)
     ? (param as CalendarView)
-    : CalendarView.day;
+    : defaultView;
 }
 
 export function parseCursor(param: string | null): Date {
@@ -25,11 +28,14 @@ export function parseCursor(param: string | null): Date {
   return getLatestTrainingDay();
 }
 
-const useAttendanceTabParams = () => {
+const useAttendanceTabParams = (
+  defaultView: CalendarView = CalendarView.year
+) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const view = useMemo(
-    () => parseView(searchParams.get("view")),
+    () => parseView(searchParams.get("view"), defaultView),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [searchParams]
   );
   const cursor = useMemo(
