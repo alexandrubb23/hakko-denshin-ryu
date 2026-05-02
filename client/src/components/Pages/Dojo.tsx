@@ -1,155 +1,195 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Container, Divider, Grid, Typography } from "@mui/material";
+import { motion } from "framer-motion";
 
-import hakkoDenshinRyuLowQualityImage from "@assets/images/200-small.webp";
 import hakkoDenshinRyuHighQualityImage from "@assets/images/200.webp";
-import BlurredUpImage from "@components/Image/BlurredUpImage";
-import Strong from "@components/Layout/Strong";
 
-const Dojo = () => {
-  return (
-    <Grid container spacing={2} alignItems="center">
-      {/* Image first on mobile */}
-      <Grid size={{ xs: 12, md: 6 }} order={{ xs: 0, md: 1 }}>
-        <BlurredUpImage
-          lowQualitySrc={hakkoDenshinRyuLowQualityImage}
-          highQualitySrc={hakkoDenshinRyuHighQualityImage}
-          sx={{
-            aspectRatio: "auto 360 / 240",
-          }}
-        />
+import {
+  bodyTextSx,
+  closingBandSx,
+  closingBgCounterSx,
+  closingTextSx,
+  dividerSx,
+  heroBgSx,
+  heroContentSx,
+  heroEyebrowSx,
+  heroKanjiSx,
+  heroSubtitleSx,
+  heroSx,
+  heroTitleSx,
+  sectionKanjiSx,
+  sectionNumberSx,
+  sectionTitleSx,
+  trainingDotSx,
+  trainingItemSx,
+  trainingListSx,
+  trainingTextSx,
+} from "./Dojo.style";
+
+const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
+
+const FadeIn = ({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) => (
+  <motion.div
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-40px" }}
+    variants={fadeUp}
+    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
+  >
+    {children}
+  </motion.div>
+);
+
+const trainingItems = [
+  {
+    label: (
+      <>
+        Hakko Denshin Ryu Jujutsu <strong>techniques and forms</strong>
+      </>
+    ),
+  },
+  {
+    label: (
+      <>
+        <strong>Traditional weapons training</strong> — tambo, jo, katana,
+        tanto, sensu
+      </>
+    ),
+  },
+  {
+    label: (
+      <>
+        <strong>Shiatsu</strong> therapeutic massage techniques
+      </>
+    ),
+  },
+  {
+    label: (
+      <>
+        <strong>Goshin Taiso</strong> health and fitness exercises
+      </>
+    ),
+  },
+  {
+    label: (
+      <>
+        <strong>Meditation</strong> and breathing practices
+      </>
+    ),
+  },
+];
+
+const Dojo = () => (
+  <>
+    {/* ── Hero ─────────────────────────────────────────────────────────── */}
+    <Box sx={heroSx}>
+      <Box sx={heroBgSx(hakkoDenshinRyuHighQualityImage)} />
+      <Typography sx={heroKanjiSx}>洗心館</Typography>
+      <Box sx={heroContentSx}>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: EASE_OUT }}
+        >
+          <Typography sx={heroEyebrowSx}>The Dojo · Romania</Typography>
+          <Typography component="h1" sx={heroTitleSx}>
+            Senshinkan Romania
+          </Typography>
+          <Typography component="p" sx={heroSubtitleSx}>
+            Hall of Heart Purification
+          </Typography>
+        </motion.div>
+      </Box>
+    </Box>
+
+    <Container maxWidth="lg">
+      {/* ── Main content ─────────────────────────────────────────────────── */}
+      <Grid
+        container
+        spacing={{ xs: 4, md: 6 }}
+        alignItems="flex-start"
+        sx={{ mb: { xs: 8, md: 10 } }}
+      >
+        {/* Text column */}
+        <Grid size={{ xs: 12, md: 7 }}>
+          <FadeIn>
+            <Typography sx={sectionNumberSx}>01</Typography>
+            <Typography component="h2" sx={sectionTitleSx}>
+              Senshinkan Romania
+            </Typography>
+            <Typography sx={sectionKanjiSx}>洗心館</Typography>
+            <Divider sx={dividerSx} />
+
+            <Typography sx={bodyTextSx}>
+              <strong>Senshinkan Romania</strong> (洗心館) is the official
+              Romanian dojo dedicated to the practice and teaching of{" "}
+              <strong>Hakko Denshin Ryu Jujutsu</strong>. The name{" "}
+              <strong>"Senshinkan"</strong> translates to{" "}
+              <strong>"Hall of Heart Purification"</strong> — reflecting our
+              commitment to both physical training and spiritual development.
+            </Typography>
+            <Typography sx={bodyTextSx}>
+              Our dojo follows the traditional teachings of{" "}
+              <strong>Hakko Denshin Ryu</strong>, emphasizing the principles of{" "}
+              <strong>datsuryoku</strong> (effortless power) and{" "}
+              <strong>harmony</strong> in both technique and daily life. We
+              maintain direct lineage connections to{" "}
+              <strong>Menkyo Kaiden Shihan Leempoels Eric San Dai Kichu</strong>
+              , ensuring authentic transmission of the art.
+            </Typography>
+            <Typography sx={bodyTextSx}>
+              Our training environment emphasizes <strong>respect</strong>,{" "}
+              <strong>discipline</strong>, and <strong>mutual growth</strong>.
+              Students develop not only effective self-defence techniques but
+              also <strong>mental clarity</strong>,{" "}
+              <strong>emotional balance</strong>, and{" "}
+              <strong>spiritual awareness</strong> through consistent practice.
+            </Typography>
+          </FadeIn>
+        </Grid>
+
+        {/* Training list column */}
+        <Grid size={{ xs: 12, md: 5 }}>
+          <FadeIn delay={0.15}>
+            <Typography sx={{ ...sectionNumberSx, mb: 1.5 }}>
+              We offer
+            </Typography>
+            <Box sx={trainingListSx}>
+              {trainingItems.map((item, i) => (
+                <Box key={i} sx={trainingItemSx}>
+                  <Box sx={trainingDotSx} />
+                  <Typography sx={trainingTextSx}>{item.label}</Typography>
+                </Box>
+              ))}
+            </Box>
+          </FadeIn>
+        </Grid>
       </Grid>
+    </Container>
 
-      {/* Text content */}
-      <Grid size={{ xs: 12, md: 6 }} order={{ xs: 1, md: 0 }}>
-        <Typography color="primary" variant="h1" gutterBottom data-aos="fade">
-          Senshinkan Romania (洗心館)
-        </Typography>
-
-        <Typography
-          variant="body1"
-          color="text.primary"
-          align="left"
-          data-aos="fade"
-          sx={{ mb: 2 }}
-        >
-          <Strong>Senshinkan Romania</Strong> (洗心館) is the official Romanian
-          dojo dedicated to the practice and teaching of{" "}
-          <Strong>Hakko Denshin Ryu Jujutsu</Strong>. The name{" "}
-          <Strong>"Senshinkan"</Strong> translates to{" "}
-          <Strong>"Hall of Heart Purification"</Strong>
-          or <Strong>"Place of Spiritual Cleansing"</Strong>, reflecting our
-          commitment to both physical training and spiritual development.
-        </Typography>
-
-        <Typography
-          variant="body1"
-          color="text.primary"
-          align="left"
-          data-aos="fade"
-          sx={{ mb: 2 }}
-        >
-          Our dojo follows the traditional teachings of{" "}
-          <Strong>Hakko Denshin Ryu</Strong>, emphasizing the principles of{" "}
-          <Strong>datsuryoku</Strong> (effortless power) and&nbsp;
-          <Strong>harmony</Strong> in both technique and daily life. We maintain
-          direct lineage connections to{" "}
-          <Strong>Menkyo Kaiden Shihan Leempoels Eric San Dai Kichu</Strong>,
-          ensuring authentic transmission of the art.
-        </Typography>
-
-        <Typography
-          variant="body1"
-          color="text.primary"
-          align="left"
-          data-aos="fade"
-          sx={{ mb: 2 }}
-        >
-          At <Strong>Senshinkan Romania</Strong>, we offer comprehensive
-          training in:
-        </Typography>
-
-        <Box
-          component="ul"
-          sx={{ pl: 3, mb: 2 }}
-          display="flex"
-          flexDirection="column"
-          gap={1}
-        >
-          <Typography
-            component="li"
-            variant="body1"
-            color="text.primary"
-            data-aos="fade"
-          >
-            <Strong>Hakko Denshin Ryu Jujutsu</Strong> techniques and forms
+    {/* ── Closing band ─────────────────────────────────────────────────── */}
+    <Box sx={closingBandSx}>
+      <Container maxWidth="lg">
+        <FadeIn>
+          <Typography sx={closingTextSx}>
+            Whether you are a beginner seeking the fundamentals of martial arts
+            or an experienced practitioner looking to deepen your understanding,{" "}
+            <strong>Senshinkan Romania</strong> provides a welcoming and
+            traditional environment for your martial arts journey. We honor the
+            legacy of our predecessors while adapting the teachings to serve the
+            needs of modern practitioners.
           </Typography>
-          <Typography
-            component="li"
-            variant="body1"
-            color="text.primary"
-            data-aos="fade"
-          >
-            <Strong>Traditional weapons training</Strong> (tambo, jo, katana,
-            tanto, sensu)
-          </Typography>
-          <Typography
-            component="li"
-            variant="body1"
-            color="text.primary"
-            data-aos="fade"
-          >
-            <Strong>Shiatsu</Strong> therapeutic massage techniques
-          </Typography>
-          <Typography
-            component="li"
-            variant="body1"
-            color="text.primary"
-            data-aos="fade"
-          >
-            <Strong>Goshin Taiso</Strong> health and fitness exercises
-          </Typography>
-          <Typography
-            component="li"
-            variant="body1"
-            color="text.primary"
-            data-aos="fade"
-          >
-            <Strong>Meditation</Strong> and breathing practices
-          </Typography>
-        </Box>
-
-        <Typography
-          variant="body1"
-          color="text.primary"
-          align="left"
-          data-aos="fade"
-          sx={{ mb: 2 }}
-        >
-          Our training environment emphasizes <Strong>respect</Strong>,{" "}
-          <Strong>discipline</Strong>, and <Strong>mutual growth</Strong>.
-          Students learn not only effective self-defense techniques but also
-          develop <Strong>mental clarity</Strong>,{" "}
-          <Strong>emotional balance</Strong>, and{" "}
-          <Strong>spiritual awareness</Strong> through consistent practice.
-        </Typography>
-
-        <Typography
-          variant="body1"
-          color="text.primary"
-          align="left"
-          data-aos="fade"
-        >
-          Whether you are a beginner seeking to learn the fundamentals of
-          martial arts or an experienced practitioner looking to deepen your
-          understanding,&nbsp;
-          <Strong>Senshinkan Romania</Strong> provides a welcoming and
-          traditional environment for your martial arts journey. We honor the
-          legacy of our predecessors while adapting the teachings to serve the
-          needs of modern practitioners.
-        </Typography>
-      </Grid>
-    </Grid>
-  );
-};
+          <Typography sx={closingBgCounterSx}>道</Typography>
+        </FadeIn>
+      </Container>
+    </Box>
+  </>
+);
 
 export default Dojo;
