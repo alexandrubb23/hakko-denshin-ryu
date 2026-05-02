@@ -1,123 +1,194 @@
+import { Box, Container, Divider, Grid, Typography } from "@mui/material";
+import { motion } from "framer-motion";
 
-import { Typography } from "@mui/material";
-
-import mobileLowQuality from "@assets/images/--262-small.webp";
 import mobileHighQuality from "@assets/images/--262.webp";
 import senshinkanLowQualityImage from "@assets/images/279-small.webp";
 import senshinkanHighQualityImage from "@assets/images/279.webp";
-import SectionsList, { type Section } from "@components/Layout/SectionsList";
-import Strong from "@components/Layout/Strong";
+import BlurredUpImage from "@components/Image/BlurredUpImage";
 
-const sections: Section[] = [
-  {
-    image: {
-      lowQualitySrc: mobileLowQuality,
-      highQualitySrc: mobileHighQuality,
-    },
-    imageFirstOnMobile: true,
-    imageFirstOnDesktop: true,
-    sectionTitle: "Senshinkan (洗心館)",
-    children: (
-      <>
-        <Typography variant="body1" data-aos="fade">
-          <Strong>Senshinkan (洗心館)</Strong>, whose name can be translated as
-          "the place (館) where you purify (洗) your heart/mind (心)", is a dojo
-          where we teach <Strong>Hakko Denshin Ryu Ju Jutsu</Strong>{" "}
-          (八光伝心流柔術), a self-defence system without any violence.
-        </Typography>
-        <Typography variant="body1" data-aos="fade">
-          The main difference with most of the other Ju Jutsu styles is the use
-          of wrist locks and Gakun, 雅勲, pressure on kyusho (急処 or 急所,
-          vital points situated along the meridians). short period.
-        </Typography>
-        <Typography variant="body1" data-aos="fade">
-          The essence of <Strong>Hakko Denshin Ryu</Strong> is learning the
-          appropriate and precise gesture, and adopting the right attitude.
-        </Typography>
-        <Typography variant="body1" data-aos="fade">
-          We hope this site will bring you some additional information about our
-          art.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    image: {
-      lowQualitySrc: senshinkanLowQualityImage,
-      highQualitySrc: senshinkanHighQualityImage,
-      sx: {
-        aspectRatio: "auto 360 / 539",
-        width: {
-          lg: "80%",
-          md: "100%",
-          sm: "80%",
-          xs: "80%",
-        },
-      },
-    },
-    imageFirstOnMobile: true,
-    imageFirstOnDesktop: false,
-    sectionTitle: "Senshinkan Romania",
-    children: (
-      <>
-        <Typography variant="body1" data-aos="fade">
-          <Strong>Senshinkan Romania (洗心館)</Strong> is a dedicated dojo
-          located in Romania, recognized as an official affiliate of the{" "}
-          <a
-            href="https://hakkodenshinryu.net/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Hombu Dojo
-          </a>
-          . We are honored to train under the supervision of{" "}
-          <Strong>Menkyo Kaiden Shihan Leempoels Eric San Dai Kichu </Strong>,
-          who serves as the{" "}
-          <a
-            href="https://hakkodenshinryu.net/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Hombu Dojo's official representative in Romania
-          </a>
-          , upholding the integrity of the lineage.
-        </Typography>
-        <Typography variant="body1" data-aos="fade">
-          Our curriculum incorporates both <Strong>unarmed techniques</Strong>
-          &nbsp; and training with traditional Japanese weapons and objects such
-          as the
-          <Strong>tambo</Strong>,&nbsp;<Strong>jo</Strong>,&nbsp;
-          <Strong>katana</Strong>, <Strong>tanto</Strong>, &nbsp;
-          <Strong>sensu (fan)</Strong>, <Strong>kasa (umbrella)</Strong>
-          ,&nbsp;<Strong>walking cane</Strong>, <Strong>paper scroll</Strong>,
-          and many more. These tools symbolize the <Strong>adaptability</Strong>
-          &nbsp; and <Strong>grace</Strong>&nbsp; inherent in{" "}
-          <Strong>Hakko Denshin Ryu</Strong>.
-        </Typography>
-        <Typography variant="body1" data-aos="fade">
-          At the heart of our practice are the principles of&nbsp;
-          <Strong>datsuryoku</Strong>&nbsp; (effortless power) and{" "}
-          <Strong>kuzushi</Strong> (balance breaking). We use&nbsp;
-          <Strong>pain as a tool of distraction</Strong>, blending it seamlessly
-          with techniques that emphasize <Strong>humility</Strong>
-          &nbsp; and <Strong>harmony</Strong>.
-        </Typography>
-        <Typography variant="body1" data-aos="fade">
-          <Strong>Hakko Ryu Denshin Ryu</Strong> is a practice that goes beyond
-          the dojo. It is a <Strong>philosophy</Strong>
-          that guides decision-making, supports&nbsp;
-          <Strong>mental well-being</Strong>, and enriches&nbsp;
-          <Strong>social interactions</Strong>. We aim to empower our students,
-          cultivating not just skilled practitioners but&nbsp;
-          <Strong>confident, humble individuals</Strong> who embody&nbsp;
-          <Strong>respect</Strong>
-          and <Strong>tradition</Strong> in all areas of life.
-        </Typography>
-      </>
-    ),
-  },
-];
+import {
+  bandSx,
+  bodyTextSx,
+  dividerSx,
+  heroBgSx,
+  heroContentSx,
+  heroEyebrowSx,
+  heroKanjiSx,
+  heroSubtitleSx,
+  heroSx,
+  heroTitleSx,
+  portraitWrapperSx,
+  pullQuoteSx,
+  sectionKanjiSx,
+  sectionNumberSx,
+  sectionTitleSx,
+  sectionWrapperSx,
+} from "./Senshinkan.style";
 
-const Senshinkan = () => <SectionsList sections={sections} />;
+const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
+
+const FadeIn = ({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) => (
+  <motion.div
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-40px" }}
+    variants={fadeUp}
+    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
+  >
+    {children}
+  </motion.div>
+);
+
+const Senshinkan = () => (
+  <>
+    {/* ── Hero ─────────────────────────────────────────────────────────── */}
+    <Box sx={heroSx}>
+      <Box sx={heroBgSx(mobileHighQuality)} />
+      <Typography sx={heroKanjiSx}>洗心館</Typography>
+      <Box sx={heroContentSx}>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: EASE_OUT }}
+        >
+          <Typography sx={heroEyebrowSx}>Senshinkan · Romania</Typography>
+          <Typography component="h1" sx={heroTitleSx}>
+            洗心館
+          </Typography>
+          <Typography component="p" sx={heroSubtitleSx}>
+            Hall of Heart Purification
+          </Typography>
+        </motion.div>
+      </Box>
+    </Box>
+
+    {/* ── 01. About Senshinkan (full-bleed band) ───────────────────────── */}
+    <Box sx={bandSx}>
+      <Container maxWidth="lg">
+        <FadeIn>
+          <Typography sx={sectionNumberSx}>01</Typography>
+          <Typography sx={pullQuoteSx}>
+            "The place where you purify your heart — without violence."
+          </Typography>
+          <Divider sx={dividerSx} />
+          <Grid container spacing={{ xs: 2, md: 5 }}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Typography sx={bodyTextSx}>
+                <strong>Senshinkan (洗心館)</strong> is a dojo where we teach{" "}
+                <strong>Hakko Denshin Ryu Ju Jutsu</strong> (八光伝心流柔術) — a
+                self-defence system without any violence. The name translates as{" "}
+                <em>
+                  "the place (館) where you purify (洗) your heart/mind (心)"
+                </em>
+                .
+              </Typography>
+              <Typography sx={bodyTextSx}>
+                The main difference with most other Ju Jutsu styles is the use
+                of wrist locks and <strong>Gakun</strong> (雅勲) — pressure on{" "}
+                <strong>kyusho</strong> (急所, vital points situated along the
+                meridians).
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Typography sx={bodyTextSx}>
+                The essence of <strong>Hakko Denshin Ryu</strong> is learning
+                the <strong>appropriate and precise gesture</strong>, and
+                adopting the right attitude.
+              </Typography>
+              <Typography sx={bodyTextSx}>
+                We hope this site will bring you some additional information
+                about our art and inspire you to discover this beautiful martial
+                tradition.
+              </Typography>
+            </Grid>
+          </Grid>
+        </FadeIn>
+      </Container>
+    </Box>
+
+    <Container maxWidth="lg">
+      {/* ── 02. Senshinkan Romania ───────────────────────────────────────── */}
+      <Box sx={sectionWrapperSx}>
+        <Grid container spacing={{ xs: 4, md: 6 }} alignItems="flex-start">
+          <Grid size={{ xs: 12, md: 5 }}>
+            <FadeIn>
+              <Box sx={portraitWrapperSx}>
+                <BlurredUpImage
+                  lowQualitySrc={senshinkanLowQualityImage}
+                  highQualitySrc={senshinkanHighQualityImage}
+                  sx={{ aspectRatio: "auto 360 / 539", width: "100%" }}
+                />
+              </Box>
+            </FadeIn>
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 7 }}>
+            <FadeIn delay={0.15}>
+              <Typography sx={sectionNumberSx}>02</Typography>
+              <Typography component="h2" sx={sectionTitleSx}>
+                Senshinkan Romania
+              </Typography>
+              <Typography sx={sectionKanjiSx}>洗心館</Typography>
+              <Divider sx={dividerSx} />
+
+              <Typography sx={bodyTextSx}>
+                <strong>Senshinkan Romania (洗心館)</strong> is a dedicated dojo
+                located in Romania, recognized as an official affiliate of the{" "}
+                <a
+                  href="https://hakkodenshinryu.net/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Hombu Dojo
+                </a>
+                . We train under the supervision of{" "}
+                <strong>
+                  Menkyo Kaiden Shihan Leempoels Eric San Dai Kichu
+                </strong>
+                , the{" "}
+                <a
+                  href="https://hakkodenshinryu.net/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Hombu Dojo's official representative in Romania
+                </a>
+                , upholding the integrity of the lineage.
+              </Typography>
+              <Typography sx={bodyTextSx}>
+                Our curriculum incorporates both{" "}
+                <strong>unarmed techniques</strong> and training with
+                traditional Japanese weapons — the <strong>tambo</strong>,{" "}
+                <strong>jo</strong>, <strong>katana</strong>,{" "}
+                <strong>tanto</strong>, <strong>sensu (fan)</strong>,{" "}
+                <strong>kasa (umbrella)</strong>, <strong>walking cane</strong>,{" "}
+                <strong>paper scroll</strong>, and many more. These tools
+                symbolize the <strong>adaptability</strong> and{" "}
+                <strong>grace</strong> inherent in Hakko Denshin Ryu.
+              </Typography>
+              <Typography sx={bodyTextSx}>
+                At the heart of our practice are <strong>datsuryoku</strong>{" "}
+                (effortless power) and <strong>kuzushi</strong> (balance
+                breaking). Hakko Denshin Ryu is a <strong>philosophy</strong>{" "}
+                that guides decision-making, supports{" "}
+                <strong>mental well-being</strong>, and cultivates{" "}
+                <strong>confident, humble individuals</strong> who embody{" "}
+                <strong>respect</strong> and <strong>tradition</strong> in all
+                areas of life.
+              </Typography>
+            </FadeIn>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
+  </>
+);
 
 export default Senshinkan;
