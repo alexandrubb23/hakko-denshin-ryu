@@ -66,6 +66,7 @@ const BoxStyled = styled(Box)<{ open: boolean }>(({ open }) => ({
     "transform var(--animation-timing), width var(--animation-timing)",
   transform: open ? "translateX(0)" : "translateX(100%)",
   width: open ? "100%" : "0",
+  zIndex: 1200,
 }));
 
 const MobileNavMenu = () => {
@@ -74,15 +75,10 @@ const MobileNavMenu = () => {
 
   return (
     <>
-      <FormLabelStyled open={isOpen} sx={{ zIndex: 2 }}>
+      <FormLabelStyled open={isOpen} sx={{ zIndex: 1201 }}>
         <input type="checkbox" onChange={toggleMenu} />
       </FormLabelStyled>
-      <BoxStyled
-        open={isOpen}
-        sx={{
-          zIndex: 1,
-        }}
-      >
+      <BoxStyled open={isOpen}>
         <ListPages
           onPageChange={toggleMenu}
           sx={{

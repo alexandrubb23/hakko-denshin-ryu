@@ -1,63 +1,119 @@
-import FormattedMessage from '@components/FormattedMessage/FormattedMessage';
-import { Grid, Typography } from '@mui/material';
+import img180 from "@assets/images/180.webp";
+import FormattedMessage from "@components/FormattedMessage/FormattedMessage";
+import Quotes from "@components/Quotes/Quotes";
+import { Box, Container, Divider, Typography } from "@mui/material";
 
-import desktopLowQuality from '@assets/images/108-small.jpg';
-import desktopHighQuality from '@assets/images/108.webp';
+import { motion } from "framer-motion";
+import { useEffect } from "react";
 
-import mobileLowQuality from '@assets/images/180-small.jpg';
-import mobileHighQuality from '@assets/images/180.webp';
-import BlurredUpImage from '@components/Image/BlurredUpImage';
-import Quotes from '@components/Quotes/Quotes';
-import useIsMobile from '@hooks/isMobile';
-import useDeviceImageType from '@hooks/useDeviceImageType';
+import {
+  badgeLabelSx,
+  badgeSx,
+  bottomAccentSx,
+  containerSx,
+  dividerSx,
+  glowBlobSx,
+  headingAccentSx,
+  headingSx,
+  heroWrapperSx,
+  overlayGradientSx,
+  pulseDotSx,
+  subtitleSx,
+  tilesBgSx,
+  topAccentSx,
+} from "./Home.style";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const Home = () => {
-  const isMobile = useIsMobile();
-
-  const { imageLowQuality, imageHighQuality } = useDeviceImageType({
-    mobileLowQuality,
-    desktopLowQuality,
-    mobileHighQuality,
-    desktopHighQuality,
-  });
+  // Prevent page scroll on the full-screen hero
+  useEffect(() => {
+    document.documentElement.style.overflowY = "hidden";
+    return () => {
+      document.documentElement.style.overflowY = "";
+    };
+  }, []);
 
   return (
-    <Grid container>
-      <Grid
-        size={{ xs: 12, lg: 4, xl: 6 }}
-        className='flex flex-col justify-center'
-      >
-        <Typography
-          variant='h1'
-          align='left'
-          data-aos='fade'
-          className='pb-0 text-shadow-lg/30'
-        >
-          Hakko Denshin Ryu Ju Jutsu Senshinkan Romania
-        </Typography>
+    <Box sx={heroWrapperSx}>
+      {/* Portrait image tiled horizontally like a filmstrip */}
+      <Box
+        sx={{ ...tilesBgSx, backgroundImage: `url(${img180})` }}
+        role="presentation"
+        aria-hidden
+      />
 
-        <Typography variant='h2Inter' data-aos='fade' align='left'>
-          <FormattedMessage id='page.home.subtitle' />
-        </Typography>
-        <Quotes />
-      </Grid>
-      <Grid
-        size={{ xs: 12, lg: 8, xl: 6 }}
-        className={`min-h-dvh top-0 z-[-2] left-0 ${
-          isMobile ? 'absolute' : 'relative'
-        }`}
-      >
-        <BlurredUpImage
-          animate='none'
-          highQualitySrc={imageHighQuality}
-          lowQualitySrc={imageLowQuality}
-          className={`min-h-dvh`}
-          sx={{
-            aspectRatio: !isMobile ? 'auto 1372 / 914' : 'auto 360 / 540',
+      {/* Dark radial vignette to keep content readable */}
+      <Box sx={overlayGradientSx} aria-hidden />
+
+      {/* Top purple glow line */}
+      <Box sx={topAccentSx} aria-hidden />
+
+      {/* Bottom subtle line */}
+      <Box sx={bottomAccentSx} aria-hidden />
+
+      <Container maxWidth="md" sx={containerSx}>
+        {/* Ambient purple glow behind the text */}
+        <Box sx={glowBlobSx} aria-hidden />
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.85, ease: [0.25, 0.46, 0.45, 0.94] }}
+          style={{ width: "100%", position: "relative", zIndex: 1 }}
+        >
+          {/* Pill badge */}
+          <Box sx={badgeSx}>
+            <Box sx={pulseDotSx} />
+            <Typography variant="caption" sx={badgeLabelSx}>
+              Senshinkan Romania
+            </Typography>
+          </Box>
+
+          {/* Main heading */}
+          <Typography variant="h1" align="center" sx={headingSx}>
+            Hakko Denshin Ryu{" "}
+            <Box component="span" sx={headingAccentSx}>
+              Ju Jutsu
+            </Box>
+          </Typography>
+
+          {/* Subtitle */}
+          <Typography variant="h2Inter" align="center" sx={subtitleSx}>
+            <FormattedMessage id="page.home.subtitle" />
+          </Typography>
+        </motion.div>
+
+        {/* Animated horizontal rule */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.55, delay: 0.5, ease: "easeOut" }}
+          style={{ width: 80, marginTop: 16, marginBottom: 8 }}
+        >
+          <Divider sx={dividerSx} />
+        </motion.div>
+
+        {/* Cycling martial arts quotes */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.7 }}
+          style={{
+            width: "100%",
+            maxWidth: 580,
+            position: "relative",
+            zIndex: 1,
           }}
-        />
-      </Grid>
-    </Grid>
+        >
+          <Quotes />
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 
