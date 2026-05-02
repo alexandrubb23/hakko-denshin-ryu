@@ -1,13 +1,11 @@
-import { Box, styled } from "@mui/material";
+import { Box, styled, type SxProps, type Theme } from "@mui/material";
 
 import useProgressiveImg, {
   type UseProgressiveImg,
 } from "@hooks/useProgressiveImg";
-import type { SxThemeProps } from "types/style";
 
 type BlurredUpImageProps = UseProgressiveImg & {
-  // TODO: Remove sx
-  sx?: SxThemeProps;
+  sx?: SxProps<Theme>;
   className?: string;
   animate?: "fade" | "none";
   aspectRatio?: string;
@@ -28,7 +26,7 @@ const BoxStyled = styled(Box, {
     WebkitBackfaceVisibility: "hidden",
     width: "100%",
     willChange: "filter",
-  }),
+  })
 );
 
 const BlurredUpImage = ({
