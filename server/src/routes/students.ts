@@ -520,4 +520,42 @@ router.post(
   }
 );
 
+router.get(
+  ApiRoutes.adminStudentEvents,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const id = req.params.id as string;
+
+    const student = await requireStudent(id, res);
+    if (!student) return;
+
+    const events = await prisma.event.findMany({
+      where: { deletedAt: null },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        status: true,
+        startDate: true,
+        endDate: true,
+        location: true,
+        participants: {
+          where: { userId: id },
+          select: { attended: true },
+          take: 1,
+        },
+      },
+      orderBy: { startDate: "asc" },
+    });
+
+    const result = events.map(({ participants, ...event }) => ({
+      ...event,
+      attended: participants[0]?.attended ?? null,
+    }));
+
+    res.json({ events: result });
+  }
+);
+
 export default router;

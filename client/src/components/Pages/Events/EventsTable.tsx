@@ -21,6 +21,7 @@ import { useState } from "react";
 
 import type { Event } from "@api/events";
 import { BORDER_COLOR, PURPLE, SKELETON_SX, SURFACE_BG } from "@style/tokens";
+import { formatDate } from "@utils/time";
 import DeleteEventModal from "./DeleteEventModal";
 import EditEventModal from "./EditEventModal";
 import EventParticipantsModal from "./EventParticipantsModal";
@@ -38,14 +39,6 @@ const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   draft: { bg: "rgba(171,150,255,0.12)", color: PURPLE },
   cancelled: { bg: "rgba(239,83,80,0.12)", color: "#ef5350" },
 };
-
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("ro-RO", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    timeZone: "Europe/Bucharest",
-  });
 
 const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);

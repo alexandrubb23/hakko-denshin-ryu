@@ -15,6 +15,7 @@ export const ApiRoutes = {
   adminStudentRanks: "/api/admin/students/:id/ranks",
   adminStudentRank: "/api/admin/students/:id/ranks/:rankEntryId",
   adminStudentAttendance: "/api/admin/students/:id/attendance",
+  adminStudentEvents: "/api/admin/students/:id/events",
   adminEvents: "/api/admin/events",
   adminEvent: "/api/admin/events/:id",
   adminEventImage: "/api/admin/events/:id/image",

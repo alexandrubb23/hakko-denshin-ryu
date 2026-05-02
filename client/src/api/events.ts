@@ -34,6 +34,17 @@ export interface EventParticipant {
   };
 }
 
+export interface StudentEvent {
+  id: string;
+  name: string;
+  type: EventType;
+  status: EventStatus;
+  startDate: string;
+  endDate: string | null;
+  location: string;
+  attended: boolean | null;
+}
+
 class EventsApi extends Http {
   async fetchEvents(): Promise<Event[]> {
     const { data } = await this.http.get(ApiRoutes.events);
@@ -84,6 +95,13 @@ class EventsApi extends Http {
       payload
     );
     return data.participation;
+  }
+
+  async fetchStudentEvents(studentId: string): Promise<StudentEvent[]> {
+    const { data } = await this.http.get(
+      ApiRoutes.adminStudentEvents(studentId)
+    );
+    return data.events;
   }
 }
 

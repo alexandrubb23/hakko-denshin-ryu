@@ -7,6 +7,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 import { BORDER_COLOR, PURPLE } from "@style/tokens";
 
 import StudentAttendanceTab from "./StudentAttendanceTab";
+import StudentEventsTab from "./StudentEventsTab";
 import StudentRankTab from "./StudentRankTab";
 
 interface TabConfig {
@@ -34,8 +35,7 @@ const STUDENT_TABS: TabConfig[] = [
     id: "events",
     label: "Events",
     icon: <EventIcon sx={{ fontSize: 18 }} />,
-    component: () => null,
-    disabled: true,
+    component: StudentEventsTab,
   },
 ];
 
@@ -68,14 +68,8 @@ const StudentDetailTabs = ({ studentId }: Props) => {
           "& .MuiTabs-scrollButtons": { color: PURPLE },
         }}
       >
-        {STUDENT_TABS.map(({ label, icon, disabled }) => (
-          <Tab
-            key={label}
-            label={label}
-            icon={icon}
-            iconPosition="start"
-            disabled={disabled}
-          />
+        {STUDENT_TABS.map(({ label, icon }) => (
+          <Tab key={label} label={label} icon={icon} iconPosition="start" />
         ))}
       </Tabs>
 
