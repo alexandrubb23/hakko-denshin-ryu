@@ -18,6 +18,8 @@ import { Role } from "@lib/role";
 import { Routes } from "@lib/routes";
 import { BORDER_COLOR, PURPLE, SKELETON_SX, SURFACE_BG } from "@style/tokens";
 
+import DashboardStudentChart from "./DashboardStudentChart";
+
 const ADMIN_LINKS = [
   { label: "Manage Students", to: Routes.students, Icon: GroupIcon },
   { label: "Manage Events", to: Routes.adminEvents, Icon: EventIcon },
@@ -97,6 +99,8 @@ const Dashboard = () => {
               </Card>
             ))}
           </Box>
+
+          <DashboardStudentChart />
         </Box>
       )}
     </Paper>

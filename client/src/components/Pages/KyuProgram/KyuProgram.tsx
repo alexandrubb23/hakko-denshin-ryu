@@ -1,8 +1,4 @@
-import blueBelt from "@assets/belts/blue.png";
-import brownBelt from "@assets/belts/brown.png";
-import greenBelt from "@assets/belts/green.png";
-import orangeBelt from "@assets/belts/orange.png";
-import yellowBelt from "@assets/belts/yellow.png";
+import { BELT_IMAGES } from "@assets/beltImages";
 import TabbedContent from "@components/Pages/shared/TabbedPageLayout/TabbedContent";
 import TabbedPageLayout from "@components/Pages/shared/TabbedPageLayout/TabbedPageLayout";
 import TabPageSkeleton from "@components/Pages/shared/TabbedPageLayout/TabPageSkeleton";
@@ -15,14 +11,6 @@ import {
   LegendItem,
   TabLabelWrapper,
 } from "./KyuProgram.style";
-
-const BELT_IMAGES: Record<string, string> = {
-  yellow: yellowBelt,
-  orange: orangeBelt,
-  green: greenBelt,
-  blue: blueBelt,
-  brown: brownBelt,
-};
 
 const KyuProgram = () => {
   const { data: levels, isLoading, isError } = useKyuProgram();
