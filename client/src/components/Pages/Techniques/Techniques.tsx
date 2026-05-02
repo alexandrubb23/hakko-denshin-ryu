@@ -1,6 +1,5 @@
 import TabbedContent from "@components/Pages/shared/TabbedPageLayout/TabbedContent";
 import TabbedPageLayout from "@components/Pages/shared/TabbedPageLayout/TabbedPageLayout";
-import TabPageSkeleton from "@components/Pages/shared/TabbedPageLayout/TabPageSkeleton";
 import { useTechniques } from "@hooks/useTechniques";
 import useUrlTab from "@hooks/useUrlTab";
 import { SuiteDescription } from "./Techniques.style";
@@ -22,7 +21,6 @@ const Techniques = () => {
       isLoading={isLoading}
       isError={isError}
       errorMessage="Failed to load techniques. Please try again."
-      skeleton={<TabPageSkeleton showDescription blockHeight={160} />}
     >
       {suites && (
         <TabbedContent

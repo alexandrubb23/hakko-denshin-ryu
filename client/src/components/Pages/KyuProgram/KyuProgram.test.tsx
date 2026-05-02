@@ -13,10 +13,6 @@ vi.mock("@hooks/useKyuProgram", () => ({
   useKyuProgram: vi.fn(),
 }));
 
-vi.mock("@components/Pages/shared/TabbedPageLayout/TabPageSkeleton", () => ({
-  default: () => <div data-testid="kyu-program-skeleton" />,
-}));
-
 const mockUseKyuProgram = vi.mocked(useKyuProgram);
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
@@ -133,8 +129,8 @@ describe("KyuProgram page", () => {
       expect(screen.getByText("Kyu Program")).toBeInTheDocument();
     });
 
-    it("renders the skeleton", () => {
-      expect(screen.getByTestId("kyu-program-skeleton")).toBeInTheDocument();
+    it("renders a loading spinner", () => {
+      expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
     it("does not render level tabs", () => {
@@ -169,10 +165,8 @@ describe("KyuProgram page", () => {
       expect(screen.queryByRole("tab")).not.toBeInTheDocument();
     });
 
-    it("does not render the skeleton", () => {
-      expect(
-        screen.queryByTestId("kyu-program-skeleton")
-      ).not.toBeInTheDocument();
+    it("does not render a spinner", () => {
+      expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
     });
   });
 
@@ -217,11 +211,9 @@ describe("KyuProgram page", () => {
       expect(screen.getByText("Henka")).toBeInTheDocument();
     });
 
-    it("does not show error or skeleton", () => {
+    it("does not show error or spinner", () => {
       expect(screen.queryByText(/failed to load/i)).not.toBeInTheDocument();
-      expect(
-        screen.queryByTestId("kyu-program-skeleton")
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
     });
   });
 

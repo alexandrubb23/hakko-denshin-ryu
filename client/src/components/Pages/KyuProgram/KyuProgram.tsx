@@ -1,7 +1,6 @@
 import { BELT_IMAGES } from "@assets/beltImages";
 import TabbedContent from "@components/Pages/shared/TabbedPageLayout/TabbedContent";
 import TabbedPageLayout from "@components/Pages/shared/TabbedPageLayout/TabbedPageLayout";
-import TabPageSkeleton from "@components/Pages/shared/TabbedPageLayout/TabPageSkeleton";
 import { useKyuProgram } from "@hooks/useKyuProgram";
 import useUrlTab from "@hooks/useUrlTab";
 import {
@@ -22,7 +21,6 @@ const KyuProgram = () => {
       isLoading={isLoading}
       isError={isError}
       errorMessage="Failed to load kyu program. Please try again."
-      skeleton={<TabPageSkeleton tabBarHeight={80} blockHeight={180} />}
     >
       {levels && (
         <TabbedContent

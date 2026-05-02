@@ -19,7 +19,6 @@ const mockUseStudentEvents = vi.mocked(useStudentEvents);
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
 const STUDENT_ID = "student-123";
-const SKELETON_ROWS = 4;
 
 const mockEvents: StudentEvent[] = [
   {
@@ -83,13 +82,12 @@ describe("StudentEventsTab", () => {
       mockAndRender({ data: undefined, isLoading: true, isError: false });
     });
 
-    it("renders the table", () => {
-      expect(screen.getByRole("table")).toBeInTheDocument();
+    it("renders a loading spinner", () => {
+      expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
-    it(`renders ${SKELETON_ROWS} skeleton rows plus the header row`, () => {
-      // 1 header + 4 skeleton rows
-      expect(screen.getAllByRole("row")).toHaveLength(SKELETON_ROWS + 1);
+    it("does not render the table", () => {
+      expect(screen.queryByRole("table")).not.toBeInTheDocument();
     });
 
     it("does not show any event data", () => {
@@ -181,7 +179,9 @@ describe("StudentEventsTab", () => {
 
     it("renders the formatted start date for each event", () => {
       for (const event of mockEvents) {
-        expect(screen.getByText(formatDate(event.startDate))).toBeInTheDocument();
+        expect(
+          screen.getByText(formatDate(event.startDate))
+        ).toBeInTheDocument();
       }
     });
 

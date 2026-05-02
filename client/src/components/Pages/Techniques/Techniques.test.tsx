@@ -13,10 +13,6 @@ vi.mock("@hooks/useTechniques", () => ({
   useTechniques: vi.fn(),
 }));
 
-vi.mock("@components/Pages/shared/TabbedPageLayout/TabPageSkeleton", () => ({
-  default: () => <div data-testid="techniques-skeleton" />,
-}));
-
 const mockUseTechniques = vi.mocked(useTechniques);
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
@@ -116,8 +112,8 @@ describe("Techniques page", () => {
       expect(screen.getByText("Techniques")).toBeInTheDocument();
     });
 
-    it("renders the skeleton", () => {
-      expect(screen.getByTestId("techniques-skeleton")).toBeInTheDocument();
+    it("renders a loading spinner", () => {
+      expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
     it("does not render suite tabs", () => {
@@ -152,10 +148,8 @@ describe("Techniques page", () => {
       expect(screen.queryByRole("tab")).not.toBeInTheDocument();
     });
 
-    it("does not render the skeleton", () => {
-      expect(
-        screen.queryByTestId("techniques-skeleton")
-      ).not.toBeInTheDocument();
+    it("does not render a spinner", () => {
+      expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
     });
   });
 
@@ -194,11 +188,9 @@ describe("Techniques page", () => {
       expect(screen.getByText("Ude osae dori")).toBeInTheDocument();
     });
 
-    it("does not show error or skeleton", () => {
+    it("does not show error or spinner", () => {
       expect(screen.queryByText(/failed to load/i)).not.toBeInTheDocument();
-      expect(
-        screen.queryByTestId("techniques-skeleton")
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
     });
   });
 

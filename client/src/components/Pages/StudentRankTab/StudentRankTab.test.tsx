@@ -19,9 +19,7 @@ vi.mock("./CreateStudentRankModal", () => ({
 vi.mock("./DeleteRankModal", () => ({
   default: createModalMock<{ entry: StudentRankEntry }>(
     "delete-rank-modal",
-    ({ entry }) => (
-      <span data-testid="delete-rank-name">{entry.rank.name}</span>
-    )
+    ({ entry }) => <span data-testid="delete-rank-name">{entry.rank.name}</span>
   ),
 }));
 
@@ -87,8 +85,12 @@ describe("StudentRankTab", () => {
       ).toBeInTheDocument();
     });
 
-    it("renders the table with column headers", () => {
-      assertTableHeaders();
+    it("renders a loading spinner", () => {
+      expect(screen.getByRole("progressbar")).toBeInTheDocument();
+    });
+
+    it("does not render the table", () => {
+      expect(screen.queryByRole("table")).not.toBeInTheDocument();
     });
 
     it("does not show an error alert", () => {
@@ -208,7 +210,9 @@ describe("StudentRankTab", () => {
     });
 
     it("renders a delete button for each rank row", () => {
-      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      const deleteButtons = screen.getAllByRole("button", {
+        name: /delete rank/i,
+      });
       expect(deleteButtons).toHaveLength(mockRanks.length);
     });
   });
@@ -223,7 +227,9 @@ describe("StudentRankTab", () => {
     });
 
     it("shows the delete modal with the correct rank name when delete is clicked", () => {
-      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      const deleteButtons = screen.getAllByRole("button", {
+        name: /delete rank/i,
+      });
       fireEvent.click(deleteButtons[0]);
 
       expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
@@ -231,7 +237,9 @@ describe("StudentRankTab", () => {
     });
 
     it("shows the delete modal for the correct row", () => {
-      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      const deleteButtons = screen.getAllByRole("button", {
+        name: /delete rank/i,
+      });
       fireEvent.click(deleteButtons[1]);
 
       expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
@@ -239,7 +247,9 @@ describe("StudentRankTab", () => {
     });
 
     it("hides the delete modal when clicking outside", () => {
-      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      const deleteButtons = screen.getAllByRole("button", {
+        name: /delete rank/i,
+      });
       fireEvent.click(deleteButtons[0]);
       expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
 
@@ -248,7 +258,9 @@ describe("StudentRankTab", () => {
     });
 
     it("hides the delete modal when pressing Escape", () => {
-      const deleteButtons = screen.getAllByRole("button", { name: /delete rank/i });
+      const deleteButtons = screen.getAllByRole("button", {
+        name: /delete rank/i,
+      });
       fireEvent.click(deleteButtons[0]);
       expect(screen.getByTestId("delete-rank-modal")).toBeInTheDocument();
 

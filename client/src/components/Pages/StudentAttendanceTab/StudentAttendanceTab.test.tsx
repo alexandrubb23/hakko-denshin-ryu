@@ -77,16 +77,16 @@ describe("StudentAttendanceTab", () => {
   // ── Default view ─────────────────────────────────────────────────────────
 
   describe("default view", () => {
-    it("renders DayView when no view param is present", () => {
+    it("renders YearView when no view param is present", () => {
       renderTab("/");
-      expect(screen.getByTestId("day-view")).toBeInTheDocument();
+      expect(screen.getByTestId("year-view")).toBeInTheDocument();
     });
 
     it("does not render other views by default", () => {
       renderTab("/");
+      expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
       expect(screen.queryByTestId("week-view")).not.toBeInTheDocument();
       expect(screen.queryByTestId("month-view")).not.toBeInTheDocument();
-      expect(screen.queryByTestId("year-view")).not.toBeInTheDocument();
     });
   });
 
@@ -106,9 +106,9 @@ describe("StudentAttendanceTab", () => {
       }
     );
 
-    it("falls back to DayView for an invalid view param", () => {
+    it("falls back to YearView for an invalid view param", () => {
       renderTab("/?view=invalid");
-      expect(screen.getByTestId("day-view")).toBeInTheDocument();
+      expect(screen.getByTestId("year-view")).toBeInTheDocument();
     });
   });
 
@@ -152,12 +152,20 @@ describe("StudentAttendanceTab", () => {
 
   describe("loading state", () => {
     it("shows a spinner while data is loading (day view)", () => {
-      renderTab("/", { data: undefined, isLoading: true, isError: false });
+      renderTab("/?view=day", {
+        data: undefined,
+        isLoading: true,
+        isError: false,
+      });
       expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
     it("hides the active view while loading (day view)", () => {
-      renderTab("/", { data: undefined, isLoading: true, isError: false });
+      renderTab("/?view=day", {
+        data: undefined,
+        isLoading: true,
+        isError: false,
+      });
       expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
     });
 
@@ -176,14 +184,22 @@ describe("StudentAttendanceTab", () => {
 
   describe("error state", () => {
     it("shows an error alert when the request fails (day view)", () => {
-      renderTab("/", { data: undefined, isLoading: false, isError: true });
+      renderTab("/?view=day", {
+        data: undefined,
+        isLoading: false,
+        isError: true,
+      });
       expect(
         screen.getByText(/failed to load attendance data/i)
       ).toBeInTheDocument();
     });
 
     it("hides the active view on error (day view)", () => {
-      renderTab("/", { data: undefined, isLoading: false, isError: true });
+      renderTab("/?view=day", {
+        data: undefined,
+        isLoading: false,
+        isError: true,
+      });
       expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
     });
 

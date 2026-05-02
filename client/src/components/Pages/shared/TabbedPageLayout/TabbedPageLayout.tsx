@@ -1,5 +1,7 @@
 import { Typography } from "@mui/material";
 import type { ReactNode } from "react";
+
+import CenterSpinner from "@components/Spinner/CenterSpinner";
 import { ErrorAlert, PageWrapper } from "./TabbedPageLayout.style";
 
 interface TabbedPageLayoutProps {
@@ -7,7 +9,6 @@ interface TabbedPageLayoutProps {
   isLoading: boolean;
   isError: boolean;
   errorMessage?: string;
-  skeleton: ReactNode;
   children?: ReactNode;
 }
 
@@ -16,7 +17,6 @@ const TabbedPageLayout = ({
   isLoading,
   isError,
   errorMessage = "Failed to load data. Please try again.",
-  skeleton,
   children,
 }: TabbedPageLayoutProps) => (
   <PageWrapper>
@@ -24,7 +24,7 @@ const TabbedPageLayout = ({
       {title}
     </Typography>
 
-    {isLoading && skeleton}
+    {isLoading && <CenterSpinner />}
 
     {isError && <ErrorAlert severity="error">{errorMessage}</ErrorAlert>}
 

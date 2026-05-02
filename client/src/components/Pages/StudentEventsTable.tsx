@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 
 import type { StudentEvent } from "@api/events";
+import CenterSpinner from "@components/Spinner/CenterSpinner";
 import { BORDER_COLOR, SURFACE_BG } from "@style/tokens";
 import { formatDate } from "@utils/time";
 import AttendedChip from "./AttendedChip";
-import StudentEventsSkeleton from "./StudentEventsSkeleton";
 
 interface Props {
   events: StudentEvent[] | undefined;
@@ -23,37 +23,37 @@ interface Props {
 
 const cellBorder = { "& td, & th": { borderBottomColor: BORDER_COLOR } };
 
-const StudentEventsTable = ({ events, isLoading }: Props) => (
-  <TableContainer
-    component={Paper}
-    elevation={0}
-    sx={{ backgroundColor: SURFACE_BG, borderRadius: 2, mt: 3 }}
-  >
-    <Table>
-      <TableHead>
-        <TableRow sx={cellBorder}>
-          <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-            Event
-          </TableCell>
-          <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-            Type
-          </TableCell>
-          <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-            Start Date
-          </TableCell>
-          <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-            Location
-          </TableCell>
-          <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-            Attended
-          </TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {isLoading ? (
-          <StudentEventsSkeleton />
-        ) : (
-          (events ?? []).map((event) => (
+const StudentEventsTable = ({ events, isLoading }: Props) => {
+  if (isLoading) return <CenterSpinner />;
+
+  return (
+    <TableContainer
+      component={Paper}
+      elevation={0}
+      sx={{ backgroundColor: SURFACE_BG, borderRadius: 2, mt: 3 }}
+    >
+      <Table>
+        <TableHead>
+          <TableRow sx={cellBorder}>
+            <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+              Event
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+              Type
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+              Start Date
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+              Location
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+              Attended
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {(events ?? []).map((event) => (
             <TableRow
               key={event.id}
               sx={{
@@ -101,11 +101,11 @@ const StudentEventsTable = ({ events, isLoading }: Props) => (
                 </Stack>
               </TableCell>
             </TableRow>
-          ))
-        )}
-      </TableBody>
-    </Table>
-  </TableContainer>
-);
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 
 export default StudentEventsTable;

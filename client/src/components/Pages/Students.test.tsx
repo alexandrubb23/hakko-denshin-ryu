@@ -99,12 +99,12 @@ describe("Students page", () => {
       expect(screen.getByText("Students")).toBeInTheDocument();
     });
 
-    it("renders the table with column headers", () => {
-      expect(screen.getByRole("table")).toBeInTheDocument();
-      expect(screen.getByText("Student")).toBeInTheDocument();
-      expect(screen.getByText("Email")).toBeInTheDocument();
-      expect(screen.getByText("Verified")).toBeInTheDocument();
-      expect(screen.getByText("Joined")).toBeInTheDocument();
+    it("renders a loading spinner", () => {
+      expect(screen.getByRole("progressbar")).toBeInTheDocument();
+    });
+
+    it("does not render the table", () => {
+      expect(screen.queryByRole("table")).not.toBeInTheDocument();
     });
 
     it("does not render any student data", () => {

@@ -7,8 +7,6 @@ import {
   Avatar,
   IconButton,
   Paper,
-  Skeleton,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -22,8 +20,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import { type Student } from "@api/students";
+import CenterSpinner from "@components/Spinner/CenterSpinner";
 import { Routes } from "@lib/routes";
-import { SKELETON_SX } from "@style/tokens";
 import { getInitials } from "@utils/string";
 import DeleteStudentModal from "./DeleteStudentModal";
 import EditStudentModal from "./EditStudentModal";
@@ -34,8 +32,6 @@ interface StudentsTableProps {
   isError: boolean;
 }
 
-const SKELETON_ROWS = 7;
-
 const StudentsTable = ({
   students,
   isLoading,
@@ -44,6 +40,7 @@ const StudentsTable = ({
   const navigate = useNavigate();
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
+
   if (isError) {
     return (
       <Typography color="error" mt={4}>
@@ -52,7 +49,9 @@ const StudentsTable = ({
     );
   }
 
-  if (!isLoading && students?.length === 0) {
+  if (isLoading) return <CenterSpinner />;
+
+  if (students?.length === 0) {
     return (
       <Paper
         elevation={0}
@@ -68,7 +67,7 @@ const StudentsTable = ({
     );
   }
 
-  if (!isLoading && !students) {
+  if (!students) {
     return null;
   }
 
@@ -108,159 +107,111 @@ const StudentsTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading
-              ? Array.from({ length: SKELETON_ROWS }).map((_, i) => (
-                  <TableRow
-                    key={i}
+            {students.map((student) => (
+              <TableRow
+                key={student.id}
+                onClick={() => navigate(Routes.studentDetail(student.id))}
+                sx={{
+                  cursor: "pointer",
+                  "& td": { borderBottomColor: "rgba(171,150,255,0.2)" },
+                  "&:last-child td": { border: 0 },
+                  "&:hover": {
+                    backgroundColor: "rgba(171,150,255,0.05)",
+                  },
+                }}
+              >
+                <TableCell>
+                  <Avatar
                     sx={{
-                      "& td": { borderBottomColor: "rgba(171,150,255,0.2)" },
-                      "&:last-child td": { border: 0 },
+                      width: 36,
+                      height: 36,
+                      backgroundColor: "rgba(171,150,255,0.25)",
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: "#AB96FF",
+                      display: "inline-flex",
+                      mr: 1.5,
+                      verticalAlign: "middle",
                     }}
                   >
-                    <TableCell>
-                      <Stack direction="row" alignItems="center" gap={1.5}>
-                        <Skeleton
-                          variant="circular"
-                          width={36}
-                          height={36}
-                          sx={SKELETON_SX}
-                        />
-                        <Skeleton variant="text" width={120} sx={SKELETON_SX} />
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="text" width={180} sx={SKELETON_SX} />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Skeleton
-                        variant="circular"
-                        width={20}
-                        height={20}
-                        sx={{ ...SKELETON_SX, mx: "auto" }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="text" width={80} sx={SKELETON_SX} />
-                    </TableCell>
-                    <TableCell align="right">
-                      <Skeleton
-                        variant="circular"
-                        width={30}
-                        height={30}
-                        sx={{ ...SKELETON_SX, ml: "auto" }}
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <Skeleton
-                        variant="circular"
-                        width={30}
-                        height={30}
-                        sx={{ ...SKELETON_SX, ml: "auto" }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))
-              : students!.map((student) => (
-                  <TableRow
-                    key={student.id}
-                    onClick={() => navigate(Routes.studentDetail(student.id))}
-                    sx={{
-                      cursor: "pointer",
-                      "& td": { borderBottomColor: "rgba(171,150,255,0.2)" },
-                      "&:last-child td": { border: 0 },
-                      "&:hover": {
-                        backgroundColor: "rgba(171,150,255,0.05)",
-                      },
-                    }}
+                    {getInitials(student.name)}
+                  </Avatar>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    fontWeight={600}
+                    sx={{ verticalAlign: "middle" }}
                   >
-                    <TableCell>
-                      <Stack direction="row" alignItems="center" gap={1.5}>
-                        <Avatar
-                          sx={{
-                            width: 36,
-                            height: 36,
-                            backgroundColor: "rgba(171,150,255,0.25)",
-                            fontSize: 14,
-                            fontWeight: 700,
-                            color: "#AB96FF",
-                          }}
-                        >
-                          {getInitials(student.name)}
-                        </Avatar>
-                        <Typography variant="body2" fontWeight={600}>
-                          {student.name}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary">
-                        {student.email}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Tooltip
-                        title={
-                          student.emailVerified
-                            ? "Email verified"
-                            : "Not verified"
-                        }
-                      >
-                        {student.emailVerified ? (
-                          <CheckCircleOutlineIcon
-                            sx={{ color: "#4caf50", fontSize: 20 }}
-                          />
-                        ) : (
-                          <RadioButtonUncheckedIcon
-                            sx={{ color: "text.disabled", fontSize: 20 }}
-                          />
-                        )}
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" color="text.secondary">
-                        {new Date(student.createdAt).toLocaleDateString()}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Tooltip title="Edit student">
-                        <IconButton
-                          aria-label="Edit student"
-                          size="small"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingStudent(student);
-                          }}
-                          sx={{
-                            color: "#AB96FF",
-                            "&:hover": {
-                              backgroundColor: "rgba(171,150,255,0.12)",
-                            },
-                          }}
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete student">
-                        <IconButton
-                          aria-label="Delete student"
-                          size="small"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setDeletingStudent(student);
-                          }}
-                          sx={{
-                            color: "#ef9a9a",
-                            "&:hover": {
-                              backgroundColor: "rgba(239,154,154,0.12)",
-                            },
-                          }}
-                        >
-                          <DeleteOutlineIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                    {student.name}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {student.email}
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Tooltip
+                    title={
+                      student.emailVerified ? "Email verified" : "Not verified"
+                    }
+                  >
+                    {student.emailVerified ? (
+                      <CheckCircleOutlineIcon
+                        sx={{ color: "#4caf50", fontSize: 20 }}
+                      />
+                    ) : (
+                      <RadioButtonUncheckedIcon
+                        sx={{ color: "text.disabled", fontSize: 20 }}
+                      />
+                    )}
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {new Date(student.createdAt).toLocaleDateString()}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Tooltip title="Edit student">
+                    <IconButton
+                      aria-label="Edit student"
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingStudent(student);
+                      }}
+                      sx={{
+                        color: "#AB96FF",
+                        "&:hover": {
+                          backgroundColor: "rgba(171,150,255,0.12)",
+                        },
+                      }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete student">
+                    <IconButton
+                      aria-label="Delete student"
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeletingStudent(student);
+                      }}
+                      sx={{
+                        color: "#ef9a9a",
+                        "&:hover": {
+                          backgroundColor: "rgba(239,154,154,0.12)",
+                        },
+                      }}
+                    >
+                      <DeleteOutlineIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
