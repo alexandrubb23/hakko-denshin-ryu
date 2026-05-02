@@ -2,6 +2,6 @@ export {
   ChartHeader,
   ChartRoot,
   ChartTitle,
+  CountBadge,
   FilterRow,
-  CountBadge as StudentCountBadge,
 } from "./DashboardChart.shared.style";

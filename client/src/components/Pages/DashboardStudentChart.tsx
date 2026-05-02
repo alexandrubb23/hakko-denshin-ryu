@@ -78,7 +78,7 @@ const DashboardStudentChart = () => {
   const [period, setPeriod] = useState<AttendancePeriod>("all");
   const [rankFilter, setRankFilter] = useState<string>(ALL_RANK_FILTER);
 
-  const { data, isLoading } = useDashboardStudents(period);
+  const { data, isLoading, isFetching } = useDashboardStudents(period);
 
   const hasUnranked = useMemo(
     () => (data?.students ?? []).some((s) => s.rankId === null),
@@ -169,7 +169,9 @@ const DashboardStudentChart = () => {
   }
 
   return (
-    <ChartRoot>
+    <ChartRoot
+      sx={{ opacity: isFetching ? 0.6 : 1, transition: "opacity 150ms" }}
+    >
       <ChartHeader>
         <ChartTitle variant="caption">
           Students — Attendance Overview

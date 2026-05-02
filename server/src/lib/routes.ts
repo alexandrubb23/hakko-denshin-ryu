@@ -21,4 +21,5 @@ export const ApiRoutes = {
   adminEventImage: "/api/admin/events/:id/image",
   adminEventParticipants: "/api/admin/events/:id/participants",
   adminDashboardStudents: "/api/admin/dashboard/students",
+  adminDashboardEvents: "/api/admin/dashboard/events",
 } as const;

@@ -1,6 +1,6 @@
 import { toUtcDate } from "@hakko/core";
 import { Router } from "express";
-import { Role } from "../generated/prisma/enums.js";
+import { EventStatus, EventType, Role } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { requireAuth } from "../middleware/requireAuth.js";
@@ -37,6 +37,8 @@ function getDateFilter(period: Period): { gte: Date; lt: Date } | undefined {
 }
 
 const VALID_PERIODS: Period[] = ["all", "day", "week", "month", "year"];
+const VALID_EVENT_TYPES: EventType[] = ["seminar", "demo", "camp", "other"];
+const VALID_EVENT_STATUSES: EventStatus[] = ["draft", "published", "cancelled"];
 
 const router = Router();
 
@@ -112,6 +114,90 @@ router.get(
     );
 
     res.json({ total: students.length, students, ranks });
+  }
+);
+
+router.get(
+  ApiRoutes.adminDashboardEvents,
+  requireAuth,
+  requireRole(Role.admin),
+  async (req, res) => {
+    const rawType = req.query.type as string | undefined;
+    const rawStatus = req.query.status as string | undefined;
+    const rawYear = req.query.year as string | undefined;
+
+    const typeFilter =
+      rawType && (VALID_EVENT_TYPES as string[]).includes(rawType)
+        ? (rawType as EventType)
+        : undefined;
+
+    const statusFilter =
+      rawStatus && (VALID_EVENT_STATUSES as string[]).includes(rawStatus)
+        ? (rawStatus as EventStatus)
+        : undefined;
+
+    const yearFilter =
+      rawYear && rawYear !== "all" && /^\d{4}$/.test(rawYear)
+        ? parseInt(rawYear, 10)
+        : undefined;
+
+    const yearDateFilter = yearFilter
+      ? {
+          gte: toUtcDate(yearFilter, 1, 1),
+          lt: toUtcDate(yearFilter + 1, 1, 1),
+        }
+      : undefined;
+
+    const events = await prisma.event.findMany({
+      where: {
+        deletedAt: null,
+        ...(typeFilter ? { type: typeFilter } : {}),
+        ...(statusFilter ? { status: statusFilter } : {}),
+        ...(yearDateFilter ? { startDate: yearDateFilter } : {}),
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        status: true,
+        startDate: true,
+        _count: {
+          select: {
+            participants: true,
+          },
+        },
+        participants: {
+          where: { attended: true },
+          select: { id: true },
+        },
+      },
+      orderBy: { startDate: "asc" },
+    });
+
+    const result = events.map((e) => ({
+      id: e.id,
+      name: e.name,
+      type: e.type,
+      status: e.status,
+      startDate: e.startDate,
+      registeredCount: e._count.participants,
+      attendedCount: e.participants.length,
+    }));
+
+    // Derive available years from ALL events (no filters)
+    const allEvents = await prisma.event.findMany({
+      where: { deletedAt: null },
+      select: { startDate: true },
+    });
+    const yearSet = new Set<number>(
+      allEvents.map((e) => e.startDate.getUTCFullYear())
+    );
+    const availableYears = Array.from(yearSet).sort((a, b) => a - b);
+    if (availableYears.length === 0) {
+      availableYears.push(new Date().getUTCFullYear());
+    }
+
+    res.json({ total: result.length, events: result, availableYears });
   }
 );
 
