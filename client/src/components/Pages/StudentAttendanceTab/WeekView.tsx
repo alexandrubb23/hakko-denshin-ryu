@@ -12,7 +12,12 @@ import {
   toUtcDate,
 } from "@constants/trainingSchedule";
 import { useUpsertAttendance } from "@hooks/useUpsertAttendance";
-import { BORDER_COLOR, PURPLE, PURPLE_ALPHA_30, SURFACE_BG } from "@style/tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_30,
+  SURFACE_BG,
+} from "@style/tokens";
 
 import AttendedChip from "../AttendedChip";
 import YesNoButtons from "./shared/YesNoButtons";
