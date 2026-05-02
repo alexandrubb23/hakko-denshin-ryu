@@ -7,41 +7,39 @@ cloudinary.config({
   api_secret: env.CLOUDINARY_API_SECRET,
 });
 
-const FOLDER = "hakko-ryu/avatars";
+const AVATARS_FOLDER = "hakko-ryu/avatars";
+const EVENTS_FOLDER = "hakko-ryu/events";
 
 /**
- * Uploads a buffer to Cloudinary and returns the secure URL.
- * Uses a base64 data URI to avoid Node.js stream compatibility issues.
- * If the user already has an image, the old asset is deleted first.
- *
- * In test mode (NODE_ENV === "test") the Cloudinary API is never called.
- * A deterministic fake URL is returned so that DB persistence is still
- * exercised by the E2E test suite without requiring real credentials.
+ * Uploads a buffer to Cloudinary under the given folder/public_id and returns
+ * the secure URL. Deletes the existing asset first if a URL is provided.
+ * In test mode the Cloudinary API is never called — a deterministic fake URL
+ * is returned so DB persistence is still exercised without real credentials.
  */
-export async function uploadAvatar(
+async function uploadImage(
   buffer: Buffer,
-  userId: string,
+  folder: string,
+  publicId: string,
   existingImageUrl?: string | null
 ): Promise<string> {
   if (env.NODE_ENV === "test") {
-    return `https://res.cloudinary.com/test/image/upload/v${Date.now()}/${FOLDER}/user_${userId}.jpg`;
+    return `https://res.cloudinary.com/test/image/upload/v${Date.now()}/${folder}/${publicId}.jpg`;
   }
 
   if (existingImageUrl) {
-    const publicId = extractPublicId(existingImageUrl);
-    if (publicId) {
-      await cloudinary.uploader.destroy(publicId).catch((err) => {
+    const existingPublicId = extractPublicId(existingImageUrl);
+    if (existingPublicId) {
+      await cloudinary.uploader.destroy(existingPublicId).catch((err) => {
         console.warn("[cloudinary] Failed to delete old image:", err?.message);
       });
     }
   }
 
-  const base64 = buffer.toString("base64");
-  const dataUri = `data:image/jpeg;base64,${base64}`;
+  const dataUri = `data:image/jpeg;base64,${buffer.toString("base64")}`;
 
   const result = await cloudinary.uploader.upload(dataUri, {
-    folder: FOLDER,
-    public_id: `user_${userId}`,
+    folder,
+    public_id: publicId,
     overwrite: true,
     invalidate: true,
   });
@@ -61,4 +59,30 @@ function extractPublicId(url: string): string | null {
   } catch {
     return null;
   }
+}
+
+export async function uploadAvatar(
+  buffer: Buffer,
+  userId: string,
+  existingImageUrl?: string | null
+): Promise<string> {
+  return uploadImage(
+    buffer,
+    AVATARS_FOLDER,
+    `user_${userId}`,
+    existingImageUrl
+  );
+}
+
+export async function uploadEventImage(
+  buffer: Buffer,
+  eventId: string,
+  existingImageUrl?: string | null
+): Promise<string> {
+  return uploadImage(
+    buffer,
+    EVENTS_FOLDER,
+    `event_${eventId}`,
+    existingImageUrl
+  );
 }

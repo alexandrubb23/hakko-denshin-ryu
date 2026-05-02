@@ -10,6 +10,8 @@ export const Routes = {
   studentDetail: (id: string) => `/students/${id}`,
   techniques: "/techniques",
   kyuProgram: "/kyu-program",
+  events: "/events",
+  adminEvents: "/admin/events",
 } as const;
 
 export const ApiRoutes = {
@@ -17,6 +19,8 @@ export const ApiRoutes = {
   meImage: "/api/me/image",
   techniques: "/api/techniques",
   kyuProgram: "/api/kyu-program",
+  events: "/api/events",
+  event: (id: string) => `/api/events/${id}`,
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: (id: string) => `/api/admin/students/${id}`,
@@ -26,4 +30,9 @@ export const ApiRoutes = {
     `/api/admin/students/${studentId}/ranks/${rankEntryId}`,
   adminStudentAttendance: (studentId: string) =>
     `/api/admin/students/${studentId}/attendance`,
+  adminEvents: "/api/admin/events",
+  adminEvent: (id: string) => `/api/admin/events/${id}`,
+  adminEventImage: (id: string) => `/api/admin/events/${id}/image`,
+  adminEventParticipants: (id: string) =>
+    `/api/admin/events/${id}/participants`,
 } as const;

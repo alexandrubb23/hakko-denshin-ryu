@@ -1,7 +1,7 @@
-import { Alert, Avatar, Box, Button } from "@mui/material";
+import { Alert, Avatar, Button } from "@mui/material";
 import { styled, type SxProps, type Theme } from "@mui/material/styles";
 
-import { BORDER_COLOR, DARK_BG, PURPLE, SURFACE_BG } from "@style/tokens";
+import { BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
 
 export const dialogPaperSx: SxProps<Theme> = {
   backgroundColor: DARK_BG,
@@ -19,25 +19,6 @@ export const PreviewAvatar = styled(Avatar)({
   color: PURPLE,
   border: `2px solid ${BORDER_COLOR}`,
 });
-
-export const DropZone = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "isDragging",
-})<{ isDragging: boolean }>(({ isDragging }) => ({
-  border: `2px dashed ${isDragging ? PURPLE : BORDER_COLOR}`,
-  borderRadius: 8,
-  padding: 24,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: 8,
-  cursor: "pointer",
-  backgroundColor: isDragging ? "rgba(171,150,255,0.08)" : SURFACE_BG,
-  transition: "border-color 0.2s, background-color 0.2s",
-  "&:hover": {
-    borderColor: PURPLE,
-    backgroundColor: "rgba(171,150,255,0.06)",
-  },
-}));
 
 export const ErrorAlert = styled(Alert)({
   marginTop: 16,

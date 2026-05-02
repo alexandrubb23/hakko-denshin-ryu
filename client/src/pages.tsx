@@ -3,6 +3,8 @@ import React from "react";
 import Contact from "@components/Pages/Contact/Contact";
 import Dashboard from "@components/Pages/Dashboard";
 import Dojo from "@components/Pages/Dojo";
+import Events from "@components/Pages/Events/Events";
+import PublicEvents from "@components/Pages/Events/PublicEvents";
 import KyuProgram from "@components/Pages/KyuProgram/KyuProgram";
 import Login from "@components/Pages/Login";
 import Senshinkan from "@components/Pages/Senshinkan";
@@ -22,7 +24,9 @@ export type PagePath =
   | "dashboard"
   | "students"
   | "techniques"
-  | "kyu-program";
+  | "kyu-program"
+  | "events"
+  | "admin/events";
 
 export interface Page {
   path: PagePath;
@@ -96,5 +100,18 @@ export const pages: Page[] = [
     title: "Kyu Program - Senshinkan Romania",
     hideFromNav: true,
     protected: true,
+  },
+  {
+    path: "events",
+    component: PublicEvents,
+    title: "Events - Senshinkan Romania",
+  },
+  {
+    path: "admin/events",
+    component: Events,
+    title: "Events - Senshinkan Romania",
+    hideFromNav: true,
+    protected: true,
+    adminOnly: true,
   },
 ] as const;

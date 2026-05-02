@@ -29,6 +29,19 @@ enum Belt {
   black
 }
 
+enum EventStatus {
+  draft
+  published
+  cancelled
+}
+
+enum EventType {
+  seminar
+  demo
+  camp
+  other
+}
+
 model User {
   id                 String               @id
   name               String
@@ -39,10 +52,11 @@ model User {
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   deletedAt          DateTime?
-  sessions           Session[]
-  accounts           Account[]
-  studentRanks       StudentRank[]
-  attendanceRecords  StudentAttendance[]
+  sessions              Session[]
+  accounts              Account[]
+  studentRanks          StudentRank[]
+  attendanceRecords     StudentAttendance[]
+  eventParticipations   EventParticipation[]
 
   @@unique([email])
   @@map("user")
@@ -137,4 +151,41 @@ model StudentAttendance {
   @@unique([userId, date])
   @@index([userId])
   @@map("student_attendance")
+}
+
+model Event {
+  id           String               @id @default(cuid())
+  name         String
+  type         EventType
+  status       EventStatus          @default(draft)
+  startDate    DateTime
+  endDate      DateTime?
+  location     String
+  details      String
+  ticketUrl    String?
+  image        String?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  deletedAt    DateTime?
+  participants EventParticipation[]
+
+  @@index([status])
+  @@index([startDate])
+  @@map("event")
+}
+
+model EventParticipation {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  attended  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+  @@map("event_participation")
 }

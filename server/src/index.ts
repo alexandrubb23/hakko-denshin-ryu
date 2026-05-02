@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { ALLOWED_ORIGINS, env } from "./env.js";
 import { auth } from "./lib/auth.js";
 import { ApiRoutes } from "./lib/routes.js";
+import eventsRouter from "./routes/events.js";
 import kyuProgramRouter from "./routes/kyuProgram.js";
 import meRouter from "./routes/me.js";
 import studentsRouter from "./routes/students.js";
@@ -39,6 +40,7 @@ app.get(ApiRoutes.health, (_req, res) => {
 
 app.use(meRouter);
 app.use(kyuProgramRouter);
+app.use(eventsRouter);
 app.use(studentsRouter);
 app.use(techniquesRouter);
 

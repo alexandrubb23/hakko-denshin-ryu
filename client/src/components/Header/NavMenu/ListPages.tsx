@@ -1,13 +1,12 @@
-import FormattedMessage from '@components/FormattedMessage/FormattedMessage';
-import LanguageSwitcher from '@components/LanguageSwitcher/LanguageSwitcher';
-import { authClient } from '@lib/auth-client';
-import { Role } from '@lib/role';
-import { List, ListItem, SxProps, Typography } from '@mui/material';
-import { styled, Theme } from '@mui/material/styles';
-import { normalizePath } from '@utils/routes';
-import { Link, useLocation } from 'react-router';
-import { pages } from '../../../pages';
-import useIsMobile from '@hooks/isMobile';
+import FormattedMessage from "@components/FormattedMessage/FormattedMessage";
+import LanguageSwitcher from "@components/LanguageSwitcher/LanguageSwitcher";
+import useIsMobile from "@hooks/isMobile";
+import { authClient } from "@lib/auth-client";
+import { List, ListItem, SxProps, Typography } from "@mui/material";
+import { styled, Theme } from "@mui/material/styles";
+import { normalizePath } from "@utils/routes";
+import { Link, useLocation } from "react-router";
+import { pages } from "../../../pages";
 
 interface Props {
   sx?: {
@@ -18,15 +17,15 @@ interface Props {
 }
 
 const ListItemStyle = styled(ListItem)(({ sx }) => ({
-  cursor: 'pointer',
-  display: 'block',
-  fontSize: '2rem',
-  textAlign: 'center',
-  transition: '200ms ease-in-out',
-  '&:hover': {
-    color: '#AB96FF',
-    cursor: 'pointer',
-    transform: 'scale(1.1)',
+  cursor: "pointer",
+  display: "block",
+  fontSize: "2rem",
+  textAlign: "center",
+  transition: "200ms ease-in-out",
+  "&:hover": {
+    color: "#AB96FF",
+    cursor: "pointer",
+    transform: "scale(1.1)",
   },
 
   ...(sx as Object),
@@ -48,40 +47,40 @@ const ListPages = ({ sx, onPageChange }: Props) => {
     </ListItemStyle>
   );
 
-  const isAdmin = session?.user.role === Role.admin;
+  const pageItems = pages
+    .filter((page) => !page.hideFromNav)
+    .map((page) => {
+      const cssProps =
+        location.pathname === normalizePath(page.path)
+          ? {
+              border: "1px solid #AB96FF",
+              borderRadius: "20px",
+              padding: "2px 15px",
+            }
+          : {};
 
-  const pageItems = pages.filter(page => !page.hideFromNav || (page.adminOnly && isAdmin)).map(page => {
-    const cssProps =
-      location.pathname === normalizePath(page.path)
-        ? {
-            border: '1px solid #AB96FF',
-            borderRadius: '20px',
-            padding: '2px 15px',
-          }
-        : {};
-
-    return (
-      <ListItemStyle key={page.path} sx={sx?.item}>
-        <Typography
-          variant='body1'
-          sx={{
-            textAlign: 'center',
-            ...cssProps,
-          }}
-        >
-          <Link to={normalizePath(page.path)} onClick={onPageChange}>
-            <FormattedMessage
-              id={
-                page.path === 'login' && session
-                  ? 'header.menu.login.authenticated'
-                  : `header.menu.${page.path}`
-              }
-            />
-          </Link>
-        </Typography>
-      </ListItemStyle>
-    );
-  });
+      return (
+        <ListItemStyle key={page.path} sx={sx?.item}>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: "center",
+              ...cssProps,
+            }}
+          >
+            <Link to={normalizePath(page.path)} onClick={onPageChange}>
+              <FormattedMessage
+                id={
+                  page.path === "login" && session
+                    ? "header.menu.login.authenticated"
+                    : `header.menu.${page.path}`
+                }
+              />
+            </Link>
+          </Typography>
+        </ListItemStyle>
+      );
+    });
 
   const listContent = isMobile
     ? [langItem, ...pageItems]

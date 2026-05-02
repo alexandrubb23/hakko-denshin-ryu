@@ -14,3 +14,16 @@ export {
 } from "./schemas/ranks.js";
 
 export { daysInMonth, toUtcDate } from "./utils/date.js";
+
+export {
+  createEventSchema,
+  EventStatusValues,
+  EventTypeValues,
+  updateEventSchema,
+  upsertEventParticipationSchema,
+  type CreateEventInput,
+  type EventStatus,
+  type EventType,
+  type UpdateEventInput,
+  type UpsertEventParticipationInput,
+} from "./schemas/events.js";
