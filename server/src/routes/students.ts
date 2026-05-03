@@ -10,12 +10,34 @@ import { Router, type Response } from "express";
 import { z } from "zod";
 import { Role } from "../generated/prisma/enums.js";
 import { uploadAvatar } from "../lib/cloudinary.js";
-import { prisma } from "../lib/prisma.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
 import { uploadMiddleware } from "../middleware/upload.js";
+import {
+  createStudent,
+  createStudentRank,
+  findAllRanks,
+  findAllStudents,
+  findRankById,
+  findRankEntryById,
+  findStudentAttendance,
+  findStudentById,
+  findStudentEvents,
+  findStudentImageById,
+  findStudentRanks,
+  findStudentTopRank,
+  findStudentWithDetails,
+  findUserByEmail,
+  softDeleteStudent,
+  softDeleteStudentRank,
+  updateStudentImage,
+  updateStudentPassword,
+  updateStudentProfile,
+  updateStudentRank,
+  upsertStudentAttendance,
+} from "../repositories/students.repository.js";
 
 const MIN_MONTH = 1; // January
 const MAX_MONTH = 12; // December
@@ -25,10 +47,7 @@ const MAX_YEAR = new Date().getUTCFullYear() + 1;
 const router = Router();
 
 const requireStudent = async (id: string, res: Response) => {
-  const student = await prisma.user.findUnique({
-    where: { id },
-    select: { role: true, deletedAt: true, email: true },
-  });
+  const student = await findStudentById(id);
   if (!student || student.role !== Role.student || student.deletedAt !== null) {
     res.status(404).json({ error: "Student not found" });
     return null;
@@ -41,9 +60,7 @@ const requireRankEntry = async (
   studentId: string,
   res: Response
 ) => {
-  const rankEntry = await prisma.studentRank.findUnique({
-    where: { id: rankEntryId },
-  });
+  const rankEntry = await findRankEntryById(rankEntryId);
   if (
     !rankEntry ||
     rankEntry.userId !== studentId ||
@@ -60,10 +77,7 @@ router.get(
   requireAuth,
   requireRole(Role.admin),
   async (_req, res) => {
-    const ranks = await prisma.rank.findMany({
-      select: { id: true, name: true, belt: true, order: true },
-      orderBy: { order: "asc" },
-    });
+    const ranks = await findAllRanks();
     res.json({ ranks });
   }
 );
@@ -73,18 +87,7 @@ router.get(
   requireAuth,
   requireRole(Role.admin),
   async (_req, res) => {
-    const students = await prisma.user.findMany({
-      where: { role: Role.student, deletedAt: null },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        emailVerified: true,
-        createdAt: true,
-      },
-      orderBy: { name: "asc" },
-    });
-
+    const students = await findAllStudents();
     res.json({ students });
   }
 );
@@ -96,19 +99,7 @@ router.get(
   async (req, res) => {
     const id = req.params.id as string;
 
-    const student = await prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        emailVerified: true,
-        createdAt: true,
-        image: true,
-        role: true,
-        deletedAt: true,
-      },
-    });
+    const student = await findStudentWithDetails(id);
 
     if (
       !student ||
@@ -133,20 +124,7 @@ router.get(
     const student = await requireStudent(id, res);
     if (!student) return;
 
-    const ranks = await prisma.studentRank.findMany({
-      where: { userId: id, deletedAt: null },
-      select: {
-        id: true,
-        rankId: true,
-        awardedAt: true,
-        notes: true,
-        rank: {
-          select: { name: true, belt: true, order: true },
-        },
-      },
-      orderBy: { awardedAt: "desc" },
-    });
-
+    const ranks = await findStudentRanks(id);
     res.json({ ranks });
   }
 );
@@ -166,17 +144,13 @@ router.post(
 
     const { rankId, awardedAt, notes } = parsed;
 
-    const targetRank = await prisma.rank.findUnique({ where: { id: rankId } });
+    const targetRank = await findRankById(rankId);
     if (!targetRank) {
       res.status(404).json({ error: "Rank not found" });
       return;
     }
 
-    const currentTop = await prisma.studentRank.findFirst({
-      where: { userId: id, deletedAt: null },
-      orderBy: { rank: { order: "desc" } },
-      select: { rank: { select: { order: true } } },
-    });
+    const currentTop = await findStudentTopRank(id);
 
     const expectedOrder = currentTop ? currentTop.rank.order + 1 : 1;
     if (targetRank.order !== expectedOrder) {
@@ -186,21 +160,12 @@ router.post(
       return;
     }
 
-    const rank = await prisma.studentRank.create({
-      data: {
-        userId: id,
-        rankId,
-        awardedAt: new Date(awardedAt),
-        notes: notes ?? null,
-      },
-      select: {
-        id: true,
-        rankId: true,
-        awardedAt: true,
-        notes: true,
-        rank: { select: { name: true, belt: true, order: true } },
-      },
-    });
+    const rank = await createStudentRank(
+      id,
+      rankId,
+      new Date(awardedAt),
+      notes ?? null
+    );
 
     res.status(201).json({ rank });
   }
@@ -225,20 +190,11 @@ router.put(
 
     const { awardedAt, notes } = parsed;
 
-    const rank = await prisma.studentRank.update({
-      where: { id: rankEntryId },
-      data: {
-        awardedAt: new Date(awardedAt),
-        notes: notes ?? null,
-      },
-      select: {
-        id: true,
-        rankId: true,
-        awardedAt: true,
-        notes: true,
-        rank: { select: { name: true, belt: true, order: true } },
-      },
-    });
+    const rank = await updateStudentRank(
+      rankEntryId,
+      new Date(awardedAt),
+      notes ?? null
+    );
 
     res.json({ rank });
   }
@@ -254,7 +210,7 @@ router.post(
 
     const { name, email, password } = parsed;
 
-    const existing = await prisma.user.findUnique({ where: { email } });
+    const existing = await findUserByEmail(email);
     if (existing) {
       res.status(409).json({ error: "Email already in use" });
       return;
@@ -263,31 +219,7 @@ router.post(
     const id = crypto.randomUUID();
     const hashedPassword = await hashPassword(password);
 
-    const student = await prisma.user.create({
-      data: {
-        id,
-        name,
-        email,
-        emailVerified: false,
-        role: Role.student,
-        accounts: {
-          create: {
-            id: crypto.randomUUID(),
-            accountId: id,
-            providerId: "credential",
-            password: hashedPassword,
-          },
-        },
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        emailVerified: true,
-        createdAt: true,
-      },
-    });
-
+    const student = await createStudent(id, name, email, hashedPassword);
     res.status(201).json({ student });
   }
 );
@@ -308,31 +240,18 @@ router.put(
     const { name, email, password } = parsed;
 
     if (email !== student.email) {
-      const existing = await prisma.user.findUnique({ where: { email } });
+      const existing = await findUserByEmail(email);
       if (existing) {
         res.status(409).json({ error: "Email already in use" });
         return;
       }
     }
 
-    const updated = await prisma.user.update({
-      where: { id },
-      data: { name, email },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        emailVerified: true,
-        createdAt: true,
-      },
-    });
+    const updated = await updateStudentProfile(id, name, email);
 
     if (password) {
       const hashedPassword = await hashPassword(password);
-      await prisma.account.updateMany({
-        where: { userId: id, providerId: "credential" },
-        data: { password: hashedPassword },
-      });
+      await updateStudentPassword(id, hashedPassword);
     }
 
     res.json({ student: updated });
@@ -353,11 +272,7 @@ router.delete(
     const rankEntry = await requireRankEntry(rankEntryId, studentId, res);
     if (!rankEntry) return;
 
-    await prisma.studentRank.update({
-      where: { id: rankEntryId },
-      data: { deletedAt: new Date() },
-    });
-
+    await softDeleteStudentRank(rankEntryId);
     res.status(204).end();
   }
 );
@@ -374,14 +289,7 @@ router.delete(
     const student = await requireStudent(id, res);
     if (!student) return;
 
-    await prisma.$transaction([
-      prisma.user.update({
-        where: { id },
-        data: { deletedAt: new Date() },
-      }),
-      prisma.session.deleteMany({ where: { userId: id } }),
-    ]);
-
+    await softDeleteStudent(id);
     res.status(204).end();
   }
 );
@@ -440,12 +348,7 @@ router.get(
       to = toUtcDate(year + 1, 1, 1);
     }
 
-    const records = await prisma.studentAttendance.findMany({
-      where: { userId: id, date: { gte: from, lt: to } },
-      select: { id: true, date: true, attended: true },
-      orderBy: { date: "asc" },
-    });
-
+    const records = await findStudentAttendance(id, from, to);
     res.json({ records });
   }
 );
@@ -475,13 +378,7 @@ router.post(
       return;
     }
 
-    const record = await prisma.studentAttendance.upsert({
-      where: { userId_date: { userId: id, date } },
-      create: { userId: id, date, attended },
-      update: { attended },
-      select: { id: true, date: true, attended: true },
-    });
-
+    const record = await upsertStudentAttendance(id, date, attended);
     res.status(200).json({ record });
   }
 );
@@ -503,17 +400,11 @@ router.post(
         return;
       }
 
-      const existing = await prisma.user.findUnique({
-        where: { id },
-        select: { image: true },
-      });
+      const existing = await findStudentImageById(id);
 
       const imageUrl = await uploadAvatar(req.file.buffer, id, existing?.image);
 
-      await prisma.user.update({
-        where: { id },
-        data: { image: imageUrl },
-      });
+      await updateStudentImage(id, imageUrl);
 
       res.json({ image: imageUrl });
     } catch (err) {
@@ -533,31 +424,8 @@ router.get(
     const student = await requireStudent(id, res);
     if (!student) return;
 
-    const events = await prisma.event.findMany({
-      where: { deletedAt: null },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        status: true,
-        startDate: true,
-        endDate: true,
-        location: true,
-        participants: {
-          where: { userId: id },
-          select: { attended: true },
-          take: 1,
-        },
-      },
-      orderBy: { startDate: "asc" },
-    });
-
-    const result = events.map(({ participants, ...event }) => ({
-      ...event,
-      attended: participants[0]?.attended ?? null,
-    }));
-
-    res.json({ events: result });
+    const events = await findStudentEvents(id);
+    res.json({ events });
   }
 );
 
