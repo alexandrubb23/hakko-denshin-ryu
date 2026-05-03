@@ -11,6 +11,12 @@ import { z } from "zod";
 import { Role } from "../generated/prisma/enums.js";
 import { uploadAvatar } from "../lib/cloudinary.js";
 import {
+  MAX_MONTH,
+  MAX_YEAR,
+  MIN_MONTH,
+  MIN_YEAR,
+} from "../lib/date-bounds.js";
+import {
   HttpBadRequestError,
   HttpConflictError,
   HttpNotFoundError,
@@ -44,11 +50,6 @@ import {
   updateStudentRank,
   upsertStudentAttendance,
 } from "../repositories/students.repository.js";
-
-const MIN_MONTH = 1; // January
-const MAX_MONTH = 12; // December
-const MIN_YEAR = 2000;
-const MAX_YEAR = new Date().getUTCFullYear() + 1;
 
 const router = Router();
 

@@ -1,11 +1,11 @@
-import { type Period } from "@hakko/core";
+import { type EventStatus, type EventType, type Period } from "@hakko/core";
 import { ApiRoutes } from "@lib/routes";
 
 import { Http } from "./http";
 
 export type AttendancePeriod = Period;
-export type EventTypeFilter = "all" | "seminar" | "demo" | "camp" | "other";
-export type EventStatusFilter = "all" | "draft" | "published" | "cancelled";
+export type EventTypeFilter = "all" | EventType;
+export type EventStatusFilter = "all" | EventStatus;
 
 export interface DashboardRank {
   id: number;

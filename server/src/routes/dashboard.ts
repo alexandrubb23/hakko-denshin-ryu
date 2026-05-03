@@ -1,4 +1,10 @@
-import { PERIOD_VALUES, type Period, toUtcDate } from "@hakko/core";
+import {
+  EventStatusValues,
+  EventTypeValues,
+  PERIOD_VALUES,
+  type Period,
+  toUtcDate,
+} from "@hakko/core";
 import { Router } from "express";
 import { EventStatus, EventType, Role } from "../generated/prisma/enums.js";
 import { ApiRoutes } from "../lib/routes.js";
@@ -38,8 +44,8 @@ function getDateFilter(period: Period): { gte: Date; lt: Date } | undefined {
 }
 
 const VALID_PERIODS: readonly Period[] = PERIOD_VALUES;
-const VALID_EVENT_TYPES: EventType[] = ["seminar", "demo", "camp", "other"];
-const VALID_EVENT_STATUSES: EventStatus[] = ["draft", "published", "cancelled"];
+const VALID_EVENT_TYPES = EventTypeValues;
+const VALID_EVENT_STATUSES = EventStatusValues;
 
 const router = Router();
 
@@ -74,12 +80,13 @@ router.get(
     const rawYear = req.query.year as string | undefined;
 
     const typeFilter =
-      rawType && (VALID_EVENT_TYPES as string[]).includes(rawType)
+      rawType && (VALID_EVENT_TYPES as readonly string[]).includes(rawType)
         ? (rawType as EventType)
         : undefined;
 
     const statusFilter =
-      rawStatus && (VALID_EVENT_STATUSES as string[]).includes(rawStatus)
+      rawStatus &&
+      (VALID_EVENT_STATUSES as readonly string[]).includes(rawStatus)
         ? (rawStatus as EventStatus)
         : undefined;
 

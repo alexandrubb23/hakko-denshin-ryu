@@ -1,6 +1,12 @@
 import { toUtcDate } from "@hakko/core";
 import { Router } from "express";
 import { uploadAvatar } from "../lib/cloudinary.js";
+import {
+  MAX_MONTH,
+  MAX_YEAR,
+  MIN_MONTH,
+  MIN_YEAR,
+} from "../lib/date-bounds.js";
 import { HttpBadRequestError } from "../lib/http-errors.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { requireAuth } from "../middleware/requireAuth.js";
@@ -12,11 +18,6 @@ import {
   findUserImageById,
   updateUserImageById,
 } from "../repositories/me.repository.js";
-
-const MIN_MONTH = 1;
-const MAX_MONTH = 12;
-const MIN_YEAR = 2000;
-const MAX_YEAR = new Date().getUTCFullYear() + 1;
 
 const router = Router();
 
