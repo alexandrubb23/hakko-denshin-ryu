@@ -19,6 +19,8 @@ import { uploadMiddleware } from "../middleware/upload.js";
 
 const MIN_MONTH = 1; // January
 const MAX_MONTH = 12; // December
+const MIN_YEAR = 2000;
+const MAX_YEAR = new Date().getUTCFullYear() + 1;
 
 const router = Router();
 
@@ -367,16 +369,10 @@ router.delete(
   async (req, res) => {
     const id = req.params.id as string;
 
-    const student = await prisma.user.findUnique({ where: { id } });
-    if (!student || student.deletedAt !== null) {
-      res.status(404).json({ error: "Student not found" });
-      return;
-    }
-
-    if (student.role === Role.admin) {
-      res.status(403).json({ error: "Admin users cannot be deleted" });
-      return;
-    }
+    // requireStudent returns null (with 404) for non-student or soft-deleted IDs,
+    // so admin IDs get the same 404 response — preventing role enumeration.
+    const student = await requireStudent(id, res);
+    if (!student) return;
 
     await prisma.$transaction([
       prisma.user.update({
@@ -415,6 +411,13 @@ router.get(
     if (!yearParam || isNaN(year)) {
       res.status(400).json({
         error: "year query parameter is required and must be a number",
+      });
+      return;
+    }
+
+    if (year < MIN_YEAR || year > MAX_YEAR) {
+      res.status(400).json({
+        error: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`,
       });
       return;
     }

@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { ALLOWED_ORIGINS, env } from "./env.js";
 import { auth } from "./lib/auth.js";
 import { ApiRoutes } from "./lib/routes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 import dashboardRouter from "./routes/dashboard.js";
 import eventsRouter from "./routes/events.js";
 import kyuProgramRouter from "./routes/kyuProgram.js";
@@ -45,6 +46,9 @@ app.use(kyuProgramRouter);
 app.use(eventsRouter);
 app.use(studentsRouter);
 app.use(techniquesRouter);
+
+// Global error handler — must be registered last.
+app.use(errorHandler);
 
 app.listen(env.PORT, () => {
   console.log(`Server running at http://localhost:${env.PORT}`);

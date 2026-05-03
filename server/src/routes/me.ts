@@ -8,6 +8,8 @@ import { uploadMiddleware } from "../middleware/upload.js";
 
 const MIN_MONTH = 1;
 const MAX_MONTH = 12;
+const MIN_YEAR = 2000;
+const MAX_YEAR = new Date().getUTCFullYear() + 1;
 
 const router = Router();
 
@@ -44,6 +46,13 @@ router.get(ApiRoutes.meAttendance, requireAuth, async (req, res) => {
   if (!yearParam || isNaN(year)) {
     res.status(400).json({
       error: "year query parameter is required and must be a number",
+    });
+    return;
+  }
+
+  if (year < MIN_YEAR || year > MAX_YEAR) {
+    res.status(400).json({
+      error: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`,
     });
     return;
   }
