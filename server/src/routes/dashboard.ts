@@ -1,10 +1,13 @@
 import { toUtcDate } from "@hakko/core";
 import { Router } from "express";
 import { EventStatus, EventType, Role } from "../generated/prisma/enums.js";
-import { prisma } from "../lib/prisma.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
+import {
+  findDashboardEvents,
+  findDashboardStudents,
+} from "../repositories/dashboard.repository.js";
 
 type Period = "all" | "day" | "week" | "month" | "year";
 
@@ -55,64 +58,10 @@ router.get(
 
     const dateFilter = getDateFilter(period);
     const attendanceWhere = dateFilter
-      ? { attended: true, date: dateFilter }
-      : { attended: true };
+      ? { attended: true as const, date: dateFilter }
+      : { attended: true as const };
 
-    const users = await prisma.user.findMany({
-      where: { role: Role.student, deletedAt: null },
-      select: {
-        id: true,
-        name: true,
-        studentRanks: {
-          where: { deletedAt: null },
-          orderBy: { rank: { order: "desc" } },
-          take: 1,
-          select: {
-            rank: {
-              select: { id: true, name: true, belt: true, order: true },
-            },
-          },
-        },
-        _count: {
-          select: { attendanceRecords: { where: attendanceWhere } },
-        },
-      },
-      orderBy: { name: "asc" },
-    });
-
-    const students = users.map((u) => {
-      const topRank = u.studentRanks[0]?.rank ?? null;
-      return {
-        id: u.id,
-        name: u.name,
-        rankId: topRank?.id ?? null,
-        rankName: topRank?.name ?? null,
-        belt: topRank?.belt ?? null,
-        attendanceCount: u._count.attendanceRecords,
-      };
-    });
-
-    // Unique ranks present among students, sorted by rank order asc
-    const rankMap = new Map<
-      number,
-      { id: number; name: string; belt: string; order: number }
-    >();
-    for (const s of students) {
-      if (
-        s.rankId !== null &&
-        s.rankName !== null &&
-        s.belt !== null &&
-        !rankMap.has(s.rankId)
-      ) {
-        const user = users.find((u) => u.id === s.id);
-        const rank = user?.studentRanks[0]?.rank;
-        if (rank) rankMap.set(rank.id, rank);
-      }
-    }
-    const ranks = Array.from(rankMap.values()).sort(
-      (a, b) => a.order - b.order
-    );
-
+    const { students, ranks } = await findDashboardStudents(attendanceWhere);
     res.json({ total: students.length, students, ranks });
   }
 );
@@ -148,56 +97,13 @@ router.get(
         }
       : undefined;
 
-    const events = await prisma.event.findMany({
-      where: {
-        deletedAt: null,
-        ...(typeFilter ? { type: typeFilter } : {}),
-        ...(statusFilter ? { status: statusFilter } : {}),
-        ...(yearDateFilter ? { startDate: yearDateFilter } : {}),
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        status: true,
-        startDate: true,
-        _count: {
-          select: {
-            participants: true,
-          },
-        },
-        participants: {
-          where: { attended: true },
-          select: { id: true },
-        },
-      },
-      orderBy: { startDate: "asc" },
+    const { events, availableYears } = await findDashboardEvents({
+      type: typeFilter,
+      status: statusFilter,
+      startDate: yearDateFilter,
     });
 
-    const result = events.map((e) => ({
-      id: e.id,
-      name: e.name,
-      type: e.type,
-      status: e.status,
-      startDate: e.startDate,
-      registeredCount: e._count.participants,
-      attendedCount: e.participants.length,
-    }));
-
-    // Derive available years from ALL events (no filters)
-    const allEvents = await prisma.event.findMany({
-      where: { deletedAt: null },
-      select: { startDate: true },
-    });
-    const yearSet = new Set<number>(
-      allEvents.map((e) => e.startDate.getUTCFullYear())
-    );
-    const availableYears = Array.from(yearSet).sort((a, b) => a - b);
-    if (availableYears.length === 0) {
-      availableYears.push(new Date().getUTCFullYear());
-    }
-
-    res.json({ total: result.length, events: result, availableYears });
+    res.json({ total: events.length, events, availableYears });
   }
 );
 
