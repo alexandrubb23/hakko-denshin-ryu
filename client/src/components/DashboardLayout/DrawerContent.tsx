@@ -105,7 +105,10 @@ const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
 
         <List disablePadding>
           {visibleItems.map(({ label, path, icon }) => {
-            const active = location.pathname === path;
+            const active =
+              path === Routes.dashboard
+                ? location.pathname === path
+                : location.pathname.startsWith(path);
             return (
               <ListItem key={path} disablePadding>
                 <ListItemButton
