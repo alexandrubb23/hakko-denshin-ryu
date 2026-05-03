@@ -5,6 +5,7 @@ export const Routes = {
   dojo: "/dojo",
   contact: "/contact",
   login: "/login",
+  setPassword: "/set-password",
   dashboard: "/dashboard",
   students: "/students",
   studentDetail: (id: string) => `/students/${id}`,
@@ -42,4 +43,6 @@ export const ApiRoutes = {
     `/api/admin/students/${studentId}/events`,
   adminDashboardStudents: "/api/admin/dashboard/students",
   adminDashboardEvents: "/api/admin/dashboard/events",
+  inviteVerifyToken: "/api/invite/verify-token",
+  inviteSetPassword: "/api/invite/set-password",
 } as const;

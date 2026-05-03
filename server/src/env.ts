@@ -26,6 +26,7 @@ export const env = createEnv({
         "BETTER_AUTH_SECRET is a placeholder. Generate with: openssl rand -base64 32"
       ),
     BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
+    CLIENT_URL: z.url().default("http://localhost:5173"),
     TRUSTED_ORIGINS: z.string().default("http://localhost:5173"),
     HOST: z.string().default("http://localhost"),
     PORT: z.coerce.number().default(3000),
@@ -35,6 +36,8 @@ export const env = createEnv({
     CLOUDINARY_CLOUD_NAME: z.string().min(1),
     CLOUDINARY_API_KEY: z.string().min(1),
     CLOUDINARY_API_SECRET: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1),
+    RESEND_FROM_EMAIL: z.email().default("onboarding@resend.dev"),
   },
 
   /**
@@ -46,6 +49,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+    CLIENT_URL: process.env.CLIENT_URL,
     TRUSTED_ORIGINS: process.env.TRUSTED_ORIGINS,
     HOST: process.env.HOST,
     PORT: process.env.PORT,
@@ -53,6 +57,8 @@ export const env = createEnv({
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
   },
 
   /**

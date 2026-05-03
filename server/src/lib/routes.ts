@@ -25,4 +25,10 @@ export const ApiRoutes = {
   adminEventParticipants: "/api/admin/events/:id/participants",
   adminDashboardStudents: "/api/admin/dashboard/students",
   adminDashboardEvents: "/api/admin/dashboard/events",
+  inviteVerifyToken: "/api/invite/verify-token",
+  inviteSetPassword: "/api/invite/set-password",
+} as const;
+
+export const ClientRoutes = {
+  setPassword: "/set-password",
 } as const;

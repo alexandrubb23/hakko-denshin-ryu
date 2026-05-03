@@ -6,8 +6,10 @@ import {
   updateStudentRankSchema,
   updateStudentSchema,
 } from "@hakko/core";
+import { createHash, randomBytes } from "crypto";
 import { Router } from "express";
 import { z } from "zod";
+import { env } from "../env.js";
 import { Role } from "../generated/prisma/enums.js";
 import { uploadAvatar } from "../lib/cloudinary.js";
 import {
@@ -16,20 +18,23 @@ import {
   MIN_MONTH,
   MIN_YEAR,
 } from "../lib/date-bounds.js";
+import { sendInvitationEmail } from "../lib/email.js";
 import {
   HttpBadRequestError,
   HttpConflictError,
   HttpNotFoundError,
   HttpUnprocessableError,
 } from "../lib/http-errors.js";
-import { ApiRoutes } from "../lib/routes.js";
+import { ApiRoutes, ClientRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
 import { uploadMiddleware } from "../middleware/upload.js";
 import {
+  createInvitationToken,
   createStudent,
   createStudentRank,
+  createStudentWithoutPassword,
   findAllRanks,
   findAllStudents,
   findRankById,
@@ -42,6 +47,7 @@ import {
   findStudentTopRank,
   findStudentWithDetails,
   findUserByEmail,
+  invalidatePendingInvites,
   softDeleteStudent,
   softDeleteStudentRank,
   updateStudentImage,
@@ -190,14 +196,33 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const { name, email, password } = validate(createStudentSchema, req.body);
+    const { name, email, password, sendInvite } = validate(
+      createStudentSchema,
+      req.body
+    );
 
     const existing = await findUserByEmail(email);
     if (existing) throw new HttpConflictError("Email already in use");
 
     const id = crypto.randomUUID();
-    const hashedPassword = await hashPassword(password);
 
+    if (sendInvite) {
+      const student = await createStudentWithoutPassword(id, name, email);
+
+      await invalidatePendingInvites(id);
+
+      const plainToken = randomBytes(32).toString("hex");
+      const tokenHash = createHash("sha256").update(plainToken).digest("hex");
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await createInvitationToken(id, tokenHash, expiresAt);
+
+      const inviteUrl = `${env.CLIENT_URL}${ClientRoutes.setPassword}?token=${plainToken}`;
+      await sendInvitationEmail(email, name, inviteUrl);
+
+      return res.status(201).json({ student });
+    }
+
+    const hashedPassword = await hashPassword(password!);
     const student = await createStudent(id, name, email, hashedPassword);
     res.status(201).json({ student });
   }

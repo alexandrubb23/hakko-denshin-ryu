@@ -8,6 +8,7 @@ import PublicEvents from "@components/Pages/Events/PublicEvents";
 import KyuProgram from "@components/Pages/KyuProgram/KyuProgram";
 import Login from "@components/Pages/Login";
 import Senshinkan from "@components/Pages/Senshinkan";
+import SetPassword from "@components/Pages/SetPassword";
 import Students from "@components/Pages/Students";
 import Techniques from "@components/Pages/Techniques/Techniques";
 
@@ -21,6 +22,7 @@ export type PagePath =
   | "dojo"
   | "contact"
   | "login"
+  | "set-password"
   | "dashboard"
   | "students"
   | "techniques"
@@ -71,6 +73,13 @@ export const pages: Page[] = [
     component: Login,
     title: "Log In - Senshinkan Romania",
     standalone: true,
+  },
+  {
+    path: "set-password",
+    component: SetPassword,
+    title: "Set Password - Senshinkan Romania",
+    standalone: true,
+    hideFromNav: true,
   },
   {
     path: "dashboard",

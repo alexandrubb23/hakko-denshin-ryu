@@ -1,7 +1,9 @@
 export {
   createStudentSchema,
+  setPasswordSchema,
   updateStudentSchema,
   type CreateStudentInput,
+  type SetPasswordInput,
   type UpdateStudentInput,
 } from "./schemas/students.js";
 

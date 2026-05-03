@@ -40,13 +40,38 @@ describe("CreateStudentModal", () => {
     renderModal();
     expect(screen.getByText("Add Student")).toBeInTheDocument();
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /^email$/i })
+    ).toBeInTheDocument();
   });
 
   it("does not render the modal when closed", () => {
     renderModal(false);
     expect(screen.queryByText("Add Student")).not.toBeInTheDocument();
+  });
+
+  it("shows the invite checkbox checked by default", () => {
+    renderModal();
+    const checkbox = screen.getByRole("checkbox", {
+      name: /send invitation email/i,
+    });
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).toBeChecked();
+  });
+
+  it("hides the password field when invite checkbox is checked", () => {
+    renderModal();
+    expect(screen.queryByLabelText(/password/i)).not.toBeInTheDocument();
+  });
+
+  it("shows the password field when invite checkbox is unchecked", async () => {
+    renderModal();
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /send invitation email/i })
+    );
+    await waitFor(() => {
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    });
   });
 
   it("calls onClose when Cancel is clicked", () => {
@@ -55,7 +80,7 @@ describe("CreateStudentModal", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("shows validation errors when submitted with empty fields", async () => {
+  it("shows name and email validation errors in invite mode when submitted empty", async () => {
     renderModal();
     fireEvent.click(screen.getByRole("button", { name: /create student/i }));
 
@@ -64,6 +89,24 @@ describe("CreateStudentModal", () => {
         screen.getByText("Name must be at least 3 characters")
       ).toBeInTheDocument();
       expect(screen.getByText("Invalid email address")).toBeInTheDocument();
+    });
+
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("shows password validation error in manual mode when submitted empty", async () => {
+    renderModal();
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /send invitation email/i })
+    );
+
+    await waitFor(() =>
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /create student/i }));
+
+    await waitFor(() => {
       expect(
         screen.getByText("Password must be at least 8 characters")
       ).toBeInTheDocument();
@@ -77,11 +120,8 @@ describe("CreateStudentModal", () => {
     fireEvent.change(screen.getByLabelText(/name/i), {
       target: { value: "ab" },
     });
-    fireEvent.change(screen.getByLabelText(/email/i), {
+    fireEvent.change(screen.getByRole("textbox", { name: /^email$/i }), {
       target: { value: "test@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "password123" },
     });
     fireEvent.click(screen.getByRole("button", { name: /create student/i }));
 
@@ -94,12 +134,76 @@ describe("CreateStudentModal", () => {
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
-  it("shows validation error when password is too short", async () => {
+  it("calls mutate with sendInvite:true when invite checkbox is checked", async () => {
     renderModal();
     fireEvent.change(screen.getByLabelText(/name/i), {
       target: { value: "John Doe" },
     });
-    fireEvent.change(screen.getByLabelText(/email/i), {
+    fireEvent.change(screen.getByRole("textbox", { name: /^email$/i }), {
+      target: { value: "john@example.com" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /create student/i }));
+
+    await waitFor(() => {
+      expect(mockMutate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: "John Doe",
+          email: "john@example.com",
+          sendInvite: true,
+        }),
+        expect.any(Object)
+      );
+    });
+  });
+
+  it("calls mutate with password when invite checkbox is unchecked", async () => {
+    renderModal();
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /send invitation email/i })
+    );
+
+    await waitFor(() =>
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    );
+
+    fireEvent.change(screen.getByLabelText(/name/i), {
+      target: { value: "John Doe" },
+    });
+    fireEvent.change(screen.getByRole("textbox", { name: /^email$/i }), {
+      target: { value: "john@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: "securepassword" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /create student/i }));
+
+    await waitFor(() => {
+      expect(mockMutate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: "John Doe",
+          email: "john@example.com",
+          password: "securepassword",
+          sendInvite: false,
+        }),
+        expect.any(Object)
+      );
+    });
+  });
+
+  it("shows validation error when password is too short in manual mode", async () => {
+    renderModal();
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /send invitation email/i })
+    );
+
+    await waitFor(() =>
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    );
+
+    fireEvent.change(screen.getByLabelText(/name/i), {
+      target: { value: "John Doe" },
+    });
+    fireEvent.change(screen.getByRole("textbox", { name: /^email$/i }), {
       target: { value: "test@example.com" },
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
@@ -114,31 +218,6 @@ describe("CreateStudentModal", () => {
     });
 
     expect(mockMutate).not.toHaveBeenCalled();
-  });
-
-  it("calls mutate with correct values when form is valid", async () => {
-    renderModal();
-    fireEvent.change(screen.getByLabelText(/name/i), {
-      target: { value: "John Doe" },
-    });
-    fireEvent.change(screen.getByLabelText(/email/i), {
-      target: { value: "john@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: "securepassword" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /create student/i }));
-
-    await waitFor(() => {
-      expect(mockMutate).toHaveBeenCalledWith(
-        {
-          name: "John Doe",
-          email: "john@example.com",
-          password: "securepassword",
-        },
-        expect.any(Object)
-      );
-    });
   });
 
   it("shows 'Creating…' text while pending", () => {

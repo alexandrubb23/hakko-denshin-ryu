@@ -164,6 +164,70 @@ export const softDeleteStudent = (id: string) =>
     prisma.session.deleteMany({ where: { userId: id } }),
   ]);
 
+// ─── Invite flow ──────────────────────────────────────────────────────────────
+
+const STUDENT_SELECT = {
+  id: true,
+  name: true,
+  email: true,
+  emailVerified: true,
+  createdAt: true,
+} as const;
+
+export const createStudentWithoutPassword = (
+  id: string,
+  name: string,
+  email: string
+) =>
+  prisma.user.create({
+    data: { id, name, email, emailVerified: false, role: Role.student },
+    select: STUDENT_SELECT,
+  });
+
+export const createStudentAccount = (userId: string, hashedPassword: string) =>
+  prisma.account.create({
+    data: {
+      id: crypto.randomUUID(),
+      accountId: userId,
+      providerId: "credential",
+      userId,
+      password: hashedPassword,
+    },
+  });
+
+export const invalidatePendingInvites = (userId: string) =>
+  prisma.invitationToken.deleteMany({ where: { userId, usedAt: null } });
+
+export const createInvitationToken = (
+  userId: string,
+  tokenHash: string,
+  expiresAt: Date
+) => prisma.invitationToken.create({ data: { userId, tokenHash, expiresAt } });
+
+export const findValidInvitationToken = (tokenHash: string) =>
+  prisma.invitationToken.findFirst({
+    where: {
+      tokenHash,
+      usedAt: null,
+      expiresAt: { gt: new Date() },
+    },
+    include: {
+      user: { select: { id: true, name: true, email: true, deletedAt: true } },
+    },
+  });
+
+export const markInvitationTokenUsed = (id: string) =>
+  prisma.invitationToken.update({
+    where: { id },
+    data: { usedAt: new Date() },
+  });
+
+export const verifyStudentEmail = (userId: string) =>
+  prisma.user.update({
+    where: { id: userId },
+    data: { emailVerified: true },
+  });
+
 // ─── Attendance ───────────────────────────────────────────────────────────────
 
 export const findStudentAttendance = (userId: string, from: Date, to: Date) =>

@@ -11,17 +11,19 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
+  FormControlLabel,
   SxProps,
   TextField,
   Theme,
 } from "@mui/material";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { type Student } from "@api/students";
@@ -48,7 +50,12 @@ const fieldSx: SxProps<Theme> = {
   "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
 };
 
-type StudentFormValues = { name: string; email: string; password: string };
+type StudentFormValues = {
+  name: string;
+  email: string;
+  password?: string;
+  sendInvite?: boolean;
+};
 
 export const StudentFormMode = {
   create: "create",
@@ -91,6 +98,8 @@ const StudentForm = (props: StudentFormProps) => {
 
   const student = mode === StudentFormMode.edit ? props.student : null;
 
+  const [sendInvite, setSendInvite] = useState(true);
+
   const createMutation = useCreateStudent();
   const updateMutation = useUpdateStudent();
   const {
@@ -107,6 +116,7 @@ const StudentForm = (props: StudentFormProps) => {
     register,
     handleSubmit,
     reset: resetForm,
+    setValue,
     formState: { errors },
   } = useForm<StudentFormValues>({ resolver: zodResolver(schema as any) });
 
@@ -116,16 +126,29 @@ const StudentForm = (props: StudentFormProps) => {
       name: student?.name ?? "",
       email: student?.email ?? "",
       password: "",
+      sendInvite: true,
     });
     resetMutation();
+    setSendInvite(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, student?.id]);
 
+  const handleSendInviteChange = (checked: boolean) => {
+    setSendInvite(checked);
+    setValue("sendInvite", checked);
+  };
+
   const onSubmit = (values: StudentFormValues) => {
     if (mode === StudentFormMode.create) {
-      createMutation.mutate(values as CreateStudentInput, {
-        onSuccess: () => onClose(),
-      });
+      createMutation.mutate(
+        {
+          name: values.name,
+          email: values.email,
+          sendInvite: values.sendInvite ?? true,
+          password: values.password,
+        } as CreateStudentInput,
+        { onSuccess: () => onClose() }
+      );
     } else {
       updateMutation.mutate(
         {
@@ -215,16 +238,35 @@ const StudentForm = (props: StudentFormProps) => {
             sx={fieldSx}
           />
 
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            placeholder={passwordPlaceholder}
-            {...register("password")}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            sx={fieldSx}
-          />
+          {mode === StudentFormMode.create && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sendInvite}
+                  onChange={(e) => handleSendInviteChange(e.target.checked)}
+                  sx={{
+                    color: BORDER_COLOR,
+                    "&.Mui-checked": { color: PURPLE },
+                  }}
+                />
+              }
+              label="Send invitation email to student"
+              sx={{ color: "text.secondary", ml: 0 }}
+            />
+          )}
+
+          {(!sendInvite || mode === StudentFormMode.edit) && (
+            <TextField
+              label="Password"
+              type="password"
+              fullWidth
+              placeholder={passwordPlaceholder}
+              {...register("password")}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              sx={fieldSx}
+            />
+          )}
         </DialogContent>
 
         <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
