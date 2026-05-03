@@ -6,10 +6,16 @@ import {
   updateStudentRankSchema,
   updateStudentSchema,
 } from "@hakko/core";
-import { Router, type Response } from "express";
+import { Router } from "express";
 import { z } from "zod";
 import { Role } from "../generated/prisma/enums.js";
 import { uploadAvatar } from "../lib/cloudinary.js";
+import {
+  HttpBadRequestError,
+  HttpConflictError,
+  HttpNotFoundError,
+  HttpUnprocessableError,
+} from "../lib/http-errors.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
@@ -46,28 +52,22 @@ const MAX_YEAR = new Date().getUTCFullYear() + 1;
 
 const router = Router();
 
-const requireStudent = async (id: string, res: Response) => {
+const requireStudent = async (id: string) => {
   const student = await findStudentById(id);
   if (!student || student.role !== Role.student || student.deletedAt !== null) {
-    res.status(404).json({ error: "Student not found" });
-    return null;
+    throw new HttpNotFoundError("Student not found");
   }
   return student;
 };
 
-const requireRankEntry = async (
-  rankEntryId: string,
-  studentId: string,
-  res: Response
-) => {
+const requireRankEntry = async (rankEntryId: string, studentId: string) => {
   const rankEntry = await findRankEntryById(rankEntryId);
   if (
     !rankEntry ||
     rankEntry.userId !== studentId ||
     rankEntry.deletedAt !== null
   ) {
-    res.status(404).json({ error: "Rank entry not found" });
-    return null;
+    throw new HttpNotFoundError("Rank entry not found");
   }
   return rankEntry;
 };
@@ -106,8 +106,7 @@ router.get(
       student.role !== Role.student ||
       student.deletedAt !== null
     ) {
-      res.status(404).json({ error: "Student not found" });
-      return;
+      throw new HttpNotFoundError("Student not found");
     }
 
     res.json({ student });
@@ -120,10 +119,7 @@ router.get(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
-
-    const student = await requireStudent(id, res);
-    if (!student) return;
-
+    const student = await requireStudent(id);
     const ranks = await findStudentRanks(id);
     res.json({ ranks });
   }
@@ -135,29 +131,23 @@ router.post(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
+    await requireStudent(id);
 
-    const student = await requireStudent(id, res);
-    if (!student) return;
-
-    const parsed = validate(createStudentRankSchema, req.body, res);
-    if (!parsed) return;
-
-    const { rankId, awardedAt, notes } = parsed;
+    const { rankId, awardedAt, notes } = validate(
+      createStudentRankSchema,
+      req.body
+    );
 
     const targetRank = await findRankById(rankId);
-    if (!targetRank) {
-      res.status(404).json({ error: "Rank not found" });
-      return;
-    }
+    if (!targetRank) throw new HttpNotFoundError("Rank not found");
 
     const currentTop = await findStudentTopRank(id);
 
     const expectedOrder = currentTop ? currentTop.rank.order + 1 : 1;
     if (targetRank.order !== expectedOrder) {
-      res.status(422).json({
-        error: "Rank must follow the student's current rank in sequence.",
-      });
-      return;
+      throw new HttpUnprocessableError(
+        "Rank must follow the student's current rank in sequence."
+      );
     }
 
     const rank = await createStudentRank(
@@ -179,16 +169,10 @@ router.put(
     const studentId = req.params.id as string;
     const rankEntryId = req.params.rankEntryId as string;
 
-    const student = await requireStudent(studentId, res);
-    if (!student) return;
+    await requireStudent(studentId);
+    await requireRankEntry(rankEntryId, studentId);
 
-    const rankEntry = await requireRankEntry(rankEntryId, studentId, res);
-    if (!rankEntry) return;
-
-    const parsed = validate(updateStudentRankSchema, req.body, res);
-    if (!parsed) return;
-
-    const { awardedAt, notes } = parsed;
+    const { awardedAt, notes } = validate(updateStudentRankSchema, req.body);
 
     const rank = await updateStudentRank(
       rankEntryId,
@@ -205,16 +189,10 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const parsed = validate(createStudentSchema, req.body, res);
-    if (!parsed) return;
-
-    const { name, email, password } = parsed;
+    const { name, email, password } = validate(createStudentSchema, req.body);
 
     const existing = await findUserByEmail(email);
-    if (existing) {
-      res.status(409).json({ error: "Email already in use" });
-      return;
-    }
+    if (existing) throw new HttpConflictError("Email already in use");
 
     const id = crypto.randomUUID();
     const hashedPassword = await hashPassword(password);
@@ -230,21 +208,13 @@ router.put(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
+    const student = await requireStudent(id);
 
-    const student = await requireStudent(id, res);
-    if (!student) return;
-
-    const parsed = validate(updateStudentSchema, req.body, res);
-    if (!parsed) return;
-
-    const { name, email, password } = parsed;
+    const { name, email, password } = validate(updateStudentSchema, req.body);
 
     if (email !== student.email) {
       const existing = await findUserByEmail(email);
-      if (existing) {
-        res.status(409).json({ error: "Email already in use" });
-        return;
-      }
+      if (existing) throw new HttpConflictError("Email already in use");
     }
 
     const updated = await updateStudentProfile(id, name, email);
@@ -266,11 +236,8 @@ router.delete(
     const studentId = req.params.id as string;
     const rankEntryId = req.params.rankEntryId as string;
 
-    const student = await requireStudent(studentId, res);
-    if (!student) return;
-
-    const rankEntry = await requireRankEntry(rankEntryId, studentId, res);
-    if (!rankEntry) return;
+    await requireStudent(studentId);
+    await requireRankEntry(rankEntryId, studentId);
 
     await softDeleteStudentRank(rankEntryId);
     res.status(204).end();
@@ -284,10 +251,9 @@ router.delete(
   async (req, res) => {
     const id = req.params.id as string;
 
-    // requireStudent returns null (with 404) for non-student or soft-deleted IDs,
+    // requireStudent throws 404 for non-student or soft-deleted IDs,
     // so admin IDs get the same 404 response — preventing role enumeration.
-    const student = await requireStudent(id, res);
-    if (!student) return;
+    await requireStudent(id);
 
     await softDeleteStudent(id);
     res.status(204).end();
@@ -307,9 +273,7 @@ router.get(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
-
-    const student = await requireStudent(id, res);
-    if (!student) return;
+    await requireStudent(id);
 
     const yearParam = req.query.year as string | undefined;
     const monthParam = req.query.month as string | undefined;
@@ -317,17 +281,15 @@ router.get(
     const year = Number(yearParam);
 
     if (!yearParam || isNaN(year)) {
-      res.status(400).json({
-        error: "year query parameter is required and must be a number",
-      });
-      return;
+      throw new HttpBadRequestError(
+        "year query parameter is required and must be a number"
+      );
     }
 
     if (year < MIN_YEAR || year > MAX_YEAR) {
-      res.status(400).json({
-        error: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`,
-      });
-      return;
+      throw new HttpBadRequestError(
+        `year must be between ${MIN_YEAR} and ${MAX_YEAR}`
+      );
     }
 
     let from: Date;
@@ -336,10 +298,9 @@ router.get(
     if (monthParam !== undefined) {
       const month = Number(monthParam);
       if (isNaN(month) || month < MIN_MONTH || month > MAX_MONTH) {
-        res.status(400).json({
-          error: `month must be between ${MIN_MONTH} and ${MAX_MONTH}`,
-        });
-        return;
+        throw new HttpBadRequestError(
+          `month must be between ${MIN_MONTH} and ${MAX_MONTH}`
+        );
       }
       from = toUtcDate(year, month, 1);
       to = toUtcDate(year, month + 1, 1);
@@ -359,23 +320,20 @@ router.post(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
+    await requireStudent(id);
 
-    const student = await requireStudent(id, res);
-    if (!student) return;
-
-    const parsed = validate(upsertAttendanceSchema, req.body, res);
-    if (!parsed) return;
-
-    const { date: dateStr, attended } = parsed;
+    const { date: dateStr, attended } = validate(
+      upsertAttendanceSchema,
+      req.body
+    );
 
     const date = new Date(`${dateStr}T00:00:00.000Z`);
     const today = new Date();
     today.setUTCHours(23, 59, 59, 999);
     if (date > today) {
-      res
-        .status(422)
-        .json({ error: "Cannot mark attendance for future dates" });
-      return;
+      throw new HttpUnprocessableError(
+        "Cannot mark attendance for future dates"
+      );
     }
 
     const record = await upsertStudentAttendance(id, date, attended);
@@ -389,28 +347,16 @@ router.post(
   requireRole(Role.admin),
   uploadMiddleware,
   async (req, res) => {
-    try {
-      const id = req.params.id as string;
+    const id = req.params.id as string;
+    await requireStudent(id);
 
-      const student = await requireStudent(id, res);
-      if (!student) return;
+    if (!req.file) throw new HttpBadRequestError("No image file provided");
 
-      if (!req.file) {
-        res.status(400).json({ error: "No image file provided" });
-        return;
-      }
+    const existing = await findStudentImageById(id);
+    const imageUrl = await uploadAvatar(req.file.buffer, id, existing?.image);
+    await updateStudentImage(id, imageUrl);
 
-      const existing = await findStudentImageById(id);
-
-      const imageUrl = await uploadAvatar(req.file.buffer, id, existing?.image);
-
-      await updateStudentImage(id, imageUrl);
-
-      res.json({ image: imageUrl });
-    } catch (err) {
-      console.error("[POST /api/admin/students/:id/image] Error:", err);
-      res.status(500).json({ error: "Image upload failed" });
-    }
+    res.json({ image: imageUrl });
   }
 );
 
@@ -420,10 +366,7 @@ router.get(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
-
-    const student = await requireStudent(id, res);
-    if (!student) return;
-
+    await requireStudent(id);
     const events = await findStudentEvents(id);
     res.json({ events });
   }

@@ -1,6 +1,7 @@
 import { toUtcDate } from "@hakko/core";
 import { Router } from "express";
 import { uploadAvatar } from "../lib/cloudinary.js";
+import { HttpBadRequestError } from "../lib/http-errors.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { uploadMiddleware } from "../middleware/upload.js";
@@ -38,17 +39,15 @@ router.get(ApiRoutes.meAttendance, requireAuth, async (req, res) => {
   const year = Number(yearParam);
 
   if (!yearParam || isNaN(year)) {
-    res.status(400).json({
-      error: "year query parameter is required and must be a number",
-    });
-    return;
+    throw new HttpBadRequestError(
+      "year query parameter is required and must be a number"
+    );
   }
 
   if (year < MIN_YEAR || year > MAX_YEAR) {
-    res.status(400).json({
-      error: `year must be between ${MIN_YEAR} and ${MAX_YEAR}`,
-    });
-    return;
+    throw new HttpBadRequestError(
+      `year must be between ${MIN_YEAR} and ${MAX_YEAR}`
+    );
   }
 
   let from: Date;
@@ -57,10 +56,9 @@ router.get(ApiRoutes.meAttendance, requireAuth, async (req, res) => {
   if (monthParam !== undefined) {
     const month = Number(monthParam);
     if (isNaN(month) || month < MIN_MONTH || month > MAX_MONTH) {
-      res.status(400).json({
-        error: `month must be between ${MIN_MONTH} and ${MAX_MONTH}`,
-      });
-      return;
+      throw new HttpBadRequestError(
+        `month must be between ${MIN_MONTH} and ${MAX_MONTH}`
+      );
     }
     from = toUtcDate(year, month, 1);
     to = toUtcDate(year, month + 1, 1);
@@ -83,27 +81,19 @@ router.post(
   requireAuth,
   uploadMiddleware,
   async (req, res) => {
-    try {
-      if (!req.file) {
-        res.status(400).json({ error: "No image file provided" });
-        return;
-      }
+    if (!req.file) throw new HttpBadRequestError("No image file provided");
 
-      const user = await findUserImageById(req.user.id);
+    const user = await findUserImageById(req.user.id);
 
-      const imageUrl = await uploadAvatar(
-        req.file.buffer,
-        req.user.id,
-        user?.image
-      );
+    const imageUrl = await uploadAvatar(
+      req.file.buffer,
+      req.user.id,
+      user?.image
+    );
 
-      await updateUserImageById(req.user.id, imageUrl);
+    await updateUserImageById(req.user.id, imageUrl);
 
-      res.json({ image: imageUrl });
-    } catch (err) {
-      console.error("[POST /api/me/image] Error:", err);
-      res.status(500).json({ error: "Image upload failed" });
-    }
+    res.json({ image: imageUrl });
   }
 );
 

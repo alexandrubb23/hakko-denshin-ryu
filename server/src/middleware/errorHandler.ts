@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { HttpError } from "../lib/http-errors.js";
 
 /**
  * Global Express error handler — must be registered as the last middleware.
@@ -6,6 +7,10 @@ import type { NextFunction, Request, Response } from "express";
  * Catches any unhandled error forwarded by async route handlers and returns a
  * consistent JSON `{ error }` response, preventing stack traces or HTML error
  * pages from leaking internal details to clients.
+ *
+ * - `HttpError` subclasses: respond with their status code and response body.
+ * - Unknown errors: log and respond with a generic 500 message (never leaks
+ *   internal details to the client).
  */
 export const errorHandler = (
   err: unknown,
@@ -13,15 +18,11 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ): void => {
+  if (err instanceof HttpError) {
+    res.status(err.statusCode).json({ error: err.responseBody });
+    return;
+  }
+
   console.error(err);
-
-  const status =
-    err != null &&
-    typeof err === "object" &&
-    "status" in err &&
-    typeof (err as { status: unknown }).status === "number"
-      ? (err as { status: number }).status
-      : 500;
-
-  res.status(status).json({ error: "Internal server error" });
+  res.status(500).json({ error: "Internal server error" });
 };

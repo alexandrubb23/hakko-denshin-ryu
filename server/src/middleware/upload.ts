@@ -1,6 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
 import { fileTypeFromBuffer } from "file-type";
 import multer from "multer";
+import {
+  HttpBadRequestError,
+  HttpPayloadTooLargeError,
+} from "../lib/http-errors.js";
 
 const FIVE_MB = 5 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -34,11 +38,11 @@ export const uploadMiddleware = (
 ): void => {
   multerInstance.single("image")(req, res, (err) => {
     if (err) {
-      const status =
+      const httpErr =
         err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE"
-          ? 413
-          : 400;
-      res.status(status).json({ error: err.message });
+          ? new HttpPayloadTooLargeError(err.message)
+          : new HttpBadRequestError(err.message);
+      next(httpErr);
       return;
     }
 
@@ -52,9 +56,11 @@ export const uploadMiddleware = (
     fileTypeFromBuffer(req.file.buffer)
       .then((type) => {
         if (!type || !ALLOWED_MIME_TYPES.has(type.mime)) {
-          res
-            .status(400)
-            .json({ error: "Only JPEG, PNG, and WebP images are allowed" });
+          next(
+            new HttpBadRequestError(
+              "Only JPEG, PNG, and WebP images are allowed"
+            )
+          );
           return;
         }
         next();

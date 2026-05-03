@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 import { Role } from "../generated/prisma/enums.js";
+import { HttpForbiddenError } from "../lib/http-errors.js";
 
 /**
  * Middleware factory that restricts a route to users holding one of the given roles.
@@ -8,11 +9,11 @@ import { Role } from "../generated/prisma/enums.js";
  * @example
  * app.get("/api/admin/students", requireAuth, requireRole(Role.admin), handler);
  */
-export const requireRole = (...roles: Role[]): RequestHandler =>
-  (req, res, next) => {
+export const requireRole =
+  (...roles: Role[]): RequestHandler =>
+  async (req, _res, next) => {
     if (!req.user || !roles.includes(req.user.role as Role)) {
-      res.status(403).json({ error: "Forbidden" });
-      return;
+      throw new HttpForbiddenError("Forbidden");
     }
     next();
   };

@@ -3,9 +3,10 @@ import {
   updateEventSchema,
   upsertEventParticipationSchema,
 } from "@hakko/core";
-import { Router, type Response } from "express";
+import { Router } from "express";
 import { EventStatus, Role } from "../generated/prisma/enums.js";
 import { uploadEventImage } from "../lib/cloudinary.js";
+import { HttpBadRequestError, HttpNotFoundError } from "../lib/http-errors.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
@@ -26,16 +27,14 @@ import {
 
 const router = Router();
 
-const requireEvent = async (id: string, res: Response, adminView = false) => {
+const requireEvent = async (id: string, adminView = false) => {
   const event = await findEventById(id);
   if (!event || event.deletedAt !== null) {
-    res.status(404).json({ error: "Event not found" });
-    return null;
+    throw new HttpNotFoundError("Event not found");
   }
 
   if (!adminView && event.status !== EventStatus.published) {
-    res.status(404).json({ error: "Event not found" });
-    return null;
+    throw new HttpNotFoundError("Event not found");
   }
 
   return event;
@@ -50,8 +49,7 @@ router.get(ApiRoutes.events, async (_req, res) => {
 
 router.get(ApiRoutes.event, async (req, res) => {
   const id = req.params.id as string;
-  const event = await requireEvent(id, res);
-  if (!event) return;
+  const event = await requireEvent(id);
   const { deletedAt: _d, updatedAt: _u, ...rest } = event;
   res.json({ event: rest });
 });
@@ -73,10 +71,10 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const parsed = validate(createEventSchema, req.body, res);
-    if (!parsed) return;
-
-    const { ticketUrl, endDate, ...rest } = parsed;
+    const { ticketUrl, endDate, ...rest } = validate(
+      createEventSchema,
+      req.body
+    );
 
     const event = await createEvent({
       ...rest,
@@ -95,13 +93,12 @@ router.put(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
-    const event = await requireEvent(id, res, true);
-    if (!event) return;
+    await requireEvent(id, true);
 
-    const parsed = validate(updateEventSchema, req.body, res);
-    if (!parsed) return;
-
-    const { ticketUrl, endDate, startDate, ...rest } = parsed;
+    const { ticketUrl, endDate, startDate, ...rest } = validate(
+      updateEventSchema,
+      req.body
+    );
 
     const updated = await updateEvent(id, {
       ...rest,
@@ -120,9 +117,7 @@ router.delete(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
-    const event = await requireEvent(id, res, true);
-    if (!event) return;
-
+    await requireEvent(id, true);
     await softDeleteEvent(id);
     res.status(204).end();
   }
@@ -134,25 +129,15 @@ router.post(
   requireRole(Role.admin),
   uploadMiddleware,
   async (req, res) => {
-    try {
-      const id = req.params.id as string;
-      const event = await requireEvent(id, res, true);
-      if (!event) return;
+    const id = req.params.id as string;
+    const event = await requireEvent(id, true);
 
-      if (!req.file) {
-        res.status(400).json({ error: "No image file provided" });
-        return;
-      }
+    if (!req.file) throw new HttpBadRequestError("No image file provided");
 
-      const imageUrl = await uploadEventImage(req.file.buffer, id, event.image);
+    const imageUrl = await uploadEventImage(req.file.buffer, id, event.image);
+    await updateEventImage(id, imageUrl);
 
-      await updateEventImage(id, imageUrl);
-
-      res.json({ image: imageUrl });
-    } catch (err) {
-      console.error("[POST /api/admin/events/:id/image] Error:", err);
-      res.status(500).json({ error: "Image upload failed" });
-    }
+    res.json({ image: imageUrl });
   }
 );
 
@@ -162,9 +147,7 @@ router.get(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
-    const event = await requireEvent(id, res, true);
-    if (!event) return;
-
+    await requireEvent(id, true);
     const participants = await findEventParticipants(id);
     res.json({ participants });
   }
@@ -176,18 +159,16 @@ router.post(
   requireRole(Role.admin),
   async (req, res) => {
     const id = req.params.id as string;
-    const event = await requireEvent(id, res, true);
-    if (!event) return;
+    await requireEvent(id, true);
 
-    const parsed = validate(upsertEventParticipationSchema, req.body, res);
-    if (!parsed) return;
-
-    const { userId, attended } = parsed;
+    const { userId, attended } = validate(
+      upsertEventParticipationSchema,
+      req.body
+    );
 
     const user = await findStudentForEvent(userId);
     if (!user || user.role !== Role.student || user.deletedAt !== null) {
-      res.status(404).json({ error: "Student not found" });
-      return;
+      throw new HttpNotFoundError("Student not found");
     }
 
     const participation = await upsertEventParticipation(id, userId, attended);

@@ -1,15 +1,9 @@
 import { z, type ZodType } from "zod";
-import { type Response } from "express";
+import { HttpBadRequestError } from "./http-errors.js";
 
-export const validate = <T>(
-  schema: ZodType<T>,
-  data: unknown,
-  res: Response
-): T | null => {
+export const validate = <T>(schema: ZodType<T>, data: unknown): T => {
   const parsed = schema.safeParse(data);
-  if (!parsed.success) {
-    res.status(400).json({ error: z.treeifyError(parsed.error) });
-    return null;
-  }
+  if (!parsed.success)
+    throw new HttpBadRequestError(z.treeifyError(parsed.error));
   return parsed.data;
 };
