@@ -1,8 +1,9 @@
+import { type Period } from "@hakko/core";
 import { ApiRoutes } from "@lib/routes";
 
 import { Http } from "./http";
 
-export type AttendancePeriod = "all" | "day" | "week" | "month" | "year";
+export type AttendancePeriod = Period;
 export type EventTypeFilter = "all" | "seminar" | "demo" | "camp" | "other";
 export type EventStatusFilter = "all" | "draft" | "published" | "cancelled";
 

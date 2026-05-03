@@ -15,6 +15,8 @@ export {
 
 export { daysInMonth, toUtcDate } from "./utils/date.js";
 
+export { PERIOD_VALUES, type Period } from "./constants/period.js";
+
 export {
   createEventSchema,
   EventStatusValues,

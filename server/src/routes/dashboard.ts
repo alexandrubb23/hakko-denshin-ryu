@@ -1,4 +1,4 @@
-import { toUtcDate } from "@hakko/core";
+import { PERIOD_VALUES, type Period, toUtcDate } from "@hakko/core";
 import { Router } from "express";
 import { EventStatus, EventType, Role } from "../generated/prisma/enums.js";
 import { ApiRoutes } from "../lib/routes.js";
@@ -8,8 +8,6 @@ import {
   findDashboardEvents,
   findDashboardStudents,
 } from "../repositories/dashboard.repository.js";
-
-type Period = "all" | "day" | "week" | "month" | "year";
 
 function getDateFilter(period: Period): { gte: Date; lt: Date } | undefined {
   if (period === "all") return undefined;
@@ -39,7 +37,7 @@ function getDateFilter(period: Period): { gte: Date; lt: Date } | undefined {
   }
 }
 
-const VALID_PERIODS: Period[] = ["all", "day", "week", "month", "year"];
+const VALID_PERIODS: readonly Period[] = PERIOD_VALUES;
 const VALID_EVENT_TYPES: EventType[] = ["seminar", "demo", "camp", "other"];
 const VALID_EVENT_STATUSES: EventStatus[] = ["draft", "published", "cancelled"];
 
