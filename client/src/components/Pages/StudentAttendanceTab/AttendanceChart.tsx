@@ -6,7 +6,7 @@ import {
   LinearScale,
   Tooltip,
 } from "chart.js";
-import { useEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 import { type AttendanceRecord } from "@api/attendance";
@@ -353,7 +353,7 @@ const AttendanceChart = ({
   yearData: yearDataProp,
 }: Props) => {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 

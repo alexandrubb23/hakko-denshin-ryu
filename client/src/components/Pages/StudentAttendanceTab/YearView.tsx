@@ -24,6 +24,10 @@ import {
 
 import AttendanceDayDot, { AttendanceStatus } from "./shared/AttendanceDayDot";
 import AttendancePopup from "./shared/AttendancePopup";
+import {
+  LoadingContainer,
+  PurpleSpinner,
+} from "./shared/AttendanceTab.style";
 
 function getStatus(
   date: Date,
@@ -221,20 +225,26 @@ const YearView = ({ studentId, cursor, onCursorChange }: Props) => {
         </NavIconButton>
       </ViewHeader>
 
+      {isLoading && (
+        <LoadingContainer>
+          <PurpleSpinner />
+        </LoadingContainer>
+      )}
+
       {isError && (
         <Typography color="error" sx={{ textAlign: "center" }}>
           Failed to load attendance data.
         </Typography>
       )}
 
-      {!isError && (
+      {!isLoading && !isError && (
         <MonthsGrid>
           {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
             <MiniMonth
               key={month}
               year={year}
               month={month}
-              records={isLoading ? [] : records}
+              records={records}
               today={today}
               onDayClick={handleDayClick}
             />
