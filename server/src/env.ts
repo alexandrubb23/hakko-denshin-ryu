@@ -27,6 +27,7 @@ export const env = createEnv({
       ),
     BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
     TRUSTED_ORIGINS: z.string().default("http://localhost:5173"),
+    HOST: z.string().default("http://localhost"),
     PORT: z.coerce.number().default(3000),
     NODE_ENV: z
       .enum(["development", "production", "test"])
@@ -46,6 +47,7 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     TRUSTED_ORIGINS: process.env.TRUSTED_ORIGINS,
+    HOST: process.env.HOST,
     PORT: process.env.PORT,
     NODE_ENV: process.env.NODE_ENV,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
