@@ -6,12 +6,14 @@ import beltOrange from "@assets/belts/orange.png";
 import beltWhite from "@assets/belts/white.png";
 import beltYellow from "@assets/belts/yellow.png";
 
+import { Belt } from "@hakko/core";
+
 export const BELT_IMAGES: Record<string, string> = {
-  white: beltWhite,
-  yellow: beltYellow,
-  orange: beltOrange,
-  green: beltGreen,
-  blue: beltBlue,
-  brown: beltBrown,
-  black: beltBlack,
+  [Belt.white]: beltWhite,
+  [Belt.yellow]: beltYellow,
+  [Belt.orange]: beltOrange,
+  [Belt.green]: beltGreen,
+  [Belt.blue]: beltBlue,
+  [Belt.brown]: beltBrown,
+  [Belt.black]: beltBlack,
 };

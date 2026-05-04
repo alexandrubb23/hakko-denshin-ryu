@@ -1,8 +1,12 @@
-import { Box, Divider, Skeleton, Typography } from "@mui/material";
+import { useState } from "react";
 
 import { type StudentRankEntry } from "@api/students";
+import { useNextKyuLevel } from "@hooks/useNextKyuLevel";
+import { Box, Divider, Skeleton, Typography } from "@mui/material";
 import { BORDER_COLOR, SKELETON_SX } from "@style/tokens";
 
+import NextRankButton from "./NextRankButton";
+import NextRankModal from "./NextRankModal";
 import BeltImage from "./StudentRankTab/BeltImage";
 
 interface Props {
@@ -11,6 +15,9 @@ interface Props {
 }
 
 const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const nextKyuLevel = useNextKyuLevel(latestRank);
+
   if (!isLoading && !latestRank) return null;
 
   return (
@@ -24,7 +31,11 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
         <Typography
           variant="caption"
           color="text.secondary"
-          sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontSize: "0.65rem" }}
+          sx={{
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            fontSize: "0.65rem",
+          }}
         >
           Current Rank
         </Typography>
@@ -36,7 +47,11 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
               height={24}
               sx={{ ...SKELETON_SX, borderRadius: 1 }}
             />
-            <Skeleton width={110} height={20} sx={{ ...SKELETON_SX, mt: 0.75 }} />
+            <Skeleton
+              width={110}
+              height={20}
+              sx={{ ...SKELETON_SX, mt: 0.75 }}
+            />
             <Skeleton width={90} height={16} sx={{ ...SKELETON_SX, mt: 0.5 }} />
           </Box>
         ) : latestRank ? (
@@ -48,9 +63,21 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
             <Typography variant="caption" color="text.secondary">
               Since {new Date(latestRank.awardedAt).toLocaleDateString()}
             </Typography>
+
+            {nextKyuLevel && (
+              <NextRankButton onClick={() => setModalOpen(true)} />
+            )}
           </Box>
         ) : null}
       </Box>
+
+      {nextKyuLevel && (
+        <NextRankModal
+          level={nextKyuLevel}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
     </>
   );
 };
