@@ -1,41 +1,33 @@
-import useUrlTab from "@hooks/useUrlTab";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import EventIcon from "@mui/icons-material/Event";
-import { Box, Tab, Tabs } from "@mui/material";
 
-import { BORDER_COLOR, PURPLE } from "@style/tokens";
+import DetailTabs, { DetailTabConfig } from "@components/DetailTabs/DetailTabs";
 
 import StudentAttendanceTab from "./StudentAttendanceTab";
 import StudentEventsTab from "./StudentEventsTab";
 import StudentRankTab from "./StudentRankTab";
 
-interface TabConfig {
-  id: string;
-  label: string;
-  icon: React.ReactElement;
-  component: React.ComponentType<{ studentId: string }>;
-  disabled?: boolean;
-}
+type StudentTabComponent = React.ComponentType<{ studentId: string }>;
 
-const STUDENT_TABS: TabConfig[] = [
+const STUDENT_TABS: DetailTabConfig<{ studentId: string }>[] = [
   {
     id: "ranks",
     label: "Ranks",
     icon: <EmojiEventsIcon sx={{ fontSize: 18 }} />,
-    component: StudentRankTab,
+    component: StudentRankTab as StudentTabComponent,
   },
   {
     id: "attendance",
     label: "Attendance",
     icon: <CalendarMonthIcon sx={{ fontSize: 18 }} />,
-    component: StudentAttendanceTab,
+    component: StudentAttendanceTab as StudentTabComponent,
   },
   {
     id: "events",
     label: "Events",
     icon: <EventIcon sx={{ fontSize: 18 }} />,
-    component: StudentEventsTab,
+    component: StudentEventsTab as StudentTabComponent,
   },
 ];
 
@@ -43,39 +35,8 @@ interface Props {
   studentId: string;
 }
 
-const StudentDetailTabs = ({ studentId }: Props) => {
-  const { activeTabIndex, handleTabChange } = useUrlTab(STUDENT_TABS, "tab");
-
-  const ActiveComponent = STUDENT_TABS[activeTabIndex].component;
-
-  return (
-    <Box sx={{ mt: 3 }}>
-      <Tabs
-        value={activeTabIndex}
-        onChange={handleTabChange}
-        variant="scrollable"
-        scrollButtons="auto"
-        allowScrollButtonsMobile
-        sx={{
-          borderBottom: `1px solid ${BORDER_COLOR}`,
-          "& .MuiTab-root": {
-            color: "text.secondary",
-            textTransform: "none",
-            fontWeight: 600,
-          },
-          "& .Mui-selected": { color: PURPLE },
-          "& .MuiTabs-indicator": { backgroundColor: PURPLE },
-          "& .MuiTabs-scrollButtons": { color: PURPLE },
-        }}
-      >
-        {STUDENT_TABS.map(({ label, icon }) => (
-          <Tab key={label} label={label} icon={icon} iconPosition="start" />
-        ))}
-      </Tabs>
-
-      <ActiveComponent studentId={studentId} />
-    </Box>
-  );
-};
+const StudentDetailTabs = ({ studentId }: Props) => (
+  <DetailTabs tabs={STUDENT_TABS} componentProps={{ studentId }} />
+);
 
 export default StudentDetailTabs;
