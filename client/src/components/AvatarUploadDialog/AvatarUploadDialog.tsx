@@ -3,11 +3,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Divider,
 } from "@mui/material";
 import { useState } from "react";
 
+import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { BORDER_COLOR } from "@style/tokens";
 import { UseMutationResult } from "@tanstack/react-query";
 import { getInitials } from "@utils/string";
@@ -88,7 +88,7 @@ const AvatarUploadDialog = ({
       fullWidth
       slotProps={{ paper: { sx: dialogPaperSx } }}
     >
-      <DialogTitle sx={{ fontWeight: 700 }}>Update Profile Photo</DialogTitle>
+      <ModalTitle>Update Profile Photo</ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
 

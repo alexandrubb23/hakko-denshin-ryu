@@ -4,13 +4,13 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Divider,
   SxProps,
   Theme,
 } from "@mui/material";
 import type { ReactNode } from "react";
 
+import ModalTitle from "@components/ModalTitle/ModalTitle";
 import {
   BACKDROP_BLUR,
   BORDER_COLOR,
@@ -63,17 +63,9 @@ const StudentRankDialog = ({
     fullWidth
     slotProps={{ paper: { sx: dialogPaperSx } }}
   >
-    <DialogTitle
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-        color: PURPLE,
-        fontWeight: 700,
-      }}
-    >
+    <ModalTitle>
       {title}
-    </DialogTitle>
+    </ModalTitle>
 
     <Divider sx={{ borderColor: BORDER_COLOR }} />
 

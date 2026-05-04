@@ -7,12 +7,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Divider,
   Typography,
 } from "@mui/material";
 import type { ReactNode } from "react";
 
+import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { ERROR_DARK, ERROR_DARK_HOVER, WARNING } from "@style/status.tokens";
 import {
   BACKDROP_BLUR,
@@ -58,20 +58,10 @@ const ConfirmDeleteModal = ({
       },
     }}
   >
-    <DialogTitle
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-        color: PURPLE,
-        fontWeight: 700,
-        fontSize: "1.1rem",
-        pb: 1,
-      }}
-    >
+    <ModalTitle sx={{ fontSize: "1.1rem", pb: 1 }}>
       <DeleteOutlineIcon fontSize="small" />
       {title}
-    </DialogTitle>
+    </ModalTitle>
 
     <Divider sx={{ borderColor: BORDER_COLOR }} />
 

@@ -15,7 +15,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Divider,
   FormControlLabel,
   SxProps,
@@ -27,6 +26,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { type Student } from "@api/students";
+import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { useCreateStudent } from "@hooks/useCreateStudent";
 import { useUpdateStudent } from "@hooks/useUpdateStudent";
 import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
@@ -187,18 +187,10 @@ const StudentForm = (props: StudentFormProps) => {
         },
       }}
     >
-      <DialogTitle
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          color: PURPLE,
-          fontWeight: 700,
-        }}
-      >
+      <ModalTitle>
         <Icon fontSize="small" />
         {title}
-      </DialogTitle>
+      </ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
 

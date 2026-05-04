@@ -9,7 +9,6 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
-  DialogTitle,
   Divider,
   List,
   ListItem,
@@ -21,6 +20,7 @@ import {
 } from "@mui/material";
 
 import type { Event } from "@api/events";
+import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { useEventParticipants } from "@hooks/useEventParticipants";
 import { useStudents } from "@hooks/useStudents";
 import { useUpsertEventParticipation } from "@hooks/useUpsertEventParticipation";
@@ -79,15 +79,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
         },
       }}
     >
-      <DialogTitle
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          color: PURPLE,
-          fontWeight: 700,
-        }}
-      >
+      <ModalTitle>
         <GroupIcon fontSize="small" />
         <Stack flex={1}>
           <Typography fontWeight={700} component="span">
@@ -106,7 +98,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
             fontWeight: 700,
           }}
         />
-      </DialogTitle>
+      </ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
 

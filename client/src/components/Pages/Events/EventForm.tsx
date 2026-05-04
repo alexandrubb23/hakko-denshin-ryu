@@ -14,7 +14,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Divider,
   MenuItem,
   Select,
@@ -35,6 +34,7 @@ import ImageDropZone, {
   MAX_IMAGE_SIZE_BYTES,
   MAX_IMAGE_SIZE_MB,
 } from "@components/ImageDropZone/ImageDropZone";
+import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { useCreateEvent } from "@hooks/useCreateEvent";
 import { useUpdateEvent } from "@hooks/useUpdateEvent";
 import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
@@ -294,18 +294,10 @@ const EventForm = (props: EventFormProps) => {
         },
       }}
     >
-      <DialogTitle
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          color: PURPLE,
-          fontWeight: 700,
-        }}
-      >
+      <ModalTitle>
         <Icon fontSize="small" />
         {title}
-      </DialogTitle>
+      </ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
 
