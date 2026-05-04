@@ -1,0 +1,13 @@
+# Railway configuration for the SSR Client service (client/).
+# In the Railway dashboard → hakko-client service → Settings → Config file path,
+# set this to: railway.client.toml
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.client"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
