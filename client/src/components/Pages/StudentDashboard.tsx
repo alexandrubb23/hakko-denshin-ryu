@@ -1,12 +1,7 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import SportsKabaddiIcon from "@mui/icons-material/SportsKabaddi";
 import {
   Box,
-  Card,
-  CardActionArea,
-  CardContent,
   Chip,
   Divider,
   Paper,
@@ -14,28 +9,21 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router";
 
 import { useMe } from "@hooks/useMe";
 import { useUploadMyImage } from "@hooks/useUploadMyImage";
-import { Routes } from "@lib/routes";
 import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
 import {
   BACKDROP_BLUR,
   BORDER_COLOR,
-  PURPLE,
   SKELETON_SX,
   SURFACE_BG,
 } from "@style/tokens";
 
+import DashboardStudentLinks from "./DashboardStudentLinks";
 import MyDetailTabs from "./MyDetailTabs";
 import MyEventChart from "./MyEventChart";
 import StudentAvatar from "./StudentAvatar";
-
-const STUDENT_LINKS = [
-  { label: "Techniques", to: Routes.techniques, Icon: SportsKabaddiIcon },
-  { label: "Kyu Program", to: Routes.kyuProgram, Icon: EmojiEventsIcon },
-] as const;
 
 const StudentDashboard = () => {
   const { data: user, isLoading, isError } = useMe();
@@ -152,52 +140,7 @@ const StudentDashboard = () => {
 
             <Divider sx={{ borderColor: BORDER_COLOR }} />
 
-            <Box>
-              <Typography
-                variant="subtitle2"
-                color="text.secondary"
-                sx={{ mb: 2, textTransform: "uppercase", letterSpacing: 1 }}
-              >
-                Quick links
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-                {STUDENT_LINKS.map(({ label, to, Icon }) => (
-                  <Card
-                    key={to}
-                    sx={{
-                      flex: "1 1 140px",
-                      backgroundColor: SURFACE_BG,
-                      border: `1px solid ${BORDER_COLOR}`,
-                      backdropFilter: BACKDROP_BLUR,
-                      backgroundImage: "none",
-                      transition: "border-color 200ms",
-                      "&:hover": { borderColor: PURPLE },
-                    }}
-                  >
-                    <CardActionArea component={Link} to={to} sx={{ p: 2.5 }}>
-                      <CardContent
-                        sx={{
-                          p: 0,
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          gap: 1,
-                        }}
-                      >
-                        <Icon sx={{ fontSize: 36, color: PURPLE }} />
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          textAlign="center"
-                        >
-                          {label}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                ))}
-              </Box>
-            </Box>
+            <DashboardStudentLinks />
           </Stack>
         )}
       </Paper>
