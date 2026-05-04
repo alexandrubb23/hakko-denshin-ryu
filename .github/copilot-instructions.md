@@ -214,6 +214,29 @@ const SKELETON_SX   = { bgcolor: "rgba(171,150,255,0.12)" } as const;
 | `BACKDROP_BLUR` | `blur(20px)` | Backdrop filter on all glass surfaces |
 | `SKELETON_SX` | `{ bgcolor: "rgba(171,150,255,0.12)" }` | MUI `<Skeleton sx={SKELETON_SX}>` — the standard skeleton color; never repeat inline |
 
+### `SkeletonText` component
+
+Use `SkeletonText` (at `@components/SkeletonText/SkeletonText`) whenever a `<Typography>` displays a loading skeleton while data is pending. It accepts all `TypographyProps` plus two extra props:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isLoading` | `boolean` | — | When `true`, renders a `<Skeleton>` instead of `children` |
+| `skeletonWidth` | `number \| string` | `120` | Forwarded to `<Skeleton width={...}>` |
+
+```tsx
+import SkeletonText from "@components/SkeletonText/SkeletonText";
+
+<SkeletonText isLoading={isLoading} skeletonWidth={180} variant="h5" fontWeight={700}>
+  {user?.name}
+</SkeletonText>
+
+<SkeletonText isLoading={isLoading} skeletonWidth="60%" variant="body1" color="text.secondary">
+  {session?.user.email}
+</SkeletonText>
+```
+
+**Do not** write `{isLoading ? <Skeleton width={...} sx={SKELETON_SX} /> : value}` inside a `<Typography>` — use `SkeletonText` instead. Only reach for a raw `<Skeleton>` when you need a non-text variant (e.g. `variant="rounded"` for chips).
+
 ### Rules — always follow these
 
 - **Never use white or light backgrounds.** All surfaces must use `DARK_BG`, `SURFACE_BG`, or `rgba(255,255,255,0.04)`.

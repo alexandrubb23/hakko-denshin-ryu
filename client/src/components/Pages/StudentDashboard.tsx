@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import SkeletonText from "@components/SkeletonText/SkeletonText";
+
 import { useMe } from "@hooks/useMe";
 import { useUploadMyImage } from "@hooks/useUploadMyImage";
 import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
@@ -62,20 +64,23 @@ const StudentDashboard = () => {
               />
 
               <Box>
-                <Typography variant="h5" fontWeight={700}>
-                  {isLoading ? (
-                    <Skeleton width={180} sx={SKELETON_SX} />
-                  ) : (
-                    user?.name
-                  )}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mt={0.5}>
-                  {isLoading ? (
-                    <Skeleton width={220} sx={SKELETON_SX} />
-                  ) : (
-                    user?.email
-                  )}
-                </Typography>
+                <SkeletonText
+                  isLoading={isLoading}
+                  skeletonWidth={180}
+                  variant="h5"
+                  fontWeight={700}
+                >
+                  {user?.name}
+                </SkeletonText>
+                <SkeletonText
+                  isLoading={isLoading}
+                  skeletonWidth={220}
+                  variant="body2"
+                  color="text.secondary"
+                  mt={0.5}
+                >
+                  {user?.email}
+                </SkeletonText>
               </Box>
             </Stack>
 
@@ -128,13 +133,13 @@ const StudentDashboard = () => {
                 <Typography variant="body2" color="text.secondary">
                   Member since
                 </Typography>
-                <Typography variant="body2">
-                  {isLoading ? (
-                    <Skeleton width={100} sx={SKELETON_SX} />
-                  ) : (
-                    user && new Date(user.createdAt).toLocaleDateString()
-                  )}
-                </Typography>
+                <SkeletonText
+                  isLoading={isLoading}
+                  skeletonWidth={100}
+                  variant="body2"
+                >
+                  {user && new Date(user.createdAt).toLocaleDateString()}
+                </SkeletonText>
               </Stack>
             </Stack>
 

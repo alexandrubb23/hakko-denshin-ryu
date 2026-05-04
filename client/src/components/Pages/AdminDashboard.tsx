@@ -1,7 +1,7 @@
-import { Box, Paper, Skeleton, Typography } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 
 import useIsAdmin from "@hooks/useIsAdmin";
-import { SKELETON_SX } from "@style/tokens";
+import SkeletonText from "@components/SkeletonText/SkeletonText";
 
 import DashboardAdminLinks from "./DashboardAdminLinks";
 import DashboardEventChart from "./DashboardEventChart";
@@ -12,21 +12,13 @@ const AdminDashboard = () => {
 
   return (
     <Paper elevation={3} className="w-full p-8 flex flex-col gap-6">
-      <Typography variant="h5" fontWeight={700}>
-        {isPending ? (
-          <Skeleton width="60%" sx={SKELETON_SX} />
-        ) : (
-          `Welcome, ${session?.user.name}!`
-        )}
-      </Typography>
+      <SkeletonText isLoading={isPending} skeletonWidth="60%" variant="h5" fontWeight={700}>
+        {`Welcome, ${session?.user.name}!`}
+      </SkeletonText>
 
-      <Typography variant="body1" color="text.secondary">
-        {isPending ? (
-          <Skeleton width="80%" sx={SKELETON_SX} />
-        ) : (
-          session?.user.email
-        )}
-      </Typography>
+      <SkeletonText isLoading={isPending} skeletonWidth="80%" variant="body1" color="text.secondary">
+        {session?.user.email}
+      </SkeletonText>
 
       <Box>
         <DashboardAdminLinks />

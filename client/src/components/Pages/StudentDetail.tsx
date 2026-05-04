@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
 
+import SkeletonText from "@components/SkeletonText/SkeletonText";
+
 import { useStudent } from "@hooks/useStudent";
 import { Routes } from "@lib/routes";
 import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
@@ -76,20 +78,23 @@ const StudentDetail = () => {
               />
 
               <Box>
-                <Typography variant="h5" fontWeight={700}>
-                  {isLoading ? (
-                    <Skeleton width={180} sx={SKELETON_SX} />
-                  ) : (
-                    student?.name
-                  )}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mt={0.5}>
-                  {isLoading ? (
-                    <Skeleton width={220} sx={SKELETON_SX} />
-                  ) : (
-                    student?.email
-                  )}
-                </Typography>
+                <SkeletonText
+                  isLoading={isLoading}
+                  skeletonWidth={180}
+                  variant="h5"
+                  fontWeight={700}
+                >
+                  {student?.name}
+                </SkeletonText>
+                <SkeletonText
+                  isLoading={isLoading}
+                  skeletonWidth={220}
+                  variant="body2"
+                  color="text.secondary"
+                  mt={0.5}
+                >
+                  {student?.email}
+                </SkeletonText>
               </Box>
             </Stack>
 
@@ -142,13 +147,13 @@ const StudentDetail = () => {
                 <Typography variant="body2" color="text.secondary">
                   Member since
                 </Typography>
-                <Typography variant="body2">
-                  {isLoading ? (
-                    <Skeleton width={100} sx={SKELETON_SX} />
-                  ) : (
-                    student && new Date(student.createdAt).toLocaleDateString()
-                  )}
-                </Typography>
+                <SkeletonText
+                  isLoading={isLoading}
+                  skeletonWidth={100}
+                  variant="body2"
+                >
+                  {student && new Date(student.createdAt).toLocaleDateString()}
+                </SkeletonText>
               </Stack>
             </Stack>
           </Stack>
