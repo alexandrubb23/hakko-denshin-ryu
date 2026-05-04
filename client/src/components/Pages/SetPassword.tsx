@@ -246,6 +246,7 @@ const SetPassword = () => {
                   sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
                 >
                   <TextField
+                    id="set-password-password"
                     label="Password"
                     type={showPassword ? "text" : "password"}
                     fullWidth
@@ -274,6 +275,7 @@ const SetPassword = () => {
                   />
 
                   <TextField
+                    id="set-password-confirm"
                     label="Confirm Password"
                     type={showConfirm ? "text" : "password"}
                     fullWidth

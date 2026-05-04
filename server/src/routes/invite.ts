@@ -1,9 +1,9 @@
 import { hashPassword } from "@better-auth/utils/password";
 import { setPasswordSchema } from "@hakko/core";
-import { createHash } from "crypto";
 import { Router } from "express";
 import { HttpBadRequestError } from "../lib/http-errors.js";
 import { ApiRoutes } from "../lib/routes.js";
+import { hashToken } from "../lib/token.js";
 import { validate } from "../lib/validate.js";
 import {
   createStudentAccount,
@@ -13,9 +13,6 @@ import {
 } from "../repositories/students.repository.js";
 
 const router = Router();
-
-const hashToken = (token: string) =>
-  createHash("sha256").update(token).digest("hex");
 
 const resolveToken = async (token: string) => {
   const record = await findValidInvitationToken(hashToken(token));

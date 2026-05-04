@@ -6,7 +6,6 @@ import {
   updateStudentRankSchema,
   updateStudentSchema,
 } from "@hakko/core";
-import { createHash, randomBytes } from "crypto";
 import { Router } from "express";
 import { z } from "zod";
 import { env } from "../env.js";
@@ -26,6 +25,7 @@ import {
   HttpUnprocessableError,
 } from "../lib/http-errors.js";
 import { ApiRoutes, ClientRoutes } from "../lib/routes.js";
+import { generateToken, hashToken } from "../lib/token.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
@@ -211,8 +211,8 @@ router.post(
 
       await invalidatePendingInvites(id);
 
-      const plainToken = randomBytes(32).toString("hex");
-      const tokenHash = createHash("sha256").update(plainToken).digest("hex");
+      const plainToken = generateToken();
+      const tokenHash = hashToken(plainToken);
       const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
       await createInvitationToken(id, tokenHash, expiresAt);
 
