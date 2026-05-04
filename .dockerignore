@@ -1,0 +1,32 @@
+# Git
+.git
+.github
+.gitignore
+
+# Dependencies (installed inside Docker)
+node_modules
+*/node_modules
+
+# Build output (rebuilt inside Docker)
+dist
+client/dist
+dist-ssr
+*.local
+
+# Environment files (sensitive)
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Test artifacts
+playwright-report
+e2e/test-results
+
+# Editor
+.vscode
+.idea
+.DS_Store
+
+# Logs
+*.log

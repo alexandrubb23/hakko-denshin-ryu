@@ -1,0 +1,36 @@
+# Railway service: API (server/)
+# Root directory must be set to the repository root so all workspace packages are available.
+# Build command: Docker build context = repo root, so core/ and server/ are both accessible.
+
+FROM oven/bun:1.2-slim
+
+# Prisma's classic engine requires OpenSSL at runtime
+RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy workspace manifests first for better layer caching
+COPY package.json bun.lock ./
+COPY core/package.json ./core/
+COPY server/package.json ./server/
+COPY client/package.json ./client/
+
+# Install all workspace dependencies
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY core/ ./core/
+COPY server/ ./server/
+
+WORKDIR /app/server
+
+# Generate the Prisma client (no DB connection needed for generate)
+# A placeholder URL is used here; the real DATABASE_URL is injected at runtime.
+RUN DATABASE_URL="postgresql://placeholder:5432/placeholder" bunx prisma generate
+
+EXPOSE 3000
+
+# Run pending migrations, then start the server.
+# DATABASE_URL (and all other required vars) must be set in Railway service variables.
+CMD ["sh", "-c", "bunx prisma migrate deploy && bun src/index.ts"]

@@ -1,0 +1,44 @@
+# Railway service: SSR Client (client/)
+# Root directory must be set to the repository root so all workspace packages are available.
+# Build command: Docker build context = repo root, so core/ and client/ are both accessible.
+#
+# IMPORTANT: VITE_API_URL must be set as a Railway Variable so it is available at build time.
+# Vite bakes this value into the client bundle — it cannot be changed without rebuilding.
+
+FROM oven/bun:1.2-slim
+
+WORKDIR /app
+
+# Copy workspace manifests first for better layer caching
+COPY package.json bun.lock ./
+COPY core/package.json ./core/
+COPY client/package.json ./client/
+COPY server/package.json ./server/
+
+# Install all workspace dependencies (resolves workspace:* protocol for @hakko/core)
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY core/ ./core/
+COPY client/ ./client/
+
+WORKDIR /app/client
+
+# Vite bakes VITE_* variables into the bundle at build time.
+# Pass them as build args and export as env vars so vite picks them up.
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
+ARG VITE_SENTRY_DSN
+ENV VITE_SENTRY_DSN=$VITE_SENTRY_DSN
+
+ARG VITE_SENTRY_ENVIRONMENT
+ENV VITE_SENTRY_ENVIRONMENT=$VITE_SENTRY_ENVIRONMENT
+
+# Build both client (browser) and server (SSR) bundles
+RUN bun run build
+
+EXPOSE 5173
+
+# NODE_ENV=production must be set in Railway service variables.
+CMD ["bun", "server.js"]

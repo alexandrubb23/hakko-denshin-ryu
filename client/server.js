@@ -60,6 +60,11 @@ app.use("/api", (req, res) => {
   res.json({ message: "Hello from API!" });
 });
 
+// Health check for Railway (must come before the SSR catch-all)
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
 // Serve HTML
 app.use("*all", async (req, res) => {
   try {

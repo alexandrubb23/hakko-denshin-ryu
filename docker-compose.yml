@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./server/.env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+    # On Mac/Linux: replace any "localhost" DB host with host.docker.internal
+    # so the container can reach a Postgres instance running on the host.
+    # If your DATABASE_URL already uses a remote host (e.g. Neon), this is a no-op.
+    command: >
+      sh -c '
+      export DATABASE_URL="$$(echo $$DATABASE_URL | sed s/localhost/host.docker.internal/g)" &&
+      bunx prisma migrate deploy &&
+      bun src/index.ts
+      '
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+      args:
+        VITE_API_URL: http://localhost:3000
+    ports:
+      - "5173:5173"
+    environment:
+      NODE_ENV: production
+      PORT: "5173"
+    depends_on:
+      - api
