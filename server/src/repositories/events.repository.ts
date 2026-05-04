@@ -59,12 +59,6 @@ export const findEventParticipants = (eventId: string) =>
     orderBy: { user: { name: "asc" } },
   });
 
-export const findStudentForEvent = (userId: string) =>
-  prisma.user.findUnique({
-    where: { id: userId },
-    select: { role: true, deletedAt: true },
-  });
-
 export const upsertEventParticipation = (
   eventId: string,
   userId: string,

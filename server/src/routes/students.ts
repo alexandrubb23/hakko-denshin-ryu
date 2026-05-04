@@ -32,7 +32,6 @@ import {
   findRankById,
   findRankEntryById,
   findStudentAttendance,
-  findStudentById,
   findStudentEvents,
   findStudentImageById,
   findStudentRanks,
@@ -50,16 +49,9 @@ import {
 } from "../repositories/students.repository.js";
 import { parseYearMonthParams } from "../utils/query-params.js";
 import { requireFile, requireId } from "../utils/request.js";
+import { requireStudent } from "../utils/student.js";
 
 const router = Router();
-
-const requireStudent = async (id: string) => {
-  const student = await findStudentById(id);
-  if (!student || student.role !== Role.student || student.deletedAt !== null) {
-    throw new HttpNotFoundError("Student not found");
-  }
-  return student;
-};
 
 const requireRankEntry = async (rankEntryId: string, studentId: string) => {
   const rankEntry = await findRankEntryById(rankEntryId);
@@ -100,16 +92,8 @@ router.get(
   async (req, res) => {
     const id = requireId(req);
 
+    await requireStudent(id);
     const student = await findStudentWithDetails(id);
-
-    if (
-      !student ||
-      student.role !== Role.student ||
-      student.deletedAt !== null
-    ) {
-      throw new HttpNotFoundError("Student not found");
-    }
-
     res.json({ student });
   }
 );

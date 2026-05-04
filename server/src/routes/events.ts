@@ -18,13 +18,13 @@ import {
   findEventById,
   findEventParticipants,
   findPublishedEvents,
-  findStudentForEvent,
   softDeleteEvent,
   updateEvent,
   updateEventImage,
   upsertEventParticipation,
 } from "../repositories/events.repository.js";
 import { requireFile, requireId } from "../utils/request.js";
+import { requireStudent } from "../utils/student.js";
 
 const router = Router();
 
@@ -167,10 +167,7 @@ router.post(
       req.body
     );
 
-    const user = await findStudentForEvent(userId);
-    if (!user || user.role !== Role.student || user.deletedAt !== null) {
-      throw new HttpNotFoundError("Student not found");
-    }
+    await requireStudent(userId);
 
     const participation = await upsertEventParticipation(id, userId, attended);
     res.status(200).json({ participation });
