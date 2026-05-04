@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /students
+Disallow: /techniques
+Disallow: /kyu-program
+Disallow: /admin/
+Disallow: /login
+Disallow: /set-password

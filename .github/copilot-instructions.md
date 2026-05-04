@@ -417,6 +417,41 @@ it.each([
 
 Keep unique test cases (different assertions, branching logic, interaction sequences) as individual `it` blocks — do not force them into `it.each`.
 
+### Shared test helpers
+
+Extract repeated setup or interaction sequences into module-level helper functions when the same multi-step pattern appears in more than one test. Name helpers after what they do, not what they assert.
+
+```tsx
+// Repeated waitFor guard → extract
+const waitForForm = () =>
+  waitFor(() => expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument());
+
+// Repeated fill + submit sequence → extract
+const fillAndSubmit = (password: string, confirm: string) => {
+  fireEvent.change(screen.getByLabelText(/^password$/i), { target: { value: password } });
+  fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: confirm } });
+  fireEvent.click(screen.getByRole("button", { name: /set password/i }));
+};
+```
+
+### Describe block discipline
+
+Only wrap tests in a `describe` block when:
+- there are **multiple** tests that share a `beforeEach` / `afterEach`, or
+- the grouping meaningfully aids readability for a larger suite.
+
+Do **not** wrap a single test in its own `describe` just for labelling — use a descriptive `it` name instead.
+
+```tsx
+// ✗ unnecessary nesting
+describe("no token in URL", () => {
+  it("shows an error alert", () => { ... });
+});
+
+// ✓ flat — the it name is self-explanatory
+it("shows an error alert when no token is in the URL", () => { ... });
+```
+
 ### Querying
 
 Prefer accessible queries in this order: `getByRole` > `getByText` > `getByLabelText` > `queryBy*` (for absence checks).

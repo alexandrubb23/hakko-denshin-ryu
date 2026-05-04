@@ -1,21 +1,29 @@
-import AdminRoute from '@components/AdminRoute';
-import DashboardLayout from '@components/DashboardLayout/DashboardLayout';
-import StudentDetail from '@components/Pages/StudentDetail';
-import ProtectedRoute from '@components/ProtectedRoute';
-import { normalizePath } from '@utils/routes';
-import { Route, Routes } from 'react-router';
-import App from './App';
-import { pages } from './pages';
+import AdminRoute from "@components/AdminRoute";
+import DashboardLayout from "@components/DashboardLayout/DashboardLayout";
+import StudentDetail from "@components/Pages/StudentDetail";
+import ProtectedRoute from "@components/ProtectedRoute";
+import { normalizePath } from "@utils/routes";
+import { useEffect } from "react";
+import { Route, Routes, useLocation } from "react-router";
+import App from "./App";
+import { pages } from "./pages";
 
 interface AppRoutesProps {
   initialLoaderData: any;
 }
 
 export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
-  const standalonePages = pages.filter(p => p.standalone);
-  const publicPages = pages.filter(p => !p.protected && !p.standalone);
-  const protectedPages = pages.filter(p => p.protected && !p.adminOnly);
-  const adminPages = pages.filter(p => p.adminOnly);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const page = pages.find((p) => normalizePath(p.path) === pathname);
+    if (page) document.title = page.title;
+  }, [pathname]);
+
+  const standalonePages = pages.filter((p) => p.standalone);
+  const publicPages = pages.filter((p) => !p.protected && !p.standalone);
+  const protectedPages = pages.filter((p) => p.protected && !p.adminOnly);
+  const adminPages = pages.filter((p) => p.adminOnly);
 
   return (
     <Routes>
