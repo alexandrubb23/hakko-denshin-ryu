@@ -1,7 +1,7 @@
-import { Resend } from "resend";
+import sgMail from "@sendgrid/mail";
 import { env } from "../env.js";
 
-const resend = new Resend(env.RESEND_API_KEY);
+sgMail.setApiKey(env.SENDGRID_API_KEY);
 
 export const sendInvitationEmail = async (
   to: string,
@@ -10,8 +10,8 @@ export const sendInvitationEmail = async (
 ): Promise<void> => {
   if (env.NODE_ENV === "test") return;
 
-  await resend.emails.send({
-    from: env.RESEND_FROM_EMAIL,
+  await sgMail.send({
+    from: env.SENDGRID_FROM_EMAIL,
     to,
     subject: "You've been invited to Senshinkan Romania",
     html: `

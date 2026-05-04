@@ -36,8 +36,8 @@ export const env = createEnv({
     CLOUDINARY_CLOUD_NAME: z.string().min(1),
     CLOUDINARY_API_KEY: z.string().min(1),
     CLOUDINARY_API_SECRET: z.string().min(1),
-    RESEND_API_KEY: z.string().min(1),
-    RESEND_FROM_EMAIL: z.email().default("onboarding@resend.dev"),
+    SENDGRID_API_KEY: z.string().min(1),
+    SENDGRID_FROM_EMAIL: z.email().default("noreply@hakko-denshin-ryu.com"),
   },
 
   /**
@@ -57,8 +57,8 @@ export const env = createEnv({
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
-    RESEND_API_KEY: process.env.RESEND_API_KEY,
-    RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+    SENDGRID_FROM_EMAIL: process.env.SENDGRID_FROM_EMAIL,
   },
 
   /**
