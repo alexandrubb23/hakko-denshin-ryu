@@ -1,159 +1,19 @@
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import {
-  Box,
-  Chip,
-  Divider,
-  Paper,
-  Skeleton,
-  Stack,
-  Typography,
-} from "@mui/material";
-
-import SkeletonText from "@components/SkeletonText/SkeletonText";
-
-import { useMe } from "@hooks/useMe";
-import { useUploadMyImage } from "@hooks/useUploadMyImage";
-import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
-import {
-  BACKDROP_BLUR,
-  BORDER_COLOR,
-  SKELETON_SX,
-  SURFACE_BG,
-} from "@style/tokens";
+import { Box } from "@mui/material";
 
 import DashboardStudentLinks from "./DashboardStudentLinks";
 import MyDetailTabs from "./MyDetailTabs";
 import MyEventChart from "./MyEventChart";
-import StudentAvatar from "./StudentAvatar";
+import StudentProfileCard from "./StudentProfileCard";
 
-const StudentDashboard = () => {
-  const { data: user, isLoading, isError } = useMe();
-  const uploadMutation = useUploadMyImage();
+const StudentDashboard = () => (
+  <Box sx={{ py: 4 }}>
+    <StudentProfileCard>
+      <DashboardStudentLinks />
+    </StudentProfileCard>
 
-  return (
-    <Box sx={{ py: 4 }}>
-      <Paper
-        elevation={0}
-        sx={{
-          backgroundColor: SURFACE_BG,
-          border: `1px solid ${BORDER_COLOR}`,
-          borderRadius: 3,
-          backdropFilter: BACKDROP_BLUR,
-          p: 4,
-        }}
-      >
-        {isError ? (
-          <Typography color="error">
-            Failed to load profile. Please try again.
-          </Typography>
-        ) : (
-          <Stack spacing={3}>
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              alignItems={{ xs: "center", sm: "center" }}
-              spacing={2.5}
-              sx={{ textAlign: { xs: "center", sm: "left" } }}
-            >
-              <StudentAvatar
-                studentId={user?.id ?? ""}
-                name={user?.name}
-                imageUrl={user?.image}
-                isLoading={isLoading}
-                uploadMutation={uploadMutation}
-              />
-
-              <Box>
-                <SkeletonText
-                  isLoading={isLoading}
-                  skeletonWidth={180}
-                  variant="h5"
-                  fontWeight={700}
-                >
-                  {user?.name}
-                </SkeletonText>
-                <SkeletonText
-                  isLoading={isLoading}
-                  skeletonWidth={220}
-                  variant="body2"
-                  color="text.secondary"
-                  mt={0.5}
-                >
-                  {user?.email}
-                </SkeletonText>
-              </Box>
-            </Stack>
-
-            <Divider sx={{ borderColor: BORDER_COLOR }} />
-
-            <Stack spacing={2}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="body2" color="text.secondary">
-                  Email verification
-                </Typography>
-                {isLoading ? (
-                  <Skeleton
-                    variant="rounded"
-                    width={90}
-                    height={24}
-                    sx={SKELETON_SX}
-                  />
-                ) : user?.emailVerified ? (
-                  <Chip
-                    icon={<CheckCircleOutlineIcon sx={{ fontSize: 16 }} />}
-                    label="Verified"
-                    size="small"
-                    sx={{
-                      color: SUCCESS,
-                      borderColor: SUCCESS,
-                      backgroundColor: SUCCESS_ALPHA_10,
-                    }}
-                    variant="outlined"
-                  />
-                ) : (
-                  <Chip
-                    icon={<RadioButtonUncheckedIcon sx={{ fontSize: 16 }} />}
-                    label="Not verified"
-                    size="small"
-                    sx={{ color: "text.disabled", borderColor: BORDER_COLOR }}
-                    variant="outlined"
-                  />
-                )}
-              </Stack>
-
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="body2" color="text.secondary">
-                  Member since
-                </Typography>
-                <SkeletonText
-                  isLoading={isLoading}
-                  skeletonWidth={100}
-                  variant="body2"
-                >
-                  {user && new Date(user.createdAt).toLocaleDateString()}
-                </SkeletonText>
-              </Stack>
-            </Stack>
-
-            <Divider sx={{ borderColor: BORDER_COLOR }} />
-
-            <DashboardStudentLinks />
-          </Stack>
-        )}
-      </Paper>
-
-      <MyEventChart />
-      <MyDetailTabs />
-    </Box>
-  );
-};
+    <MyEventChart />
+    <MyDetailTabs />
+  </Box>
+);
 
 export default StudentDashboard;
