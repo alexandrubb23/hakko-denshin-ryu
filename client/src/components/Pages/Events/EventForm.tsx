@@ -14,7 +14,6 @@ import {
   DialogContent,
   Divider,
   MenuItem,
-  Select,
   Stack,
   SxProps,
   TextField,
@@ -27,6 +26,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { eventsApi, type Event } from "@api/events";
+import DarkSelect from "@components/DarkSelect/DarkSelect";
 import ImageDropZone, {
   ACCEPTED_IMAGE_TYPES,
   MAX_IMAGE_SIZE_BYTES,
@@ -42,9 +42,6 @@ import {
   BORDER_HOVER,
   DARK_BG,
   PURPLE,
-  PURPLE_ALPHA_12,
-  PURPLE_ALPHA_18,
-  PURPLE_ALPHA_25,
   PURPLE_HOVER,
   SURFACE_BG,
 } from "@style/tokens";
@@ -57,27 +54,6 @@ const fieldSx: SxProps<Theme> = {
     "&.Mui-focused fieldset": { borderColor: PURPLE },
   },
   "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
-};
-
-const selectMenuProps = {
-  slotProps: {
-    paper: {
-      sx: {
-        backgroundColor: DARK_BG,
-        backgroundImage: "none",
-        border: `1px solid ${BORDER_COLOR}`,
-        "& .MuiMenuItem-root:hover": {
-          backgroundColor: PURPLE_ALPHA_12,
-        },
-        "& .MuiMenuItem-root.Mui-selected": {
-          backgroundColor: PURPLE_ALPHA_18,
-        },
-        "& .MuiMenuItem-root.Mui-selected:hover": {
-          backgroundColor: PURPLE_ALPHA_25,
-        },
-      },
-    },
-  },
 };
 
 /** datetime-local input produces "YYYY-MM-DDTHH:MM" — no timezone suffix */
@@ -313,31 +289,18 @@ const EventForm = (props: EventFormProps) => {
                 name="type"
                 control={control}
                 render={({ field }) => (
-                  <Select
+                  <DarkSelect
                     {...field}
                     fullWidth
                     size="small"
                     error={!!errors.type}
-                    MenuProps={selectMenuProps}
-                    sx={{
-                      backgroundColor: SURFACE_BG,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: BORDER_COLOR,
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: BORDER_HOVER,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: PURPLE,
-                      },
-                    }}
                   >
                     {EventTypeValues.map((t) => (
                       <MenuItem key={t} value={t}>
                         {t.charAt(0).toUpperCase() + t.slice(1)}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </DarkSelect>
                 )}
               />
             </Box>
@@ -354,31 +317,18 @@ const EventForm = (props: EventFormProps) => {
                 name="status"
                 control={control}
                 render={({ field }) => (
-                  <Select
+                  <DarkSelect
                     {...field}
                     fullWidth
                     size="small"
                     error={!!errors.status}
-                    MenuProps={selectMenuProps}
-                    sx={{
-                      backgroundColor: SURFACE_BG,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: BORDER_COLOR,
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: BORDER_HOVER,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: PURPLE,
-                      },
-                    }}
                   >
                     {EventStatusValues.map((s) => (
                       <MenuItem key={s} value={s}>
                         {s.charAt(0).toUpperCase() + s.slice(1)}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </DarkSelect>
                 )}
               />
             </Box>

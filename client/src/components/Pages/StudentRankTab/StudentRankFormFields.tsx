@@ -4,7 +4,6 @@ import {
   FormHelperText,
   InputLabel,
   MenuItem,
-  Select,
   SxProps,
   TextField,
   Theme,
@@ -17,17 +16,9 @@ import type {
 } from "react-hook-form";
 import { Controller } from "react-hook-form";
 
+import DarkSelect from "@components/DarkSelect/DarkSelect";
 import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
-import {
-  BORDER_COLOR,
-  BORDER_HOVER,
-  DARK_BG,
-  PURPLE,
-  PURPLE_ALPHA_12,
-  PURPLE_ALPHA_18,
-  PURPLE_ALPHA_25,
-  SURFACE_BG,
-} from "@style/tokens";
+import { BORDER_COLOR, BORDER_HOVER, PURPLE, SURFACE_BG } from "@style/tokens";
 
 const fieldSx: SxProps<Theme> = {
   "& .MuiOutlinedInput-root": {
@@ -39,30 +30,8 @@ const fieldSx: SxProps<Theme> = {
   "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
 };
 
-const selectSx: SxProps<Theme> = {
-  ...fieldSx,
-  "& .MuiSelect-icon": { color: PURPLE },
-};
-
-const menuProps = {
-  slotProps: {
-    paper: {
-      sx: {
-        backgroundColor: DARK_BG,
-        backgroundImage: "none",
-        border: `1px solid ${BORDER_COLOR}`,
-        "& .MuiMenuItem-root:hover": {
-          backgroundColor: PURPLE_ALPHA_12,
-        },
-        "& .MuiMenuItem-root.Mui-selected": {
-          backgroundColor: PURPLE_ALPHA_18,
-        },
-        "& .MuiMenuItem-root.Mui-selected:hover": {
-          backgroundColor: PURPLE_ALPHA_25,
-        },
-      },
-    },
-  },
+const labelFocusSx: SxProps<Theme> = {
+  "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
 };
 
 export interface RankOption {
@@ -106,21 +75,20 @@ const StudentRankFormFields = ({
         name="rankId"
         control={control}
         render={({ field }) => (
-          <FormControl fullWidth error={!!errors.rankId} sx={selectSx}>
+          <FormControl fullWidth error={!!errors.rankId} sx={labelFocusSx}>
             <InputLabel>Rank</InputLabel>
-            <Select
+            <DarkSelect
               {...field}
               label="Rank"
               value={field.value || ""}
               onChange={(e) => field.onChange(Number(e.target.value))}
-              MenuProps={menuProps}
             >
               {ranks.map((r) => (
                 <MenuItem key={r.id} value={r.id}>
                   {r.name}
                 </MenuItem>
               ))}
-            </Select>
+            </DarkSelect>
             {errors.rankId && (
               <FormHelperText>{errors.rankId.message as string}</FormHelperText>
             )}
@@ -128,20 +96,15 @@ const StudentRankFormFields = ({
         )}
       />
     ) : (
-      <FormControl fullWidth disabled sx={selectSx}>
+      <FormControl fullWidth disabled sx={labelFocusSx}>
         <InputLabel shrink>Rank</InputLabel>
-        <Select
-          value={displayRankId ?? ""}
-          label="Rank"
-          notched
-          MenuProps={menuProps}
-        >
+        <DarkSelect value={displayRankId ?? ""} label="Rank" notched>
           {ranks.map((r) => (
             <MenuItem key={r.id} value={r.id}>
               {r.name}
             </MenuItem>
           ))}
-        </Select>
+        </DarkSelect>
       </FormControl>
     )}
 
