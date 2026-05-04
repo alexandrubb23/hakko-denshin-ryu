@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { HttpError } from "../lib/http-errors.js";
+import { Sentry } from "../lib/sentry.js";
 
 /**
  * Global Express error handler — must be registered as the last middleware.
@@ -24,5 +25,6 @@ export const errorHandler = (
   }
 
   console.error(err);
+  Sentry.captureException(err);
   res.status(500).json({ error: "Internal server error" });
 };

@@ -38,6 +38,8 @@ export const env = createEnv({
     CLOUDINARY_API_SECRET: z.string().min(1),
     SENDGRID_API_KEY: z.string().min(1),
     SENDGRID_FROM_EMAIL: z.email().default("noreply@hakko-denshin-ryu.com"),
+    SENTRY_DSN: z.url().optional(),
+    SENTRY_ENVIRONMENT: z.string().optional(),
   },
 
   /**
@@ -59,6 +61,8 @@ export const env = createEnv({
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     SENDGRID_FROM_EMAIL: process.env.SENDGRID_FROM_EMAIL,
+    SENTRY_DSN: process.env.SENTRY_DSN,
+    SENTRY_ENVIRONMENT: process.env.SENTRY_ENVIRONMENT,
   },
 
   /**
