@@ -101,11 +101,11 @@ const AvatarUploadDialog = ({
         />
 
         {validationError && (
-          <ErrorAlert severity="error">{validationError}</ErrorAlert>
+          <ErrorAlert>{validationError}</ErrorAlert>
         )}
 
         {isError && !validationError && (
-          <ErrorAlert severity="error">
+          <ErrorAlert>
             {error?.message ?? "Upload failed. Please try again."}
           </ErrorAlert>
         )}
