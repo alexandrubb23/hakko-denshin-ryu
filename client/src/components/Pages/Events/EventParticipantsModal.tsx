@@ -7,7 +7,6 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Dialog,
   DialogContent,
   Divider,
   List,
@@ -20,6 +19,7 @@ import {
 } from "@mui/material";
 
 import type { Event } from "@api/events";
+import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { useEventParticipants } from "@hooks/useEventParticipants";
 import { useStudents } from "@hooks/useStudents";
@@ -30,9 +30,7 @@ import {
   SUCCESS_ALPHA_40,
 } from "@style/status.tokens";
 import {
-  BACKDROP_BLUR,
   BORDER_COLOR,
-  DARK_BG,
   PURPLE,
   PURPLE_ALPHA_08,
   PURPLE_ALPHA_15,
@@ -63,22 +61,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-      slotProps={{
-        paper: {
-          sx: {
-            backgroundColor: DARK_BG,
-            backgroundImage: "none",
-            border: `1px solid ${BORDER_COLOR}`,
-            backdropFilter: BACKDROP_BLUR,
-          },
-        },
-      }}
-    >
+    <ModalDialog open={open} onClose={onClose} maxWidth="sm">
       <ModalTitle>
         <GroupIcon fontSize="small" />
         <Stack flex={1}>
@@ -230,7 +213,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
           Close
         </Button>
       </Box>
-    </Dialog>
+    </ModalDialog>
   );
 };
 

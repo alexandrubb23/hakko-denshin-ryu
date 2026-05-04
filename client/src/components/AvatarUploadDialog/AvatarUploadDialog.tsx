@@ -1,12 +1,12 @@
 import {
   CircularProgress,
-  Dialog,
   DialogActions,
   DialogContent,
   Divider,
 } from "@mui/material";
 import { useState } from "react";
 
+import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { BORDER_COLOR } from "@style/tokens";
 import { UseMutationResult } from "@tanstack/react-query";
@@ -21,7 +21,6 @@ import {
   ErrorAlert,
   PreviewAvatar,
   UploadButton,
-  dialogPaperSx,
 } from "./AvatarUploadDialog.style";
 
 export interface AvatarUploadDialogProps {
@@ -81,13 +80,7 @@ const AvatarUploadDialog = ({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="xs"
-      fullWidth
-      slotProps={{ paper: { sx: dialogPaperSx } }}
-    >
+    <ModalDialog open={open} onClose={handleClose} maxWidth="xs">
       <ModalTitle>Update Profile Photo</ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
@@ -135,7 +128,7 @@ const AvatarUploadDialog = ({
           {isPending ? "Uploading…" : "Upload"}
         </UploadButton>
       </DialogActions>
-    </Dialog>
+    </ModalDialog>
   );
 };
 

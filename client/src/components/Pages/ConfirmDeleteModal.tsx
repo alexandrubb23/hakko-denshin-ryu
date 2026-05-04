@@ -4,7 +4,6 @@ import {
   Alert,
   Box,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   Divider,
@@ -12,15 +11,10 @@ import {
 } from "@mui/material";
 import type { ReactNode } from "react";
 
+import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { ERROR_DARK, ERROR_DARK_HOVER, WARNING } from "@style/status.tokens";
-import {
-  BACKDROP_BLUR,
-  BORDER_COLOR,
-  DARK_BG,
-  PURPLE,
-  SURFACE_BG,
-} from "@style/tokens";
+import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
 
 interface Props {
   open: boolean;
@@ -41,22 +35,11 @@ const ConfirmDeleteModal = ({
   isPending,
   error,
 }: Props) => (
-  <Dialog
+  <ModalDialog
     open={open}
     onClose={onClose}
     maxWidth="xs"
-    fullWidth
-    slotProps={{
-      paper: {
-        sx: {
-          backgroundColor: DARK_BG,
-          backgroundImage: "none",
-          border: `1px solid ${BORDER_COLOR}`,
-          borderRadius: 3,
-          backdropFilter: BACKDROP_BLUR,
-        },
-      },
-    }}
+    paperSx={{ borderRadius: 3 }}
   >
     <ModalTitle sx={{ fontSize: "1.1rem", pb: 1 }}>
       <DeleteOutlineIcon fontSize="small" />
@@ -121,7 +104,7 @@ const ConfirmDeleteModal = ({
         {isPending ? "Deleting…" : "Delete"}
       </Button>
     </DialogActions>
-  </Dialog>
+  </ModalDialog>
 );
 
 export default ConfirmDeleteModal;

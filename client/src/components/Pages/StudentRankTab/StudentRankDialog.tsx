@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   Divider,
@@ -10,21 +9,9 @@ import {
 } from "@mui/material";
 import type { ReactNode } from "react";
 
+import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
-import {
-  BACKDROP_BLUR,
-  BORDER_COLOR,
-  DARK_BG,
-  PURPLE,
-  PURPLE_HOVER,
-} from "@style/tokens";
-
-const dialogPaperSx: SxProps<Theme> = {
-  backgroundColor: DARK_BG,
-  backgroundImage: "none",
-  border: `1px solid ${BORDER_COLOR}`,
-  backdropFilter: BACKDROP_BLUR,
-};
+import { BORDER_COLOR, DARK_BG, PURPLE, PURPLE_HOVER } from "@style/tokens";
 
 const submitButtonSx: SxProps<Theme> = {
   backgroundColor: PURPLE,
@@ -56,16 +43,8 @@ const StudentRankDialog = ({
   submitDisabled = false,
   children,
 }: Props) => (
-  <Dialog
-    open={open}
-    onClose={onClose}
-    maxWidth="xs"
-    fullWidth
-    slotProps={{ paper: { sx: dialogPaperSx } }}
-  >
-    <ModalTitle>
-      {title}
-    </ModalTitle>
+  <ModalDialog open={open} onClose={onClose} maxWidth="xs">
+    <ModalTitle>{title}</ModalTitle>
 
     <Divider sx={{ borderColor: BORDER_COLOR }} />
 
@@ -94,7 +73,7 @@ const StudentRankDialog = ({
         </Button>
       </DialogActions>
     </Box>
-  </Dialog>
+  </ModalDialog>
 );
 
 export default StudentRankDialog;

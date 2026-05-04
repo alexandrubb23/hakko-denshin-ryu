@@ -11,7 +11,6 @@ import {
   Alert,
   Box,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   Divider,
@@ -34,12 +33,12 @@ import ImageDropZone, {
   MAX_IMAGE_SIZE_BYTES,
   MAX_IMAGE_SIZE_MB,
 } from "@components/ImageDropZone/ImageDropZone";
+import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { useCreateEvent } from "@hooks/useCreateEvent";
 import { useUpdateEvent } from "@hooks/useUpdateEvent";
 import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
-  BACKDROP_BLUR,
   BORDER_COLOR,
   BORDER_HOVER,
   DARK_BG,
@@ -278,22 +277,7 @@ const EventForm = (props: EventFormProps) => {
   })();
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-      slotProps={{
-        paper: {
-          sx: {
-            backgroundColor: DARK_BG,
-            backgroundImage: "none",
-            border: `1px solid ${BORDER_COLOR}`,
-            backdropFilter: BACKDROP_BLUR,
-          },
-        },
-      }}
-    >
+    <ModalDialog open={open} onClose={onClose} maxWidth="sm">
       <ModalTitle>
         <Icon fontSize="small" />
         {title}
@@ -534,7 +518,7 @@ const EventForm = (props: EventFormProps) => {
           </Button>
         </DialogActions>
       </Box>
-    </Dialog>
+    </ModalDialog>
   );
 };
 

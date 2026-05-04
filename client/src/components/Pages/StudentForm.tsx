@@ -12,7 +12,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Dialog,
   DialogActions,
   DialogContent,
   Divider,
@@ -26,12 +25,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { type Student } from "@api/students";
+import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
 import { useCreateStudent } from "@hooks/useCreateStudent";
 import { useUpdateStudent } from "@hooks/useUpdateStudent";
 import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
-  BACKDROP_BLUR,
   BORDER_COLOR,
   BORDER_HOVER,
   DARK_BG,
@@ -171,22 +170,7 @@ const StudentForm = (props: StudentFormProps) => {
   })();
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="xs"
-      fullWidth
-      slotProps={{
-        paper: {
-          sx: {
-            backgroundColor: DARK_BG,
-            backgroundImage: "none",
-            border: `1px solid ${BORDER_COLOR}`,
-            backdropFilter: BACKDROP_BLUR,
-          },
-        },
-      }}
-    >
+    <ModalDialog open={open} onClose={onClose} maxWidth="xs">
       <ModalTitle>
         <Icon fontSize="small" />
         {title}
@@ -284,7 +268,7 @@ const StudentForm = (props: StudentFormProps) => {
           </Button>
         </DialogActions>
       </Box>
-    </Dialog>
+    </ModalDialog>
   );
 };
 
