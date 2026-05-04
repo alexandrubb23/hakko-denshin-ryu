@@ -14,7 +14,6 @@ import {
   type EventTypeFilter,
 } from "@api/dashboard";
 import { useDashboardEvents } from "@hooks/useDashboardEvents";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
@@ -41,22 +40,20 @@ import {
 import {
   BORDER_COLOR,
   PURPLE,
-  PURPLE_ALPHA_12,
   PURPLE_ALPHA_25,
   SKELETON_SX,
   TEXT_MUTED,
   TEXT_SUBTLE,
   WHITE_ALPHA_10,
   WHITE_ALPHA_25,
-  WHITE_ALPHA_60,
 } from "@style/tokens";
 
+import ChipFilterRow, { defaultChipSx } from "./ChipFilterRow";
 import {
   ChartHeader,
   ChartRoot,
   ChartTitle,
   CountBadge,
-  FilterRow,
 } from "./DashboardEventChart.style";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
@@ -104,21 +101,14 @@ const STATUS_OPTIONS: { value: EventStatusFilter; label: string }[] = [
   { value: "cancelled", label: "Cancelled" },
 ];
 
-const chipSx = (active: boolean) => ({
-  borderColor: active ? PURPLE : BORDER_COLOR,
-  color: active ? PURPLE : WHITE_ALPHA_60,
-  backgroundColor: active ? PURPLE_ALPHA_12 : "transparent",
-  "&:hover": { borderColor: PURPLE },
-});
-
 const statusChipSx = (
   value: EventStatusFilter,
   active: boolean,
   activeStatus: EventStatusFilter
 ) => {
-  if (value === "all") return chipSx(active);
+  if (value === "all") return defaultChipSx(active);
   const colors = EVENT_STATUS_COLORS[value];
-  if (!colors) return chipSx(active);
+  if (!colors) return defaultChipSx(active);
   const isActive = active && activeStatus !== "all";
   return {
     borderColor: isActive ? colors.text : colors.border,
@@ -173,6 +163,14 @@ const DashboardEventChart = () => {
   );
 
   const availableYears = data?.availableYears ?? [];
+
+  const yearOptions = useMemo(
+    () => [
+      { value: "all" as const, label: "All Years" },
+      ...availableYears.map((y) => ({ value: y, label: String(y) })),
+    ],
+    [availableYears]
+  );
 
   const options = {
     indexAxis: "y" as const,
@@ -251,57 +249,22 @@ const DashboardEventChart = () => {
       </ChartHeader>
 
       {/* Type filter */}
-      <FilterRow>
-        {TYPE_OPTIONS.map(({ value, label }) => (
-          <Chip
-            key={value}
-            label={label}
-            size="small"
-            onClick={() => setType(value)}
-            sx={chipSx(type === value)}
-            variant="outlined"
-          />
-        ))}
-      </FilterRow>
+      <ChipFilterRow options={TYPE_OPTIONS} value={type} onChange={setType} />
 
       <Divider sx={{ borderColor: BORDER_COLOR, mb: 2 }} />
 
       {/* Status filter */}
-      <FilterRow>
-        {STATUS_OPTIONS.map(({ value, label }) => (
-          <Chip
-            key={value}
-            label={label}
-            size="small"
-            onClick={() => setStatus(value)}
-            sx={statusChipSx(value, status === value, status)}
-            variant="outlined"
-          />
-        ))}
-      </FilterRow>
+      <ChipFilterRow
+        options={STATUS_OPTIONS}
+        value={status}
+        onChange={setStatus}
+        getChipSx={(v, active) => statusChipSx(v, active, status)}
+      />
 
       <Divider sx={{ borderColor: BORDER_COLOR, mb: 2 }} />
 
       {/* Year filter */}
-      <FilterRow>
-        <Chip
-          label="All Years"
-          size="small"
-          onClick={() => setYear("all")}
-          sx={chipSx(year === "all")}
-          variant="outlined"
-        />
-        {availableYears.map((y) => (
-          <Chip
-            key={y}
-            label={String(y)}
-            size="small"
-            onClick={() => setYear(y)}
-            sx={chipSx(year === y)}
-            variant="outlined"
-          />
-        ))}
-      </FilterRow>
+      <ChipFilterRow options={yearOptions} value={year} onChange={setYear} />
 
       {filtered.length === 0 ? (
         <Typography

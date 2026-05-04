@@ -10,7 +10,6 @@ import { Bar } from "react-chartjs-2";
 
 import { type AttendancePeriod, type DashboardStudent } from "@api/dashboard";
 import { useDashboardStudents } from "@hooks/useDashboardStudents";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
 import {
@@ -29,20 +28,14 @@ import {
   BELT_WHITE,
   BELT_YELLOW,
 } from "@style/ranks.tokens";
-import {
-  BORDER_COLOR,
-  PURPLE,
-  PURPLE_ALPHA_12,
-  SKELETON_SX,
-  WHITE_ALPHA_60,
-} from "@style/tokens";
+import { BORDER_COLOR, PURPLE, SKELETON_SX } from "@style/tokens";
 
 import BeltChipLabel from "./BeltChipLabel";
+import ChipFilterRow from "./ChipFilterRow";
 import {
   ChartHeader,
   ChartRoot,
   ChartTitle,
-  FilterRow,
   StudentCountBadge,
 } from "./DashboardStudentChart.style";
 
@@ -83,13 +76,6 @@ function filterStudents(
     return students.filter((s) => s.rankId === null);
   return students.filter((s) => String(s.rankId) === rankFilter);
 }
-
-const chipSx = (active: boolean) => ({
-  borderColor: active ? PURPLE : BORDER_COLOR,
-  color: active ? PURPLE : WHITE_ALPHA_60,
-  backgroundColor: active ? PURPLE_ALPHA_12 : "transparent",
-  "&:hover": { borderColor: PURPLE },
-});
 
 const DashboardStudentChart = () => {
   const [period, setPeriod] = useState<AttendancePeriod>("all");
@@ -170,6 +156,18 @@ const DashboardStudentChart = () => {
     },
   };
 
+  const rankOptions = useMemo(
+    () => [
+      { value: ALL_RANK_FILTER, label: "All" },
+      ...(data?.ranks ?? []).map((rank) => ({
+        value: String(rank.id),
+        label: <BeltChipLabel belt={rank.belt} name={rank.name} />,
+      })),
+      ...(hasUnranked ? [{ value: UNRANKED_FILTER, label: "Unranked" }] : []),
+    ],
+    [data?.ranks, hasUnranked]
+  );
+
   const chartHeight = Math.max(120, filtered.length * 36);
 
   if (isLoading) {
@@ -199,50 +197,20 @@ const DashboardStudentChart = () => {
       </ChartHeader>
 
       {/* Period filter */}
-      <FilterRow>
-        {PERIOD_OPTIONS.map(({ value, label }) => (
-          <Chip
-            key={value}
-            label={label}
-            size="small"
-            onClick={() => setPeriod(value)}
-            sx={chipSx(period === value)}
-            variant="outlined"
-          />
-        ))}
-      </FilterRow>
+      <ChipFilterRow
+        options={PERIOD_OPTIONS}
+        value={period}
+        onChange={setPeriod}
+      />
 
       <Divider sx={{ borderColor: BORDER_COLOR, mb: 2 }} />
 
       {/* Rank filter */}
-      <FilterRow>
-        <Chip
-          label="All"
-          size="small"
-          onClick={() => setRankFilter(ALL_RANK_FILTER)}
-          sx={chipSx(rankFilter === ALL_RANK_FILTER)}
-          variant="outlined"
-        />
-        {(data?.ranks ?? []).map((rank) => (
-          <Chip
-            key={rank.id}
-            label={<BeltChipLabel belt={rank.belt} name={rank.name} />}
-            size="small"
-            onClick={() => setRankFilter(String(rank.id))}
-            sx={chipSx(rankFilter === String(rank.id))}
-            variant="outlined"
-          />
-        ))}
-        {hasUnranked && (
-          <Chip
-            label="Unranked"
-            size="small"
-            onClick={() => setRankFilter(UNRANKED_FILTER)}
-            sx={chipSx(rankFilter === UNRANKED_FILTER)}
-            variant="outlined"
-          />
-        )}
-      </FilterRow>
+      <ChipFilterRow
+        options={rankOptions}
+        value={rankFilter}
+        onChange={setRankFilter}
+      />
 
       {filtered.length > 0 && (
         <div style={{ height: chartHeight }}>
