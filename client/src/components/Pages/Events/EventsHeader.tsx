@@ -1,7 +1,9 @@
 import AddIcon from "@mui/icons-material/Add";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import { Box, Button, Chip, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Stack } from "@mui/material";
 import { DARK_BG, PURPLE, PURPLE_ALPHA_15, PURPLE_HOVER } from "@style/tokens";
+
+import PageTitle from "../PageTitle";
 
 interface EventsHeaderProps {
   count: number | undefined;
@@ -17,9 +19,7 @@ const EventsHeader = ({ count, onAdd }: EventsHeaderProps) => (
   >
     <Stack direction="row" alignItems="center" gap={1.5}>
       <EventNoteIcon sx={{ color: PURPLE, fontSize: 32 }} />
-      <Typography variant="h4" fontWeight={700}>
-        Events
-      </Typography>
+      <PageTitle>Events</PageTitle>
       {count !== undefined && (
         <Chip
           label={count}

@@ -1,8 +1,9 @@
 import PeopleIcon from "@mui/icons-material/People";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { Box, Button, Chip, Stack, Typography } from "@mui/material";
-
+import { Box, Button, Chip, Stack } from "@mui/material";
 import { DARK_BG, PURPLE, PURPLE_ALPHA_15, PURPLE_HOVER } from "@style/tokens";
+
+import PageTitle from "./PageTitle";
 
 interface StudentsHeaderProps {
   count: number | undefined;
@@ -18,9 +19,7 @@ const StudentsHeader = ({ count, onAdd }: StudentsHeaderProps) => (
   >
     <Stack direction="row" alignItems="center" gap={1.5}>
       <PeopleIcon sx={{ color: PURPLE, fontSize: 32 }} />
-      <Typography variant="h4" fontWeight={700}>
-        Students
-      </Typography>
+      <PageTitle>Students</PageTitle>
       {count !== undefined && (
         <Chip
           label={count}
