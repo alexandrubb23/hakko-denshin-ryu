@@ -135,16 +135,20 @@ Reusable server-side helpers live in `server/src/utils/`. Always import from the
 | Utility | File | Description |
 |---------|------|-------------|
 | `parseYearMonthParams` | `query-params.ts` | Parses and validates `year` (required) and `month` (optional) query params. Returns `{ year, from, to }` as a UTC date range. Throws `HttpBadRequestError` for invalid or out-of-bounds values. |
+| `requireFile` | `request.ts` | Asserts `req.file` is present (set by `uploadMiddleware`). Returns the file typed as non-nullable. Throws `HttpBadRequestError("No image file provided")` if missing. |
 
 Usage in a route handler:
 
 ```ts
 import { parseYearMonthParams } from "../utils/query-params.js";
+import { requireFile } from "../utils/request.js";
 
 const { from, to } = parseYearMonthParams(
   req.query.year as string | undefined,
   req.query.month as string | undefined
 );
+
+const file = requireFile(req); // throws if no file uploaded
 ```
 
 ### Routing

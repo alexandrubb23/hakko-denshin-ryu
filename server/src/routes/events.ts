@@ -6,7 +6,7 @@ import {
 import { Router } from "express";
 import { EventStatus, Role } from "../generated/prisma/enums.js";
 import { uploadEventImage } from "../lib/cloudinary.js";
-import { HttpBadRequestError, HttpNotFoundError } from "../lib/http-errors.js";
+import { HttpNotFoundError } from "../lib/http-errors.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
@@ -24,6 +24,7 @@ import {
   updateEventImage,
   upsertEventParticipation,
 } from "../repositories/events.repository.js";
+import { requireFile } from "../utils/request.js";
 
 const router = Router();
 
@@ -132,9 +133,9 @@ router.post(
     const id = req.params.id as string;
     const event = await requireEvent(id, true);
 
-    if (!req.file) throw new HttpBadRequestError("No image file provided");
+    const file = requireFile(req);
 
-    const imageUrl = await uploadEventImage(req.file.buffer, id, event.image);
+    const imageUrl = await uploadEventImage(file.buffer, id, event.image);
     await updateEventImage(id, imageUrl);
 
     res.json({ image: imageUrl });

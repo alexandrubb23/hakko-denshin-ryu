@@ -12,7 +12,6 @@ import { Role } from "../generated/prisma/enums.js";
 import { uploadAvatar } from "../lib/cloudinary.js";
 import { sendInvitationEmail } from "../lib/email.js";
 import {
-  HttpBadRequestError,
   HttpConflictError,
   HttpNotFoundError,
   HttpUnprocessableError,
@@ -50,6 +49,7 @@ import {
   upsertStudentAttendance,
 } from "../repositories/students.repository.js";
 import { parseYearMonthParams } from "../utils/query-params.js";
+import { requireFile } from "../utils/request.js";
 
 const router = Router();
 
@@ -341,10 +341,10 @@ router.post(
     const id = req.params.id as string;
     await requireStudent(id);
 
-    if (!req.file) throw new HttpBadRequestError("No image file provided");
+    const file = requireFile(req);
 
     const existing = await findStudentImageById(id);
-    const imageUrl = await uploadAvatar(req.file.buffer, id, existing?.image);
+    const imageUrl = await uploadAvatar(file.buffer, id, existing?.image);
     await updateStudentImage(id, imageUrl);
 
     res.json({ image: imageUrl });

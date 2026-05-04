@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { uploadAvatar } from "../lib/cloudinary.js";
-import { HttpBadRequestError } from "../lib/http-errors.js";
 import { ApiRoutes } from "../lib/routes.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { uploadMiddleware } from "../middleware/upload.js";
@@ -12,6 +11,7 @@ import {
   updateUserImageById,
 } from "../repositories/me.repository.js";
 import { parseYearMonthParams } from "../utils/query-params.js";
+import { requireFile } from "../utils/request.js";
 
 const router = Router();
 
@@ -47,15 +47,11 @@ router.post(
   requireAuth,
   uploadMiddleware,
   async (req, res) => {
-    if (!req.file) throw new HttpBadRequestError("No image file provided");
+    const file = requireFile(req);
 
     const user = await findUserImageById(req.user.id);
 
-    const imageUrl = await uploadAvatar(
-      req.file.buffer,
-      req.user.id,
-      user?.image
-    );
+    const imageUrl = await uploadAvatar(file.buffer, req.user.id, user?.image);
 
     await updateUserImageById(req.user.id, imageUrl);
 
