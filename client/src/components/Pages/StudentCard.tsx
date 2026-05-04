@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import type { UseMutationResult } from "@tanstack/react-query";
 
+import { type StudentRankEntry } from "@api/students";
 import SkeletonText from "@components/SkeletonText/SkeletonText";
 import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
 import {
@@ -21,6 +22,7 @@ import {
 } from "@style/tokens";
 
 import StudentAvatar from "./StudentAvatar";
+import StudentCurrentRank from "./StudentCurrentRank";
 
 export type StudentCardUser = {
   id: string;
@@ -37,6 +39,8 @@ type Props = {
   isError: boolean;
   errorMessage?: string;
   uploadMutation?: UseMutationResult<string, Error, File, unknown>;
+  latestRank?: StudentRankEntry;
+  isRankLoading?: boolean;
   children?: React.ReactNode;
 };
 
@@ -46,6 +50,8 @@ const StudentCard = ({
   isError,
   errorMessage = "Failed to load profile. Please try again.",
   uploadMutation,
+  latestRank,
+  isRankLoading,
   children,
 }: Props) => (
   <Paper
@@ -95,6 +101,11 @@ const StudentCard = ({
               {user?.email}
             </SkeletonText>
           </Box>
+
+          <StudentCurrentRank
+            latestRank={latestRank}
+            isLoading={isRankLoading}
+          />
         </Stack>
 
         <Divider sx={{ borderColor: BORDER_COLOR }} />
