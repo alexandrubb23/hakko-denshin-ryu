@@ -24,7 +24,7 @@ import {
   updateEventImage,
   upsertEventParticipation,
 } from "../repositories/events.repository.js";
-import { requireFile } from "../utils/request.js";
+import { requireFile, requireId } from "../utils/request.js";
 
 const router = Router();
 
@@ -49,7 +49,7 @@ router.get(ApiRoutes.events, async (_req, res) => {
 });
 
 router.get(ApiRoutes.event, async (req, res) => {
-  const id = req.params.id as string;
+  const id = requireId(req);
   const event = await requireEvent(id);
   const { deletedAt: _d, updatedAt: _u, ...rest } = event;
   res.json({ event: rest });
@@ -93,7 +93,7 @@ router.put(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireEvent(id, true);
 
     const { ticketUrl, endDate, startDate, ...rest } = validate(
@@ -117,7 +117,7 @@ router.delete(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireEvent(id, true);
     await softDeleteEvent(id);
     res.status(204).end();
@@ -130,7 +130,7 @@ router.post(
   requireRole(Role.admin),
   uploadMiddleware,
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     const event = await requireEvent(id, true);
 
     const file = requireFile(req);
@@ -147,7 +147,7 @@ router.get(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireEvent(id, true);
     const participants = await findEventParticipants(id);
     res.json({ participants });
@@ -159,7 +159,7 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireEvent(id, true);
 
     const { userId, attended } = validate(

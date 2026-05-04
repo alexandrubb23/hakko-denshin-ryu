@@ -49,7 +49,7 @@ import {
   upsertStudentAttendance,
 } from "../repositories/students.repository.js";
 import { parseYearMonthParams } from "../utils/query-params.js";
-import { requireFile } from "../utils/request.js";
+import { requireFile, requireId } from "../utils/request.js";
 
 const router = Router();
 
@@ -98,7 +98,7 @@ router.get(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
 
     const student = await findStudentWithDetails(id);
 
@@ -119,7 +119,7 @@ router.get(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     const student = await requireStudent(id);
     const ranks = await findStudentRanks(id);
     res.json({ ranks });
@@ -131,7 +131,7 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireStudent(id);
 
     const { rankId, awardedAt, notes } = validate(
@@ -167,8 +167,8 @@ router.put(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const studentId = req.params.id as string;
-    const rankEntryId = req.params.rankEntryId as string;
+    const studentId = requireId(req);
+    const rankEntryId = requireId(req, "rankEntryId");
 
     await requireStudent(studentId);
     await requireRankEntry(rankEntryId, studentId);
@@ -227,7 +227,7 @@ router.put(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     const student = await requireStudent(id);
 
     const { name, email, password } = validate(updateStudentSchema, req.body);
@@ -253,8 +253,8 @@ router.delete(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const studentId = req.params.id as string;
-    const rankEntryId = req.params.rankEntryId as string;
+    const studentId = requireId(req);
+    const rankEntryId = requireId(req, "rankEntryId");
 
     await requireStudent(studentId);
     await requireRankEntry(rankEntryId, studentId);
@@ -269,7 +269,7 @@ router.delete(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
 
     // requireStudent throws 404 for non-student or soft-deleted IDs,
     // so admin IDs get the same 404 response — preventing role enumeration.
@@ -292,7 +292,7 @@ router.get(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireStudent(id);
 
     const { from, to } = parseYearMonthParams(
@@ -310,7 +310,7 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireStudent(id);
 
     const { date: dateStr, attended } = validate(
@@ -338,7 +338,7 @@ router.post(
   requireRole(Role.admin),
   uploadMiddleware,
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireStudent(id);
 
     const file = requireFile(req);
@@ -356,7 +356,7 @@ router.get(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const id = req.params.id as string;
+    const id = requireId(req);
     await requireStudent(id);
     const events = await findStudentEvents(id);
     res.json({ events });
