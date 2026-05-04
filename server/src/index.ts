@@ -7,6 +7,8 @@ initSentry();
 
 const app = createApp();
 
-app.listen(env.PORT, () => {
-  console.log(`Server running at ${env.HOST}:${env.PORT}`);
+const port = new URL(env.SERVER_URL).port || "3000";
+
+app.listen(Number(port), () => {
+  console.log(`Server running at ${env.SERVER_URL}`);
 });

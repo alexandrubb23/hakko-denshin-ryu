@@ -25,11 +25,10 @@ export const env = createEnv({
         (val) => !WEAK_SECRETS.has(val),
         "BETTER_AUTH_SECRET is a placeholder. Generate with: openssl rand -base64 32"
       ),
+    SERVER_URL: z.url().default("http://localhost:3000"),
     BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
     CLIENT_URL: z.url().default("http://localhost:5173"),
     TRUSTED_ORIGINS: z.string().default("http://localhost:5173"),
-    HOST: z.string().default("http://localhost"),
-    PORT: z.coerce.number().default(3000),
     NODE_ENV: z
       .enum(["development", "production", "test"])
       .default("development"),
@@ -50,11 +49,10 @@ export const env = createEnv({
   runtimeEnvStrict: {
     DATABASE_URL: process.env.DATABASE_URL,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    SERVER_URL: process.env.SERVER_URL,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     CLIENT_URL: process.env.CLIENT_URL,
     TRUSTED_ORIGINS: process.env.TRUSTED_ORIGINS,
-    HOST: process.env.HOST,
-    PORT: process.env.PORT,
     NODE_ENV: process.env.NODE_ENV,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,

@@ -9,7 +9,7 @@ services:
       - ./server/.env
     environment:
       NODE_ENV: production
-      PORT: "3000"
+      SERVER_URL: "http://localhost:3000"
     # On Mac/Linux: replace any "localhost" DB host with host.docker.internal
     # so the container can reach a Postgres instance running on the host.
     # If your DATABASE_URL already uses a remote host (e.g. Neon), this is a no-op.
