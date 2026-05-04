@@ -128,6 +128,25 @@ The `@hakko/core` package (`core/`) is a shared TypeScript workspace package use
 - React Hook Form uses Zod resolvers on the client — pass the schema directly to `zodResolver`.
 - Express route handlers use Zod schemas on the server via `schema.safeParse(req.body)`.
 
+### Server Utilities (`server/src/utils/`)
+
+Reusable server-side helpers live in `server/src/utils/`. Always import from there rather than duplicating logic in route files.
+
+| Utility | File | Description |
+|---------|------|-------------|
+| `parseYearMonthParams` | `query-params.ts` | Parses and validates `year` (required) and `month` (optional) query params. Returns `{ year, from, to }` as a UTC date range. Throws `HttpBadRequestError` for invalid or out-of-bounds values. |
+
+Usage in a route handler:
+
+```ts
+import { parseYearMonthParams } from "../utils/query-params.js";
+
+const { from, to } = parseYearMonthParams(
+  req.query.year as string | undefined,
+  req.query.month as string | undefined
+);
+```
+
 ### Routing
 
 - All pages declared in `client/src/pages.tsx` as a `pages` array — single source of truth

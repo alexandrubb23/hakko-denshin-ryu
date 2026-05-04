@@ -1,8 +1,13 @@
-import { test as base, expect, type Browser, type Page } from "@playwright/test";
-export type { Page };
+import {
+  test as base,
+  expect,
+  type Browser,
+  type Page,
+} from "@playwright/test";
 import { execSync } from "child_process";
 import { readFileSync } from "fs";
 import path from "path";
+export type { Page };
 
 export { expect };
 
@@ -28,7 +33,10 @@ function loadEnvFile(filePath: string): Record<string, string> {
     const eqIdx = trimmed.indexOf("=");
     if (eqIdx === -1) continue;
     const key = trimmed.slice(0, eqIdx).trim();
-    const val = trimmed.slice(eqIdx + 1).trim().replace(/^["']|["']$/g, "");
+    const val = trimmed
+      .slice(eqIdx + 1)
+      .trim()
+      .replace(/^["']|["']$/g, "");
     vars[key] = val;
   }
   return vars;
@@ -84,7 +92,11 @@ export async function createStudentViaUI(
   const dialog = page.getByRole("dialog");
   await dialog.waitFor({ state: "visible" });
   await dialog.getByLabel("Name").fill(student.name);
-  await dialog.getByLabel("Email").fill(student.email);
+  await dialog.getByLabel("Email", { exact: true }).fill(student.email);
+  // Uncheck "Send invitation email" to reveal the Password field
+  await dialog
+    .getByRole("checkbox", { name: /send invitation email/i })
+    .uncheck();
   await dialog.getByLabel("Password").fill(student.password);
   await dialog.getByRole("button", { name: "Create Student" }).click();
   await dialog.waitFor({ state: "hidden" });
@@ -156,7 +168,11 @@ export const test = base.extend<{
   studentPage: async ({ browser }, use) => {
     const testEnv = loadEnvFile(path.join(SERVER_DIR, ".env.test"));
     const env = { ...process.env, NODE_ENV: "test", ...testEnv };
-    execSync("bun run db:seed:test-student", { cwd: SERVER_DIR, env, stdio: "inherit" });
+    execSync("bun run db:seed:test-student", {
+      cwd: SERVER_DIR,
+      env,
+      stdio: "inherit",
+    });
 
     const { page, context } = await createAuthenticatedPage(
       browser,

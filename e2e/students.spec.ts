@@ -27,7 +27,11 @@ async function createStudentViaUI(
   await dialog.waitFor({ state: "visible" });
 
   await dialog.getByLabel("Name").fill(student.name);
-  await dialog.getByLabel("Email").fill(student.email);
+  await dialog.getByLabel("Email", { exact: true }).fill(student.email);
+  // Uncheck "Send invitation email" to reveal the Password field
+  await dialog
+    .getByRole("checkbox", { name: /send invitation email/i })
+    .uncheck();
   await dialog.getByLabel("Password").fill(student.password);
 
   await dialog.getByRole("button", { name: "Create Student" }).click();
