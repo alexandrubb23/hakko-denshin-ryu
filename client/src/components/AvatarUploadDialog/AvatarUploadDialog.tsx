@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
+import ErrorAlert from "@components/Pages/shared/ErrorAlert";
 import { BORDER_COLOR } from "@style/tokens";
 import { UseMutationResult } from "@tanstack/react-query";
 import { getInitials } from "@utils/string";
@@ -18,7 +19,6 @@ import AvatarDropZone, {
 } from "./AvatarDropZone";
 import {
   CancelButton,
-  ErrorAlert,
   PreviewAvatar,
   UploadButton,
 } from "./AvatarUploadDialog.style";

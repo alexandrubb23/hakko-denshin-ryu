@@ -2,7 +2,8 @@ import { Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
 import CenterSpinner from "@components/Spinner/CenterSpinner";
-import { ErrorAlert, PageWrapper } from "./TabbedPageLayout.style";
+import ErrorAlert from "../ErrorAlert";
+import { PageWrapper } from "./TabbedPageLayout.style";
 
 interface TabbedPageLayoutProps {
   title: string;
@@ -26,7 +27,7 @@ const TabbedPageLayout = ({
 
     {isLoading && <CenterSpinner />}
 
-    {isError && <ErrorAlert severity="error">{errorMessage}</ErrorAlert>}
+    {isError && <ErrorAlert>{errorMessage}</ErrorAlert>}
 
     {children}
   </PageWrapper>

@@ -1,7 +1,6 @@
-import { Alert, Avatar, Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
   BORDER_COLOR,
   DARK_BG,
@@ -20,12 +19,6 @@ export const PreviewAvatar = styled(Avatar)({
   backgroundColor: PURPLE_ALPHA_25,
   color: PURPLE,
   border: `2px solid ${BORDER_COLOR}`,
-});
-
-export const ErrorAlert = styled(Alert)({
-  marginTop: 16,
-  backgroundColor: ERROR_DARK_ALPHA_12,
-  color: ERROR_DARK_TEXT,
 });
 
 export const CancelButton = styled(Button)({

@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import {
-  Alert,
   Box,
   Button,
   DialogActions,
@@ -35,9 +34,9 @@ import ImageDropZone, {
 } from "@components/ImageDropZone/ImageDropZone";
 import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
+import ErrorAlert from "@components/Pages/shared/ErrorAlert";
 import { useCreateEvent } from "@hooks/useCreateEvent";
 import { useUpdateEvent } from "@hooks/useUpdateEvent";
-import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
   BORDER_COLOR,
   BORDER_HOVER,
@@ -289,17 +288,7 @@ const EventForm = (props: EventFormProps) => {
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: 3 }}
         >
-          {serverErrorMessage && (
-            <Alert
-              severity="error"
-              sx={{
-                backgroundColor: ERROR_DARK_ALPHA_12,
-                color: ERROR_DARK_TEXT,
-              }}
-            >
-              {serverErrorMessage}
-            </Alert>
-          )}
+          {serverErrorMessage && <ErrorAlert>{serverErrorMessage}</ErrorAlert>}
 
           <TextField
             label="Event Name"
@@ -477,16 +466,7 @@ const EventForm = (props: EventFormProps) => {
               onFileSelect={handleFileSelect}
             />
             {imageValidationError && (
-              <Alert
-                severity="error"
-                sx={{
-                  mt: 1,
-                  backgroundColor: ERROR_DARK_ALPHA_12,
-                  color: ERROR_DARK_TEXT,
-                }}
-              >
-                {imageValidationError}
-              </Alert>
+              <ErrorAlert sx={{ mt: 1 }}>{imageValidationError}</ErrorAlert>
             )}
           </Box>
         </DialogContent>

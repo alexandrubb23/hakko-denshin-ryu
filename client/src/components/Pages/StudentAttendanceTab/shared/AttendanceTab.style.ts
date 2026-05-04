@@ -1,4 +1,4 @@
-import { Alert, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { PURPLE } from "@style/tokens";
@@ -13,5 +13,3 @@ export const LoadingContainer = styled("div")({
 });
 
 export const PurpleSpinner = styled(CircularProgress)({ color: PURPLE });
-
-export const StyledAlert = styled(Alert)({ marginTop: 16 });

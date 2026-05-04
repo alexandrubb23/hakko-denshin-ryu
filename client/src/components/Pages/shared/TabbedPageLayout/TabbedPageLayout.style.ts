@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Divider,
   Paper,
@@ -8,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
   BACKDROP_BLUR,
   BORDER_COLOR,
@@ -27,12 +25,6 @@ export const PageWrapper = styled(Box)({
   alignItems: "stretch",
   gap: 24,
   "@media (min-width:600px)": { padding: "24px" },
-});
-
-export const ErrorAlert = styled(Alert)({
-  backgroundColor: ERROR_DARK_ALPHA_12,
-  color: ERROR_DARK_TEXT,
-  border: "1px solid rgba(211,47,47,0.3)",
 });
 
 export const ContentCard = styled(Paper)({

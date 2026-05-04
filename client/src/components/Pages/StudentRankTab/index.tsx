@@ -1,11 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Alert, Box, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 import { type StudentRankEntry } from "@api/students";
 import { useStudentRanks } from "@hooks/useStudentRanks";
 import { DARK_BG, PURPLE, PURPLE_HOVER } from "@style/tokens";
 
+import ErrorAlert from "../shared/ErrorAlert";
 import InfoAlert from "../shared/InfoAlert";
 import CreateStudentRankModal from "./CreateStudentRankModal";
 import DeleteRankModal from "./DeleteRankModal";
@@ -65,9 +66,7 @@ const StudentRankTab = ({ studentId }: Props) => {
       )}
 
       {isError && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          Failed to load rank history. Please try again.
-        </Alert>
+        <ErrorAlert>Failed to load rank history. Please try again.</ErrorAlert>
       )}
 
       {!isLoading && !isError && ranks?.length === 0 && (

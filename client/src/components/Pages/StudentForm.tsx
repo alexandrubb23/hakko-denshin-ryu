@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import {
-  Alert,
   Box,
   Button,
   Checkbox,
@@ -27,9 +26,9 @@ import { useForm } from "react-hook-form";
 import { type Student } from "@api/students";
 import ModalDialog from "@components/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ModalTitle/ModalTitle";
+import ErrorAlert from "@components/Pages/shared/ErrorAlert";
 import { useCreateStudent } from "@hooks/useCreateStudent";
 import { useUpdateStudent } from "@hooks/useUpdateStudent";
-import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import {
   BORDER_COLOR,
   BORDER_HOVER,
@@ -183,15 +182,7 @@ const StudentForm = (props: StudentFormProps) => {
           sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: 3 }}
         >
           {serverErrorMessage && (
-            <Alert
-              severity="error"
-              sx={{
-                backgroundColor: ERROR_DARK_ALPHA_12,
-                color: ERROR_DARK_TEXT,
-              }}
-            >
-              {serverErrorMessage}
-            </Alert>
+            <ErrorAlert>{serverErrorMessage}</ErrorAlert>
           )}
 
           <TextField

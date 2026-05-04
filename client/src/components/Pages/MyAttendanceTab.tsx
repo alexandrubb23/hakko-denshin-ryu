@@ -11,12 +11,12 @@ import AttendanceNavBar from "./StudentAttendanceTab/shared/AttendanceNavBar";
 import {
   LoadingContainer,
   PurpleSpinner,
-  StyledAlert,
   TabRoot,
 } from "./StudentAttendanceTab/shared/AttendanceTab.style";
 import { CalendarView } from "./StudentAttendanceTab/shared/calendarView";
 import useAttendanceTabParams from "./StudentAttendanceTab/shared/useAttendanceTabParams";
 import WeekView from "./StudentAttendanceTab/WeekView";
+import ErrorAlert from "./shared/ErrorAlert";
 
 const PLACEHOLDER_STUDENT_ID = "";
 
@@ -44,9 +44,9 @@ const MyAttendanceTab = () => {
       <AttendanceNavBar view={view} onChange={handleViewChange} />
 
       {isError && view !== CalendarView.year && (
-        <StyledAlert severity="error">
+        <ErrorAlert>
           Failed to load attendance data. Please try again.
-        </StyledAlert>
+        </ErrorAlert>
       )}
 
       {isLoading && view !== CalendarView.year && (

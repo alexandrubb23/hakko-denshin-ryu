@@ -10,13 +10,13 @@ import AttendanceNavBar from "./shared/AttendanceNavBar";
 import {
   LoadingContainer,
   PurpleSpinner,
-  StyledAlert,
   TabRoot,
 } from "./shared/AttendanceTab.style";
 import { CalendarView } from "./shared/calendarView";
 import useAttendanceTabParams from "./shared/useAttendanceTabParams";
 import WeekView from "./WeekView";
 import YearView from "./YearView";
+import ErrorAlert from "../shared/ErrorAlert";
 
 interface Props {
   studentId: string;
@@ -61,9 +61,9 @@ const StudentAttendanceTab = ({ studentId }: Props) => {
       <AttendanceNavBar view={view} onChange={handleViewChange} />
 
       {isError && view !== CalendarView.year && (
-        <StyledAlert severity="error">
+        <ErrorAlert>
           Failed to load attendance data. Please try again.
-        </StyledAlert>
+        </ErrorAlert>
       )}
 
       {isLoading && view !== CalendarView.year && (
