@@ -1,18 +1,17 @@
 import { Navigate, Outlet } from "react-router";
 
 import CenterSpinner from "@components/Spinner/CenterSpinner";
-import { authClient } from "@lib/auth-client";
-import { Role } from "@lib/role";
+import useIsAdmin from "@hooks/useIsAdmin";
 import { Routes } from "@lib/routes";
 
 const AdminRoute = () => {
-  const { data: session, isPending } = authClient.useSession();
+  const { isAdmin, isPending } = useIsAdmin();
 
   if (isPending) {
     return <CenterSpinner minHeight="100vh" />;
   }
 
-  if (session?.user.role !== Role.admin) {
+  if (!isAdmin) {
     return <Navigate to={Routes.dashboard} replace />;
   }
 

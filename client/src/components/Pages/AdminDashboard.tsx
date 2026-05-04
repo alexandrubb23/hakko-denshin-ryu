@@ -1,6 +1,6 @@
 import { Box, Paper, Skeleton, Typography } from "@mui/material";
 
-import { authClient } from "@lib/auth-client";
+import useIsAdmin from "@hooks/useIsAdmin";
 import { SKELETON_SX } from "@style/tokens";
 
 import DashboardAdminLinks from "./DashboardAdminLinks";
@@ -8,7 +8,7 @@ import DashboardEventChart from "./DashboardEventChart";
 import DashboardStudentChart from "./DashboardStudentChart";
 
 const AdminDashboard = () => {
-  const { data: session, isPending } = authClient.useSession();
+  const { session, isPending } = useIsAdmin();
 
   return (
     <Paper elevation={3} className="w-full p-8 flex flex-col gap-6">

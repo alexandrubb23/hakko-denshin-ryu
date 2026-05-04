@@ -20,8 +20,7 @@ import { Link, useLocation } from "react-router";
 
 import LogoIcon from "@assets/images/logo.webp";
 import useIsMobile from "@hooks/isMobile";
-import { authClient } from "@lib/auth-client";
-import { Role } from "@lib/role";
+import useIsAdmin from "@hooks/useIsAdmin";
 import { Routes } from "@lib/routes";
 import {
   PURPLE,
@@ -68,10 +67,12 @@ type DrawerContentProps = {
 const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
   const location = useLocation();
   const isMobile = useIsMobile();
-  const { data: session, isPending } = authClient.useSession();
+  const { isAdmin, isPending } = useIsAdmin();
 
-  const isAdmin = isPending || session?.user.role === Role.admin;
-  const visibleItems = NAV_ITEMS.filter((item) => !item.adminOnly || isAdmin);
+  const showAdminItems = isPending || isAdmin;
+  const visibleItems = NAV_ITEMS.filter(
+    (item) => !item.adminOnly || showAdminItems
+  );
 
   return (
     <>

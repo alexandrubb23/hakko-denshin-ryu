@@ -1,12 +1,10 @@
-import { authClient } from "@lib/auth-client";
-import { Role } from "@lib/role";
+import useIsAdmin from "@hooks/useIsAdmin";
 
 import AdminDashboard from "./AdminDashboard";
 import StudentDashboard from "./StudentDashboard";
 
 const Dashboard = () => {
-  const { data: session, isPending } = authClient.useSession();
-  const isAdmin = session?.user.role === Role.admin;
+  const { isAdmin, isPending, session } = useIsAdmin();
 
   if (!isPending && session && !isAdmin) {
     return <StudentDashboard />;
