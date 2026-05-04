@@ -25,9 +25,9 @@ export const env = createEnv({
         (val) => !WEAK_SECRETS.has(val),
         "BETTER_AUTH_SECRET is a placeholder. Generate with: openssl rand -base64 32"
       ),
-    SERVER_URL: z.url().default("http://localhost:3000"),
-    BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
-    CLIENT_URL: z.url().default("http://localhost:5173"),
+    SERVER_URL: z.string().url().default("http://localhost:3000"),
+    BETTER_AUTH_URL: z.string().url().default("http://localhost:3000"),
+    CLIENT_URL: z.string().url().default("http://localhost:5173"),
     TRUSTED_ORIGINS: z.string().default("http://localhost:5173"),
     NODE_ENV: z
       .enum(["development", "production", "test"])
@@ -37,7 +37,7 @@ export const env = createEnv({
     CLOUDINARY_API_SECRET: z.string().min(1),
     SENDGRID_API_KEY: z.string().min(1),
     SENDGRID_FROM_EMAIL: z.email().default("noreply@hakko-denshin-ryu.com"),
-    SENTRY_DSN: z.url().optional(),
+    SENTRY_DSN: z.string().url().optional(),
     SENTRY_ENVIRONMENT: z.string().optional(),
   },
 
