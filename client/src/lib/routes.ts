@@ -43,6 +43,7 @@ export const ApiRoutes = {
     `/api/admin/students/${studentId}/events`,
   adminDashboardStudents: "/api/admin/dashboard/students",
   adminDashboardEvents: "/api/admin/dashboard/events",
+  adminTrainingDayAttendance: "/api/admin/training-day/attendance",
   inviteVerifyToken: "/api/invite/verify-token",
   inviteSetPassword: "/api/invite/set-password",
 } as const;

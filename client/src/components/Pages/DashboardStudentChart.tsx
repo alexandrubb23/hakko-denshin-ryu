@@ -10,6 +10,8 @@ import { Bar } from "react-chartjs-2";
 
 import { type AttendancePeriod, type DashboardStudent } from "@api/dashboard";
 import { useDashboardStudents } from "@hooks/useDashboardStudents";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
 import {
@@ -37,9 +39,13 @@ import {
   ChartRoot,
   ChartTitle,
   StudentCountBadge,
+  trainingDayBtnSx,
 } from "./DashboardStudentChart.style";
+import TrainingDayModal from "./TrainingDayModal";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
+
+const TRAINING_DAYS = new Set([2, 4, 6]); // Tue, Thu, Sat
 
 const BELT_COLORS: Record<string, string> = {
   white: BELT_WHITE,
@@ -80,6 +86,11 @@ function filterStudents(
 const DashboardStudentChart = () => {
   const [period, setPeriod] = useState<AttendancePeriod>("all");
   const [rankFilter, setRankFilter] = useState<string>(ALL_RANK_FILTER);
+  const [trainingModalOpen, setTrainingModalOpen] = useState(false);
+
+  const today = new Date();
+  const isTodayTrainingDay = TRAINING_DAYS.has(today.getDay());
+  const todayStr = today.toLocaleDateString("en-CA"); // "YYYY-MM-DD"
 
   const { data, isLoading, isFetching } = useDashboardStudents(period);
 
@@ -187,14 +198,55 @@ const DashboardStudentChart = () => {
     <ChartRoot
       sx={{ opacity: isFetching ? 0.6 : 1, transition: "opacity 150ms" }}
     >
-      <ChartHeader>
+      <ChartHeader sx={{ flexWrap: "wrap", rowGap: { xs: 1.5, sm: 0 } }}>
         <ChartTitle variant="caption">
           Students — Attendance Overview
         </ChartTitle>
-        <StudentCountBadge>
-          {filtered.length} student{filtered.length !== 1 ? "s" : ""}
-        </StudentCountBadge>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <StudentCountBadge>
+            {filtered.length} student{filtered.length !== 1 ? "s" : ""}
+          </StudentCountBadge>
+          {/* Desktop: inline with badge */}
+          {isTodayTrainingDay && (
+            <Button
+              size="small"
+              variant="contained"
+              onClick={() => setTrainingModalOpen(true)}
+              sx={{
+                ...trainingDayBtnSx,
+                display: { xs: "none", sm: "inline-flex" },
+              }}
+            >
+              Training Day
+            </Button>
+          )}
+        </Box>
+        {/* Mobile: full-width row below title + badge */}
+        {isTodayTrainingDay && (
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => setTrainingModalOpen(true)}
+            sx={{
+              ...trainingDayBtnSx,
+              display: { xs: "flex", sm: "none" },
+              width: "100%",
+              py: 0.75,
+              fontSize: "0.75rem",
+            }}
+          >
+            Training Day
+          </Button>
+        )}
       </ChartHeader>
+
+      {isTodayTrainingDay && (
+        <TrainingDayModal
+          open={trainingModalOpen}
+          date={todayStr}
+          onClose={() => setTrainingModalOpen(false)}
+        />
+      )}
 
       {/* Period filter */}
       <ChipFilterRow

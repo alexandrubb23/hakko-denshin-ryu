@@ -42,8 +42,8 @@ import {
   updateStudentRank,
   upsertStudentAttendance,
 } from "../repositories/students.repository.js";
-import { parseYearMonthParams } from "../utils/query-params.js";
 import { sendStudentInvitation } from "../utils/invite.js";
+import { DATE_REGEX, parseYearMonthParams } from "../utils/query-params.js";
 import { requireFile, requireId } from "../utils/request.js";
 import { requireStudent } from "../utils/student.js";
 
@@ -260,7 +260,7 @@ router.delete(
 const upsertAttendanceSchema = z.object({
   date: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, expected YYYY-MM-DD"),
+    .regex(DATE_REGEX, "Invalid date format, expected YYYY-MM-DD"),
   attended: z.boolean(),
 });
 

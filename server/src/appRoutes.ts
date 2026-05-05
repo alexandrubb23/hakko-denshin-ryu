@@ -9,6 +9,7 @@ import kyuProgramRouter from "./routes/kyuProgram.js";
 import meRouter from "./routes/me.js";
 import studentsRouter from "./routes/students.js";
 import techniquesRouter from "./routes/techniques.js";
+import trainingDayRouter from "./routes/trainingDay.js";
 
 export function appRoutes(app: Application): void {
   app.use(healthRouter);
@@ -19,6 +20,7 @@ export function appRoutes(app: Application): void {
   app.use(studentsRouter);
   app.use(techniquesRouter);
   app.use(inviteRouter);
+  app.use(trainingDayRouter);
 
   // Catch-all 404 — must be before the error handler.
   app.use((_req, res) => {

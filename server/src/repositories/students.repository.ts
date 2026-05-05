@@ -237,6 +237,12 @@ export const findStudentAttendance = (userId: string, from: Date, to: Date) =>
     orderBy: { date: "asc" },
   });
 
+export const findAttendanceForDate = (date: Date) =>
+  prisma.studentAttendance.findMany({
+    where: { date },
+    select: { userId: true, attended: true },
+  });
+
 export const upsertStudentAttendance = (
   userId: string,
   date: Date,
