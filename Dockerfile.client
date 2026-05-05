@@ -5,7 +5,7 @@
 # IMPORTANT: VITE_API_URL must be set as a Railway Variable so it is available at build time.
 # Vite bakes this value into the client bundle — it cannot be changed without rebuilding.
 
-FROM ghcr.io/oven-sh/bun:1.2-slim
+FROM oven/bun:1.2-slim
 
 WORKDIR /app
 
