@@ -32,6 +32,7 @@ export const updateStudentSchema = z.object({
       "Password must be at least 8 characters"
     )
     .optional(),
+  sendInvite: z.boolean().optional(),
 });
 
 export type UpdateStudentInput = z.infer<typeof updateStudentSchema>;

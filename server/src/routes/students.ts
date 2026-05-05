@@ -214,7 +214,10 @@ router.put(
     const id = requireId(req);
     const student = await requireStudent(id);
 
-    const { name, email, password } = validate(updateStudentSchema, req.body);
+    const { name, email, password, sendInvite } = validate(
+      updateStudentSchema,
+      req.body
+    );
 
     if (email !== student.email) {
       const existing = await findUserByEmail(email);
@@ -223,7 +226,17 @@ router.put(
 
     const updated = await updateStudentProfile(id, name, email);
 
-    if (password) {
+    if (sendInvite) {
+      await invalidatePendingInvites(id);
+
+      const plainToken = generateToken();
+      const tokenHash = hashToken(plainToken);
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await createInvitationToken(id, tokenHash, expiresAt);
+
+      const inviteUrl = `${env.CLIENT_URL}${ClientRoutes.setPassword}?token=${plainToken}`;
+      await sendInvitationEmail(email, name, inviteUrl);
+    } else if (password) {
       const hashedPassword = await hashPassword(password);
       await updateStudentPassword(id, hashedPassword);
     }
