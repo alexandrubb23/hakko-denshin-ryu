@@ -2,7 +2,7 @@
 # Root directory must be set to the repository root so all workspace packages are available.
 # Build command: Docker build context = repo root, so core/ and server/ are both accessible.
 
-FROM oven/bun:1.2-slim
+FROM ghcr.io/oven-sh/bun:1.2-slim
 
 # Prisma's classic engine requires OpenSSL at runtime
 RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates \
