@@ -22,18 +22,28 @@ export const createStudentSchema = z
 
 export type CreateStudentInput = z.infer<typeof createStudentSchema>;
 
-export const updateStudentSchema = z.object({
-  name: z.string().trim().min(3, "Name must be at least 3 characters"),
-  email: z.email("Invalid email address"),
-  password: z
-    .string()
-    .refine(
-      (val) => !val || val.length >= 8,
-      "Password must be at least 8 characters"
-    )
-    .optional(),
-  sendInvite: z.boolean().optional(),
-});
+export const updateStudentSchema = z
+  .object({
+    name: z.string().trim().min(3, "Name must be at least 3 characters"),
+    email: z.email("Invalid email address"),
+    password: z
+      .string()
+      .refine(
+        (val) => !val || val.length >= 8,
+        "Password must be at least 8 characters"
+      )
+      .optional(),
+    sendInvite: z.boolean().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.sendInvite && data.password) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Cannot set a password when sending an invitation email",
+        path: ["password"],
+      });
+    }
+  });
 
 export type UpdateStudentInput = z.infer<typeof updateStudentSchema>;
 

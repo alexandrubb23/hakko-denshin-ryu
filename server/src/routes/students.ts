@@ -212,13 +212,11 @@ router.put(
       if (existing) throw new HttpConflictError("Email already in use");
     }
 
-    if (sendInvite) {
-      await sendStudentInvitation(id, email, name);
-    }
-
     const updated = await updateStudentProfile(id, name, email);
 
-    if (!sendInvite && password) {
+    if (sendInvite) {
+      await sendStudentInvitation(id, email, name);
+    } else if (password) {
       const hashedPassword = await hashPassword(password);
       await updateStudentPassword(id, hashedPassword);
     }
