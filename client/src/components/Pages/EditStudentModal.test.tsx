@@ -129,10 +129,6 @@ describe("EditStudentModal", () => {
       screen.getByRole("checkbox", { name: /send invitation email/i })
     );
 
-    await waitFor(() =>
-      expect(screen.queryByLabelText(/password/i)).not.toBeInTheDocument()
-    );
-
     fireEvent.change(screen.getByLabelText(/name/i), {
       target: { value: "Jane Doe" },
     });

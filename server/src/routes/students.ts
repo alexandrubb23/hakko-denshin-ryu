@@ -7,23 +7,19 @@ import {
 } from "@hakko/core";
 import { Router } from "express";
 import { z } from "zod";
-import { env } from "../env.js";
 import { Role } from "../generated/prisma/enums.js";
 import { uploadAvatar } from "../lib/cloudinary.js";
-import { sendInvitationEmail } from "../lib/email.js";
 import {
   HttpConflictError,
   HttpNotFoundError,
   HttpUnprocessableError,
 } from "../lib/http-errors.js";
-import { ApiRoutes, ClientRoutes } from "../lib/routes.js";
-import { generateToken, hashToken } from "../lib/token.js";
+import { ApiRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
 import { uploadMiddleware } from "../middleware/upload.js";
 import {
-  createInvitationToken,
   createStudent,
   createStudentRank,
   createStudentWithoutPassword,
@@ -38,7 +34,6 @@ import {
   findStudentTopRank,
   findStudentWithDetails,
   findUserByEmail,
-  invalidatePendingInvites,
   softDeleteStudent,
   softDeleteStudentRank,
   updateStudentImage,
@@ -48,6 +43,7 @@ import {
   upsertStudentAttendance,
 } from "../repositories/students.repository.js";
 import { parseYearMonthParams } from "../utils/query-params.js";
+import { sendStudentInvitation } from "../utils/invite.js";
 import { requireFile, requireId } from "../utils/request.js";
 import { requireStudent } from "../utils/student.js";
 
@@ -187,15 +183,7 @@ router.post(
     if (sendInvite) {
       const student = await createStudentWithoutPassword(id, name, email);
 
-      await invalidatePendingInvites(id);
-
-      const plainToken = generateToken();
-      const tokenHash = hashToken(plainToken);
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      await createInvitationToken(id, tokenHash, expiresAt);
-
-      const inviteUrl = `${env.CLIENT_URL}${ClientRoutes.setPassword}?token=${plainToken}`;
-      await sendInvitationEmail(email, name, inviteUrl);
+      await sendStudentInvitation(id, email, name);
 
       return res.status(201).json({ student });
     }
@@ -225,15 +213,7 @@ router.put(
     }
 
     if (sendInvite) {
-      await invalidatePendingInvites(id);
-
-      const plainToken = generateToken();
-      const tokenHash = hashToken(plainToken);
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      await createInvitationToken(id, tokenHash, expiresAt);
-
-      const inviteUrl = `${env.CLIENT_URL}${ClientRoutes.setPassword}?token=${plainToken}`;
-      await sendInvitationEmail(email, name, inviteUrl);
+      await sendStudentInvitation(id, email, name);
     }
 
     const updated = await updateStudentProfile(id, name, email);
