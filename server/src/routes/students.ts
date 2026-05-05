@@ -224,8 +224,6 @@ router.put(
       if (existing) throw new HttpConflictError("Email already in use");
     }
 
-    const updated = await updateStudentProfile(id, name, email);
-
     if (sendInvite) {
       await invalidatePendingInvites(id);
 
@@ -236,7 +234,11 @@ router.put(
 
       const inviteUrl = `${env.CLIENT_URL}${ClientRoutes.setPassword}?token=${plainToken}`;
       await sendInvitationEmail(email, name, inviteUrl);
-    } else if (password) {
+    }
+
+    const updated = await updateStudentProfile(id, name, email);
+
+    if (!sendInvite && password) {
       const hashedPassword = await hashPassword(password);
       await updateStudentPassword(id, hashedPassword);
     }

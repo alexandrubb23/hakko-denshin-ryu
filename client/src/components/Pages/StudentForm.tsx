@@ -154,7 +154,7 @@ const StudentForm = (props: StudentFormProps) => {
           id: student!.id,
           name: values.name,
           email: values.email,
-          sendInvite: values.sendInvite ?? false,
+          sendInvite: values.sendInvite,
           password: values.password || undefined,
         } as { id: string } & UpdateStudentInput,
         { onSuccess: () => onClose() }
