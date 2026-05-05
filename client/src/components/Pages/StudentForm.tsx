@@ -96,7 +96,8 @@ const StudentForm = (props: StudentFormProps) => {
 
   const student = mode === StudentFormMode.edit ? props.student : null;
 
-  const [sendInvite, setSendInvite] = useState(true);
+  const defaultSendInvite = mode === StudentFormMode.create;
+  const [sendInvite, setSendInvite] = useState(defaultSendInvite);
 
   const createMutation = useCreateStudent();
   const updateMutation = useUpdateStudent();
@@ -124,10 +125,10 @@ const StudentForm = (props: StudentFormProps) => {
       name: student?.name ?? "",
       email: student?.email ?? "",
       password: "",
-      sendInvite: true,
+      sendInvite: defaultSendInvite,
     });
     resetMutation();
-    setSendInvite(true);
+    setSendInvite(defaultSendInvite);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, student?.id]);
 
@@ -153,6 +154,7 @@ const StudentForm = (props: StudentFormProps) => {
           id: student!.id,
           name: values.name,
           email: values.email,
+          sendInvite: values.sendInvite,
           password: values.password || undefined,
         } as { id: string } & UpdateStudentInput,
         { onSuccess: () => onClose() }
@@ -205,24 +207,22 @@ const StudentForm = (props: StudentFormProps) => {
             sx={fieldSx}
           />
 
-          {mode === StudentFormMode.create && (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={sendInvite}
-                  onChange={(e) => handleSendInviteChange(e.target.checked)}
-                  sx={{
-                    color: BORDER_COLOR,
-                    "&.Mui-checked": { color: PURPLE },
-                  }}
-                />
-              }
-              label="Send invitation email to student"
-              sx={{ color: "text.secondary", ml: 0 }}
-            />
-          )}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={sendInvite}
+                onChange={(e) => handleSendInviteChange(e.target.checked)}
+                sx={{
+                  color: BORDER_COLOR,
+                  "&.Mui-checked": { color: PURPLE },
+                }}
+              />
+            }
+            label="Send invitation email to student"
+            sx={{ color: "text.secondary", ml: 0 }}
+          />
 
-          {(!sendInvite || mode === StudentFormMode.edit) && (
+          {!sendInvite && (
             <TextField
               label="Password"
               type="password"
