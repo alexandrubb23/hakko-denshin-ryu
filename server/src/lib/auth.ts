@@ -15,7 +15,7 @@ export const auth = betterAuth({
   rateLimit: {
     enabled: env.NODE_ENV === "production",
     window: 60,
-    max: 10,
+    max: 20,
     storage: "memory",
   },
   emailAndPassword: {
