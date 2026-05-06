@@ -13,7 +13,8 @@
     "db:push": "prisma db push",
     "db:seed": "bun prisma/seed.ts",
     "db:seed:test-student": "bun prisma/seed-test-student.ts",
-    "db:reset:test": "bun prisma/reset-test-db.ts"
+    "db:reset:test": "bun prisma/reset-test-db.ts",
+    "db:clear:attendance": "bun prisma/clear-attendance-for-date.ts"
   },
   "dependencies": {
     "@hakko/core": "workspace:*",

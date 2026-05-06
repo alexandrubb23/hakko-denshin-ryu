@@ -1,3 +1,6 @@
+import { execSync } from "child_process";
+import path from "path";
+
 import {
   createStudentViaUI,
   expect,
@@ -5,6 +8,9 @@ import {
   test,
   type Page,
 } from "./fixtures";
+import { loadEnvFile } from "./helpers/env";
+
+const SERVER_DIR = path.join(process.cwd(), "server");
 
 /**
  * A known **past** Tuesday used to mock the browser clock so that
@@ -18,7 +24,8 @@ import {
  * It is intentionally chosen to avoid conflicts with `student-attendance.spec.ts`,
  * which uses April 29, 2025 (and its ISO week / April month view).
  */
-const TRAINING_DAY = new Date("2025-05-06T12:00:00");
+const TRAINING_DATE = "2025-05-06";
+const TRAINING_DAY = new Date(`${TRAINING_DATE}T12:00:00`);
 
 /**
  * Waits for a successful POST to the per-student attendance endpoint.
@@ -34,6 +41,26 @@ function waitForAttendancePost(page: Page) {
 }
 
 test.describe("Training Day Attendance", () => {
+  /**
+   * Before any test in this describe block runs, wipe all StudentAttendance
+   * records for TRAINING_DAY so cross-spec DB contamination cannot affect
+   * the baseline assumptions (both buttons outlined, chip = 0).
+   */
+  test.beforeAll(() => {
+    const testEnv = loadEnvFile(path.join(SERVER_DIR, ".env.test"));
+    const env = {
+      ...process.env,
+      NODE_ENV: "test",
+      ...testEnv,
+      CLEAR_DATE: TRAINING_DATE,
+    };
+    execSync("bun run db:clear:attendance", {
+      cwd: SERVER_DIR,
+      env,
+      stdio: "inherit",
+    });
+  });
+
   /**
    * Common setup for every test:
    *  1. Mock the browser clock to a past Tuesday before any navigation so
