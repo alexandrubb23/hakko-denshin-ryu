@@ -134,6 +134,7 @@ const StudentsTable = ({
               >
                 <TableCell>
                   <Avatar
+                    src={student.image ?? undefined}
                     sx={{
                       width: 36,
                       height: 36,

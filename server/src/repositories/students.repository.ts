@@ -86,6 +86,7 @@ export const findAllStudents = () =>
       email: true,
       emailVerified: true,
       createdAt: true,
+      image: true,
     },
     orderBy: { name: "asc" },
   });
