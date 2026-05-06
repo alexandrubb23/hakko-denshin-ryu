@@ -14,9 +14,11 @@ import {
  * We deliberately use a past date because the server rejects attendance records
  * with a future date (`"Cannot mark attendance for future dates"`).
  *
- * April 29, 2025 is a Tuesday (day index 2 in JS Date).
+ * May 6, 2025 is a Tuesday (day index 2 in JS Date).
+ * It is intentionally chosen to avoid conflicts with `student-attendance.spec.ts`,
+ * which uses April 29, 2025 (and its ISO week / April month view).
  */
-const TRAINING_DAY = new Date("2025-04-29T12:00:00");
+const TRAINING_DAY = new Date("2025-05-06T12:00:00");
 
 /**
  * Waits for a successful POST to the per-student attendance endpoint.
