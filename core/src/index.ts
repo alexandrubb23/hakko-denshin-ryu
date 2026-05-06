@@ -22,6 +22,12 @@ export { PERIOD_VALUES, type Period } from "./constants/period.js";
 export { Belt, type BeltValue } from "./constants/belt.js";
 
 export {
+  RANKS,
+  type RankDefinition,
+  type RankName,
+} from "./constants/ranks.js";
+
+export {
   createEventSchema,
   EventStatusValues,
   EventTypeValues,
