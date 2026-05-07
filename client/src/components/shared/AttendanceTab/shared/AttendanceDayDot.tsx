@@ -1,7 +1,9 @@
-import { Box, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 
 import { ERROR, SUCCESS } from "@style/status.tokens";
 import { PURPLE } from "@style/tokens";
+
+import { Dot } from "./AttendanceDayDot.style";
 
 enum AttendanceStatus {
   present = "present",
@@ -22,17 +24,7 @@ const COLOR: Record<AttendanceStatus, string> = {
 };
 
 const AttendanceDayDot = ({ status, size = 8, tooltip }: Props) => {
-  const dot = (
-    <Box
-      sx={{
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        backgroundColor: COLOR[status],
-        flexShrink: 0,
-      }}
-    />
-  );
+  const dot = <Dot size={size} color={COLOR[status]} />;
 
   if (tooltip) {
     return (
