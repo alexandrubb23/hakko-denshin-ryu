@@ -1,6 +1,6 @@
 import AdminRoute from "@components/AdminRoute";
-import DashboardLayout from "@components/DashboardLayout/DashboardLayout";
-import StudentDetail from "@components/Pages/StudentDetail";
+import DashboardLayout from "@components/ui/DashboardLayout/DashboardLayout";
+import StudentDetail from "@features/admin/students/components/StudentDetail";
 import ProtectedRoute from "@components/ProtectedRoute";
 import { normalizePath } from "@utils/routes";
 import { useEffect } from "react";

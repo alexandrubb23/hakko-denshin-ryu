@@ -18,6 +18,7 @@ export default defineConfig({
       "@assets": r("src/assets"),
       "@api": r("src/api"),
       "@components": r("src/components"),
+      "@features": r("src/features"),
       "@hooks": r("src/hooks"),
       "@providers": r("src/providers"),
       "@utils": r("src/utils"),

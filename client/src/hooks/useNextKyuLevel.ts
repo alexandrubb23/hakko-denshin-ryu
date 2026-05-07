@@ -1,7 +1,7 @@
 import { type KyuLevel } from "@api/kyuProgram";
 import { type StudentRankEntry } from "@api/students";
 import { Belt } from "@hakko/core";
-import { useKyuProgram } from "@hooks/useKyuProgram";
+import { useKyuProgram } from "@features/public/kyu-program/useKyuProgram";
 
 /**
  * Returns the next KyuLevel that the student should target based on their

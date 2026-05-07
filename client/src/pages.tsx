@@ -1,19 +1,19 @@
 import React from "react";
 
-import Contact from "@components/Pages/Contact/Contact";
-import Dashboard from "@components/Pages/Dashboard";
-import Dojo from "@components/Pages/Dojo";
-import Events from "@components/Pages/Events/Events";
-import PublicEvents from "@components/Pages/Events/PublicEvents";
-import KyuProgram from "@components/Pages/KyuProgram/KyuProgram";
-import Login from "@components/Pages/Login";
-import Senshinkan from "@components/Pages/Senshinkan";
-import SetPassword from "@components/Pages/SetPassword";
-import Students from "@components/Pages/Students";
-import Techniques from "@components/Pages/Techniques/Techniques";
+import Contact from "@features/public/contact/Contact";
+import Dashboard from "@features/dashboard/Dashboard";
+import Dojo from "@features/public/dojo/Dojo";
+import Events from "@features/admin/events/components/Events";
+import PublicEvents from "@features/public/events/PublicEvents";
+import KyuProgram from "@features/public/kyu-program/KyuProgram";
+import Login from "@features/auth/Login";
+import Senshinkan from "@features/public/senshinkan/Senshinkan";
+import SetPassword from "@features/auth/SetPassword";
+import Students from "@features/admin/students/components/Students";
+import Techniques from "@features/public/techniques/Techniques";
 
-import HakkoRyuRGB from "@components/Pages/HakkoRyu";
-import Home from "@components/Pages/Home";
+import HakkoRyuRGB from "@features/public/hakko-ryu/HakkoRyu";
+import Home from "@features/public/home/Home";
 
 export type PagePath =
   | "home"

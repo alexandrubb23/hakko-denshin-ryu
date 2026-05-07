@@ -28,6 +28,7 @@ export default defineConfig({
       '@pages': '/src/pages',
       '@lib': '/src/lib',
       '@constants': '/src/constants',
+      '@features': '/src/features',
     },
   },
 });

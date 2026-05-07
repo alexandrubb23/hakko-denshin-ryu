@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 
-import CenterSpinner from "@components/Spinner/CenterSpinner";
+import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
 import useIsAdmin from "@hooks/useIsAdmin";
 import { Routes } from "@lib/routes";
 

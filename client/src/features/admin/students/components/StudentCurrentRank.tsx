@@ -1,0 +1,85 @@
+import { useState } from "react";
+
+import { type StudentRankEntry } from "@api/students";
+import { useNextKyuLevel } from "@hooks/useNextKyuLevel";
+import { Box, Divider, Skeleton, Typography } from "@mui/material";
+import { BORDER_COLOR, SKELETON_SX } from "@style/tokens";
+
+import NextRankButton from "@features/student/ranks/components/NextRankButton";
+import NextRankModal from "@features/student/ranks/components/NextRankModal";
+import BeltImage from "@features/admin/ranks/components/BeltImage";
+
+interface Props {
+  latestRank?: StudentRankEntry;
+  isLoading?: boolean;
+}
+
+const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const nextKyuLevel = useNextKyuLevel(latestRank);
+
+  if (!isLoading && !latestRank) return null;
+
+  return (
+    <>
+      <Divider
+        orientation="vertical"
+        flexItem
+        sx={{ borderColor: BORDER_COLOR, display: { xs: "none", sm: "block" } }}
+      />
+      <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            fontSize: "0.65rem",
+          }}
+        >
+          Current Rank
+        </Typography>
+        {isLoading ? (
+          <Box mt={0.75}>
+            <Skeleton
+              variant="rectangular"
+              width={96}
+              height={24}
+              sx={{ ...SKELETON_SX, borderRadius: 1 }}
+            />
+            <Skeleton
+              width={110}
+              height={20}
+              sx={{ ...SKELETON_SX, mt: 0.75 }}
+            />
+            <Skeleton width={90} height={16} sx={{ ...SKELETON_SX, mt: 0.5 }} />
+          </Box>
+        ) : latestRank ? (
+          <Box mt={0.75}>
+            <BeltImage belt={latestRank.rank.belt} />
+            <Typography variant="body2" fontWeight={600} mt={0.75}>
+              {latestRank.rank.name}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Since {new Date(latestRank.awardedAt).toLocaleDateString()}
+            </Typography>
+
+            {nextKyuLevel && (
+              <NextRankButton onClick={() => setModalOpen(true)} />
+            )}
+          </Box>
+        ) : null}
+      </Box>
+
+      {nextKyuLevel && (
+        <NextRankModal
+          level={nextKyuLevel}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+    </>
+  );
+};
+
+export default StudentCurrentRank;

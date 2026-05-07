@@ -3,13 +3,13 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
 
-import CenterSpinner from '@components/Spinner/CenterSpinner';
+import CenterSpinner from '@components/ui/Spinner/CenterSpinner';
 import useBodyOverflow from '@hooks/useBodyOverflow';
 import useLangStore from '@store/useLangStore';
 import './App.css';
-import Content from './components/Content/Content';
-import Footer from './components/Footer/Footer';
-import Header from './components/Header/Header';
+import Content from './components/ui/Content/Content';
+import Footer from './components/ui/Footer/Footer';
+import Header from './components/ui/Header/Header';
 import { PAGE_TRANSITION_DURATION } from './constants/animationsTiming';
 
 const StackStyled = styled(Stack, {
