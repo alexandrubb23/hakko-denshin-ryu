@@ -59,6 +59,13 @@ const BELT_COLORS: Record<string, string> = {
 
 const ALL_RANK_FILTER = "all";
 const UNRANKED_FILTER = "unranked";
+const ALL_ATTENDANCE_FILTER = "all";
+const ACTIVE_ATTENDANCE_FILTER = "active";
+
+const ATTENDANCE_OPTIONS = [
+  { value: ALL_ATTENDANCE_FILTER, label: "All Students" },
+  { value: ACTIVE_ATTENDANCE_FILTER, label: "With Attendance" },
+];
 
 const PERIOD_OPTIONS: { value: AttendancePeriod; label: string }[] = [
   { value: "all", label: "All Time" },
@@ -76,16 +83,30 @@ function beltColor(belt: string | null): string {
 function filterStudents(
   students: DashboardStudent[],
   rankFilter: string,
+  attendanceFilter: string
 ): DashboardStudent[] {
-  if (rankFilter === ALL_RANK_FILTER) return students;
-  if (rankFilter === UNRANKED_FILTER)
-    return students.filter((s) => s.rankId === null);
-  return students.filter((s) => String(s.rankId) === rankFilter);
+  let result = students;
+
+  if (rankFilter !== ALL_RANK_FILTER) {
+    result =
+      rankFilter === UNRANKED_FILTER
+        ? result.filter((s) => s.rankId === null)
+        : result.filter((s) => String(s.rankId) === rankFilter);
+  }
+
+  if (attendanceFilter === ACTIVE_ATTENDANCE_FILTER) {
+    result = result.filter((s) => s.attendanceCount > 0);
+  }
+
+  return result;
 }
 
 const DashboardStudentChart = () => {
   const [period, setPeriod] = useState<AttendancePeriod>("all");
   const [rankFilter, setRankFilter] = useState<string>(ALL_RANK_FILTER);
+  const [attendanceFilter, setAttendanceFilter] = useState<string>(
+    ALL_ATTENDANCE_FILTER
+  );
   const [trainingModalOpen, setTrainingModalOpen] = useState(false);
 
   const today = new Date();
@@ -96,12 +117,12 @@ const DashboardStudentChart = () => {
 
   const hasUnranked = useMemo(
     () => (data?.students ?? []).some((s) => s.rankId === null),
-    [data],
+    [data]
   );
 
   const filtered = useMemo(
-    () => filterStudents(data?.students ?? [], rankFilter),
-    [data, rankFilter],
+    () => filterStudents(data?.students ?? [], rankFilter, attendanceFilter),
+    [data, rankFilter, attendanceFilter]
   );
 
   const chartData = useMemo(() => {
@@ -113,7 +134,7 @@ const DashboardStudentChart = () => {
 
   const maxX = useMemo(
     () => Math.max(...(chartData.values.length ? chartData.values : [0]), 4),
-    [chartData.values],
+    [chartData.values]
   );
 
   const options = {
@@ -176,7 +197,7 @@ const DashboardStudentChart = () => {
       })),
       ...(hasUnranked ? [{ value: UNRANKED_FILTER, label: "Unranked" }] : []),
     ],
-    [data?.ranks, hasUnranked],
+    [data?.ranks, hasUnranked]
   );
 
   const chartHeight = Math.max(120, filtered.length * 36);
@@ -253,6 +274,13 @@ const DashboardStudentChart = () => {
         options={PERIOD_OPTIONS}
         value={period}
         onChange={setPeriod}
+      />
+
+      {/* Attendance presence filter */}
+      <ChipFilterRow
+        options={ATTENDANCE_OPTIONS}
+        value={attendanceFilter}
+        onChange={setAttendanceFilter}
       />
 
       <Divider sx={{ borderColor: BORDER_COLOR, mb: 2 }} />
