@@ -1,32 +1,15 @@
-import { Box, Drawer, SxProps, Theme } from "@mui/material";
+import { Box } from "@mui/material";
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 import useIsMobile from "@hooks/isMobile";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
-import {
-  BACKDROP_BLUR,
-  BORDER_COLOR,
-  DARK_BG,
-  SURFACE_BG,
-} from "@style/tokens";
+import { DARK_BG } from "@style/tokens";
 
 import DashboardAppBar from "./DashboardAppBar";
-import DrawerContent from "./DrawerContent";
-
-const DRAWER_WIDTH = 220;
-
-const DRAWER_PAPER_SX: SxProps<Theme> = {
-  width: DRAWER_WIDTH,
-  boxSizing: "border-box" as const,
-  display: "flex",
-  flexDirection: "column" as const,
-  justifyContent: "space-between",
-  backgroundColor: SURFACE_BG,
-  backdropFilter: BACKDROP_BLUR,
-  "& .MuiListItemIcon-root": { color: "#fff" },
-};
+import DashboardDrawer from "./DashboardDrawer";
+import DashboardMain from "./DashboardMain";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
@@ -50,48 +33,17 @@ const DashboardLayout = () => {
       {isMobile ? (
         <>
           <DashboardAppBar onMenuClick={() => setMobileOpen((prev) => !prev)} />
-
-          <Drawer
+          <DashboardDrawer
             variant="temporary"
             open={mobileOpen}
-            onClose={() => setMobileOpen(false)}
-            ModalProps={{ keepMounted: true }}
-            sx={{
-              "& .MuiDrawer-paper": {
-                ...DRAWER_PAPER_SX,
-                borderRight: `1px solid ${BORDER_COLOR}`,
-              },
-            }}
-          >
-            <DrawerContent {...drawerProps} />
-          </Drawer>
-
-          <Box
-            component="main"
-            sx={{ flexGrow: 1, minWidth: 0, p: 1.5, mt: 8 }}
-          >
-            <Outlet />
-          </Box>
+            {...drawerProps}
+          />
+          <DashboardMain withTopOffset />
         </>
       ) : (
         <>
-          <Drawer
-            variant="permanent"
-            sx={{
-              width: DRAWER_WIDTH,
-              flexShrink: 0,
-              "& .MuiDrawer-paper": {
-                ...DRAWER_PAPER_SX,
-                borderRight: `1px solid ${BORDER_COLOR}`,
-              },
-            }}
-          >
-            <DrawerContent {...drawerProps} />
-          </Drawer>
-
-          <Box component="main" sx={{ flexGrow: 1, minWidth: 0, p: 1.5 }}>
-            <Outlet />
-          </Box>
+          <DashboardDrawer variant="permanent" {...drawerProps} />
+          <DashboardMain />
         </>
       )}
     </Box>
