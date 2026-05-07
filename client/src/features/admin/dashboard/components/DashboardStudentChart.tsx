@@ -42,6 +42,10 @@ import {
   StudentCountBadge,
   trainingDayBtnSx,
 } from "./DashboardStudentChart.style";
+import PeriodAttendanceFilter, {
+  ACTIVE_ATTENDANCE_FILTER,
+  ALL_ATTENDANCE_FILTER,
+} from "./PeriodAttendanceFilter";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -59,21 +63,6 @@ const BELT_COLORS: Record<string, string> = {
 
 const ALL_RANK_FILTER = "all";
 const UNRANKED_FILTER = "unranked";
-const ALL_ATTENDANCE_FILTER = "all";
-const ACTIVE_ATTENDANCE_FILTER = "active";
-
-const ATTENDANCE_OPTIONS = [
-  { value: ALL_ATTENDANCE_FILTER, label: "All Students" },
-  { value: ACTIVE_ATTENDANCE_FILTER, label: "With Attendance" },
-];
-
-const PERIOD_OPTIONS: { value: AttendancePeriod; label: string }[] = [
-  { value: "all", label: "All Time" },
-  { value: "day", label: "Today" },
-  { value: "week", label: "This Week" },
-  { value: "month", label: "This Month" },
-  { value: "year", label: "This Year" },
-];
 
 function beltColor(belt: string | null): string {
   if (!belt) return BELT_UNRANKED;
@@ -269,18 +258,12 @@ const DashboardStudentChart = () => {
         />
       )}
 
-      {/* Period filter */}
-      <ChipFilterRow
-        options={PERIOD_OPTIONS}
-        value={period}
-        onChange={setPeriod}
-      />
-
-      {/* Attendance presence filter */}
-      <ChipFilterRow
-        options={ATTENDANCE_OPTIONS}
-        value={attendanceFilter}
-        onChange={setAttendanceFilter}
+      {/* Period filter + connected attendance sub-filter */}
+      <PeriodAttendanceFilter
+        period={period}
+        onPeriodChange={setPeriod}
+        attendanceFilter={attendanceFilter}
+        onAttendanceChange={setAttendanceFilter}
       />
 
       <Divider sx={{ borderColor: BORDER_COLOR, mb: 2 }} />
