@@ -10,21 +10,15 @@ import {
   Typography,
 } from "@mui/material";
 
+import ParticipantsList from "@components/shared/ParticipantsList";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
-import ParticipantsList from "@components/shared/ParticipantsList";
-import { useStudents } from "@features/admin/students/hooks/useStudents";
 import { useTrainingDayAttendance } from "@features/admin/attendance/hooks/useTrainingDayAttendance";
 import { useUpsertTrainingDayAttendance } from "@features/admin/attendance/hooks/useUpsertTrainingDayAttendance";
-import {
-  ERROR,
-  ERROR_ALPHA_08,
-  ERROR_ALPHA_30,
-  SUCCESS,
-  SUCCESS_ALPHA_08,
-  SUCCESS_ALPHA_30,
-} from "@style/status.tokens";
+import { useStudents } from "@features/admin/students/hooks/useStudents";
 import { BORDER_COLOR, PURPLE, PURPLE_ALPHA_15 } from "@style/tokens";
+
+import { NoButton, YesButton } from "./AttendanceButton.style";
 
 interface Props {
   open: boolean;
@@ -92,56 +86,24 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
             const attended = recordMap.get(student.id) ?? false;
             return (
               <Stack direction="row" gap={1}>
-                <Button
+                <YesButton
                   size="small"
                   variant={attended ? "contained" : "outlined"}
+                  active={attended}
                   disabled={isPending}
                   onClick={() => mark(student.id, true)}
-                  sx={{
-                    minWidth: 52,
-                    ...(attended
-                      ? {
-                          backgroundColor: SUCCESS,
-                          color: "#fff",
-                          "&:hover": { backgroundColor: SUCCESS_ALPHA_30 },
-                        }
-                      : {
-                          borderColor: SUCCESS_ALPHA_30,
-                          color: SUCCESS,
-                          "&:hover": {
-                            borderColor: SUCCESS,
-                            backgroundColor: SUCCESS_ALPHA_08,
-                          },
-                        }),
-                  }}
                 >
                   Yes
-                </Button>
-                <Button
+                </YesButton>
+                <NoButton
                   size="small"
                   variant={hasRecord && !attended ? "contained" : "outlined"}
+                  active={hasRecord && !attended}
                   disabled={isPending}
                   onClick={() => mark(student.id, false)}
-                  sx={{
-                    minWidth: 52,
-                    ...(hasRecord && !attended
-                      ? {
-                          backgroundColor: ERROR,
-                          color: "#fff",
-                          "&:hover": { backgroundColor: ERROR_ALPHA_30 },
-                        }
-                      : {
-                          borderColor: ERROR_ALPHA_30,
-                          color: ERROR,
-                          "&:hover": {
-                            borderColor: ERROR,
-                            backgroundColor: ERROR_ALPHA_08,
-                          },
-                        }),
-                  }}
                 >
                   No
-                </Button>
+                </NoButton>
               </Stack>
             );
           }}
