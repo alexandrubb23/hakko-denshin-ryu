@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 
 import type { StudentEvent } from "@api/events";
+import AttendedChip from "@components/shared/AttendedChip";
 import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
 import { BORDER_COLOR, PURPLE_ALPHA_04, SURFACE_BG } from "@style/tokens";
 import { formatDate } from "@utils/time";
-import AttendedChip from "@components/shared/AttendedChip";
 
 interface Props {
   events: StudentEvent[] | undefined;

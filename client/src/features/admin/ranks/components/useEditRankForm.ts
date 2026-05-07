@@ -5,8 +5,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { type StudentRankEntry } from "@api/students";
-import { useRanks } from "@hooks/useRanks";
 import { useUpdateStudentRank } from "@features/admin/ranks/hooks/useUpdateStudentRank";
+import { useRanks } from "@hooks/useRanks";
 import getServerError from "@utils/getServerError";
 
 import useRankForm from "./useRankForm";

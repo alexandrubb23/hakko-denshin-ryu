@@ -2,11 +2,13 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import EventIcon from "@mui/icons-material/Event";
 
-import DetailTabs, { DetailTabConfig } from "@components/ui/DetailTabs/DetailTabs";
+import DetailTabs, {
+  DetailTabConfig,
+} from "@components/ui/DetailTabs/DetailTabs";
 
 import StudentAttendanceTab from "@components/shared/AttendanceTab";
-import StudentEventsTab from "./StudentEventsTab";
 import StudentRankTab from "@features/admin/ranks/components";
+import StudentEventsTab from "./StudentEventsTab";
 
 type StudentTabComponent = React.ComponentType<{ studentId: string }>;
 

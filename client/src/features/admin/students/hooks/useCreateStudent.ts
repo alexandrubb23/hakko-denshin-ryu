@@ -7,7 +7,8 @@ export const useCreateStudent = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: CreateStudentInput) => studentsApi.createStudent(payload),
+    mutationFn: (payload: CreateStudentInput) =>
+      studentsApi.createStudent(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
     },

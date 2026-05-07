@@ -8,8 +8,12 @@ interface Props {
 }
 
 const EditStudentModal = ({ open, onClose, student }: Props) => (
-  <StudentForm mode={StudentFormMode.edit} open={open} onClose={onClose} student={student} />
+  <StudentForm
+    mode={StudentFormMode.edit}
+    open={open}
+    onClose={onClose}
+    student={student}
+  />
 );
 
 export default EditStudentModal;
-

@@ -6,8 +6,8 @@ import { useStudent } from "@features/admin/students/hooks/useStudent";
 import { Routes } from "@lib/routes";
 import { PURPLE, PURPLE_ALPHA_08 } from "@style/tokens";
 
-import StudentDetailTabs from "./StudentDetailTabs";
 import StudentCard from "./StudentCard";
+import StudentDetailTabs from "./StudentDetailTabs";
 
 const StudentDetail = () => {
   const { id } = useParams<{ id: string }>();

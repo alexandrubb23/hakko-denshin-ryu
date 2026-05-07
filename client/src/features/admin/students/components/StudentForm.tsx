@@ -24,9 +24,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { type Student } from "@api/students";
+import ErrorAlert from "@components/shared/ErrorAlert";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
-import ErrorAlert from "@components/shared/ErrorAlert";
 import { useCreateStudent } from "@features/admin/students/hooks/useCreateStudent";
 import { useUpdateStudent } from "@features/admin/students/hooks/useUpdateStudent";
 import {
@@ -183,9 +183,7 @@ const StudentForm = (props: StudentFormProps) => {
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: 3 }}
         >
-          {serverErrorMessage && (
-            <ErrorAlert>{serverErrorMessage}</ErrorAlert>
-          )}
+          {serverErrorMessage && <ErrorAlert>{serverErrorMessage}</ErrorAlert>}
 
           <TextField
             label="Name"

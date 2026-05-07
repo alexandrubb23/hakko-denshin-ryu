@@ -1,6 +1,6 @@
 import { useMe } from "@features/student/profile/hooks/useMe";
-import { useMyRanks } from "@features/student/ranks/hooks/useMyRanks";
 import { useUploadMyImage } from "@features/student/profile/hooks/useUploadMyImage";
+import { useMyRanks } from "@features/student/ranks/hooks/useMyRanks";
 
 import StudentCard from "./StudentCard";
 

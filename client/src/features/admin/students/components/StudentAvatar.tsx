@@ -5,8 +5,8 @@ import { useState } from "react";
 import AvatarUploadDialog from "@components/ui/AvatarUploadDialog/AvatarUploadDialog";
 import { useUploadStudentImage } from "@features/admin/students/hooks/useUploadStudentImage";
 import { SKELETON_SX } from "@style/tokens";
-import { getInitials } from "@utils/string";
 import { type UseMutationResult } from "@tanstack/react-query";
+import { getInitials } from "@utils/string";
 import { StyledAvatar } from "./StudentAvatar.style";
 
 interface StudentAvatarProps {

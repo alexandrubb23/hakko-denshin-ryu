@@ -157,9 +157,7 @@ describe("EditStudentModal", () => {
     } as unknown as ReturnType<typeof useUpdateStudent>);
 
     renderModal();
-    expect(
-      screen.getByRole("button", { name: /saving/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /saving/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /saving/i })).toBeDisabled();
   });
 

@@ -10,4 +10,3 @@ const CreateStudentModal = ({ open, onClose }: Props) => (
 );
 
 export default CreateStudentModal;
-
