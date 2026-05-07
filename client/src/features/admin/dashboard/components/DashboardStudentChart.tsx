@@ -34,6 +34,7 @@ import { BORDER_COLOR, PURPLE, SKELETON_SX } from "@style/tokens";
 
 import BeltChipLabel from "@components/shared/BeltChipLabel";
 import ChipFilterRow from "@components/shared/ChipFilterRow";
+import TrainingDayModal from "@features/admin/attendance/components/TrainingDayModal";
 import {
   ChartHeader,
   ChartRoot,
@@ -41,7 +42,6 @@ import {
   StudentCountBadge,
   trainingDayBtnSx,
 } from "./DashboardStudentChart.style";
-import TrainingDayModal from "@features/admin/attendance/components/TrainingDayModal";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 

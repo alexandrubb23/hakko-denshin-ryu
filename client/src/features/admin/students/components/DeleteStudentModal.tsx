@@ -1,10 +1,8 @@
-import axios from "axios";
-import { useState } from "react";
-
 import { type Student } from "@api/students";
-import { useDeleteStudent } from "@features/admin/students/hooks/useDeleteStudent";
-
 import ConfirmDeleteModal from "@components/shared/ConfirmDeleteModal";
+import DeleteMessage from "@components/shared/DeleteMessage";
+import { useDeleteStudent } from "@features/admin/students/hooks/useDeleteStudent";
+import useDeleteModal from "@hooks/useDeleteModal";
 
 interface Props {
   open: boolean;
@@ -14,39 +12,19 @@ interface Props {
 
 const DeleteStudentModal = ({ open, student, onClose }: Props) => {
   const { mutate, isPending } = useDeleteStudent();
-  const [error, setError] = useState<string | null>(null);
-
-  const handleClose = () => {
-    if (isPending) return;
-    setError(null);
-    onClose();
-  };
-
-  const handleConfirm = () => {
-    setError(null);
-    mutate(student.id, {
-      onSuccess: onClose,
-      onError: (err) => {
-        setError(
-          axios.isAxiosError(err)
-            ? (err.response?.data?.error ?? "Failed to delete student.")
-            : "An unexpected error occurred."
-        );
-      },
-    });
-  };
+  const { error, handleClose, handleConfirm } = useDeleteModal({
+    id: student.id,
+    mutate,
+    isPending,
+    onClose,
+    fallbackError: "Failed to delete student.",
+  });
 
   return (
     <ConfirmDeleteModal
       open={open}
       title="Delete Student"
-      message={
-        <>
-          Are you sure you want to delete{" "}
-          <strong style={{ color: "white" }}>{student.name}</strong>? This
-          action cannot be undone.
-        </>
-      }
+      message={<DeleteMessage name={student.name} />}
       onClose={handleClose}
       onConfirm={handleConfirm}
       isPending={isPending}
