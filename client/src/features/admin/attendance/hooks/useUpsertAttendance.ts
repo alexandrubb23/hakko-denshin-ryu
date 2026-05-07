@@ -7,7 +7,11 @@ interface UpsertAttendancePayload {
   attended: boolean;
 }
 
-export const useUpsertAttendance = (studentId: string, year: number, month?: number) => {
+export const useUpsertAttendance = (
+  studentId: string,
+  year: number,
+  month?: number
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({
