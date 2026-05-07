@@ -6,8 +6,11 @@ import { MONTH_NAMES } from "@constants/dateNames";
 import { BACKDROP_BLUR, BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
 
 import useAttendanceMark from "./useAttendanceMark";
-
 import YesNoButtons from "./YesNoButtons";
+
+const LABEL_MARK = "Mark attendance:";
+const LABEL_PRESENT = "✓ Present";
+const LABEL_ABSENT = "✗ Absent";
 
 interface Props {
   anchorEl: HTMLElement | null;
@@ -82,10 +85,10 @@ const AttendancePopup = ({
           </DateLabel>
           <StatusCaption variant="caption">
             {attended === null
-              ? "Mark attendance:"
+              ? LABEL_MARK
               : attended
-                ? "✓ Present"
-                : "✗ Absent"}
+                ? LABEL_PRESENT
+                : LABEL_ABSENT}
           </StatusCaption>
           {isPending ? (
             <PurpleSpinner size={20} />
