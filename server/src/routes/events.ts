@@ -64,7 +64,7 @@ router.get(
   async (_req, res) => {
     const events = await findAdminEvents();
     res.json({ events });
-  }
+  },
 );
 
 router.post(
@@ -74,7 +74,7 @@ router.post(
   async (req, res) => {
     const { ticketUrl, endDate, ...rest } = validate(
       createEventSchema,
-      req.body
+      req.body,
     );
 
     const event = await createEvent({
@@ -85,7 +85,7 @@ router.post(
     });
 
     res.status(201).json({ event });
-  }
+  },
 );
 
 router.put(
@@ -98,7 +98,7 @@ router.put(
 
     const { ticketUrl, endDate, startDate, ...rest } = validate(
       updateEventSchema,
-      req.body
+      req.body,
     );
 
     const updated = await updateEvent(id, {
@@ -109,7 +109,7 @@ router.put(
     });
 
     res.json({ event: updated });
-  }
+  },
 );
 
 router.delete(
@@ -121,7 +121,7 @@ router.delete(
     await requireEvent(id, true);
     await softDeleteEvent(id);
     res.status(204).end();
-  }
+  },
 );
 
 router.post(
@@ -139,7 +139,7 @@ router.post(
     await updateEventImage(id, imageUrl);
 
     res.json({ image: imageUrl });
-  }
+  },
 );
 
 router.get(
@@ -151,7 +151,7 @@ router.get(
     await requireEvent(id, true);
     const participants = await findEventParticipants(id);
     res.json({ participants });
-  }
+  },
 );
 
 router.post(
@@ -164,14 +164,14 @@ router.post(
 
     const { userId, attended } = validate(
       upsertEventParticipationSchema,
-      req.body
+      req.body,
     );
 
     await requireStudent(userId);
 
     const participation = await upsertEventParticipation(id, userId, attended);
     res.status(200).json({ participation });
-  }
+  },
 );
 
 export default router;

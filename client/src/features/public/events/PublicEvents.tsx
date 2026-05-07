@@ -167,7 +167,7 @@ const PublicEvents = () => {
                         label={event.type}
                         size="small"
                         sx={chipSx(
-                          TYPE_COLORS[event.type] ?? TYPE_COLORS.other
+                          TYPE_COLORS[event.type] ?? TYPE_COLORS.other,
                         )}
                       />
                     </Stack>

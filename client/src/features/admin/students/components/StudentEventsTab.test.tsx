@@ -63,7 +63,7 @@ type MockState = {
 
 const mockAndRender = (state: MockState) => {
   mockUseStudentEvents.mockReturnValue(
-    state as unknown as ReturnType<typeof useStudentEvents>
+    state as unknown as ReturnType<typeof useStudentEvents>,
   );
   renderUi(<StudentEventsTab studentId={STUDENT_ID} />);
 };
@@ -96,7 +96,7 @@ describe("StudentEventsTab", () => {
 
     it("does not show an error message", () => {
       expect(
-        screen.queryByText(/failed to load events/i)
+        screen.queryByText(/failed to load events/i),
       ).not.toBeInTheDocument();
     });
 
@@ -114,7 +114,7 @@ describe("StudentEventsTab", () => {
 
     it("shows the error message", () => {
       expect(
-        screen.getByText(/failed to load events\. please try again/i)
+        screen.getByText(/failed to load events\. please try again/i),
       ).toBeInTheDocument();
     });
 
@@ -144,7 +144,7 @@ describe("StudentEventsTab", () => {
 
     it("does not show an error message", () => {
       expect(
-        screen.queryByText(/failed to load events/i)
+        screen.queryByText(/failed to load events/i),
       ).not.toBeInTheDocument();
     });
   });
@@ -164,7 +164,7 @@ describe("StudentEventsTab", () => {
       "renders the '%s' column header",
       (header) => {
         expect(screen.getByText(header)).toBeInTheDocument();
-      }
+      },
     );
 
     it("renders a row for each event plus the header", () => {
@@ -180,7 +180,7 @@ describe("StudentEventsTab", () => {
     it("renders the formatted start date for each event", () => {
       for (const event of mockEvents) {
         expect(
-          screen.getByText(formatDate(event.startDate))
+          screen.getByText(formatDate(event.startDate)),
         ).toBeInTheDocument();
       }
     });
@@ -211,7 +211,7 @@ describe("StudentEventsTab", () => {
 
     it("does not show an error message", () => {
       expect(
-        screen.queryByText(/failed to load events/i)
+        screen.queryByText(/failed to load events/i),
       ).not.toBeInTheDocument();
     });
 

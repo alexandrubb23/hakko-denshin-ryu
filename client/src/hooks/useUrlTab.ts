@@ -12,7 +12,7 @@ interface UseUrlTabResult {
 
 const useUrlTab = <T extends TabItem>(
   items: T[] | undefined,
-  paramKey: string
+  paramKey: string,
 ): UseUrlTabResult => {
   const [searchParams, setSearchParams] = useSearchParams();
 

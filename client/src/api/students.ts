@@ -47,11 +47,11 @@ class StudentsApi extends Http {
 
   async createStudentRank(
     studentId: string,
-    payload: { rankId: number; awardedAt: string; notes?: string }
+    payload: { rankId: number; awardedAt: string; notes?: string },
   ): Promise<StudentRankEntry> {
     const { data } = await this.http.post(
       ApiRoutes.adminStudentRanks(studentId),
-      payload
+      payload,
     );
     return data.rank;
   }
@@ -59,25 +59,25 @@ class StudentsApi extends Http {
   async updateStudentRank(
     studentId: string,
     rankEntryId: string,
-    payload: { awardedAt: string; notes?: string }
+    payload: { awardedAt: string; notes?: string },
   ): Promise<StudentRankEntry> {
     const { data } = await this.http.put(
       ApiRoutes.adminStudentRank(studentId, rankEntryId),
-      payload
+      payload,
     );
     return data.rank;
   }
 
   async deleteStudentRank(
     studentId: string,
-    rankEntryId: string
+    rankEntryId: string,
   ): Promise<void> {
     await this.http.delete(ApiRoutes.adminStudentRank(studentId, rankEntryId));
   }
 
   async updateStudent(
     id: string,
-    payload: UpdateStudentInput
+    payload: UpdateStudentInput,
   ): Promise<Student> {
     const { data } = await this.http.put(ApiRoutes.adminStudent(id), payload);
     return data.student;

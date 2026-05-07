@@ -81,25 +81,25 @@ class EventsApi extends Http {
 
   async fetchEventParticipants(eventId: string): Promise<EventParticipant[]> {
     const { data } = await this.http.get(
-      ApiRoutes.adminEventParticipants(eventId)
+      ApiRoutes.adminEventParticipants(eventId),
     );
     return data.participants;
   }
 
   async upsertEventParticipation(
     eventId: string,
-    payload: UpsertEventParticipationInput
+    payload: UpsertEventParticipationInput,
   ): Promise<EventParticipant> {
     const { data } = await this.http.post(
       ApiRoutes.adminEventParticipants(eventId),
-      payload
+      payload,
     );
     return data.participation;
   }
 
   async fetchStudentEvents(studentId: string): Promise<StudentEvent[]> {
     const { data } = await this.http.get(
-      ApiRoutes.adminStudentEvents(studentId)
+      ApiRoutes.adminStudentEvents(studentId),
     );
     return data.events;
   }

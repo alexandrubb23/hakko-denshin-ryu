@@ -13,7 +13,7 @@ const VALID_VIEWS = Object.values(CalendarView);
 
 export function parseView(
   param: string | null,
-  defaultView: CalendarView = CalendarView.day
+  defaultView: CalendarView = CalendarView.day,
 ): CalendarView {
   return param && VALID_VIEWS.includes(param as CalendarView)
     ? (param as CalendarView)
@@ -29,18 +29,18 @@ export function parseCursor(param: string | null): Date {
 }
 
 const useAttendanceTabParams = (
-  defaultView: CalendarView = CalendarView.year
+  defaultView: CalendarView = CalendarView.year,
 ) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const view = useMemo(
     () => parseView(searchParams.get("view"), defaultView),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [searchParams]
+    [searchParams],
   );
   const cursor = useMemo(
     () => parseCursor(searchParams.get("date")),
-    [searchParams]
+    [searchParams],
   );
 
   const year = cursor.getUTCFullYear();
@@ -52,7 +52,7 @@ const useAttendanceTabParams = (
         Object.entries(updates).forEach(([k, v]) => prev.set(k, v));
         return prev;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 

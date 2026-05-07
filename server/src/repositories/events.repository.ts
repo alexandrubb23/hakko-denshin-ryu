@@ -62,7 +62,7 @@ export const findEventParticipants = (eventId: string) =>
 export const upsertEventParticipation = (
   eventId: string,
   userId: string,
-  attended: boolean
+  attended: boolean,
 ) =>
   prisma.eventParticipation.upsert({
     where: { eventId_userId: { eventId, userId } },

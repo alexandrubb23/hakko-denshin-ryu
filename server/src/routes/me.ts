@@ -30,7 +30,7 @@ router.get(ApiRoutes.meRanks, requireAuth, async (req, res) => {
 router.get(ApiRoutes.meAttendance, requireAuth, async (req, res) => {
   const { from, to } = parseYearMonthParams(
     req.query.year as string | undefined,
-    req.query.month as string | undefined
+    req.query.month as string | undefined,
   );
 
   const records = await findMyAttendance(req.user.id, from, to);
@@ -56,7 +56,7 @@ router.post(
     await updateUserImageById(req.user.id, imageUrl);
 
     res.json({ image: imageUrl });
-  }
+  },
 );
 
 export default router;

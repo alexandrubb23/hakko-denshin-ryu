@@ -140,7 +140,7 @@ describe("Techniques page", () => {
 
     it("renders the error message", () => {
       expect(
-        screen.getByText(/failed to load techniques/i)
+        screen.getByText(/failed to load techniques/i),
       ).toBeInTheDocument();
     });
 
@@ -169,7 +169,7 @@ describe("Techniques page", () => {
       "renders the %s tab",
       (label) => {
         expect(screen.getByRole("tab", { name: label })).toBeInTheDocument();
-      }
+      },
     );
 
     it("shows the first suite content by default", () => {
@@ -212,7 +212,7 @@ describe("Techniques page", () => {
         renderTechniques(`/?suite=${suiteId}`);
         expect(screen.getByText(suiteName)).toBeInTheDocument();
         expect(screen.getByText(suiteDescription)).toBeInTheDocument();
-      }
+      },
     );
 
     it("falls back to the first suite for an unknown suite param", () => {
@@ -239,7 +239,7 @@ describe("Techniques page", () => {
       (tabLabel, suiteName) => {
         fireEvent.click(screen.getByRole("tab", { name: tabLabel }));
         expect(screen.getByText(suiteName)).toBeInTheDocument();
-      }
+      },
     );
 
     it("only renders one suite's content at a time", () => {
@@ -252,7 +252,7 @@ describe("Techniques page", () => {
       fireEvent.click(screen.getByRole("tab", { name: "Sandan" }));
       expect(screen.getByRole("tab", { name: "Sandan" })).toHaveAttribute(
         "aria-selected",
-        "true"
+        "true",
       );
     });
   });

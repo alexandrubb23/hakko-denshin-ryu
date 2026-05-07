@@ -10,7 +10,7 @@ interface UpsertAttendancePayload {
 export const useUpsertAttendance = (
   studentId: string,
   year: number,
-  month?: number
+  month?: number,
 ) => {
   const queryClient = useQueryClient();
 

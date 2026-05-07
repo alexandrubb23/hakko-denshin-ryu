@@ -1,7 +1,7 @@
-import { v4 as uuid } from 'uuid';
-import { FormattedMessage as ReactFormattedMessage } from 'react-intl';
+import { v4 as uuid } from "uuid";
+import { FormattedMessage as ReactFormattedMessage } from "react-intl";
 
-import type { IntlMessageID } from 'i18n/messages';
+import type { IntlMessageID } from "i18n/messages";
 
 type FormattedMessageProps = {
   id: IntlMessageID;

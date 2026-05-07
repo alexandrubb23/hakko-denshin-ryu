@@ -21,7 +21,7 @@ export async function render(url: string) {
   const search = rawSearch ? `?${rawSearch}` : "";
 
   const page = pages.find(
-    (route) => normalizePath(route.path) === normalizedPathname
+    (route) => normalizePath(route.path) === normalizedPathname,
   );
   const title = page?.title || "Default Title";
   const noIndex = page?.protected || page?.standalone;
@@ -33,7 +33,7 @@ export async function render(url: string) {
       <StaticRouter location={`${normalizedPathname}${search}`}>
         <AppRoutes initialLoaderData={loaderData} />
       </StaticRouter>
-    </Providers>
+    </Providers>,
   );
 
   const emotionChunks = extractCriticalToChunks(html);

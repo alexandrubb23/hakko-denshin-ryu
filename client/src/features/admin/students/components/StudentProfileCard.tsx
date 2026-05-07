@@ -16,7 +16,7 @@ const StudentProfileCard = ({ children }: Props) => {
   const latestRank =
     ranks && ranks.length > 0
       ? ranks.reduce((best, curr) =>
-          curr.rank.order > best.rank.order ? curr : best
+          curr.rank.order > best.rank.order ? curr : best,
         )
       : undefined;
 

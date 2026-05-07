@@ -102,7 +102,7 @@ const SetPassword = () => {
       })
       .catch(() => {
         setVerifyError(
-          "This invitation link is invalid or has expired. Please contact your administrator."
+          "This invitation link is invalid or has expired. Please contact your administrator.",
         );
         setVerifying(false);
       });
@@ -116,7 +116,7 @@ const SetPassword = () => {
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
         setServerError(
-          "This invitation link is invalid or has expired. Please contact your administrator."
+          "This invitation link is invalid or has expired. Please contact your administrator.",
         );
       } else {
         setServerError("Something went wrong. Please try again.");

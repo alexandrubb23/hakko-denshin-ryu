@@ -43,17 +43,17 @@ describe("Events", () => {
       isError: false,
     } as unknown as ReturnType<typeof useAdminEvents>);
     mockUseCreateEvent.mockReturnValue(
-      defaultMutation as unknown as ReturnType<typeof useCreateEvent>
+      defaultMutation as unknown as ReturnType<typeof useCreateEvent>,
     );
     mockUseUpdateEvent.mockReturnValue(
-      defaultMutation as unknown as ReturnType<typeof useUpdateEvent>
+      defaultMutation as unknown as ReturnType<typeof useUpdateEvent>,
     );
   });
 
   it("renders the Add Event button", () => {
     renderEvents();
     expect(
-      screen.getByRole("button", { name: /add event/i })
+      screen.getByRole("button", { name: /add event/i }),
     ).toBeInTheDocument();
   });
 

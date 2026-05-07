@@ -27,7 +27,7 @@ const renderPage = (token?: string) =>
 
 const waitForForm = () =>
   waitFor(() =>
-    expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument(),
   );
 
 const fillAndSubmit = (password: string, confirm: string) => {
@@ -52,7 +52,7 @@ describe("SetPassword", () => {
 
     expect(screen.getByText(/no invitation token found/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /go to login/i })
+      screen.getByRole("link", { name: /go to login/i }),
     ).toBeInTheDocument();
     expect(mockVerifyToken).not.toHaveBeenCalled();
   });
@@ -65,10 +65,10 @@ describe("SetPassword", () => {
     renderPage("bad-token");
 
     await waitFor(() =>
-      expect(screen.getByText(/invalid or has expired/i)).toBeInTheDocument()
+      expect(screen.getByText(/invalid or has expired/i)).toBeInTheDocument(),
     );
     expect(
-      screen.getByRole("link", { name: /go to login/i })
+      screen.getByRole("link", { name: /go to login/i }),
     ).toBeInTheDocument();
   });
 
@@ -87,14 +87,14 @@ describe("SetPassword", () => {
 
       await waitFor(() =>
         expect(
-          screen.getByRole("heading", { name: /set your password/i })
-        ).toBeInTheDocument()
+          screen.getByRole("heading", { name: /set your password/i }),
+        ).toBeInTheDocument(),
       );
       expect(screen.getByText(/welcome, tanaka hiroshi/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/confirm password/i)).toBeInTheDocument();
       expect(
-        screen.getByRole("button", { name: /set password/i })
+        screen.getByRole("button", { name: /set password/i }),
       ).toBeInTheDocument();
     });
 
@@ -121,9 +121,9 @@ describe("SetPassword", () => {
         fillAndSubmit(password, confirm);
 
         await waitFor(() =>
-          expect(screen.getByText(errorPattern)).toBeInTheDocument()
+          expect(screen.getByText(errorPattern)).toBeInTheDocument(),
         );
-      }
+      },
     );
 
     // ── Submit — success ────────────────────────────────────────────────────
@@ -135,11 +135,11 @@ describe("SetPassword", () => {
         verify: async () => {
           await waitFor(() =>
             expect(
-              screen.getByText(/your password has been set/i)
-            ).toBeInTheDocument()
+              screen.getByText(/your password has been set/i),
+            ).toBeInTheDocument(),
           );
           expect(
-            screen.getByRole("link", { name: /go to login/i })
+            screen.getByRole("link", { name: /go to login/i }),
           ).toBeInTheDocument();
         },
       },
@@ -151,7 +151,7 @@ describe("SetPassword", () => {
             expect(mockSetPassword).toHaveBeenCalledWith({
               token: "my-secret-token",
               password: "NewSecurePass1!",
-            })
+            }),
           );
         },
       },
@@ -196,9 +196,9 @@ describe("SetPassword", () => {
         fillAndSubmit("NewSecurePass1!", "NewSecurePass1!");
 
         await waitFor(() =>
-          expect(screen.getByText(errorPattern)).toBeInTheDocument()
+          expect(screen.getByText(errorPattern)).toBeInTheDocument(),
         );
-      }
+      },
     );
   });
 });

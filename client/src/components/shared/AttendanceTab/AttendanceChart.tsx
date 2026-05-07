@@ -139,7 +139,7 @@ function makeSingleBarData(
   color: string,
   tooltipLabel: string,
   presentCount: number,
-  absentCount: number
+  absentCount: number,
 ): ChartData {
   return {
     labels: [label],
@@ -166,7 +166,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
       PURPLE_ALPHA_18,
       SessionLabel.NotYet,
       0,
-      0
+      0,
     );
 
   const record = records.find((r) => r.date.startsWith(key));
@@ -177,7 +177,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
       PURPLE_ALPHA_18,
       SessionLabel.Unmarked,
       0,
-      0
+      0,
     );
   if (record.attended)
     return makeSingleBarData(
@@ -186,7 +186,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
       ATTENDED_COLOR,
       SessionLabel.Present,
       1,
-      0
+      0,
     );
   return makeSingleBarData(
     label,
@@ -194,7 +194,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
     ERROR_DARK_ALPHA_80,
     SessionLabel.Absent,
     0,
-    1
+    1,
   );
 }
 
@@ -309,19 +309,19 @@ function buildMonthData(cursor: Date, records: AttendanceRecord[]): ChartData {
 
 function buildYearData(
   yearRecords: AttendanceRecord[],
-  year: number
+  year: number,
 ): ChartData {
   const labels = MONTH_NAMES_SHORT.map((m) => `${m} ${year}`);
   const attendedData = Array.from({ length: 12 }, (_, i) => {
     const monthStr = String(i + 1).padStart(2, "0");
     return yearRecords.filter(
-      (r) => r.date.slice(5, 7) === monthStr && r.attended
+      (r) => r.date.slice(5, 7) === monthStr && r.attended,
     ).length;
   });
   const absentData = Array.from({ length: 12 }, (_, i) => {
     const monthStr = String(i + 1).padStart(2, "0");
     return yearRecords.filter(
-      (r) => r.date.slice(5, 7) === monthStr && !r.attended
+      (r) => r.date.slice(5, 7) === monthStr && !r.attended,
     ).length;
   });
   const maxY = Math.max(...attendedData.map((a, i) => a + absentData[i]), 4);

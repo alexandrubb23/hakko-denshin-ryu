@@ -1,5 +1,5 @@
-import en from '../locales/en.json';
-import ro from '../locales/ro.json';
+import en from "../locales/en.json";
+import ro from "../locales/ro.json";
 
 export type IntlMessageID = keyof typeof en;
 

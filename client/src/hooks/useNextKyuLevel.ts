@@ -14,7 +14,7 @@ import { useKyuProgram } from "@features/public/kyu-program/useKyuProgram";
  *  - Black belt (dan rank)       → undefined (outside kyu program)
  */
 export const useNextKyuLevel = (
-  latestRank: StudentRankEntry | undefined
+  latestRank: StudentRankEntry | undefined,
 ): KyuLevel | undefined => {
   const { data: kyuLevels } = useKyuProgram();
 

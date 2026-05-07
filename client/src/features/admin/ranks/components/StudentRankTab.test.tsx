@@ -19,7 +19,9 @@ vi.mock("./CreateStudentRankModal", () => ({
 vi.mock("./DeleteRankModal", () => ({
   default: createModalMock<{ entry: StudentRankEntry }>(
     "delete-rank-modal",
-    ({ entry }) => <span data-testid="delete-rank-name">{entry.rank.name}</span>
+    ({ entry }) => (
+      <span data-testid="delete-rank-name">{entry.rank.name}</span>
+    ),
   ),
 }));
 
@@ -54,7 +56,7 @@ type MockState = {
 
 const mockAndRender = (state: MockState) => {
   mockUseStudentRanks.mockReturnValue(
-    state as unknown as ReturnType<typeof useStudentRanks>
+    state as unknown as ReturnType<typeof useStudentRanks>,
   );
   renderUi(<StudentRankTab studentId={STUDENT_ID} />);
 };
@@ -81,7 +83,7 @@ describe("StudentRankTab", () => {
 
     it("renders the Assign Rank button", () => {
       expect(
-        screen.getByRole("button", { name: /assign rank/i })
+        screen.getByRole("button", { name: /assign rank/i }),
       ).toBeInTheDocument();
     });
 
@@ -95,13 +97,13 @@ describe("StudentRankTab", () => {
 
     it("does not show an error alert", () => {
       expect(
-        screen.queryByText(/failed to load rank history/i)
+        screen.queryByText(/failed to load rank history/i),
       ).not.toBeInTheDocument();
     });
 
     it("does not show the empty state alert", () => {
       expect(
-        screen.queryByText(/no ranks assigned yet/i)
+        screen.queryByText(/no ranks assigned yet/i),
       ).not.toBeInTheDocument();
     });
   });
@@ -113,7 +115,7 @@ describe("StudentRankTab", () => {
 
     it("shows the error alert", () => {
       expect(
-        screen.getByText(/failed to load rank history/i)
+        screen.getByText(/failed to load rank history/i),
       ).toBeInTheDocument();
     });
 
@@ -123,13 +125,13 @@ describe("StudentRankTab", () => {
 
     it("does not show the empty state alert", () => {
       expect(
-        screen.queryByText(/no ranks assigned yet/i)
+        screen.queryByText(/no ranks assigned yet/i),
       ).not.toBeInTheDocument();
     });
 
     it("still renders the Assign Rank button", () => {
       expect(
-        screen.getByRole("button", { name: /assign rank/i })
+        screen.getByRole("button", { name: /assign rank/i }),
       ).toBeInTheDocument();
     });
   });
@@ -149,13 +151,13 @@ describe("StudentRankTab", () => {
 
     it("does not show an error alert", () => {
       expect(
-        screen.queryByText(/failed to load rank history/i)
+        screen.queryByText(/failed to load rank history/i),
       ).not.toBeInTheDocument();
     });
 
     it("renders the Assign Rank button", () => {
       expect(
-        screen.getByRole("button", { name: /assign rank/i })
+        screen.getByRole("button", { name: /assign rank/i }),
       ).toBeInTheDocument();
     });
   });
@@ -196,16 +198,16 @@ describe("StudentRankTab", () => {
 
     it("renders the Assign Rank button", () => {
       expect(
-        screen.getByRole("button", { name: /assign rank/i })
+        screen.getByRole("button", { name: /assign rank/i }),
       ).toBeInTheDocument();
     });
 
     it("does not show error or empty state alerts", () => {
       expect(
-        screen.queryByText(/failed to load rank history/i)
+        screen.queryByText(/failed to load rank history/i),
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByText(/no ranks assigned yet/i)
+        screen.queryByText(/no ranks assigned yet/i),
       ).not.toBeInTheDocument();
     });
 

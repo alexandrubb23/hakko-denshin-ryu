@@ -1,6 +1,6 @@
-import { matchRoutes } from 'react-router';
+import { matchRoutes } from "react-router";
 
-import { pages } from '../pages';
+import { pages } from "../pages";
 
 export const prefetch = async (url: string) => {
   const matches = matchRoutes(pages, url);
@@ -12,7 +12,7 @@ export const prefetch = async (url: string) => {
       if (route.loader) {
         loaderData = await route.loader();
       }
-    })
+    }),
   );
 
   return loaderData;

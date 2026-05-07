@@ -104,7 +104,7 @@ const STATUS_OPTIONS: { value: EventStatusFilter; label: string }[] = [
 const statusChipSx = (
   value: EventStatusFilter,
   active: boolean,
-  activeStatus: EventStatusFilter
+  activeStatus: EventStatusFilter,
 ) => {
   if (value === "all") return defaultChipSx(active);
   const colors = EVENT_STATUS_COLORS[value];
@@ -125,7 +125,7 @@ function eventTypeColor(type: string): string {
 function filterEvents(
   events: DashboardEvent[],
   type: EventTypeFilter,
-  status: EventStatusFilter
+  status: EventStatusFilter,
 ): DashboardEvent[] {
   return events.filter((e) => {
     const typeMatch = type === "all" || e.type === type;
@@ -142,12 +142,12 @@ const DashboardEventChart = () => {
   const { data, isLoading, isFetching } = useDashboardEvents(
     type,
     status,
-    year
+    year,
   );
 
   const filtered = useMemo(
     () => filterEvents(data?.events ?? [], type, status),
-    [data, type, status]
+    [data, type, status],
   );
 
   const chartData = useMemo(() => {
@@ -159,7 +159,7 @@ const DashboardEventChart = () => {
 
   const maxX = useMemo(
     () => Math.max(...(chartData.values.length ? chartData.values : [0]), 4),
-    [chartData.values]
+    [chartData.values],
   );
 
   const availableYears = data?.availableYears ?? [];
@@ -169,7 +169,7 @@ const DashboardEventChart = () => {
       { value: "all" as const, label: "All Years" },
       ...availableYears.map((y) => ({ value: y, label: String(y) })),
     ],
-    [availableYears]
+    [availableYears],
   );
 
   const options = {

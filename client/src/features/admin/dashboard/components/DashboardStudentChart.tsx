@@ -75,7 +75,7 @@ function beltColor(belt: string | null): string {
 
 function filterStudents(
   students: DashboardStudent[],
-  rankFilter: string
+  rankFilter: string,
 ): DashboardStudent[] {
   if (rankFilter === ALL_RANK_FILTER) return students;
   if (rankFilter === UNRANKED_FILTER)
@@ -96,12 +96,12 @@ const DashboardStudentChart = () => {
 
   const hasUnranked = useMemo(
     () => (data?.students ?? []).some((s) => s.rankId === null),
-    [data]
+    [data],
   );
 
   const filtered = useMemo(
     () => filterStudents(data?.students ?? [], rankFilter),
-    [data, rankFilter]
+    [data, rankFilter],
   );
 
   const chartData = useMemo(() => {
@@ -113,7 +113,7 @@ const DashboardStudentChart = () => {
 
   const maxX = useMemo(
     () => Math.max(...(chartData.values.length ? chartData.values : [0]), 4),
-    [chartData.values]
+    [chartData.values],
   );
 
   const options = {
@@ -176,7 +176,7 @@ const DashboardStudentChart = () => {
       })),
       ...(hasUnranked ? [{ value: UNRANKED_FILTER, label: "Unranked" }] : []),
     ],
-    [data?.ranks, hasUnranked]
+    [data?.ranks, hasUnranked],
   );
 
   const chartHeight = Math.max(120, filtered.length * 36);

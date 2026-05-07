@@ -33,7 +33,7 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
   const { mutate: upsert, isPending } = useUpsertTrainingDayAttendance(date);
 
   const recordMap = new Map(
-    attendanceData?.records.map((r) => [r.userId, r.attended]) ?? []
+    attendanceData?.records.map((r) => [r.userId, r.attended]) ?? [],
   );
 
   const isLoading = loadingStudents || loadingAttendance;

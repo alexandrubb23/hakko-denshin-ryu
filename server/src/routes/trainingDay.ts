@@ -18,7 +18,7 @@ router.get(
 
     if (!rawDate || !DATE_REGEX.test(rawDate)) {
       throw new HttpBadRequestError(
-        "Missing or invalid date. Expected format: YYYY-MM-DD"
+        "Missing or invalid date. Expected format: YYYY-MM-DD",
       );
     }
 
@@ -26,7 +26,7 @@ router.get(
     const records = await findAttendanceForDate(date);
 
     res.json({ records });
-  }
+  },
 );
 
 export default router;

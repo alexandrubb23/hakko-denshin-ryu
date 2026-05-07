@@ -38,7 +38,9 @@ describe("StudentAvatar", () => {
   it("does not show the upload dialog initially", () => {
     renderUi(<StudentAvatar {...defaultProps} />);
 
-    expect(screen.queryByTestId("avatar-upload-dialog")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("avatar-upload-dialog"),
+    ).not.toBeInTheDocument();
   });
 
   it("renders initials when no image is provided", () => {
@@ -51,7 +53,9 @@ describe("StudentAvatar", () => {
     renderUi(<StudentAvatar {...defaultProps} isLoading />);
 
     expect(screen.queryByText("JD")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("avatar-upload-dialog")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("avatar-upload-dialog"),
+    ).not.toBeInTheDocument();
   });
 
   describe("dialog visibility", () => {
@@ -71,7 +75,9 @@ describe("StudentAvatar", () => {
 
       fireEvent.click(screen.getByTestId("avatar-upload-dialog-backdrop"));
 
-      expect(screen.queryByTestId("avatar-upload-dialog")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("avatar-upload-dialog"),
+      ).not.toBeInTheDocument();
     });
 
     it("closes the dialog when the Escape key is pressed", () => {
@@ -80,7 +86,9 @@ describe("StudentAvatar", () => {
 
       fireEvent.keyDown(document, { key: "Escape" });
 
-      expect(screen.queryByTestId("avatar-upload-dialog")).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId("avatar-upload-dialog"),
+      ).not.toBeInTheDocument();
     });
   });
 });

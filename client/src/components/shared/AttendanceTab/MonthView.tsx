@@ -170,13 +170,17 @@ const MonthView = ({
 
   const prevMonth = () => {
     onCursorChange(
-      toUtcDate(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, 1)
+      toUtcDate(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, 1),
     );
   };
 
   const nextMonth = () => {
     onCursorChange(
-      toUtcDate(month === 12 ? year + 1 : year, month === 12 ? 1 : month + 1, 1)
+      toUtcDate(
+        month === 12 ? year + 1 : year,
+        month === 12 ? 1 : month + 1,
+        1,
+      ),
     );
   };
 
@@ -221,7 +225,7 @@ const MonthView = ({
             />
           ) : (
             <EmptyCell key={`empty-${i}`} />
-          )
+          ),
         )}
       </CalendarGrid>
     </MonthViewRoot>

@@ -9,7 +9,9 @@ export const useDeleteStudentRank = (studentId: string) => {
     mutationFn: (rankEntryId: string) =>
       studentsApi.deleteStudentRank(studentId, rankEntryId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["students", studentId, "ranks"] });
+      queryClient.invalidateQueries({
+        queryKey: ["students", studentId, "ranks"],
+      });
     },
   });
 };

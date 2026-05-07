@@ -146,7 +146,7 @@ const StudentForm = (props: StudentFormProps) => {
           sendInvite: values.sendInvite ?? true,
           password: values.password,
         } as CreateStudentInput,
-        { onSuccess: () => onClose() }
+        { onSuccess: () => onClose() },
       );
     } else {
       updateMutation.mutate(
@@ -157,7 +157,7 @@ const StudentForm = (props: StudentFormProps) => {
           sendInvite: values.sendInvite,
           password: values.password || undefined,
         } as { id: string } & UpdateStudentInput,
-        { onSuccess: () => onClose() }
+        { onSuccess: () => onClose() },
       );
     }
   };

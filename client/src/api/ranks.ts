@@ -10,7 +10,6 @@ export interface Rank {
 }
 
 class RanksApi extends Http {
-
   async fetchRanks(): Promise<Rank[]> {
     const { data } = await this.http.get(ApiRoutes.adminRanks);
     return data.ranks;

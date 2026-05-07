@@ -157,7 +157,7 @@ describe("KyuProgram page", () => {
 
     it("renders the error message", () => {
       expect(
-        screen.getByText(/failed to load kyu program/i)
+        screen.getByText(/failed to load kyu program/i),
       ).toBeInTheDocument();
     });
 
@@ -186,9 +186,9 @@ describe("KyuProgram page", () => {
       "renders the %s tab",
       (shortName) => {
         expect(
-          screen.getByRole("tab", { name: new RegExp(shortName, "i") })
+          screen.getByRole("tab", { name: new RegExp(shortName, "i") }),
         ).toBeInTheDocument();
-      }
+      },
     );
 
     it("shows the first level content by default", () => {
@@ -235,7 +235,7 @@ describe("KyuProgram page", () => {
       (levelId, levelName) => {
         renderKyuProgram(`/?level=${levelId}`);
         expect(screen.getByText(levelName)).toBeInTheDocument();
-      }
+      },
     );
 
     it("falls back to the first level for an unknown level param", () => {
@@ -262,17 +262,17 @@ describe("KyuProgram page", () => {
       "shows %s level content when the tab is clicked",
       (shortName, levelName) => {
         fireEvent.click(
-          screen.getByRole("tab", { name: new RegExp(shortName, "i") })
+          screen.getByRole("tab", { name: new RegExp(shortName, "i") }),
         );
         expect(screen.getByText(levelName)).toBeInTheDocument();
-      }
+      },
     );
 
     it("only renders one level's content at a time", () => {
       fireEvent.click(screen.getByRole("tab", { name: /4th kyu/i }));
       expect(screen.getByText("4TH KYU — ORANGE BELT")).toBeInTheDocument();
       expect(
-        screen.queryByText("5TH KYU — YELLOW BELT")
+        screen.queryByText("5TH KYU — YELLOW BELT"),
       ).not.toBeInTheDocument();
     });
 
@@ -280,7 +280,7 @@ describe("KyuProgram page", () => {
       fireEvent.click(screen.getByRole("tab", { name: /3rd kyu/i }));
       expect(screen.getByRole("tab", { name: /3rd kyu/i })).toHaveAttribute(
         "aria-selected",
-        "true"
+        "true",
       );
     });
 
@@ -288,7 +288,7 @@ describe("KyuProgram page", () => {
       fireEvent.click(screen.getByRole("tab", { name: /2nd kyu/i }));
       expect(screen.getByRole("tab", { name: /5th kyu/i })).toHaveAttribute(
         "aria-selected",
-        "false"
+        "false",
       );
     });
   });

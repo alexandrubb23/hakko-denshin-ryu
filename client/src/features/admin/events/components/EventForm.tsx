@@ -89,7 +89,7 @@ const eventFormSchema = z
       if (!data.endDate) return true;
       return new Date(data.endDate) > new Date(data.startDate);
     },
-    { message: "End date must be after start date", path: ["endDate"] }
+    { message: "End date must be after start date", path: ["endDate"] },
   );
 
 type EventFormValues = z.infer<typeof eventFormSchema>;
@@ -195,7 +195,7 @@ const EventForm = (props: EventFormProps) => {
     }
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
       setImageValidationError(
-        `File must be smaller than ${MAX_IMAGE_SIZE_MB} MB.`
+        `File must be smaller than ${MAX_IMAGE_SIZE_MB} MB.`,
       );
       return;
     }

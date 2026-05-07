@@ -122,7 +122,7 @@ describe("Students page", () => {
 
     it("renders the Add Student button", () => {
       expect(
-        screen.getByRole("button", { name: /add student/i })
+        screen.getByRole("button", { name: /add student/i }),
       ).toBeInTheDocument();
     });
   });
@@ -219,13 +219,13 @@ describe("Students page", () => {
 
     it("renders the Add Student button", () => {
       expect(
-        screen.getByRole("button", { name: /add student/i })
+        screen.getByRole("button", { name: /add student/i }),
       ).toBeInTheDocument();
     });
 
     it("does not show the modal by default", () => {
       expect(
-        screen.queryByTestId("create-student-modal")
+        screen.queryByTestId("create-student-modal"),
       ).not.toBeInTheDocument();
     });
 
@@ -238,7 +238,7 @@ describe("Students page", () => {
 
     it("does not show the edit modal by default", () => {
       expect(
-        screen.queryByTestId("edit-student-modal")
+        screen.queryByTestId("edit-student-modal"),
       ).not.toBeInTheDocument();
     });
 
@@ -251,7 +251,7 @@ describe("Students page", () => {
 
     it("does not show the delete modal by default", () => {
       expect(
-        screen.queryByTestId("delete-student-modal")
+        screen.queryByTestId("delete-student-modal"),
       ).not.toBeInTheDocument();
     });
   });
@@ -278,7 +278,7 @@ describe("Students page", () => {
 
       fireEvent.click(screen.getByTestId("create-student-modal-backdrop"));
       expect(
-        screen.queryByTestId("create-student-modal")
+        screen.queryByTestId("create-student-modal"),
       ).not.toBeInTheDocument();
     });
 
@@ -288,7 +288,7 @@ describe("Students page", () => {
 
       fireEvent.keyDown(document, { key: "Escape" });
       expect(
-        screen.queryByTestId("create-student-modal")
+        screen.queryByTestId("create-student-modal"),
       ).not.toBeInTheDocument();
     });
   });
@@ -318,7 +318,7 @@ describe("Students page", () => {
       });
       fireEvent.click(firstEditBtn);
       expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
-        mockStudents[0].name
+        mockStudents[0].name,
       );
     });
 
@@ -328,7 +328,7 @@ describe("Students page", () => {
       });
       fireEvent.click(editButtons[1]);
       expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
-        mockStudents[1].name
+        mockStudents[1].name,
       );
     });
 
@@ -341,7 +341,7 @@ describe("Students page", () => {
 
       fireEvent.click(screen.getByRole("button", { name: /close modal/i }));
       expect(
-        screen.queryByTestId("edit-student-modal")
+        screen.queryByTestId("edit-student-modal"),
       ).not.toBeInTheDocument();
     });
   });
@@ -371,7 +371,7 @@ describe("Students page", () => {
       });
       fireEvent.click(firstDeleteBtn);
       expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
-        mockStudents[0].name
+        mockStudents[0].name,
       );
     });
 
@@ -381,7 +381,7 @@ describe("Students page", () => {
       });
       fireEvent.click(deleteButtons[1]);
       expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
-        mockStudents[1].name
+        mockStudents[1].name,
       );
     });
 
@@ -393,10 +393,10 @@ describe("Students page", () => {
       expect(screen.getByTestId("delete-student-modal")).toBeInTheDocument();
 
       fireEvent.click(
-        screen.getByRole("button", { name: /close delete modal/i })
+        screen.getByRole("button", { name: /close delete modal/i }),
       );
       expect(
-        screen.queryByTestId("delete-student-modal")
+        screen.queryByTestId("delete-student-modal"),
       ).not.toBeInTheDocument();
     });
   });

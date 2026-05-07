@@ -1,18 +1,18 @@
-import WebAssetIcon from '@mui/icons-material/WebAsset';
-import { Box, SvgIcon } from '@mui/material';
+import WebAssetIcon from "@mui/icons-material/WebAsset";
+import { Box, SvgIcon } from "@mui/material";
 
-import MediaItem from '@components/ui/MediaObject/MediaItem';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import YouTubeIcon from '@mui/icons-material/YouTube';
+import MediaItem from "@components/ui/MediaObject/MediaItem";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
 const items = [
   {
-    href: 'https://www.facebook.com/profile.php?id=61573820020885',
+    href: "https://www.facebook.com/profile.php?id=61573820020885",
     icon: FacebookIcon,
   },
   {
-    href: 'https://www.youtube.com/@HakkoDenshinRyuJuJutsuRomania',
+    href: "https://www.youtube.com/@HakkoDenshinRyuJuJutsuRomania",
     icon: YouTubeIcon,
   },
   {
@@ -26,19 +26,19 @@ const SocialMediaItem = () => {
     <MediaItem
       icon={WebAssetIcon}
       localeId={{
-        title: 'page.contact.social.title',
+        title: "page.contact.social.title",
       }}
     >
       <Box
         sx={{
-          display: 'flex',
+          display: "flex",
           gap: 2,
           marginTop: 1,
         }}
       >
-        {items.map(item => (
-          <a href={item.href} target='_blank' key={item.href}>
-            <SvgIcon component={item.icon} fontSize='small' />
+        {items.map((item) => (
+          <a href={item.href} target="_blank" key={item.href}>
+            <SvgIcon component={item.icon} fontSize="small" />
           </a>
         ))}
       </Box>

@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import useMenuStore from '@store/useMenuStore';
+import useMenuStore from "@store/useMenuStore";
 
 const useBodyOverflow = () => {
-  const isOpen = useMenuStore(state => state.isOpen);
+  const isOpen = useMenuStore((state) => state.isOpen);
 
   useEffect(() => {
-    document.body.style.overflowY = isOpen ? 'hidden' : '';
+    document.body.style.overflowY = isOpen ? "hidden" : "";
   }, [isOpen]);
 };
 

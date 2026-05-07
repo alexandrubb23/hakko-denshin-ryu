@@ -9,7 +9,7 @@ import {
 export const useDashboardEvents = (
   type: EventTypeFilter = "all",
   status: EventStatusFilter = "all",
-  year: number | "all" = "all"
+  year: number | "all" = "all",
 ) =>
   useQuery({
     queryKey: ["dashboard", "events", type, status, year],

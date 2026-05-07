@@ -26,7 +26,7 @@ const BoxStyled = styled(Box, {
     WebkitBackfaceVisibility: "hidden",
     width: "100%",
     willChange: "filter",
-  })
+  }),
 );
 
 const BlurredUpImage = ({

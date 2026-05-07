@@ -1,4 +1,4 @@
-import { Lang } from '@store/useLangStore';
+import { Lang } from "@store/useLangStore";
 
 type Data = {
   root: {
@@ -17,18 +17,18 @@ export const data: Data = {
     header: {
       menu: {
         en: {
-          home: 'Home',
-          'hakko-ryu': 'Hakko Ryu',
-          senshinkan: 'Senshinkan',
-          dojo: 'Dojo',
-          contact: 'Contact',
+          home: "Home",
+          "hakko-ryu": "Hakko Ryu",
+          senshinkan: "Senshinkan",
+          dojo: "Dojo",
+          contact: "Contact",
         },
         ro: {
-          home: 'Acasă',
-          'hakko-ryu': 'Hakko Ryu',
-          senshinkan: 'Senshinkan',
-          dojo: 'Dojo',
-          contact: 'Contact',
+          home: "Acasă",
+          "hakko-ryu": "Hakko Ryu",
+          senshinkan: "Senshinkan",
+          dojo: "Dojo",
+          contact: "Contact",
         },
       },
     },

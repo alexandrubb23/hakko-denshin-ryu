@@ -1,11 +1,4 @@
-import {
-  Box,
-  Divider,
-  Paper,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, Paper, Tab, Tabs, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   BACKDROP_BLUR,

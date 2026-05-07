@@ -32,7 +32,7 @@ describe("CreateStudentModal", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     mockUseCreateStudent.mockReturnValue(
-      defaultMutation as unknown as ReturnType<typeof useCreateStudent>
+      defaultMutation as unknown as ReturnType<typeof useCreateStudent>,
     );
   });
 
@@ -41,7 +41,7 @@ describe("CreateStudentModal", () => {
     expect(screen.getByText("Add Student")).toBeInTheDocument();
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: /^email$/i })
+      screen.getByRole("textbox", { name: /^email$/i }),
     ).toBeInTheDocument();
   });
 
@@ -67,7 +67,7 @@ describe("CreateStudentModal", () => {
   it("shows the password field when invite checkbox is unchecked", async () => {
     renderModal();
     fireEvent.click(
-      screen.getByRole("checkbox", { name: /send invitation email/i })
+      screen.getByRole("checkbox", { name: /send invitation email/i }),
     );
     await waitFor(() => {
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe("CreateStudentModal", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Name must be at least 3 characters")
+        screen.getByText("Name must be at least 3 characters"),
       ).toBeInTheDocument();
       expect(screen.getByText("Invalid email address")).toBeInTheDocument();
     });
@@ -97,18 +97,18 @@ describe("CreateStudentModal", () => {
   it("shows password validation error in manual mode when submitted empty", async () => {
     renderModal();
     fireEvent.click(
-      screen.getByRole("checkbox", { name: /send invitation email/i })
+      screen.getByRole("checkbox", { name: /send invitation email/i }),
     );
 
     await waitFor(() =>
-      expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument(),
     );
 
     fireEvent.click(screen.getByRole("button", { name: /create student/i }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Password must be at least 8 characters")
+        screen.getByText("Password must be at least 8 characters"),
       ).toBeInTheDocument();
     });
 
@@ -127,7 +127,7 @@ describe("CreateStudentModal", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Name must be at least 3 characters")
+        screen.getByText("Name must be at least 3 characters"),
       ).toBeInTheDocument();
     });
 
@@ -151,7 +151,7 @@ describe("CreateStudentModal", () => {
           email: "john@example.com",
           sendInvite: true,
         }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
@@ -159,11 +159,11 @@ describe("CreateStudentModal", () => {
   it("calls mutate with password when invite checkbox is unchecked", async () => {
     renderModal();
     fireEvent.click(
-      screen.getByRole("checkbox", { name: /send invitation email/i })
+      screen.getByRole("checkbox", { name: /send invitation email/i }),
     );
 
     await waitFor(() =>
-      expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument(),
     );
 
     fireEvent.change(screen.getByLabelText(/name/i), {
@@ -185,7 +185,7 @@ describe("CreateStudentModal", () => {
           password: "securepassword",
           sendInvite: false,
         }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
@@ -193,11 +193,11 @@ describe("CreateStudentModal", () => {
   it("shows validation error when password is too short in manual mode", async () => {
     renderModal();
     fireEvent.click(
-      screen.getByRole("checkbox", { name: /send invitation email/i })
+      screen.getByRole("checkbox", { name: /send invitation email/i }),
     );
 
     await waitFor(() =>
-      expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument(),
     );
 
     fireEvent.change(screen.getByLabelText(/name/i), {
@@ -213,7 +213,7 @@ describe("CreateStudentModal", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Password must be at least 8 characters")
+        screen.getByText("Password must be at least 8 characters"),
       ).toBeInTheDocument();
     });
 
@@ -228,7 +228,7 @@ describe("CreateStudentModal", () => {
 
     renderModal();
     expect(
-      screen.getByRole("button", { name: /creating/i })
+      screen.getByRole("button", { name: /creating/i }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /creating/i })).toBeDisabled();
   });

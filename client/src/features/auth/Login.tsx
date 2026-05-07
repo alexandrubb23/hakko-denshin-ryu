@@ -75,7 +75,7 @@ const Login = () => {
 
     if (error) {
       setServerError(
-        error.message ?? "Invalid email or password. Please try again."
+        error.message ?? "Invalid email or password. Please try again.",
       );
       return;
     }

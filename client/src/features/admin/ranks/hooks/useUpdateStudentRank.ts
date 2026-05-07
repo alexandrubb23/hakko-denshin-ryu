@@ -15,7 +15,9 @@ export const useUpdateStudentRank = (studentId: string) => {
       payload: UpdateStudentRankInput;
     }) => studentsApi.updateStudentRank(studentId, rankEntryId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["students", studentId, "ranks"] });
+      queryClient.invalidateQueries({
+        queryKey: ["students", studentId, "ranks"],
+      });
     },
   });
 };

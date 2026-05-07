@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import useLangStore from '@store/useLangStore';
-import useMenuStore from '@store/useMenuStore';
+import useLangStore from "@store/useLangStore";
+import useMenuStore from "@store/useMenuStore";
 
 const useCloseMenuOnLangChange = () => {
   useEffect(() => {

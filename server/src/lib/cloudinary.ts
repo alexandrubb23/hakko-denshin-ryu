@@ -20,7 +20,7 @@ async function uploadImage(
   buffer: Buffer,
   folder: string,
   publicId: string,
-  existingImageUrl?: string | null
+  existingImageUrl?: string | null,
 ): Promise<string> {
   if (env.NODE_ENV === "test") {
     return `https://res.cloudinary.com/test/image/upload/v${Date.now()}/${folder}/${publicId}.jpg`;
@@ -64,25 +64,25 @@ function extractPublicId(url: string): string | null {
 export async function uploadAvatar(
   buffer: Buffer,
   userId: string,
-  existingImageUrl?: string | null
+  existingImageUrl?: string | null,
 ): Promise<string> {
   return uploadImage(
     buffer,
     AVATARS_FOLDER,
     `user_${userId}`,
-    existingImageUrl
+    existingImageUrl,
   );
 }
 
 export async function uploadEventImage(
   buffer: Buffer,
   eventId: string,
-  existingImageUrl?: string | null
+  existingImageUrl?: string | null,
 ): Promise<string> {
   return uploadImage(
     buffer,
     EVENTS_FOLDER,
     `event_${eventId}`,
-    existingImageUrl
+    existingImageUrl,
   );
 }

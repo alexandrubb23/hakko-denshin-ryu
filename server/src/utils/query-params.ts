@@ -23,19 +23,19 @@ export type YearMonthRange = {
  */
 export function parseYearMonthParams(
   yearParam: string | undefined,
-  monthParam: string | undefined
+  monthParam: string | undefined,
 ): YearMonthRange {
   const year = Number(yearParam);
 
   if (!yearParam || isNaN(year)) {
     throw new HttpBadRequestError(
-      "year query parameter is required and must be a number"
+      "year query parameter is required and must be a number",
     );
   }
 
   if (year < MIN_YEAR || year > MAX_YEAR) {
     throw new HttpBadRequestError(
-      `year must be between ${MIN_YEAR} and ${MAX_YEAR}`
+      `year must be between ${MIN_YEAR} and ${MAX_YEAR}`,
     );
   }
 
@@ -46,7 +46,7 @@ export function parseYearMonthParams(
     const month = Number(monthParam);
     if (isNaN(month) || month < MIN_MONTH || month > MAX_MONTH) {
       throw new HttpBadRequestError(
-        `month must be between ${MIN_MONTH} and ${MAX_MONTH}`
+        `month must be between ${MIN_MONTH} and ${MAX_MONTH}`,
       );
     }
     from = toUtcDate(year, month, 1);

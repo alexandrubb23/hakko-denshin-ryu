@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import useIsMobile from './isMobile';
+import { useEffect, useState } from "react";
+import useIsMobile from "./isMobile";
 
 type ImageSet = {
   mobileLowQuality: string;
@@ -16,8 +16,8 @@ const useDeviceImageType = ({
 }: ImageSet) => {
   const isMobile = useIsMobile({ noSsr: true });
 
-  const [imageLowQuality, setImageLowQuality] = useState('');
-  const [imageHighQuality, setImageHighQuality] = useState('');
+  const [imageLowQuality, setImageLowQuality] = useState("");
+  const [imageHighQuality, setImageHighQuality] = useState("");
 
   useEffect(() => {
     setImageLowQuality(isMobile ? mobileLowQuality : desktopLowQuality);

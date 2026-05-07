@@ -1,7 +1,18 @@
-import { Avatar, Box, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { BORDER_COLOR, PURPLE, PURPLE_ALPHA_25, SURFACE_BG } from "@style/tokens";
+import {
+  BORDER_COLOR,
+  PURPLE,
+  PURPLE_ALPHA_25,
+  SURFACE_BG,
+} from "@style/tokens";
 
 export const StyledListItem = styled(ListItem)({
   borderColor: BORDER_COLOR,

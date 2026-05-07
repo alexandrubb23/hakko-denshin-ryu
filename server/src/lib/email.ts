@@ -6,7 +6,7 @@ sgMail.setApiKey(env.SENDGRID_API_KEY);
 export const sendInvitationEmail = async (
   to: string,
   name: string,
-  inviteUrl: string
+  inviteUrl: string,
 ): Promise<void> => {
   if (env.NODE_ENV === "test") return;
 

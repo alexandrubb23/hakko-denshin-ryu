@@ -17,7 +17,7 @@ export const errorHandler = (
   err: unknown,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ): void => {
   if (err instanceof HttpError) {
     res.status(err.statusCode).json({ error: err.responseBody });

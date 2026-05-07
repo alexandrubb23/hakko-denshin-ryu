@@ -71,7 +71,7 @@ const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
 
   const showAdminItems = isPending || isAdmin;
   const visibleItems = NAV_ITEMS.filter(
-    (item) => !item.adminOnly || showAdminItems
+    (item) => !item.adminOnly || showAdminItems,
   );
 
   return (

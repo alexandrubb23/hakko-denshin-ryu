@@ -19,7 +19,7 @@ const CREATE_DEFAULTS: CreateStudentRankInput = {
 const useCreateRankForm = (
   studentId: string,
   open: boolean,
-  onClose: () => void
+  onClose: () => void,
 ) => {
   const mutation = useCreateStudentRank(studentId);
   const { data: ranks = [] } = useRanks();
@@ -34,7 +34,7 @@ const useCreateRankForm = (
   const onSubmit = (values: CreateStudentRankInput) => {
     mutation.mutate(
       { ...values, notes: values.notes || undefined },
-      { onSuccess: () => onClose() }
+      { onSuccess: () => onClose() },
     );
   };
 

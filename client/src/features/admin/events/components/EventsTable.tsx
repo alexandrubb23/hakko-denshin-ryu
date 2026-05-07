@@ -59,7 +59,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [deletingEvent, setDeletingEvent] = useState<Event | null>(null);
   const [participantsEvent, setParticipantsEvent] = useState<Event | null>(
-    null
+    null,
   );
 
   if (isError) {

@@ -31,7 +31,7 @@ const SectionsList = ({ sections }: SectionsListProps) => {
             sectionTitle,
             children,
           },
-          index
+          index,
         ) => (
           <ImageTextSection
             key={index}
@@ -42,7 +42,7 @@ const SectionsList = ({ sections }: SectionsListProps) => {
           >
             {children}
           </ImageTextSection>
-        )
+        ),
       )}
     </>
   );

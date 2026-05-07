@@ -34,7 +34,7 @@ const multerInstance = multer({
 export const uploadMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   multerInstance.single("image")(req, res, (err) => {
     if (err) {
@@ -58,8 +58,8 @@ export const uploadMiddleware = (
         if (!type || !ALLOWED_MIME_TYPES.has(type.mime)) {
           next(
             new HttpBadRequestError(
-              "Only JPEG, PNG, and WebP images are allowed"
-            )
+              "Only JPEG, PNG, and WebP images are allowed",
+            ),
           );
           return;
         }

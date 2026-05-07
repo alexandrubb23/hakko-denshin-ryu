@@ -47,7 +47,7 @@ export interface EventStats {
 
 class DashboardApi extends Http {
   async fetchStudentStats(
-    period: AttendancePeriod = "all"
+    period: AttendancePeriod = "all",
   ): Promise<StudentStats> {
     const { data } = await this.http.get(ApiRoutes.adminDashboardStudents, {
       params: { period },
@@ -58,7 +58,7 @@ class DashboardApi extends Http {
   async fetchEventStats(
     type: EventTypeFilter = "all",
     status: EventStatusFilter = "all",
-    year: number | "all" = "all"
+    year: number | "all" = "all",
   ): Promise<EventStats> {
     const { data } = await this.http.get(ApiRoutes.adminDashboardEvents, {
       params: { type, status, year },

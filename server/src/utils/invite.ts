@@ -14,7 +14,7 @@ import {
 export const sendStudentInvitation = async (
   id: string,
   email: string,
-  name: string
+  name: string,
 ): Promise<void> => {
   await invalidatePendingInvites(id);
 

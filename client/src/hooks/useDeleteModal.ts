@@ -5,7 +5,7 @@ interface Options {
   id: string;
   mutate: (
     id: string,
-    callbacks: { onSuccess: () => void; onError: (err: unknown) => void }
+    callbacks: { onSuccess: () => void; onError: (err: unknown) => void },
   ) => void;
   isPending: boolean;
   onClose: () => void;
@@ -35,7 +35,7 @@ const useDeleteModal = ({
         setError(
           axios.isAxiosError(err)
             ? (err.response?.data?.error ?? fallbackError)
-            : "An unexpected error occurred."
+            : "An unexpected error occurred.",
         );
       },
     });

@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box } from "@mui/material";
 
 interface ColoredTextProps {
   text: string;
@@ -6,7 +6,7 @@ interface ColoredTextProps {
 }
 
 const ColoredText = ({ text, color }: ColoredTextProps) => (
-  <Box component='span' color={color}>
+  <Box component="span" color={color}>
     {text}
   </Box>
 );

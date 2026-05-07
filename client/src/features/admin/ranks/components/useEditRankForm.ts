@@ -15,7 +15,7 @@ const useEditRankForm = (
   studentId: string,
   entry: StudentRankEntry,
   open: boolean,
-  onClose: () => void
+  onClose: () => void,
 ) => {
   const mutation = useUpdateStudentRank(studentId);
   const { data: ranks = [] } = useRanks();
@@ -43,7 +43,7 @@ const useEditRankForm = (
         rankEntryId: entry.id,
         payload: { ...values, notes: values.notes || undefined },
       },
-      { onSuccess: () => onClose() }
+      { onSuccess: () => onClose() },
     );
   };
 

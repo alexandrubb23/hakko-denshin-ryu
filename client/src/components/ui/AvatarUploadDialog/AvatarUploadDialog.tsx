@@ -100,9 +100,7 @@ const AvatarUploadDialog = ({
           onFileSelect={validateAndStage}
         />
 
-        {validationError && (
-          <ErrorAlert>{validationError}</ErrorAlert>
-        )}
+        {validationError && <ErrorAlert>{validationError}</ErrorAlert>}
 
         {isError && !validationError && (
           <ErrorAlert>

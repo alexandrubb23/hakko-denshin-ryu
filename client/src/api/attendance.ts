@@ -12,26 +12,26 @@ class AttendanceApi extends Http {
   async getAttendanceByMonth(
     studentId: string,
     year: number,
-    month: number
+    month: number,
   ): Promise<{ records: AttendanceRecord[] }> {
     const { data } = await this.http.get(
       ApiRoutes.adminStudentAttendance(studentId),
       {
         params: { year, month },
-      }
+      },
     );
     return data;
   }
 
   async getAttendanceByYear(
     studentId: string,
-    year: number
+    year: number,
   ): Promise<{ records: AttendanceRecord[] }> {
     const { data } = await this.http.get(
       ApiRoutes.adminStudentAttendance(studentId),
       {
         params: { year },
-      }
+      },
     );
     return data;
   }
@@ -39,20 +39,20 @@ class AttendanceApi extends Http {
   async upsertAttendance(
     studentId: string,
     date: string,
-    attended: boolean
+    attended: boolean,
   ): Promise<{ record: AttendanceRecord }> {
     const { data } = await this.http.post(
       ApiRoutes.adminStudentAttendance(studentId),
       {
         date,
         attended,
-      }
+      },
     );
     return data;
   }
 
   async getTrainingDayAttendance(
-    date: string
+    date: string,
   ): Promise<{ records: { userId: string; attended: boolean }[] }> {
     const { data } = await this.http.get(ApiRoutes.adminTrainingDayAttendance, {
       params: { date },

@@ -13,7 +13,7 @@ export function applyMiddleware(app: Application): void {
     helmet({
       // This is a JSON API server — disable CSP (not serving HTML)
       contentSecurityPolicy: false,
-    })
+    }),
   );
 
   // CORS — only allow requests from trusted origins (TRUSTED_ORIGINS env var)
@@ -21,7 +21,7 @@ export function applyMiddleware(app: Application): void {
     cors({
       origin: ALLOWED_ORIGINS,
       credentials: true,
-    })
+    }),
   );
 
   // Better Auth handler must be mounted before express.json()

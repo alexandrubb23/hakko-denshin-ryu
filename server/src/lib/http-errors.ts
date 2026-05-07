@@ -14,7 +14,7 @@ export class HttpError extends Error {
      * Value sent as the `error` field in the JSON response body.
      * May be a plain string or a structured object (e.g., Zod validation errors).
      */
-    public readonly responseBody: unknown
+    public readonly responseBody: unknown,
   ) {
     super(typeof responseBody === "string" ? responseBody : "HTTP Error");
     this.name = "HttpError";

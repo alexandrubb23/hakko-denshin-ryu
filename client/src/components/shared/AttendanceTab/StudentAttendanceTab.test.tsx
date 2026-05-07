@@ -45,7 +45,7 @@ const defaultState: MockState = {
 
 const renderTab = (initialUrl = "/", state: MockState = defaultState) => {
   mockUseAttendanceByMonth.mockReturnValue(
-    state as unknown as ReturnType<typeof useAttendanceByMonth>
+    state as unknown as ReturnType<typeof useAttendanceByMonth>,
   );
   return renderUi(<StudentAttendanceTab studentId={STUDENT_ID} />, {
     initialEntries: [initialUrl],
@@ -69,7 +69,7 @@ describe("StudentAttendanceTab", () => {
 
     it.each(["Day", "Week", "Month", "Year"])("renders the %s tab", (label) => {
       expect(
-        screen.getByRole("tab", { name: new RegExp(`^${label}$`, "i") })
+        screen.getByRole("tab", { name: new RegExp(`^${label}$`, "i") }),
       ).toBeInTheDocument();
     });
   });
@@ -103,7 +103,7 @@ describe("StudentAttendanceTab", () => {
         renderTab(`/?view=${view}`);
         expect(screen.getByTestId(testId)).toBeInTheDocument();
         expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
-      }
+      },
     );
 
     it("falls back to YearView for an invalid view param", () => {
@@ -127,7 +127,7 @@ describe("StudentAttendanceTab", () => {
         clickView(label);
         expect(screen.getByTestId(testId)).toBeInTheDocument();
         expect(screen.queryByTestId("day-view")).not.toBeInTheDocument();
-      }
+      },
     );
 
     it("returns to DayView when Day is clicked after switching", () => {
@@ -190,7 +190,7 @@ describe("StudentAttendanceTab", () => {
         isError: true,
       });
       expect(
-        screen.getByText(/failed to load attendance data/i)
+        screen.getByText(/failed to load attendance data/i),
       ).toBeInTheDocument();
     });
 
@@ -210,7 +210,7 @@ describe("StudentAttendanceTab", () => {
         isError: true,
       });
       expect(
-        screen.queryByText(/failed to load attendance data/i)
+        screen.queryByText(/failed to load attendance data/i),
       ).not.toBeInTheDocument();
       expect(screen.getByTestId("year-view")).toBeInTheDocument();
     });

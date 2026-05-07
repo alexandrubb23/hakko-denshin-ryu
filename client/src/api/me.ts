@@ -28,7 +28,7 @@ class MeApi extends Http {
 
   async getMyAttendance(
     year: number,
-    month?: number
+    month?: number,
   ): Promise<{ records: AttendanceRecord[] }> {
     const { data } = await this.http.get(ApiRoutes.meAttendance, {
       params: month !== undefined ? { year, month } : { year },

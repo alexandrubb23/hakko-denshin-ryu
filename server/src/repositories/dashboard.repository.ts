@@ -12,7 +12,7 @@ type EventFilters = {
 };
 
 export const findDashboardStudents = async (
-  attendanceWhere: AttendanceWhere
+  attendanceWhere: AttendanceWhere,
 ) => {
   const users = await prisma.user.findMany({
     where: { role: Role.student, deletedAt: null },
@@ -96,7 +96,7 @@ export const findDashboardEvents = async (filters: EventFilters) => {
     select: { startDate: true },
   });
   const yearSet = new Set<number>(
-    allEvents.map((e) => e.startDate.getUTCFullYear())
+    allEvents.map((e) => e.startDate.getUTCFullYear()),
   );
   const availableYears = Array.from(yearSet).sort((a, b) => a - b);
   if (availableYears.length === 0)

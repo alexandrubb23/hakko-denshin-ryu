@@ -30,7 +30,7 @@ type ModalBaseProps = {
  */
 const createModalMock = <P extends Record<string, unknown>>(
   testId: string,
-  renderContent?: (props: P) => ReactNode
+  renderContent?: (props: P) => ReactNode,
 ) =>
   function MockModal(props: P & ModalBaseProps) {
     const { open, onClose } = props;

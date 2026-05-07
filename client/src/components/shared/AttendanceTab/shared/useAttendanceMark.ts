@@ -29,7 +29,7 @@ const useAttendanceMark = ({
     if (!date) return;
     mutate(
       { date: dateKey, attended: value },
-      onSuccess ? { onSuccess } : undefined
+      onSuccess ? { onSuccess } : undefined,
     );
   };
 

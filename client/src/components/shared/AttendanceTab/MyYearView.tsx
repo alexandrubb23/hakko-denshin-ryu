@@ -21,15 +21,12 @@ import {
 } from "@style/tokens";
 
 import AttendanceDayDot, { AttendanceStatus } from "./shared/AttendanceDayDot";
-import {
-  LoadingContainer,
-  PurpleSpinner,
-} from "./shared/AttendanceTab.style";
+import { LoadingContainer, PurpleSpinner } from "./shared/AttendanceTab.style";
 
 function getStatus(
   date: Date,
   records: AttendanceRecord[],
-  today: Date
+  today: Date,
 ): AttendanceStatus {
   if (date > today) return AttendanceStatus.unmarked;
   const record = records.find((r) => r.date.startsWith(formatDateKey(date)));
@@ -154,7 +151,7 @@ const MiniMonth = ({ year, month, records, today }: MiniMonthProps) => {
             </DayCell>
           ) : (
             <EmptyDayCell key={`e-${i}`} />
-          )
+          ),
         )}
       </CellsGrid>
     </MiniMonthCard>

@@ -45,7 +45,7 @@ const renderModal = (open = true) =>
       studentId={STUDENT_ID}
       open={open}
       onClose={onClose}
-    />
+    />,
   );
 
 const selectRank = (name: string) => {
@@ -70,7 +70,7 @@ describe("CreateStudentRankModal", () => {
       data: mockRanks,
     } as unknown as ReturnType<typeof useRanks>);
     mockUseCreateStudentRank.mockReturnValue(
-      defaultMutation as unknown as ReturnType<typeof useCreateStudentRank>
+      defaultMutation as unknown as ReturnType<typeof useCreateStudentRank>,
     );
   });
 
@@ -81,7 +81,7 @@ describe("CreateStudentRankModal", () => {
 
     it("renders the dialog title", () => {
       expect(
-        screen.getByRole("heading", { name: /assign rank/i })
+        screen.getByRole("heading", { name: /assign rank/i }),
       ).toBeInTheDocument();
     });
 
@@ -99,13 +99,13 @@ describe("CreateStudentRankModal", () => {
 
     it("renders the Cancel button", () => {
       expect(
-        screen.getByRole("button", { name: /cancel/i })
+        screen.getByRole("button", { name: /cancel/i }),
       ).toBeInTheDocument();
     });
 
     it("renders the submit button", () => {
       expect(
-        screen.getByRole("button", { name: /assign rank/i })
+        screen.getByRole("button", { name: /assign rank/i }),
       ).toBeInTheDocument();
     });
 
@@ -146,7 +146,7 @@ describe("CreateStudentRankModal", () => {
       submitForm();
       await waitFor(() => {
         expect(
-          screen.getByText(/please select a valid date/i)
+          screen.getByText(/please select a valid date/i),
         ).toBeInTheDocument();
       });
     });
@@ -173,7 +173,7 @@ describe("CreateStudentRankModal", () => {
       await waitFor(() => {
         expect(mockMutate).toHaveBeenCalledWith(
           { rankId: 2, awardedAt: "2024-03-01", notes: undefined },
-          expect.objectContaining({ onSuccess: expect.any(Function) })
+          expect.objectContaining({ onSuccess: expect.any(Function) }),
         );
       });
     });
@@ -186,7 +186,7 @@ describe("CreateStudentRankModal", () => {
       await waitFor(() => {
         expect(mockMutate).toHaveBeenCalledWith(
           expect.objectContaining({ notes: "Great session" }),
-          expect.anything()
+          expect.anything(),
         );
       });
     });
@@ -194,7 +194,7 @@ describe("CreateStudentRankModal", () => {
     it("closes the modal on success", async () => {
       mockMutate.mockImplementation(
         (_values: unknown, { onSuccess }: { onSuccess: () => void }) =>
-          onSuccess()
+          onSuccess(),
       );
       submitForm();
       await waitFor(() => {

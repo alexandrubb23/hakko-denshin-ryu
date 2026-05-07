@@ -10,7 +10,7 @@ export interface VerifyTokenResponse {
 class InviteApi extends Http {
   async verifyToken(token: string): Promise<VerifyTokenResponse> {
     const { data } = await this.http.get(
-      `${ApiRoutes.inviteVerifyToken}?token=${encodeURIComponent(token)}`
+      `${ApiRoutes.inviteVerifyToken}?token=${encodeURIComponent(token)}`,
     );
     return data;
   }

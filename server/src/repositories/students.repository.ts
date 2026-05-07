@@ -51,7 +51,7 @@ export const createStudentRank = (
   userId: string,
   rankId: number,
   awardedAt: Date,
-  notes: string | null
+  notes: string | null,
 ) =>
   prisma.studentRank.create({
     data: { userId, rankId, awardedAt, notes },
@@ -61,7 +61,7 @@ export const createStudentRank = (
 export const updateStudentRank = (
   rankEntryId: string,
   awardedAt: Date,
-  notes: string | null
+  notes: string | null,
 ) =>
   prisma.studentRank.update({
     where: { id: rankEntryId },
@@ -113,7 +113,7 @@ export const createStudent = (
   id: string,
   name: string,
   email: string,
-  hashedPassword: string
+  hashedPassword: string,
 ) =>
   prisma.user.create({
     data: {
@@ -178,7 +178,7 @@ const STUDENT_SELECT = {
 export const createStudentWithoutPassword = (
   id: string,
   name: string,
-  email: string
+  email: string,
 ) =>
   prisma.user.create({
     data: { id, name, email, emailVerified: false, role: Role.student },
@@ -202,7 +202,7 @@ export const invalidatePendingInvites = (userId: string) =>
 export const createInvitationToken = (
   userId: string,
   tokenHash: string,
-  expiresAt: Date
+  expiresAt: Date,
 ) => prisma.invitationToken.create({ data: { userId, tokenHash, expiresAt } });
 
 export const findValidInvitationToken = (tokenHash: string) =>
@@ -247,7 +247,7 @@ export const findAttendanceForDate = (date: Date) =>
 export const upsertStudentAttendance = (
   userId: string,
   date: Date,
-  attended: boolean
+  attended: boolean,
 ) =>
   prisma.studentAttendance.upsert({
     where: { userId_date: { userId, date } },

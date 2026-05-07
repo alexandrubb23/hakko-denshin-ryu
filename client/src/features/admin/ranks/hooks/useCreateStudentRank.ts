@@ -10,7 +10,9 @@ export const useCreateStudentRank = (studentId: string) => {
     mutationFn: (payload: CreateStudentRankInput) =>
       studentsApi.createStudentRank(studentId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["students", studentId, "ranks"] });
+      queryClient.invalidateQueries({
+        queryKey: ["students", studentId, "ranks"],
+      });
     },
   });
 };

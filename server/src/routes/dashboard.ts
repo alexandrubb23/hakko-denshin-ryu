@@ -67,7 +67,7 @@ router.get(
 
     const { students, ranks } = await findDashboardStudents(attendanceWhere);
     res.json({ total: students.length, students, ranks });
-  }
+  },
 );
 
 router.get(
@@ -109,7 +109,7 @@ router.get(
     });
 
     res.json({ total: events.length, events, availableYears });
-  }
+  },
 );
 
 export default router;
