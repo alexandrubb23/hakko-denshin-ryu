@@ -8,6 +8,8 @@ import {
 
 import { type KyuLevel } from "@api/kyuProgram";
 import { BELT_IMAGES } from "@assets/beltImages";
+import { ContentDivider } from "@components/shared/TabbedPageLayout/TabbedPageLayout.style";
+import TechniqueGroupsList from "@components/shared/TabbedPageLayout/TechniqueGroupsList";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import {
@@ -15,14 +17,6 @@ import {
   LegendDot,
   LegendItem,
 } from "@features/public/kyu-program/KyuProgram.style";
-import {
-  ContentDivider,
-  GroupCard,
-  GroupsGrid,
-  GroupTitle,
-  TechniqueItem,
-  TechniqueList,
-} from "@components/shared/TabbedPageLayout/TabbedPageLayout.style";
 import { BORDER_COLOR, TEXT_MUTED, WHITE_ALPHA_90 } from "@style/tokens";
 
 interface Props {
@@ -59,27 +53,13 @@ const NextRankModal = ({ level, open, onClose }: Props) => (
 
       <ContentDivider />
 
-      <GroupsGrid>
-        {level.groups.map((group) => (
-          <GroupCard key={group.id}>
-            <GroupTitle variant="subtitle2">{group.name}</GroupTitle>
-            <TechniqueList component="ol">
-              {group.techniques.map((t) => (
-                <TechniqueItem
-                  component="li"
-                  key={`${group.id}-${t.number}`}
-                  sx={{
-                    color: t.isKihon ? WHITE_ALPHA_90 : TEXT_MUTED,
-                    fontWeight: t.isKihon ? 600 : 400,
-                  }}
-                >
-                  {t.name}
-                </TechniqueItem>
-              ))}
-            </TechniqueList>
-          </GroupCard>
-        ))}
-      </GroupsGrid>
+      <TechniqueGroupsList
+        groups={level.groups}
+        getTechniqueSx={(t) => ({
+          color: t.isKihon ? WHITE_ALPHA_90 : TEXT_MUTED,
+          fontWeight: t.isKihon ? 600 : 400,
+        })}
+      />
     </DialogContent>
 
     <DialogActions sx={{ px: 3, pb: 3 }}>
