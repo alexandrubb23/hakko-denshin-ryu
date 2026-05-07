@@ -26,6 +26,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { eventsApi, type Event } from "@api/events";
+import ErrorAlert from "@components/shared/ErrorAlert";
 import DarkSelect from "@components/ui/DarkSelect/DarkSelect";
 import ImageDropZone, {
   ACCEPTED_IMAGE_TYPES,
@@ -34,7 +35,6 @@ import ImageDropZone, {
 } from "@components/ui/ImageDropZone/ImageDropZone";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
-import ErrorAlert from "@components/shared/ErrorAlert";
 import { useCreateEvent } from "@features/admin/events/hooks/useCreateEvent";
 import { useUpdateEvent } from "@features/admin/events/hooks/useUpdateEvent";
 import {

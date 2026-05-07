@@ -2,7 +2,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import GroupIcon from "@mui/icons-material/Group";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import {
-  Box,
   Button,
   Chip,
   CircularProgress,
@@ -13,23 +12,23 @@ import {
 } from "@mui/material";
 
 import type { Event } from "@api/events";
+import ParticipantsList from "@components/shared/ParticipantsList";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
-import ParticipantsList from "@components/shared/ParticipantsList";
 import { useEventParticipants } from "@features/admin/events/hooks/useEventParticipants";
-import { useStudents } from "@features/admin/students/hooks/useStudents";
 import { useUpsertEventParticipation } from "@features/admin/events/hooks/useUpsertEventParticipation";
+import { useStudents } from "@features/admin/students/hooks/useStudents";
 import {
-  SUCCESS,
-  SUCCESS_ALPHA_08,
-  SUCCESS_ALPHA_40,
-} from "@style/status.tokens";
-import {
-  BORDER_COLOR,
-  PURPLE,
-  PURPLE_ALPHA_08,
-  PURPLE_ALPHA_15,
-} from "@style/tokens";
+  CHECK_ICON_SX,
+  CLOSE_BUTTON_SX,
+  CONTENT_SX,
+  COUNT_CHIP_SX,
+  DIVIDER_SX,
+  FooterBox,
+  SPINNER_SX,
+  ToggleButton,
+  UNCHECK_ICON_SX,
+} from "./EventParticipantsModal.style";
 
 interface Props {
   open: boolean;
@@ -66,17 +65,13 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
         <Chip
           label={participants?.filter((p) => p.attended).length ?? 0}
           size="small"
-          sx={{
-            backgroundColor: PURPLE_ALPHA_15,
-            color: PURPLE,
-            fontWeight: 700,
-          }}
+          sx={COUNT_CHIP_SX}
         />
       </ModalTitle>
 
-      <Divider sx={{ borderColor: BORDER_COLOR }} />
+      <Divider sx={DIVIDER_SX} />
 
-      <DialogContent sx={{ p: 0, maxHeight: 480, overflowY: "auto" }}>
+      <DialogContent sx={CONTENT_SX}>
         <ParticipantsList
           students={students}
           isLoading={isLoading}
@@ -84,56 +79,35 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
             const participation = participationMap.get(student.id);
             const attended = participation?.attended ?? false;
             return (
-              <Button
+              <ToggleButton
+                attended={attended}
                 size="small"
                 variant="outlined"
                 disabled={isPending}
                 onClick={() => toggle(student.id, attended)}
                 startIcon={
                   attended ? (
-                    <CheckCircleIcon sx={{ color: SUCCESS, fontSize: 16 }} />
+                    <CheckCircleIcon sx={CHECK_ICON_SX} />
                   ) : (
-                    <RadioButtonUncheckedIcon
-                      sx={{ color: "text.disabled", fontSize: 16 }}
-                    />
+                    <RadioButtonUncheckedIcon sx={UNCHECK_ICON_SX} />
                   )
                 }
-                sx={{
-                  borderColor: attended ? SUCCESS_ALPHA_40 : BORDER_COLOR,
-                  color: attended ? SUCCESS : "text.secondary",
-                  minWidth: 110,
-                  "&:hover": {
-                    borderColor: attended ? SUCCESS : PURPLE,
-                    backgroundColor: attended
-                      ? SUCCESS_ALPHA_08
-                      : PURPLE_ALPHA_08,
-                  },
-                }}
               >
                 {attended ? "Attended" : "Mark"}
-              </Button>
+              </ToggleButton>
             );
           }}
         />
       </DialogContent>
 
-      <Divider sx={{ borderColor: BORDER_COLOR }} />
+      <Divider sx={DIVIDER_SX} />
 
-      <Box
-        sx={{
-          px: 3,
-          py: 2,
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          gap: 1,
-        }}
-      >
-        {isPending && <CircularProgress size={16} sx={{ color: PURPLE }} />}
-        <Button onClick={onClose} sx={{ color: "text.secondary" }}>
+      <FooterBox>
+        {isPending && <CircularProgress size={16} sx={SPINNER_SX} />}
+        <Button onClick={onClose} sx={CLOSE_BUTTON_SX}>
           Close
         </Button>
-      </Box>
+      </FooterBox>
     </ModalDialog>
   );
 };

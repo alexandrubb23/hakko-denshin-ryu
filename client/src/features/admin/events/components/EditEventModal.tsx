@@ -8,7 +8,12 @@ interface Props {
 }
 
 const EditEventModal = ({ open, event, onClose }: Props) => (
-  <EventForm mode={EventFormMode.edit} open={open} onClose={onClose} event={event} />
+  <EventForm
+    mode={EventFormMode.edit}
+    open={open}
+    onClose={onClose}
+    event={event}
+  />
 );
 
 export default EditEventModal;
