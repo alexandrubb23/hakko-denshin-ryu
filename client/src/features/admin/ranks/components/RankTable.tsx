@@ -1,17 +1,10 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
 import { type StudentRankEntry } from "@api/students";
 import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
-import { BACKDROP_BLUR, BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
 
 import RankRow from "./RankRow";
+import { HeaderCell, StyledTableContainer } from "./RankTable.style";
 
 const TABLE_HEADERS = ["Belt", "Rank", "Awarded on", "Notes", "Actions"];
 const TABLE_HEADERS_READONLY = ["Belt", "Rank", "Awarded on", "Notes"];
@@ -29,30 +22,12 @@ const RankTable = ({ isLoading, ranks, onEdit, onDelete, readOnly }: Props) => {
 
   const headers = readOnly ? TABLE_HEADERS_READONLY : TABLE_HEADERS;
   return (
-    <TableContainer
-      sx={{
-        mt: 2,
-        backgroundColor: SURFACE_BG,
-        border: `1px solid ${BORDER_COLOR}`,
-        borderRadius: 2,
-        backdropFilter: BACKDROP_BLUR,
-      }}
-    >
+    <StyledTableContainer>
       <Table size="small">
         <TableHead>
           <TableRow>
             {headers.map((h) => (
-              <TableCell
-                key={h}
-                sx={{
-                  color: PURPLE,
-                  fontWeight: 700,
-                  fontSize: "0.75rem",
-                  borderBottom: `1px solid ${BORDER_COLOR}`,
-                }}
-              >
-                {h}
-              </TableCell>
+              <HeaderCell key={h}>{h}</HeaderCell>
             ))}
           </TableRow>
         </TableHead>
@@ -68,7 +43,7 @@ const RankTable = ({ isLoading, ranks, onEdit, onDelete, readOnly }: Props) => {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   );
 };
 

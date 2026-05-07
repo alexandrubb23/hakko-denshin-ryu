@@ -9,7 +9,9 @@ import renderUi from "@test/renderUi";
 import CreateStudentRankModal from "./CreateStudentRankModal";
 
 vi.mock("@hooks/useRanks", () => ({ useRanks: vi.fn() }));
-vi.mock("@features/admin/ranks/hooks/useCreateStudentRank", () => ({ useCreateStudentRank: vi.fn() }));
+vi.mock("@features/admin/ranks/hooks/useCreateStudentRank", () => ({
+  useCreateStudentRank: vi.fn(),
+}));
 
 const mockUseRanks = vi.mocked(useRanks);
 const mockUseCreateStudentRank = vi.mocked(useCreateStudentRank);
@@ -39,7 +41,11 @@ const onClose = vi.fn();
 
 const renderModal = (open = true) =>
   renderUi(
-    <CreateStudentRankModal studentId={STUDENT_ID} open={open} onClose={onClose} />
+    <CreateStudentRankModal
+      studentId={STUDENT_ID}
+      open={open}
+      onClose={onClose}
+    />
   );
 
 const selectRank = (name: string) => {
@@ -74,7 +80,9 @@ describe("CreateStudentRankModal", () => {
     });
 
     it("renders the dialog title", () => {
-      expect(screen.getByRole("heading", { name: /assign rank/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /assign rank/i })
+      ).toBeInTheDocument();
     });
 
     it("renders the Rank select", () => {
@@ -90,11 +98,15 @@ describe("CreateStudentRankModal", () => {
     });
 
     it("renders the Cancel button", () => {
-      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /cancel/i })
+      ).toBeInTheDocument();
     });
 
     it("renders the submit button", () => {
-      expect(screen.getByRole("button", { name: /assign rank/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /assign rank/i })
+      ).toBeInTheDocument();
     });
 
     it("populates rank options from the hook", () => {
@@ -133,7 +145,9 @@ describe("CreateStudentRankModal", () => {
     it("shows error when date is not provided", async () => {
       submitForm();
       await waitFor(() => {
-        expect(screen.getByText(/please select a valid date/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/please select a valid date/i)
+        ).toBeInTheDocument();
       });
     });
 
@@ -178,8 +192,9 @@ describe("CreateStudentRankModal", () => {
     });
 
     it("closes the modal on success", async () => {
-      mockMutate.mockImplementation((_values: unknown, { onSuccess }: { onSuccess: () => void }) =>
-        onSuccess()
+      mockMutate.mockImplementation(
+        (_values: unknown, { onSuccess }: { onSuccess: () => void }) =>
+          onSuccess()
       );
       submitForm();
       await waitFor(() => {
