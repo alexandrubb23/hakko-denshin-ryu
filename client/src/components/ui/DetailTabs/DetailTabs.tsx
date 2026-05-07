@@ -1,7 +1,8 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Tab } from "@mui/material";
 
 import useUrlTab from "@hooks/useUrlTab";
-import { BORDER_COLOR, PURPLE } from "@style/tokens";
+
+import { StyledTabs, WrapperBox } from "./DetailTabs.style";
 
 export interface DetailTabConfig<P = any> {
   id: string;
@@ -21,32 +22,21 @@ const DetailTabs = ({ tabs, componentProps }: Props) => {
   const ActiveComponent = tabs[activeTabIndex].component;
 
   return (
-    <Box sx={{ mt: 3 }}>
-      <Tabs
+    <WrapperBox>
+      <StyledTabs
         value={activeTabIndex}
         onChange={handleTabChange}
         variant="scrollable"
         scrollButtons="auto"
         allowScrollButtonsMobile
-        sx={{
-          borderBottom: `1px solid ${BORDER_COLOR}`,
-          "& .MuiTab-root": {
-            color: "text.secondary",
-            textTransform: "none",
-            fontWeight: 600,
-          },
-          "& .Mui-selected": { color: PURPLE },
-          "& .MuiTabs-indicator": { backgroundColor: PURPLE },
-          "& .MuiTabs-scrollButtons": { color: PURPLE },
-        }}
       >
         {tabs.map(({ label, icon }) => (
           <Tab key={label} label={label} icon={icon} iconPosition="start" />
         ))}
-      </Tabs>
+      </StyledTabs>
 
       <ActiveComponent {...(componentProps ?? {})} />
-    </Box>
+    </WrapperBox>
   );
 };
 
