@@ -11,7 +11,6 @@ import {
   isTrainingDay,
   toUtcDate,
 } from "@constants/trainingSchedule";
-import { useUpsertAttendance } from "@features/admin/attendance/hooks/useUpsertAttendance";
 import {
   BORDER_COLOR,
   PURPLE,
@@ -20,6 +19,7 @@ import {
 } from "@style/tokens";
 
 import AttendedChip from "../AttendedChip";
+import useAttendanceMark from "./shared/useAttendanceMark";
 import YesNoButtons from "./shared/YesNoButtons";
 
 function getWeekDates(cursor: Date): Date[] {
@@ -127,15 +127,14 @@ const DayCell = ({
 }: DayCellProps) => {
   const training = isTrainingDay(date);
   const isFuture = date > today;
-  const dateKey = formatDateKey(date);
-  const record = records.find((r) => r.date.startsWith(dateKey));
-  const attended = record ? record.attended : null;
 
-  const { mutate, isPending } = useUpsertAttendance(studentId, year, month);
-
-  const handleMark = (value: boolean) => {
-    if (!isFuture) mutate({ date: dateKey, attended: value });
-  };
+  const { attended, isPending, handleMark } = useAttendanceMark({
+    date,
+    studentId,
+    year,
+    month,
+    records,
+  });
 
   return (
     <DayCellRoot training={training}>

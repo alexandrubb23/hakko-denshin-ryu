@@ -3,9 +3,9 @@ import { styled } from "@mui/material/styles";
 
 import { type AttendanceRecord } from "@api/attendance";
 import { MONTH_NAMES } from "@constants/dateNames";
-import { formatDateKey } from "@constants/trainingSchedule";
-import { useUpsertAttendance } from "@features/admin/attendance/hooks/useUpsertAttendance";
 import { BACKDROP_BLUR, BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
+
+import useAttendanceMark from "./useAttendanceMark";
 
 import YesNoButtons from "./YesNoButtons";
 
@@ -55,19 +55,17 @@ const AttendancePopup = ({
 }: Props) => {
   const open = Boolean(anchorEl) && date !== null;
 
-  const dateKey = date ? formatDateKey(date) : "";
   const year = date?.getUTCFullYear() ?? 0;
   const month = date ? date.getUTCMonth() + 1 : 0;
 
-  const record = records.find((r) => r.date.startsWith(dateKey));
-  const attended = record ? record.attended : null;
-
-  const { mutate, isPending } = useUpsertAttendance(studentId, year, month);
-
-  const handleMark = (value: boolean) => {
-    if (!date) return;
-    mutate({ date: dateKey, attended: value }, { onSuccess: onClose });
-  };
+  const { attended, isPending, handleMark } = useAttendanceMark({
+    date,
+    studentId,
+    year,
+    month,
+    records,
+    onSuccess: onClose,
+  });
 
   return (
     <StyledPopover

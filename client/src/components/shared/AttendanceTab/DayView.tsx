@@ -6,12 +6,10 @@ import { styled } from "@mui/material/styles";
 import { type AttendanceRecord } from "@api/attendance";
 import { DAY_NAMES, MONTH_NAMES } from "@constants/dateNames";
 import {
-  formatDateKey,
   getLatestTrainingDay,
   getNextTrainingDay,
   getPrevTrainingDay,
 } from "@constants/trainingSchedule";
-import { useUpsertAttendance } from "@features/admin/attendance/hooks/useUpsertAttendance";
 import {
   BORDER_COLOR,
   PURPLE,
@@ -20,6 +18,7 @@ import {
 } from "@style/tokens";
 
 import AttendedChip from "../AttendedChip";
+import useAttendanceMark from "./shared/useAttendanceMark";
 import YesNoButtons from "./shared/YesNoButtons";
 
 interface Props {
@@ -101,17 +100,16 @@ const DayView = ({
   const today = getLatestTrainingDay();
   const isAtOrBeforeToday = cursor <= today;
 
-  const dateKey = formatDateKey(cursor);
-  const record = records.find((r) => r.date.startsWith(dateKey));
-  const attended = record ? record.attended : null;
-
   const year = cursor.getUTCFullYear();
   const month = cursor.getUTCMonth() + 1;
-  const { mutate, isPending } = useUpsertAttendance(studentId, year, month);
 
-  const handleMark = (value: boolean) => {
-    mutate({ date: dateKey, attended: value });
-  };
+  const { attended, isPending, handleMark } = useAttendanceMark({
+    date: cursor,
+    studentId,
+    year,
+    month,
+    records,
+  });
 
   const dayName = DAY_NAMES[cursor.getUTCDay()];
   const monthName = MONTH_NAMES[cursor.getUTCMonth()];
