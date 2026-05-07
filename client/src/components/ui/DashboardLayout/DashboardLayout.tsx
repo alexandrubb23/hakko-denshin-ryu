@@ -1,19 +1,7 @@
-import MenuIcon from "@mui/icons-material/Menu";
-import {
-  AppBar,
-  Box,
-  Drawer,
-  IconButton,
-  Skeleton,
-  SxProps,
-  Theme,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Drawer, SxProps, Theme } from "@mui/material";
 import { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 
-import LogoIcon from "@assets/images/logo.webp";
 import useIsMobile from "@hooks/isMobile";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
@@ -21,10 +9,10 @@ import {
   BACKDROP_BLUR,
   BORDER_COLOR,
   DARK_BG,
-  PURPLE_ALPHA_12,
   SURFACE_BG,
 } from "@style/tokens";
 
+import DashboardAppBar from "./DashboardAppBar";
 import DrawerContent from "./DrawerContent";
 
 const DRAWER_WIDTH = 220;
@@ -44,7 +32,6 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { isPending } = authClient.useSession();
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -62,50 +49,7 @@ const DashboardLayout = () => {
     >
       {isMobile ? (
         <>
-          <AppBar
-            position="fixed"
-            elevation={0}
-            sx={{
-              backgroundColor: SURFACE_BG,
-              backdropFilter: BACKDROP_BLUR,
-              borderBottom: `1px solid ${BORDER_COLOR}`,
-            }}
-          >
-            <Toolbar sx={{ gap: 1 }}>
-              <IconButton
-                edge="start"
-                onClick={() => setMobileOpen((prev) => !prev)}
-                sx={{ color: "#fff" }}
-                aria-label="open navigation"
-              >
-                <MenuIcon />
-              </IconButton>
-              {isPending ? (
-                <Box className="flex items-center gap-2">
-                  <Skeleton
-                    variant="circular"
-                    width={32}
-                    height={32}
-                    sx={{ bgcolor: PURPLE_ALPHA_12 }}
-                  />
-                  <Skeleton
-                    variant="text"
-                    width={80}
-                    sx={{ bgcolor: PURPLE_ALPHA_12 }}
-                  />
-                </Box>
-              ) : (
-                <Link to="/">
-                  <Box className="flex items-center gap-2">
-                    <Box component="img" src={LogoIcon} height={32} />
-                    <Typography variant="body2" fontWeight={700}>
-                      Senshinkan
-                    </Typography>
-                  </Box>
-                </Link>
-              )}
-            </Toolbar>
-          </AppBar>
+          <DashboardAppBar onMenuClick={() => setMobileOpen((prev) => !prev)} />
 
           <Drawer
             variant="temporary"
