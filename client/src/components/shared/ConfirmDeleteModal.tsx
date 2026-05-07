@@ -1,20 +1,21 @@
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import {
-  Alert,
-  Box,
-  Button,
-  DialogActions,
-  DialogContent,
-  Divider,
-  Typography,
-} from "@mui/material";
+import { Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
-import { ERROR_DARK, ERROR_DARK_HOVER, WARNING } from "@style/status.tokens";
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+
+import {
+  ActionsRow,
+  CancelButton,
+  DeleteButton,
+  ErrorAlert,
+  MessageBox,
+  MODAL_TITLE_SX,
+  ModalDivider,
+  StyledDialogContent,
+  WarningIcon,
+} from "./ConfirmDeleteModal.style";
 
 interface Props {
   open: boolean;
@@ -41,69 +42,38 @@ const ConfirmDeleteModal = ({
     maxWidth="xs"
     paperSx={{ borderRadius: 3 }}
   >
-    <ModalTitle sx={{ fontSize: "1.1rem", pb: 1 }}>
+    <ModalTitle sx={MODAL_TITLE_SX}>
       <DeleteOutlineIcon fontSize="small" />
       {title}
     </ModalTitle>
 
-    <Divider sx={{ borderColor: BORDER_COLOR }} />
+    <ModalDivider />
 
-    <DialogContent sx={{ pt: 3 }}>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 2,
-          alignItems: "flex-start",
-          mb: error ? 2 : 0,
-        }}
-      >
-        <WarningAmberIcon sx={{ color: WARNING, mt: 0.25 }} />
+    <StyledDialogContent>
+      <MessageBox hasError={Boolean(error)}>
+        <WarningIcon />
         <Typography variant="body2" color="text.secondary">
           {message}
         </Typography>
-      </Box>
+      </MessageBox>
 
-      {error && (
-        <Alert
-          severity="error"
-          sx={{
-            backgroundColor: SURFACE_BG,
-            border: `1px solid ${BORDER_COLOR}`,
-          }}
-        >
-          {error}
-        </Alert>
-      )}
-    </DialogContent>
+      {error && <ErrorAlert severity="error">{error}</ErrorAlert>}
+    </StyledDialogContent>
 
-    <Divider sx={{ borderColor: BORDER_COLOR }} />
+    <ModalDivider />
 
-    <DialogActions sx={{ px: 3, py: 2, gap: 1 }}>
-      <Button
-        variant="outlined"
-        onClick={onClose}
-        disabled={isPending}
-        sx={{
-          borderColor: BORDER_COLOR,
-          color: "text.secondary",
-          "&:hover": { borderColor: PURPLE, color: PURPLE },
-        }}
-      >
+    <ActionsRow>
+      <CancelButton variant="outlined" onClick={onClose} disabled={isPending}>
         Cancel
-      </Button>
-      <Button
+      </CancelButton>
+      <DeleteButton
         variant="contained"
         onClick={onConfirm}
         disabled={isPending}
-        sx={{
-          backgroundColor: ERROR_DARK,
-          "&:hover": { backgroundColor: ERROR_DARK_HOVER },
-          "&:disabled": { opacity: 0.5 },
-        }}
       >
         {isPending ? "Deleting…" : "Delete"}
-      </Button>
-    </DialogActions>
+      </DeleteButton>
+    </ActionsRow>
   </ModalDialog>
 );
 
