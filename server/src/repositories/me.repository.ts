@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import { AttendanceQuery } from "./students.repository.js";
 
 export const findMyRanks = (userId: string) =>
   prisma.studentRank.findMany({
@@ -15,7 +16,7 @@ export const findMyRanks = (userId: string) =>
     orderBy: { awardedAt: "desc" },
   });
 
-export const findMyAttendance = (userId: string, from: Date, to: Date) =>
+export const findMyAttendance = ({ userId, from, to }: AttendanceQuery) =>
   prisma.studentAttendance.findMany({
     where: { userId, date: { gte: from, lt: to } },
     select: { id: true, date: true, attended: true },

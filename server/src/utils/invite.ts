@@ -26,5 +26,5 @@ export const sendStudentInvitation = async ({
   await createInvitationToken({ userId: id, tokenHash, expiresAt });
 
   const inviteUrl = `${env.CLIENT_URL}${ClientRoutes.setPassword}?token=${plainToken}`;
-  await sendInvitationEmail(email, name, inviteUrl);
+  await sendInvitationEmail({ to: email, name, inviteUrl });
 };

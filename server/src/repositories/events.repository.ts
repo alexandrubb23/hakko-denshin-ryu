@@ -59,11 +59,17 @@ export const findEventParticipants = (eventId: string) =>
     orderBy: { user: { name: "asc" } },
   });
 
-export const upsertEventParticipation = (
-  eventId: string,
-  userId: string,
-  attended: boolean,
-) =>
+type UpsertEventParticipationInput = {
+  eventId: string;
+  userId: string;
+  attended: boolean;
+};
+
+export const upsertEventParticipation = ({
+  eventId,
+  userId,
+  attended,
+}: UpsertEventParticipationInput) =>
   prisma.eventParticipation.upsert({
     where: { eventId_userId: { eventId, userId } },
     create: { eventId, userId, attended },

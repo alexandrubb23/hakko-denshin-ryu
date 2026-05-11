@@ -336,7 +336,11 @@ router.post(
     const file = requireFile(req);
 
     const existing = await findStudentImageById(id);
-    const imageUrl = await uploadAvatar(file.buffer, id, existing?.image);
+    const imageUrl = await uploadAvatar({
+      buffer: file.buffer,
+      userId: id,
+      existingImageUrl: existing?.image,
+    });
     await updateStudentImage(id, imageUrl);
 
     res.json({ image: imageUrl });

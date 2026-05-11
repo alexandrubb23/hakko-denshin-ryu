@@ -16,12 +16,17 @@ const EVENTS_FOLDER = "hakko-ryu/events";
  * In test mode the Cloudinary API is never called — a deterministic fake URL
  * is returned so DB persistence is still exercised without real credentials.
  */
-async function uploadImage(
-  buffer: Buffer,
-  folder: string,
-  publicId: string,
-  existingImageUrl?: string | null,
-): Promise<string> {
+type UploadBase = { buffer: Buffer; existingImageUrl?: string | null };
+type UploadImageOptions = UploadBase & { folder: string; publicId: string };
+export type UploadAvatarOptions = UploadBase & { userId: string };
+export type UploadEventImageOptions = UploadBase & { eventId: string };
+
+async function uploadImage({
+  buffer,
+  folder,
+  publicId,
+  existingImageUrl,
+}: UploadImageOptions): Promise<string> {
   if (env.NODE_ENV === "test") {
     return `https://res.cloudinary.com/test/image/upload/v${Date.now()}/${folder}/${publicId}.jpg`;
   }
@@ -61,28 +66,28 @@ function extractPublicId(url: string): string | null {
   }
 }
 
-export async function uploadAvatar(
-  buffer: Buffer,
-  userId: string,
-  existingImageUrl?: string | null,
-): Promise<string> {
-  return uploadImage(
+export async function uploadAvatar({
+  buffer,
+  userId,
+  existingImageUrl,
+}: UploadAvatarOptions): Promise<string> {
+  return uploadImage({
     buffer,
-    AVATARS_FOLDER,
-    `user_${userId}`,
+    folder: AVATARS_FOLDER,
+    publicId: `user_${userId}`,
     existingImageUrl,
-  );
+  });
 }
 
-export async function uploadEventImage(
-  buffer: Buffer,
-  eventId: string,
-  existingImageUrl?: string | null,
-): Promise<string> {
-  return uploadImage(
+export async function uploadEventImage({
+  buffer,
+  eventId,
+  existingImageUrl,
+}: UploadEventImageOptions): Promise<string> {
+  return uploadImage({
     buffer,
-    EVENTS_FOLDER,
-    `event_${eventId}`,
+    folder: EVENTS_FOLDER,
+    publicId: `event_${eventId}`,
     existingImageUrl,
-  );
+  });
 }

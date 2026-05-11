@@ -30,10 +30,10 @@ router.get(ApiRoutes.meRanks, requireAuth, async (req, res) => {
 router.get(ApiRoutes.meAttendance, requireAuth, async (req, res) => {
   const { from, to } = parseYearMonthParams(
     req.query.year as string | undefined,
-    req.query.month as string | undefined,
+    req.query.month as string | undefined
   );
 
-  const records = await findMyAttendance(req.user.id, from, to);
+  const records = await findMyAttendance({ userId: req.user.id, from, to });
   res.json({ records });
 });
 
@@ -51,12 +51,16 @@ router.post(
 
     const user = await findUserImageById(req.user.id);
 
-    const imageUrl = await uploadAvatar(file.buffer, req.user.id, user?.image);
+    const imageUrl = await uploadAvatar({
+      buffer: file.buffer,
+      userId: req.user.id,
+      existingImageUrl: user?.image,
+    });
 
     await updateUserImageById(req.user.id, imageUrl);
 
     res.json({ image: imageUrl });
-  },
+  }
 );
 
 export default router;

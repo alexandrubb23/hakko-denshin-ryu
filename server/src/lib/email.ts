@@ -3,11 +3,13 @@ import { env } from "../env.js";
 
 sgMail.setApiKey(env.SENDGRID_API_KEY);
 
-export const sendInvitationEmail = async (
-  to: string,
-  name: string,
-  inviteUrl: string,
-): Promise<void> => {
+type InvitationEmailOptions = { to: string; name: string; inviteUrl: string };
+
+export const sendInvitationEmail = async ({
+  to,
+  name,
+  inviteUrl,
+}: InvitationEmailOptions): Promise<void> => {
   if (env.NODE_ENV === "test") return;
 
   await sgMail.send({

@@ -269,15 +269,9 @@ export const verifyStudentEmail = (userId: string) =>
 
 // ─── Attendance ───────────────────────────────────────────────────────────────
 
-export const findStudentAttendance = ({
-  userId,
-  from,
-  to,
-}: {
-  userId: string;
-  from: Date;
-  to: Date;
-}) =>
+export type AttendanceQuery = { userId: string; from: Date; to: Date };
+
+export const findStudentAttendance = ({ userId, from, to }: AttendanceQuery) =>
   prisma.studentAttendance.findMany({
     where: { userId, date: { gte: from, lt: to } },
     select: { id: true, date: true, attended: true },
