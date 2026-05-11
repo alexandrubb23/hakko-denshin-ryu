@@ -1,42 +1,4 @@
-import { type Page } from "@playwright/test";
-import { expect, test } from "./fixtures";
-
-/**
- * Returns unique student data on each call to avoid DB conflicts across runs.
- */
-function newStudent() {
-  const ts = Date.now();
-  return {
-    name: `E2E Student ${ts}`,
-    email: `e2e.student.${ts}@example.com`,
-    password: "Password123!",
-  };
-}
-
-/**
- * Opens the "Add Student" dialog, fills all fields, and submits.
- * Waits for the dialog to close before returning.
- */
-async function createStudentViaUI(
-  page: Page,
-  student: ReturnType<typeof newStudent>
-) {
-  await page.getByRole("button", { name: "Add Student" }).click();
-
-  const dialog = page.getByRole("dialog");
-  await dialog.waitFor({ state: "visible" });
-
-  await dialog.getByLabel("Name").fill(student.name);
-  await dialog.getByLabel("Email", { exact: true }).fill(student.email);
-  // Uncheck "Send invitation email" to reveal the Password field
-  await dialog
-    .getByRole("checkbox", { name: /send invitation email/i })
-    .uncheck();
-  await dialog.getByLabel("Password").fill(student.password);
-
-  await dialog.getByRole("button", { name: "Create Student" }).click();
-  await dialog.waitFor({ state: "hidden" });
-}
+import { expect, test, newStudent, createStudentViaUI } from "./fixtures";
 
 test.describe("Student Management", () => {
   test.beforeEach(async ({ adminPage }) => {
@@ -102,6 +64,9 @@ test.describe("Student Management", () => {
     await expect(
       adminPage.getByRole("cell", { name: student.email })
     ).toBeVisible();
+    // Verify the category chip is rendered in the table row
+    const row = adminPage.getByRole("row").filter({ hasText: student.email });
+    await expect(row.getByText("Kid")).toBeVisible();
   });
 
   test("should edit a student's name and reflect the change in the table", async ({
@@ -126,6 +91,34 @@ test.describe("Student Management", () => {
     await expect(
       adminPage.getByRole("cell", { name: updatedName })
     ).toBeVisible();
+  });
+
+  test("should edit a student's category and reflect the change in the table", async ({
+    adminPage,
+  }) => {
+    const student = newStudent(); // default category: "kid"
+    await createStudentViaUI(adminPage, student);
+
+    const row = adminPage.getByRole("row").filter({ hasText: student.email });
+    await row.getByRole("button", { name: "Edit student" }).click();
+
+    const dialog = adminPage.getByRole("dialog");
+    await dialog.waitFor({ state: "visible" });
+
+    // MUI Select renders a <div role="combobox"> — getByLabel doesn't work for it.
+    const categorySelect = dialog.getByRole("combobox");
+    await categorySelect.waitFor({ state: "visible" });
+    await categorySelect.click();
+    // Options render in a portal outside the dialog
+    await adminPage.getByRole("listbox").waitFor({ state: "visible" });
+    await adminPage.getByRole("option", { name: /^senior$/i }).click();
+
+    await dialog.getByRole("button", { name: "Save Changes" }).click();
+    await dialog.waitFor({ state: "hidden" });
+
+    // The updated row should now show the "Senior" chip
+    const updatedRow = adminPage.getByRole("row").filter({ hasText: student.email });
+    await expect(updatedRow.getByText("Senior")).toBeVisible();
   });
 
   test("should delete a student and remove them from the table", async ({

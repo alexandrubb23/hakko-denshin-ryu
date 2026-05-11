@@ -29,6 +29,7 @@ const student: Student = {
   name: "John Doe",
   email: "john@example.com",
   emailVerified: true,
+  category: "kid",
   createdAt: "2024-01-01T00:00:00.000Z",
   image: null,
 };
@@ -37,14 +38,14 @@ const onClose = vi.fn();
 
 const renderModal = (open = true) =>
   renderUi(
-    <EditStudentModal open={open} onClose={onClose} student={student} />,
+    <EditStudentModal open={open} onClose={onClose} student={student} />
   );
 
 describe("EditStudentModal", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     mockUseUpdateStudent.mockReturnValue(
-      defaultMutation as unknown as ReturnType<typeof useUpdateStudent>,
+      defaultMutation as unknown as ReturnType<typeof useUpdateStudent>
     );
   });
 
@@ -53,7 +54,7 @@ describe("EditStudentModal", () => {
     expect(screen.getByText("Edit Student")).toBeInTheDocument();
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: /^email$/i }),
+      screen.getByRole("textbox", { name: /^email$/i })
     ).toBeInTheDocument();
   });
 
@@ -66,7 +67,7 @@ describe("EditStudentModal", () => {
     renderModal();
     expect(screen.getByLabelText(/name/i)).toHaveValue(student.name);
     expect(screen.getByRole("textbox", { name: /^email$/i })).toHaveValue(
-      student.email,
+      student.email
     );
   });
 
@@ -87,7 +88,7 @@ describe("EditStudentModal", () => {
   it("hides the password field when invite checkbox is checked", async () => {
     renderModal();
     fireEvent.click(
-      screen.getByRole("checkbox", { name: /send invitation email/i }),
+      screen.getByRole("checkbox", { name: /send invitation email/i })
     );
     await waitFor(() => {
       expect(screen.queryByLabelText(/password/i)).not.toBeInTheDocument();
@@ -118,7 +119,7 @@ describe("EditStudentModal", () => {
           email: "jane@example.com",
           sendInvite: false,
         }),
-        expect.any(Object),
+        expect.any(Object)
       );
     });
   });
@@ -126,7 +127,7 @@ describe("EditStudentModal", () => {
   it("calls mutate with sendInvite:true when invite checkbox is checked", async () => {
     renderModal();
     fireEvent.click(
-      screen.getByRole("checkbox", { name: /send invitation email/i }),
+      screen.getByRole("checkbox", { name: /send invitation email/i })
     );
 
     fireEvent.change(screen.getByLabelText(/name/i), {
@@ -145,7 +146,7 @@ describe("EditStudentModal", () => {
           email: "jane@example.com",
           sendInvite: true,
         }),
-        expect.any(Object),
+        expect.any(Object)
       );
     });
   });

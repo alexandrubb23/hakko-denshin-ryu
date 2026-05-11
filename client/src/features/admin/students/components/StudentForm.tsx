@@ -1,7 +1,9 @@
 import {
   createStudentSchema,
+  STUDENT_CATEGORIES,
   updateStudentSchema,
   type CreateStudentInput,
+  type StudentCategory,
   type UpdateStudentInput,
 } from "@hakko/core";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,14 +16,19 @@ import {
   DialogActions,
   DialogContent,
   Divider,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
   SxProps,
   TextField,
   Theme,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { type Student } from "@api/students";
 import ErrorAlert from "@components/shared/ErrorAlert";
@@ -48,9 +55,31 @@ const fieldSx: SxProps<Theme> = {
   "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
 };
 
+const categoryMenuProps = {
+  slotProps: {
+    paper: {
+      sx: {
+        backgroundColor: DARK_BG,
+        backgroundImage: "none",
+        border: `1px solid ${BORDER_COLOR}`,
+        "& .MuiMenuItem-root:hover": {
+          backgroundColor: "rgba(171,150,255,0.12)",
+        },
+        "& .MuiMenuItem-root.Mui-selected": {
+          backgroundColor: "rgba(171,150,255,0.18)",
+        },
+        "& .MuiMenuItem-root.Mui-selected:hover": {
+          backgroundColor: "rgba(171,150,255,0.25)",
+        },
+      },
+    },
+  },
+};
+
 type StudentFormValues = {
   name: string;
   email: string;
+  category: StudentCategory | "";
   password?: string;
   sendInvite?: boolean;
 };
@@ -116,6 +145,7 @@ const StudentForm = (props: StudentFormProps) => {
     handleSubmit,
     reset: resetForm,
     setValue,
+    control,
     formState: { errors },
   } = useForm<StudentFormValues>({ resolver: zodResolver(schema as any) });
 
@@ -124,6 +154,7 @@ const StudentForm = (props: StudentFormProps) => {
     resetForm({
       name: student?.name ?? "",
       email: student?.email ?? "",
+      category: student?.category ?? "",
       password: "",
       sendInvite: defaultSendInvite,
     });
@@ -138,15 +169,19 @@ const StudentForm = (props: StudentFormProps) => {
   };
 
   const onSubmit = (values: StudentFormValues) => {
+    const { category } = values;
+    if (!category) return;
+
     if (mode === StudentFormMode.create) {
       createMutation.mutate(
         {
           name: values.name,
           email: values.email,
+          category,
           sendInvite: values.sendInvite ?? true,
           password: values.password,
         } as CreateStudentInput,
-        { onSuccess: () => onClose() },
+        { onSuccess: () => onClose() }
       );
     } else {
       updateMutation.mutate(
@@ -154,10 +189,11 @@ const StudentForm = (props: StudentFormProps) => {
           id: student!.id,
           name: values.name,
           email: values.email,
+          category,
           sendInvite: values.sendInvite,
           password: values.password || undefined,
         } as { id: string } & UpdateStudentInput,
-        { onSuccess: () => onClose() },
+        { onSuccess: () => onClose() }
       );
     }
   };
@@ -203,6 +239,30 @@ const StudentForm = (props: StudentFormProps) => {
             error={!!errors.email}
             helperText={errors.email?.message}
             sx={fieldSx}
+          />
+
+          <Controller
+            name="category"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth error={!!errors.category} sx={fieldSx}>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  {...field}
+                  label="Category"
+                  MenuProps={categoryMenuProps}
+                >
+                  {STUDENT_CATEGORIES.map((cat) => (
+                    <MenuItem key={cat} value={cat}>
+                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.category && (
+                  <FormHelperText>{errors.category.message}</FormHelperText>
+                )}
+              </FormControl>
+            )}
           />
 
           <FormControlLabel

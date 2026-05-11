@@ -18,48 +18,48 @@ Admin manages all members, sessions, ranks, and events.
 
 ### Key Scripts (run from root)
 
-| Command                  | Description                        |
-|--------------------------|------------------------------------|
-| `bun run dev`            | Start client + server in parallel  |
-| `bun run build`          | Build client (Vite SSR)            |
-| `bun run start`          | Start production server            |
-| `bun run preview`        | Production preview                 |
-| `bun run typecheck`      | TypeScript check (server)          |
-| `bun run test:e2e`       | Run Playwright E2E tests           |
-| `bun run test:e2e:ui`    | Playwright interactive UI          |
-| `bun run test:e2e:headed`| Run tests in headed browser        |
-| `bun run test:e2e:report`| Open last HTML report              |
+| Command                   | Description                       |
+| ------------------------- | --------------------------------- |
+| `bun run dev`             | Start client + server in parallel |
+| `bun run build`           | Build client (Vite SSR)           |
+| `bun run start`           | Start production server           |
+| `bun run preview`         | Production preview                |
+| `bun run typecheck`       | TypeScript check (server)         |
+| `bun run test:e2e`        | Run Playwright E2E tests          |
+| `bun run test:e2e:ui`     | Playwright interactive UI         |
+| `bun run test:e2e:headed` | Run tests in headed browser       |
+| `bun run test:e2e:report` | Open last HTML report             |
 
 ## Tech Stack
 
 ### Frontend (`/client`)
 
-| Layer          | Tech                  | Version   |
-|----------------|-----------------------|-----------|
-| Framework      | React + TypeScript    | 19        |
-| SSR            | Vite + Express        | 6 / 5     |
-| Routing        | React Router          | 7         |
-| Server state   | TanStack Query        | 5         |
-| HTTP client    | Axios                 | latest    |
-| Client state   | Zustand               | 5         |
-| UI components  | MUI (Material UI)     | 7         |
-| Utility styling| Tailwind CSS          | 4         |
-| Animations     | Framer Motion         | latest    |
-| Forms          | React Hook Form       | latest    |
-| Validation     | Zod                   | latest    |
-| i18n           | react-intl            | 7         |
+| Layer           | Tech               | Version |
+| --------------- | ------------------ | ------- |
+| Framework       | React + TypeScript | 19      |
+| SSR             | Vite + Express     | 6 / 5   |
+| Routing         | React Router       | 7       |
+| Server state    | TanStack Query     | 5       |
+| HTTP client     | Axios              | latest  |
+| Client state    | Zustand            | 5       |
+| UI components   | MUI (Material UI)  | 7       |
+| Utility styling | Tailwind CSS       | 4       |
+| Animations      | Framer Motion      | latest  |
+| Forms           | React Hook Form    | latest  |
+| Validation      | Zod                | latest  |
+| i18n            | react-intl         | 7       |
 
 > MUI is the primary component library. Tailwind CSS is used sparingly for utility spacing and custom styling.
 
 ### Backend (`/server`)
 
-| Layer           | Tech                    | Notes                                      |
-|-----------------|-------------------------|--------------------------------------------|
-| Runtime         | Bun                     | ≥ 1.1.0                                   |
-| Server          | Express                 | 5                                          |
-| ORM             | Prisma                  | TypeScript-first, migrations               |
-| Database        | PostgreSQL               | via Neon (serverless)                      |
-| Auth            | Better Auth             | v1.6+, email+password only, sign-up disabled |
+| Layer    | Tech        | Notes                                        |
+| -------- | ----------- | -------------------------------------------- |
+| Runtime  | Bun         | ≥ 1.1.0                                      |
+| Server   | Express     | 5                                            |
+| ORM      | Prisma      | TypeScript-first, migrations                 |
+| Database | PostgreSQL  | via Neon (serverless)                        |
+| Auth     | Better Auth | v1.6+, email+password only, sign-up disabled |
 
 ### Authentication
 
@@ -93,11 +93,13 @@ Admin manages all members, sessions, ranks, and events.
 The `@hakko/core` package (`core/`) is a shared TypeScript workspace package used by both client and server.
 
 **When to add something to `@hakko/core`:**
+
 - Zod schemas that are validated on the server **and** drive form validation on the client (e.g., `createStudentSchema`)
 - TypeScript types inferred from those schemas (e.g., `CreateStudentInput`)
 - Any other pure logic that must be identical on both sides
 
 **How to add a schema:**
+
 1. Create `core/src/schemas/<domain>.ts` — define the Zod schema and export the inferred type:
    ```ts
    import { z } from "zod";
@@ -106,7 +108,10 @@ The `@hakko/core` package (`core/`) is a shared TypeScript workspace package use
    ```
 2. Re-export from `core/src/index.ts`:
    ```ts
-   export { createStudentSchema, type CreateStudentInput } from "./schemas/<domain>.js";
+   export {
+     createStudentSchema,
+     type CreateStudentInput,
+   } from "./schemas/<domain>.js";
    ```
 3. Import in client or server using the `@hakko/core` alias:
    ```ts
@@ -114,6 +119,7 @@ The `@hakko/core` package (`core/`) is a shared TypeScript workspace package use
    ```
 
 **Important — workspace setup:**
+
 - `@hakko/core` is resolved via a path alias in `client/vite.config.ts`, `client/vitest.config.ts`, and TypeScript `paths` in both `client/tsconfig.json` and `server/tsconfig.json` — all pointing to `../core/src`.
 - After adding `core` to `package.json` workspaces, the symlink `node_modules/@hakko/core → ../../core` must exist. Create it manually with:
   ```bash
@@ -132,11 +138,11 @@ The `@hakko/core` package (`core/`) is a shared TypeScript workspace package use
 
 Reusable server-side helpers live in `server/src/utils/`. Always import from there rather than duplicating logic in route files.
 
-| Utility | File | Description |
-|---------|------|-------------|
+| Utility                | File              | Description                                                                                                                                                                                     |
+| ---------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `parseYearMonthParams` | `query-params.ts` | Parses and validates `year` (required) and `month` (optional) query params. Returns `{ year, from, to }` as a UTC date range. Throws `HttpBadRequestError` for invalid or out-of-bounds values. |
-| `requireId` | `request.ts` | Reads and validates a route param as a DB id (cuid or UUID). Accepts an optional `param` name (default `"id"`). Throws `HttpBadRequestError` if the value is absent or has an invalid format. |
-| `requireFile` | `request.ts` | Asserts `req.file` is present (set by `uploadMiddleware`). Returns the file typed as non-nullable. Throws `HttpBadRequestError("No image file provided")` if missing. |
+| `requireId`            | `request.ts`      | Reads and validates a route param as a DB id (cuid or UUID). Accepts an optional `param` name (default `"id"`). Throws `HttpBadRequestError` if the value is absent or has an invalid format.   |
+| `requireFile`          | `request.ts`      | Asserts `req.file` is present (set by `uploadMiddleware`). Returns the file typed as non-nullable. Throws `HttpBadRequestError("No image file provided")` if missing.                           |
 
 Usage in a route handler:
 
@@ -144,7 +150,7 @@ Usage in a route handler:
 import { parseYearMonthParams } from "../utils/query-params.js";
 import { requireFile, requireId } from "../utils/request.js";
 
-const id = requireId(req);               // defaults to req.params.id
+const id = requireId(req); // defaults to req.params.id
 const rankEntryId = requireId(req, "rankEntryId");
 
 const { from, to } = parseYearMonthParams(
@@ -154,6 +160,26 @@ const { from, to } = parseYearMonthParams(
 
 const file = requireFile(req); // throws if no file uploaded
 ```
+
+### Function Parameter Convention
+
+Functions must have **at most two parameters**. When a function requires more than two arguments, consolidate them into a single options object:
+
+```ts
+// ✗ too many positional params — order-dependent and error-prone
+export const createStudent = (id: string, name: string, email: string, category: StudentCategory, hashedPassword: string) => ...
+
+// ✓ single options object — self-documenting, order-independent
+export const createStudent = ({ id, name, email, category, hashedPassword }: {
+  id: string;
+  name: string;
+  email: string;
+  category: StudentCategory;
+  hashedPassword: string;
+}) => ...
+```
+
+Apply this rule consistently to repository functions, utilities, and any other module-level or exported functions across both client and server.
 
 ### Routing
 
@@ -185,7 +211,6 @@ const file = requireFile(req); // throws if no file uploaded
 All imports use Vite aliases resolving to `client/src/`:
 `@api`, `@assets`, `@components`, `@hooks`, `@providers`, `@utils`, `@style`, `@routes`, `@store`, `@types`, `@locales`, `@pages`, `@lib`, `@test`
 
-
 ## UI Design Tokens
 
 The MUI theme (`client/src/style/theme.ts`) is configured with **`mode: 'dark'`** and custom dark palette overrides. All authenticated pages use a consistent dark theme.
@@ -195,33 +220,33 @@ The MUI theme (`client/src/style/theme.ts`) is configured with **`mode: 'dark'`*
 Declare these at the top of every component file that uses them:
 
 ```ts
-const PURPLE        = "#AB96FF";
-const DARK_BG       = "#0a0619";
-const BORDER_COLOR  = "rgba(171,150,255,0.2)";
-const BORDER_HOVER  = "rgba(171,150,255,0.55)";
-const SURFACE_BG    = "rgba(255,255,255,0.04)";
+const PURPLE = "#AB96FF";
+const DARK_BG = "#0a0619";
+const BORDER_COLOR = "rgba(171,150,255,0.2)";
+const BORDER_HOVER = "rgba(171,150,255,0.55)";
+const SURFACE_BG = "rgba(255,255,255,0.04)";
 const BACKDROP_BLUR = "blur(20px)";
-const SKELETON_SX   = { bgcolor: "rgba(171,150,255,0.12)" } as const;
+const SKELETON_SX = { bgcolor: "rgba(171,150,255,0.12)" } as const;
 ```
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `PURPLE` | `#AB96FF` | Primary accent — buttons, focused inputs, active nav items, icons |
-| `DARK_BG` | `#0a0619` | Page/layout background; Dialog/Modal paper background |
-| `BORDER_COLOR` | `rgba(171,150,255,0.2)` | Borders on cards, drawers, modals, and glass surfaces (default state) |
-| `BORDER_HOVER` | `rgba(171,150,255,0.55)` | Input field border on hover |
-| `SURFACE_BG` | `rgba(255,255,255,0.04)` | Glass-effect surface background (Paper, TableContainer, inputs) |
-| `BACKDROP_BLUR` | `blur(20px)` | Backdrop filter on all glass surfaces |
-| `SKELETON_SX` | `{ bgcolor: "rgba(171,150,255,0.12)" }` | MUI `<Skeleton sx={SKELETON_SX}>` — the standard skeleton color; never repeat inline |
+| Token           | Value                                   | Usage                                                                                |
+| --------------- | --------------------------------------- | ------------------------------------------------------------------------------------ |
+| `PURPLE`        | `#AB96FF`                               | Primary accent — buttons, focused inputs, active nav items, icons                    |
+| `DARK_BG`       | `#0a0619`                               | Page/layout background; Dialog/Modal paper background                                |
+| `BORDER_COLOR`  | `rgba(171,150,255,0.2)`                 | Borders on cards, drawers, modals, and glass surfaces (default state)                |
+| `BORDER_HOVER`  | `rgba(171,150,255,0.55)`                | Input field border on hover                                                          |
+| `SURFACE_BG`    | `rgba(255,255,255,0.04)`                | Glass-effect surface background (Paper, TableContainer, inputs)                      |
+| `BACKDROP_BLUR` | `blur(20px)`                            | Backdrop filter on all glass surfaces                                                |
+| `SKELETON_SX`   | `{ bgcolor: "rgba(171,150,255,0.12)" }` | MUI `<Skeleton sx={SKELETON_SX}>` — the standard skeleton color; never repeat inline |
 
 ### `SkeletonText` component
 
 Use `SkeletonText` (at `@components/SkeletonText/SkeletonText`) whenever a `<Typography>` displays a loading skeleton while data is pending. It accepts all `TypographyProps` plus two extra props:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `isLoading` | `boolean` | — | When `true`, renders a `<Skeleton>` instead of `children` |
-| `skeletonWidth` | `number \| string` | `120` | Forwarded to `<Skeleton width={...}>` |
+| Prop            | Type               | Default | Description                                               |
+| --------------- | ------------------ | ------- | --------------------------------------------------------- |
+| `isLoading`     | `boolean`          | —       | When `true`, renders a `<Skeleton>` instead of `children` |
+| `skeletonWidth` | `number \| string` | `120`   | Forwarded to `<Skeleton width={...}>`                     |
 
 ```tsx
 import SkeletonText from "@components/SkeletonText/SkeletonText";
@@ -240,7 +265,7 @@ import SkeletonText from "@components/SkeletonText/SkeletonText";
 ### Rules — always follow these
 
 - **Never use white or light backgrounds.** All surfaces must use `DARK_BG`, `SURFACE_BG`, or `rgba(255,255,255,0.04)`.
-- **All Dialog/Modal paper** must set `backgroundColor: DARK_BG`, `backgroundImage: "none"`, `border: \`1px solid ${BORDER_COLOR}\``, and `backdropFilter: "blur(20px)"` via `slotProps.paper.sx`.
+- **All Dialog/Modal paper** must set `backgroundColor: DARK_BG`, `backgroundImage: "none"`, `border: \`1px solid ${BORDER_COLOR}\``, and `backdropFilter: "blur(20px)"`via`slotProps.paper.sx`.
 - **Select dropdowns** must pass `MenuProps` with `slotProps.paper.sx` to set `backgroundColor: DARK_BG`, `backgroundImage: "none"`, and dark hover/selected states for MenuItems.
 - **Input fields** must use `fieldSx` (or equivalent) for `backgroundColor: SURFACE_BG`, purple border colors on hover/focus.
 - **Dividers** inside modals must use `sx={{ borderColor: BORDER_COLOR }}`.
@@ -272,9 +297,15 @@ const fieldSx = {
           backgroundColor: DARK_BG,
           backgroundImage: "none",
           border: `1px solid ${BORDER_COLOR}`,
-          "& .MuiMenuItem-root:hover": { backgroundColor: "rgba(171,150,255,0.12)" },
-          "& .MuiMenuItem-root.Mui-selected": { backgroundColor: "rgba(171,150,255,0.18)" },
-          "& .MuiMenuItem-root.Mui-selected:hover": { backgroundColor: "rgba(171,150,255,0.25)" },
+          "& .MuiMenuItem-root:hover": {
+            backgroundColor: "rgba(171,150,255,0.12)",
+          },
+          "& .MuiMenuItem-root.Mui-selected": {
+            backgroundColor: "rgba(171,150,255,0.18)",
+          },
+          "& .MuiMenuItem-root.Mui-selected:hover": {
+            backgroundColor: "rgba(171,150,255,0.25)",
+          },
         },
       },
     },
@@ -308,12 +339,14 @@ const YesButton = styled(Button, {
 ```
 
 **When to use `styled()` vs `sx`:**
+
 - Use `sx` for one-off, non-conditional styles on a single element.
 - Use `styled()` when styles depend on props/state or when you'd otherwise define multiple sx-object constants.
 
 ### Co-locating styled components in a `.style.ts` module
 
 Extract styles into a co-located `<ComponentName>.style.ts` file whenever a component has:
+
 - any `styled()` definition, or
 - module-level `sx` constants that are significant enough to clutter the component file.
 
@@ -377,19 +410,19 @@ return record.attended ? AttendanceStatus.present : AttendanceStatus.absent;
 
 ### Stack
 
-| Tool                          | Role                                     |
-|-------------------------------|------------------------------------------|
-| Vitest                        | Test runner (configured in `client/vitest.config.ts`) |
-| React Testing Library (RTL)   | Component rendering and querying         |
-| `@testing-library/jest-dom`   | Custom DOM matchers (`toBeInTheDocument`, etc.) |
-| `happy-dom`                   | DOM environment (do **not** use jsdom — v25+ has ESM incompatibility) |
+| Tool                        | Role                                                                  |
+| --------------------------- | --------------------------------------------------------------------- |
+| Vitest                      | Test runner (configured in `client/vitest.config.ts`)                 |
+| React Testing Library (RTL) | Component rendering and querying                                      |
+| `@testing-library/jest-dom` | Custom DOM matchers (`toBeInTheDocument`, etc.)                       |
+| `happy-dom`                 | DOM environment (do **not** use jsdom — v25+ has ESM incompatibility) |
 
 ### Running tests
 
 Tests live in `client/`. Run them from the root:
 
 | Command              | Description                  |
-|----------------------|------------------------------|
+| -------------------- | ---------------------------- |
 | `bun run test`       | Run all component tests once |
 | `bun run test:watch` | Watch mode                   |
 
@@ -404,7 +437,7 @@ All component tests must use `renderUi` from `@test/renderUi` instead of calling
 It wraps the component with the MUI `ThemeProvider` and any other global providers.
 
 ```tsx
-import renderUi from '@test/renderUi';
+import renderUi from "@test/renderUi";
 renderUi(<MyComponent />);
 ```
 
@@ -415,10 +448,10 @@ Never call `render(...)` from `@testing-library/react` directly in test files.
 Use `vi.mock` to mock hooks that make network requests:
 
 ```tsx
-import { vi } from 'vitest';
-import { useStudents } from '@hooks/useStudents';
+import { vi } from "vitest";
+import { useStudents } from "@hooks/useStudents";
 
-vi.mock('@hooks/useStudents', () => ({
+vi.mock("@hooks/useStudents", () => ({
   useStudents: vi.fn(),
 }));
 
@@ -441,12 +474,12 @@ Always call `vi.resetAllMocks()` in `beforeEach` to prevent test bleed.
 
 Every page-level component test should cover all four query states:
 
-| `describe` block | `isLoading` | `isError` | `data`         |
-|------------------|-------------|-----------|----------------|
-| `loading state`  | `true`      | `false`   | `undefined`    |
-| `error state`    | `false`     | `true`    | `undefined`    |
-| `empty state`    | `false`     | `false`   | `[]`           |
-| `success state`  | `false`     | `false`   | `[...items]`   |
+| `describe` block | `isLoading` | `isError` | `data`       |
+| ---------------- | ----------- | --------- | ------------ |
+| `loading state`  | `true`      | `false`   | `undefined`  |
+| `error state`    | `false`     | `true`    | `undefined`  |
+| `empty state`    | `false`     | `false`   | `[]`         |
+| `success state`  | `false`     | `false`   | `[...items]` |
 
 Use `beforeEach` inside each `describe` block to mock the hook and render.
 
@@ -474,12 +507,18 @@ Extract repeated setup or interaction sequences into module-level helper functio
 ```tsx
 // Repeated waitFor guard → extract
 const waitForForm = () =>
-  waitFor(() => expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument());
+  waitFor(() =>
+    expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument()
+  );
 
 // Repeated fill + submit sequence → extract
 const fillAndSubmit = (password: string, confirm: string) => {
-  fireEvent.change(screen.getByLabelText(/^password$/i), { target: { value: password } });
-  fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: confirm } });
+  fireEvent.change(screen.getByLabelText(/^password$/i), {
+    target: { value: password },
+  });
+  fireEvent.change(screen.getByLabelText(/confirm password/i), {
+    target: { value: confirm },
+  });
   fireEvent.click(screen.getByRole("button", { name: /set password/i }));
 };
 ```
@@ -487,6 +526,7 @@ const fillAndSubmit = (password: string, confirm: string) => {
 ### Describe block discipline
 
 Only wrap tests in a `describe` block when:
+
 - there are **multiple** tests that share a `beforeEach` / `afterEach`, or
 - the grouping meaningfully aids readability for a larger suite.
 
@@ -536,24 +576,24 @@ query: "nested routes loader data"
 
 ### Key libraries to resolve via Context7
 
-| Library           | Suggested search name       |
-|-------------------|-----------------------------|
-| React 19          | `React`                     |
-| React Router 7    | `React Router`              |
-| TanStack Query 5  | `TanStack Query`            |
-| Axios             | `Axios`                     |
-| Zustand 5         | `Zustand`                   |
-| MUI 7             | `Material UI`               |
-| Tailwind CSS 4    | `Tailwind CSS`              |
-| Framer Motion     | `Framer Motion`             |
-| React Hook Form   | `React Hook Form`           |
-| Zod               | `Zod`                       |
-| Vite 6            | `Vite`                      |
-| Express 5         | `Express`                   |
-| Prisma            | `Prisma`                    |
-| Bun               | `Bun`                       |
-| Vitest            | `Vitest`                    |
-| react-intl        | `react-intl`                |
+| Library          | Suggested search name |
+| ---------------- | --------------------- |
+| React 19         | `React`               |
+| React Router 7   | `React Router`        |
+| TanStack Query 5 | `TanStack Query`      |
+| Axios            | `Axios`               |
+| Zustand 5        | `Zustand`             |
+| MUI 7            | `Material UI`         |
+| Tailwind CSS 4   | `Tailwind CSS`        |
+| Framer Motion    | `Framer Motion`       |
+| React Hook Form  | `React Hook Form`     |
+| Zod              | `Zod`                 |
+| Vite 6           | `Vite`                |
+| Express 5        | `Express`             |
+| Prisma           | `Prisma`              |
+| Bun              | `Bun`                 |
+| Vitest           | `Vitest`              |
+| react-intl       | `react-intl`          |
 
 > Always resolve the library ID first — IDs can change between versions.  
 > Prefer `context7-query-docs` with `researchMode: true` when the first answer is insufficient.

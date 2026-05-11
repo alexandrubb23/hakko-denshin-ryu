@@ -68,7 +68,7 @@ router.get(
   async (_req, res) => {
     const ranks = await findAllRanks();
     res.json({ ranks });
-  },
+  }
 );
 
 router.get(
@@ -78,7 +78,7 @@ router.get(
   async (_req, res) => {
     const students = await findAllStudents();
     res.json({ students });
-  },
+  }
 );
 
 router.get(
@@ -91,7 +91,7 @@ router.get(
     await requireStudent(id);
     const student = await findStudentWithDetails(id);
     res.json({ student });
-  },
+  }
 );
 
 router.get(
@@ -103,7 +103,7 @@ router.get(
     const student = await requireStudent(id);
     const ranks = await findStudentRanks(id);
     res.json({ ranks });
-  },
+  }
 );
 
 router.post(
@@ -116,7 +116,7 @@ router.post(
 
     const { rankId, awardedAt, notes } = validate(
       createStudentRankSchema,
-      req.body,
+      req.body
     );
 
     const targetRank = await findRankById(rankId);
@@ -127,19 +127,19 @@ router.post(
     const expectedOrder = currentTop ? currentTop.rank.order + 1 : 1;
     if (targetRank.order !== expectedOrder) {
       throw new HttpUnprocessableError(
-        "Rank must follow the student's current rank in sequence.",
+        "Rank must follow the student's current rank in sequence."
       );
     }
 
-    const rank = await createStudentRank(
-      id,
+    const rank = await createStudentRank({
+      userId: id,
       rankId,
-      new Date(awardedAt),
-      notes ?? null,
-    );
+      awardedAt: new Date(awardedAt),
+      notes: notes ?? null,
+    });
 
     res.status(201).json({ rank });
-  },
+  }
 );
 
 router.put(
@@ -155,14 +155,14 @@ router.put(
 
     const { awardedAt, notes } = validate(updateStudentRankSchema, req.body);
 
-    const rank = await updateStudentRank(
+    const rank = await updateStudentRank({
       rankEntryId,
-      new Date(awardedAt),
-      notes ?? null,
-    );
+      awardedAt: new Date(awardedAt),
+      notes: notes ?? null,
+    });
 
     res.json({ rank });
-  },
+  }
 );
 
 router.post(
@@ -170,9 +170,9 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const { name, email, password, sendInvite } = validate(
+    const { name, email, category, password, sendInvite } = validate(
       createStudentSchema,
-      req.body,
+      req.body
     );
 
     const existing = await findUserByEmail(email);
@@ -181,17 +181,28 @@ router.post(
     const id = crypto.randomUUID();
 
     if (sendInvite) {
-      const student = await createStudentWithoutPassword(id, name, email);
+      const student = await createStudentWithoutPassword({
+        id,
+        name,
+        email,
+        category,
+      });
 
-      await sendStudentInvitation(id, email, name);
+      await sendStudentInvitation({ id, email, name });
 
       return res.status(201).json({ student });
     }
 
     const hashedPassword = await hashPassword(password!);
-    const student = await createStudent(id, name, email, hashedPassword);
+    const student = await createStudent({
+      id,
+      name,
+      email,
+      category,
+      hashedPassword,
+    });
     res.status(201).json({ student });
-  },
+  }
 );
 
 router.put(
@@ -202,9 +213,9 @@ router.put(
     const id = requireId(req);
     const student = await requireStudent(id);
 
-    const { name, email, password, sendInvite } = validate(
+    const { name, email, category, password, sendInvite } = validate(
       updateStudentSchema,
-      req.body,
+      req.body
     );
 
     if (email !== student.email) {
@@ -212,17 +223,17 @@ router.put(
       if (existing) throw new HttpConflictError("Email already in use");
     }
 
-    const updated = await updateStudentProfile(id, name, email);
+    const updated = await updateStudentProfile({ id, name, email, category });
 
     if (sendInvite) {
-      await sendStudentInvitation(id, email, name);
+      await sendStudentInvitation({ id, email, name });
     } else if (password) {
       const hashedPassword = await hashPassword(password);
       await updateStudentPassword(id, hashedPassword);
     }
 
     res.json({ student: updated });
-  },
+  }
 );
 
 router.delete(
@@ -238,7 +249,7 @@ router.delete(
 
     await softDeleteStudentRank(rankEntryId);
     res.status(204).end();
-  },
+  }
 );
 
 router.delete(
@@ -254,7 +265,7 @@ router.delete(
 
     await softDeleteStudent(id);
     res.status(204).end();
-  },
+  }
 );
 
 const upsertAttendanceSchema = z.object({
@@ -274,12 +285,12 @@ router.get(
 
     const { from, to } = parseYearMonthParams(
       req.query.year as string | undefined,
-      req.query.month as string | undefined,
+      req.query.month as string | undefined
     );
 
-    const records = await findStudentAttendance(id, from, to);
+    const records = await findStudentAttendance({ userId: id, from, to });
     res.json({ records });
-  },
+  }
 );
 
 router.post(
@@ -292,7 +303,7 @@ router.post(
 
     const { date: dateStr, attended } = validate(
       upsertAttendanceSchema,
-      req.body,
+      req.body
     );
 
     const date = new Date(`${dateStr}T00:00:00.000Z`);
@@ -300,13 +311,17 @@ router.post(
     today.setUTCHours(23, 59, 59, 999);
     if (date > today) {
       throw new HttpUnprocessableError(
-        "Cannot mark attendance for future dates",
+        "Cannot mark attendance for future dates"
       );
     }
 
-    const record = await upsertStudentAttendance(id, date, attended);
+    const record = await upsertStudentAttendance({
+      userId: id,
+      date,
+      attended,
+    });
     res.status(200).json({ record });
-  },
+  }
 );
 
 router.post(
@@ -325,7 +340,7 @@ router.post(
     await updateStudentImage(id, imageUrl);
 
     res.json({ image: imageUrl });
-  },
+  }
 );
 
 router.get(
@@ -337,7 +352,7 @@ router.get(
     await requireStudent(id);
     const events = await findStudentEvents(id);
     res.json({ events });
-  },
+  }
 );
 
 export default router;

@@ -1,4 +1,8 @@
-import { type CreateStudentInput, type UpdateStudentInput } from "@hakko/core";
+import {
+  type CreateStudentInput,
+  type StudentCategory,
+  type UpdateStudentInput,
+} from "@hakko/core";
 import { ApiRoutes } from "@lib/routes";
 
 import { Http } from "./http";
@@ -8,6 +12,7 @@ export interface Student {
   name: string;
   email: string;
   emailVerified: boolean;
+  category: StudentCategory | null;
   createdAt: string;
   image: string | null;
 }

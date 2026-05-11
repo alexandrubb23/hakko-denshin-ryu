@@ -62,6 +62,7 @@ export function newStudent() {
     name: `E2E Student ${ts}`,
     email: `e2e.student.${ts}@example.com`,
     password: "Password123!",
+    category: "kid" as "kid" | "senior",
   };
 }
 
@@ -71,7 +72,12 @@ export function newStudent() {
  */
 export async function createStudentViaUI(
   page: Page,
-  student: { name: string; email: string; password: string }
+  student: {
+    name: string;
+    email: string;
+    password: string;
+    category?: "kid" | "senior";
+  }
 ): Promise<void> {
   await page.getByRole("button", { name: "Add Student" }).click();
   const dialog = page.getByRole("dialog");
@@ -83,6 +89,16 @@ export async function createStudentViaUI(
     .getByRole("checkbox", { name: /send invitation email/i })
     .uncheck();
   await dialog.getByLabel("Password").fill(student.password);
+  // MUI Select renders a <div role="combobox"> — getByLabel doesn't work for it.
+  const categorySelect = dialog.getByRole("combobox");
+  await categorySelect.waitFor({ state: "visible" });
+  await categorySelect.click();
+  // Options render in a portal outside the dialog
+  await page.getByRole("listbox").waitFor({ state: "visible" });
+  const category = student.category ?? "kid";
+  await page
+    .getByRole("option", { name: new RegExp(`^${category}$`, "i") })
+    .click();
   await dialog.getByRole("button", { name: "Create Student" }).click();
   await dialog.waitFor({ state: "hidden" });
 }

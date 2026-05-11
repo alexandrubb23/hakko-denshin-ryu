@@ -1,9 +1,16 @@
 import { z } from "zod";
 
+import { STUDENT_CATEGORIES } from "../constants/categories.js";
+
+const categorySchema = z.enum(STUDENT_CATEGORIES, {
+  error: () => ({ message: "Category must be 'kid' or 'senior'" }),
+});
+
 export const createStudentSchema = z
   .object({
     name: z.string().trim().min(3, "Name must be at least 3 characters"),
     email: z.email("Invalid email address"),
+    category: categorySchema,
     password: z.preprocess(
       (v) => (v === "" ? undefined : v),
       z.string().min(8, "Password must be at least 8 characters").optional()
@@ -26,6 +33,7 @@ export const updateStudentSchema = z
   .object({
     name: z.string().trim().min(3, "Name must be at least 3 characters"),
     email: z.email("Invalid email address"),
+    category: categorySchema,
     password: z
       .string()
       .refine(

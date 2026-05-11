@@ -1,5 +1,24 @@
-import { Role } from "../generated/prisma/enums.js";
+import { Role, StudentCategory } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
+
+// ─── Domain types ─────────────────────────────────────────────────────────────
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  category: StudentCategory;
+};
+
+type UserWithPassword = User & { hashedPassword: string };
+
+type StudentRankEntry = {
+  rankEntryId: string;
+  userId: string;
+  rankId: number;
+  awardedAt: Date;
+  notes: string | null;
+};
 
 // ─── Rank selects ─────────────────────────────────────────────────────────────
 
@@ -47,22 +66,22 @@ export const findStudentRanks = (userId: string) =>
     orderBy: { awardedAt: "desc" },
   });
 
-export const createStudentRank = (
-  userId: string,
-  rankId: number,
-  awardedAt: Date,
-  notes: string | null,
-) =>
+export const createStudentRank = ({
+  userId,
+  rankId,
+  awardedAt,
+  notes,
+}: Omit<StudentRankEntry, "rankEntryId">) =>
   prisma.studentRank.create({
     data: { userId, rankId, awardedAt, notes },
     select: RANK_ENTRY_SELECT,
   });
 
-export const updateStudentRank = (
-  rankEntryId: string,
-  awardedAt: Date,
-  notes: string | null,
-) =>
+export const updateStudentRank = ({
+  rankEntryId,
+  awardedAt,
+  notes,
+}: Omit<StudentRankEntry, "userId" | "rankId">) =>
   prisma.studentRank.update({
     where: { id: rankEntryId },
     data: { awardedAt, notes },
@@ -85,6 +104,7 @@ export const findAllStudents = () =>
       name: true,
       email: true,
       emailVerified: true,
+      category: true,
       createdAt: true,
       image: true,
     },
@@ -99,6 +119,7 @@ export const findStudentWithDetails = (id: string) =>
       name: true,
       email: true,
       emailVerified: true,
+      category: true,
       createdAt: true,
       image: true,
       role: true,
@@ -109,17 +130,19 @@ export const findStudentWithDetails = (id: string) =>
 export const findUserByEmail = (email: string) =>
   prisma.user.findUnique({ where: { email } });
 
-export const createStudent = (
-  id: string,
-  name: string,
-  email: string,
-  hashedPassword: string,
-) =>
+export const createStudent = ({
+  id,
+  name,
+  email,
+  category,
+  hashedPassword,
+}: UserWithPassword) =>
   prisma.user.create({
     data: {
       id,
       name,
       email,
+      category,
       emailVerified: false,
       role: Role.student,
       accounts: {
@@ -136,19 +159,21 @@ export const createStudent = (
       name: true,
       email: true,
       emailVerified: true,
+      category: true,
       createdAt: true,
     },
   });
 
-export const updateStudentProfile = (id: string, name: string, email: string) =>
+export const updateStudentProfile = ({ id, name, email, category }: User) =>
   prisma.user.update({
     where: { id },
-    data: { name, email },
+    data: { name, email, category },
     select: {
       id: true,
       name: true,
       email: true,
       emailVerified: true,
+      category: true,
       createdAt: true,
     },
   });
@@ -172,16 +197,25 @@ const STUDENT_SELECT = {
   name: true,
   email: true,
   emailVerified: true,
+  category: true,
   createdAt: true,
 } as const;
 
-export const createStudentWithoutPassword = (
-  id: string,
-  name: string,
-  email: string,
-) =>
+export const createStudentWithoutPassword = ({
+  id,
+  name,
+  email,
+  category,
+}: User) =>
   prisma.user.create({
-    data: { id, name, email, emailVerified: false, role: Role.student },
+    data: {
+      id,
+      name,
+      email,
+      category,
+      emailVerified: false,
+      role: Role.student,
+    },
     select: STUDENT_SELECT,
   });
 
@@ -199,11 +233,15 @@ export const createStudentAccount = (userId: string, hashedPassword: string) =>
 export const invalidatePendingInvites = (userId: string) =>
   prisma.invitationToken.deleteMany({ where: { userId, usedAt: null } });
 
-export const createInvitationToken = (
-  userId: string,
-  tokenHash: string,
-  expiresAt: Date,
-) => prisma.invitationToken.create({ data: { userId, tokenHash, expiresAt } });
+export const createInvitationToken = ({
+  userId,
+  tokenHash,
+  expiresAt,
+}: {
+  userId: string;
+  tokenHash: string;
+  expiresAt: Date;
+}) => prisma.invitationToken.create({ data: { userId, tokenHash, expiresAt } });
 
 export const findValidInvitationToken = (tokenHash: string) =>
   prisma.invitationToken.findFirst({
@@ -231,7 +269,15 @@ export const verifyStudentEmail = (userId: string) =>
 
 // ─── Attendance ───────────────────────────────────────────────────────────────
 
-export const findStudentAttendance = (userId: string, from: Date, to: Date) =>
+export const findStudentAttendance = ({
+  userId,
+  from,
+  to,
+}: {
+  userId: string;
+  from: Date;
+  to: Date;
+}) =>
   prisma.studentAttendance.findMany({
     where: { userId, date: { gte: from, lt: to } },
     select: { id: true, date: true, attended: true },
@@ -244,11 +290,15 @@ export const findAttendanceForDate = (date: Date) =>
     select: { userId: true, attended: true },
   });
 
-export const upsertStudentAttendance = (
-  userId: string,
-  date: Date,
-  attended: boolean,
-) =>
+export const upsertStudentAttendance = ({
+  userId,
+  date,
+  attended,
+}: {
+  userId: string;
+  date: Date;
+  attended: boolean;
+}) =>
   prisma.studentAttendance.upsert({
     where: { userId_date: { userId, date } },
     create: { userId, date, attended },

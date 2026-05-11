@@ -39,6 +39,7 @@ import {
 import { getInitials } from "@utils/string";
 import DeleteStudentModal from "./DeleteStudentModal";
 import EditStudentModal from "./EditStudentModal";
+import { CategoryChip } from "./StudentsTable.style";
 
 interface StudentsTableProps {
   students: Student[] | undefined;
@@ -101,6 +102,9 @@ const StudentsTable = ({
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
                 Email
               </TableCell>
+              <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
+                Category
+              </TableCell>
               <TableCell
                 sx={{ fontWeight: 700, color: "text.secondary" }}
                 align="center"
@@ -162,6 +166,23 @@ const StudentsTable = ({
                   <Typography variant="body2" color="text.secondary">
                     {student.email}
                   </Typography>
+                </TableCell>
+                <TableCell>
+                  {student.category ? (
+                    <CategoryChip
+                      label={
+                        student.category.charAt(0).toUpperCase() +
+                        student.category.slice(1)
+                      }
+                      size="small"
+                      variant="outlined"
+                      category={student.category}
+                    />
+                  ) : (
+                    <Typography variant="body2" color="text.disabled">
+                      —
+                    </Typography>
+                  )}
                 </TableCell>
                 <TableCell align="center">
                   <Tooltip
