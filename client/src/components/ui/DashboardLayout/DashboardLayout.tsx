@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -14,10 +15,12 @@ import DashboardMain from "./DashboardMain";
 const DashboardLayout = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const queryClient = useQueryClient();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleSignOut = async () => {
     await authClient.signOut();
+    queryClient.clear();
     navigate(Routes.login, { replace: true });
   };
 
