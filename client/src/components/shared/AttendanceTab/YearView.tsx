@@ -14,6 +14,7 @@ import {
   toUtcDate,
 } from "@constants/trainingSchedule";
 import { useAttendanceByYear } from "@features/admin/attendance/hooks/useAttendance";
+import { useMyAttendanceByYear } from "@features/student/attendance/hooks/useMyAttendance";
 import {
   BORDER_COLOR,
   PURPLE,
@@ -121,7 +122,7 @@ interface MiniMonthProps {
   month: number;
   records: AttendanceRecord[];
   today: Date;
-  onDayClick: (date: Date, el: HTMLElement) => void;
+  onDayClick?: (date: Date, el: HTMLElement) => void;
 }
 
 const MiniMonth = ({
@@ -132,6 +133,7 @@ const MiniMonth = ({
   onDayClick,
 }: MiniMonthProps) => {
   const grid = getCalendarGrid(year, month);
+  const interactive = !!onDayClick;
 
   return (
     <MiniMonthCard>
@@ -152,10 +154,10 @@ const MiniMonth = ({
           date ? (
             <DayCell
               key={formatDateKey(date)}
-              clickable={isTrainingDay(date) && date <= today}
+              clickable={interactive && isTrainingDay(date) && date <= today}
               onClick={
-                isTrainingDay(date) && date <= today
-                  ? (e) => onDayClick(date, e.currentTarget as HTMLElement)
+                interactive && isTrainingDay(date) && date <= today
+                  ? (e) => onDayClick!(date, e.currentTarget as HTMLElement)
                   : undefined
               }
             >
@@ -183,13 +185,21 @@ interface Props {
   studentId: string;
   cursor: Date;
   onCursorChange: (date: Date) => void;
+  readOnly?: boolean;
 }
 
-const YearView = ({ studentId, cursor, onCursorChange }: Props) => {
+const YearView = ({ studentId, cursor, onCursorChange, readOnly }: Props) => {
   const year = cursor.getUTCFullYear();
   const today = getLatestTrainingDay();
 
-  const { data, isLoading, isError } = useAttendanceByYear({ studentId, year });
+  const adminQuery = useAttendanceByYear({
+    studentId,
+    year,
+    enabled: !readOnly,
+  });
+  const myQuery = useMyAttendanceByYear(year);
+
+  const { data, isLoading, isError } = readOnly ? myQuery : adminQuery;
   const records = data?.records ?? [];
 
   const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null);
@@ -243,19 +253,21 @@ const YearView = ({ studentId, cursor, onCursorChange }: Props) => {
               month={month}
               records={records}
               today={today}
-              onDayClick={handleDayClick}
+              onDayClick={readOnly ? undefined : handleDayClick}
             />
           ))}
         </MonthsGrid>
       )}
 
-      <AttendancePopup
-        anchorEl={popoverAnchor}
-        date={popoverDate}
-        studentId={studentId}
-        records={records}
-        onClose={handlePopoverClose}
-      />
+      {!readOnly && (
+        <AttendancePopup
+          anchorEl={popoverAnchor}
+          date={popoverDate}
+          studentId={studentId}
+          records={records}
+          onClose={handlePopoverClose}
+        />
+      )}
     </YearViewRoot>
   );
 };

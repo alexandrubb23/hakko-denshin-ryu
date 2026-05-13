@@ -6,7 +6,7 @@ import {
 import AttendanceChart from "@components/shared/AttendanceTab/AttendanceChart";
 import DayView from "@components/shared/AttendanceTab/DayView";
 import MonthView from "@components/shared/AttendanceTab/MonthView";
-import MyYearView from "@components/shared/AttendanceTab/MyYearView";
+import YearView from "@components/shared/AttendanceTab/YearView";
 import AttendanceNavBar from "@components/shared/AttendanceTab/shared/AttendanceNavBar";
 import {
   LoadingContainer,
@@ -59,7 +59,12 @@ const MyAttendanceTab = () => {
         (!isError || view === CalendarView.year) && (
           <>
             {view === CalendarView.year && (
-              <MyYearView cursor={cursor} onCursorChange={handleCursorChange} />
+              <YearView
+                studentId={PLACEHOLDER_STUDENT_ID}
+                cursor={cursor}
+                onCursorChange={handleCursorChange}
+                readOnly
+              />
             )}
             {view === CalendarView.day && (
               <DayView

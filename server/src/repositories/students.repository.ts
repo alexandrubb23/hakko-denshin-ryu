@@ -22,7 +22,7 @@ type StudentRankEntry = {
 
 // ─── Rank selects ─────────────────────────────────────────────────────────────
 
-const RANK_ENTRY_SELECT = {
+export const RANK_ENTRY_SELECT = {
   id: true,
   rankId: true,
   awardedAt: true,
