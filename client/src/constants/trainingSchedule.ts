@@ -14,7 +14,7 @@ export interface TrainingSession {
 }
 
 export const TRAINING_SESSIONS: readonly TrainingSession[] = [
-  { day: 2, group: "kid", start: "18:30", end: "19:30" },
+  { day: 2, group: "kid", start: "18:15", end: "19:15" },
   { day: 2, group: "senior", start: "19:30", end: "21:00" },
   { day: 4, group: "senior", start: "20:00", end: "21:30" },
   { day: 6, group: "kid", start: "10:00", end: "11:00" },

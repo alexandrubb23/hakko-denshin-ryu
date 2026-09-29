@@ -14,7 +14,7 @@ describe("trainingSchedule", () => {
 
   it("computes a session's length in minutes", () => {
     expect(
-      getSessionMinutes({ day: 2, group: "kid", start: "18:30", end: "19:30" })
+      getSessionMinutes({ day: 2, group: "kid", start: "18:15", end: "19:15" })
     ).toBe(60);
     expect(
       getSessionMinutes({
