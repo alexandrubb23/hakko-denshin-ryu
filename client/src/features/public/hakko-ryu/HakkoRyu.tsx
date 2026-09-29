@@ -1,6 +1,7 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
+import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import BlurredUpImage from "@components/ui/Image/BlurredUpImage";
 
@@ -16,6 +17,8 @@ import hakkoRyuLowQualityImage from "@assets/images/53-small.webp";
 import hakkoRyuHighQualityImage from "@assets/images/53.webp";
 import goshinTaisoLowQualityImage from "@assets/images/89-small.webp";
 import goshinTaisoHighQualityImage from "@assets/images/89.webp";
+
+import { EASE_OUT } from "@constants/animationsTiming";
 
 import {
   bodyTextSx,
@@ -37,31 +40,6 @@ import {
   sectionTitleSx,
   sectionWrapperSx,
 } from "./HakkoRyu.style";
-
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => (
-  <motion.div
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-40px" }}
-    variants={fadeUp}
-    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
-  >
-    {children}
-  </motion.div>
-);
 
 const HakkoRyu = () => (
   <>

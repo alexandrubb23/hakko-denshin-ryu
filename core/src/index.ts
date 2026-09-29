@@ -21,6 +21,7 @@ export { PERIOD_VALUES, type Period } from "./constants/period.js";
 
 export {
   STUDENT_CATEGORIES,
+  isStudentCategory,
   type StudentCategory,
 } from "./constants/categories.js";
 

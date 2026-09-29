@@ -3,6 +3,7 @@ export const Routes = {
   hakkoRyu: "/hakko-ryu",
   senshinkan: "/senshinkan",
   dojo: "/dojo",
+  schedule: "/schedule",
   contact: "/contact",
   login: "/login",
   setPassword: "/set-password",

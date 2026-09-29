@@ -10,6 +10,7 @@ import { Bar } from "react-chartjs-2";
 import { useIntl } from "react-intl";
 
 import { type AttendancePeriod, type DashboardStudent } from "@api/dashboard";
+import { TRAINING_DAYS } from "@constants/trainingSchedule";
 import { useDashboardStudents } from "@features/admin/dashboard/hooks/useDashboardStudents";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -51,8 +52,6 @@ import PeriodAttendanceFilter, {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
-const TRAINING_DAYS = new Set([2, 4, 6]); // Tue, Thu, Sat
-
 const BELT_COLORS: Record<string, string> = {
   white: BELT_WHITE,
   yellow: BELT_YELLOW,
@@ -74,7 +73,7 @@ function beltColor(belt: string | null): string {
 function filterStudents(
   students: DashboardStudent[],
   rankFilter: string,
-  attendanceFilter: string,
+  attendanceFilter: string
 ): DashboardStudent[] {
   let result = students;
 
@@ -97,24 +96,24 @@ const DashboardStudentChart = () => {
   const [period, setPeriod] = useState<AttendancePeriod>("all");
   const [rankFilter, setRankFilter] = useState<string>(ALL_RANK_FILTER);
   const [attendanceFilter, setAttendanceFilter] = useState<string>(
-    ALL_ATTENDANCE_FILTER,
+    ALL_ATTENDANCE_FILTER
   );
   const [trainingModalOpen, setTrainingModalOpen] = useState(false);
 
   const today = new Date();
-  const isTodayTrainingDay = TRAINING_DAYS.has(today.getDay());
+  const isTodayTrainingDay = TRAINING_DAYS.includes(today.getDay());
   const todayStr = today.toLocaleDateString("en-CA"); // "YYYY-MM-DD"
 
   const { data, isLoading, isFetching } = useDashboardStudents(period);
 
   const hasUnranked = useMemo(
     () => (data?.students ?? []).some((s) => s.rankId === null),
-    [data],
+    [data]
   );
 
   const filtered = useMemo(
     () => filterStudents(data?.students ?? [], rankFilter, attendanceFilter),
-    [data, rankFilter, attendanceFilter],
+    [data, rankFilter, attendanceFilter]
   );
 
   const chartData = useMemo(() => {
@@ -126,7 +125,7 @@ const DashboardStudentChart = () => {
 
   const maxX = useMemo(
     () => Math.max(...(chartData.values.length ? chartData.values : [0]), 4),
-    [chartData.values],
+    [chartData.values]
   );
 
   const options = {
@@ -147,11 +146,11 @@ const DashboardStudentChart = () => {
             return [
               ` ${intl.formatMessage(
                 { id: "admin.dashboard.students.tooltip.sessions" },
-                { count },
+                { count }
               )}`,
               ` ${intl.formatMessage(
                 { id: "admin.dashboard.students.tooltip.rank" },
-                { rank },
+                { rank }
               )}`,
             ];
           },
@@ -209,7 +208,7 @@ const DashboardStudentChart = () => {
           ]
         : []),
     ],
-    [data?.ranks, hasUnranked, intl],
+    [data?.ranks, hasUnranked, intl]
   );
 
   const chartHeight = Math.max(120, filtered.length * 36);

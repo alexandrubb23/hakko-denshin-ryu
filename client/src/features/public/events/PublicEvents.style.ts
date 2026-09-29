@@ -3,7 +3,6 @@ import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { SxProps, Theme } from "@mui/material";
 import {
   EVENT_CAMP_BG,
   EVENT_DEMO_BG,
@@ -19,7 +18,6 @@ import {
   PURPLE_ALPHA_08,
   PURPLE_ALPHA_30,
   SURFACE_BG,
-  TEXT_MUTED,
 } from "@style/tokens";
 
 export const TYPE_COLORS: Record<string, string> = {
@@ -33,48 +31,6 @@ export const PageWrapper = styled(Box)({
   minHeight: "60vh",
   padding: "0 0 64px",
 });
-
-// ─── Page header ──────────────────────────────────────────────────────────────
-
-export const pageHeaderSx: SxProps<Theme> = {
-  mb: { xs: 6, md: 8 },
-  pt: { xs: 3, md: 4 },
-};
-
-export const eyebrowSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  fontSize: { xs: "0.75rem", md: "0.85rem" },
-  letterSpacing: "0.25em",
-  textTransform: "uppercase",
-  color: PURPLE,
-  mb: 1.5,
-  padding: 0,
-};
-
-export const pageTitleSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: { xs: "clamp(2rem, 8vw, 4rem)" },
-  fontWeight: 400,
-  lineHeight: 1.05,
-  color: "#fff",
-  mb: 1,
-  padding: 0,
-};
-
-export const pageKanjiSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: { xs: "0.8rem", md: "0.85rem" },
-  letterSpacing: "0.2em",
-  color: TEXT_MUTED,
-  mb: 2,
-  padding: 0,
-};
-
-export const pageHeaderDividerSx: SxProps<Theme> = {
-  borderColor: BORDER_COLOR,
-  mb: 0,
-  mt: 2,
-};
 
 export const EventCard = styled(Card)({
   boxShadow: "none",

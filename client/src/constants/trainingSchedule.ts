@@ -1,9 +1,66 @@
-// Training days: 2 = Tuesday, 4 = Thursday, 6 = Saturday (JS getDay(): 0=Sun ... 6=Sat)
-export const TRAINING_DAYS: readonly number[] = [2, 4, 6];
-
-import { daysInMonth, toUtcDate } from "@hakko/core";
+import { daysInMonth, toUtcDate, type StudentCategory } from "@hakko/core";
 
 export { daysInMonth, toUtcDate };
+
+// ─── Weekly timetable ───────────────────────────────────────────────────────
+
+export interface TrainingSession {
+  /** JS getDay() index (0=Sun ... 6=Sat) */
+  day: number;
+  group: StudentCategory;
+  /** "HH:mm", local dojo time */
+  start: string;
+  end: string;
+}
+
+export const TRAINING_SESSIONS: readonly TrainingSession[] = [
+  { day: 2, group: "kid", start: "18:30", end: "19:30" },
+  { day: 2, group: "senior", start: "19:30", end: "21:00" },
+  { day: 4, group: "senior", start: "20:00", end: "21:30" },
+  { day: 6, group: "kid", start: "10:00", end: "11:00" },
+  { day: 6, group: "senior", start: "11:00", end: "12:30" },
+];
+
+/** Weekdays with at least one session, ascending (JS getDay(): 0=Sun ... 6=Sat). */
+export const TRAINING_DAYS: readonly number[] = [
+  ...new Set(TRAINING_SESSIONS.map((s) => s.day)),
+].sort((a, b) => a - b);
+
+const toMinutes = (time: string) => {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
+};
+
+/** Length of a session in minutes. */
+export const getSessionMinutes = ({ start, end }: TrainingSession): number =>
+  toMinutes(end) - toMinutes(start);
+
+/** Weekly session count and total training minutes for a group. */
+export const getGroupStats = (group: StudentCategory) => {
+  const sessions = TRAINING_SESSIONS.filter((s) => s.group === group);
+  return {
+    count: sessions.length,
+    minutes: sessions.reduce((sum, s) => sum + getSessionMinutes(s), 0),
+  };
+};
+
+export interface TrainingDaySessions {
+  day: number;
+  sessions: TrainingSession[];
+}
+
+/** Sessions grouped by weekday, optionally limited to one group; days without sessions are omitted. */
+export const getSessionsByDay = (
+  group: StudentCategory | null = null
+): TrainingDaySessions[] =>
+  TRAINING_DAYS.map((day) => ({
+    day,
+    sessions: TRAINING_SESSIONS.filter(
+      (s) => s.day === day && (!group || s.group === group)
+    ),
+  })).filter(({ sessions }) => sessions.length > 0);
+
+// ─── Calendar helpers ───────────────────────────────────────────────────────
 
 export function isTrainingDay(date: Date): boolean {
   return TRAINING_DAYS.includes(date.getUTCDay());

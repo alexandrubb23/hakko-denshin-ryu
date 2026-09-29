@@ -10,6 +10,7 @@ import Contact from "@features/public/contact/Contact";
 import Dojo from "@features/public/dojo/Dojo";
 import PublicEvents from "@features/public/events/PublicEvents";
 import KyuProgram from "@features/public/kyu-program/KyuProgram";
+import Schedule from "@features/public/schedule/Schedule";
 import Senshinkan from "@features/public/senshinkan/Senshinkan";
 import Techniques from "@features/public/techniques/Techniques";
 
@@ -26,6 +27,7 @@ export type PagePath =
   | "hakko-ryu"
   | "senshinkan"
   | "dojo"
+  | "schedule"
   | "contact"
   | "login"
   | "set-password"
@@ -73,6 +75,12 @@ export const pages: Page[] = [
     component: Dojo,
     path: "dojo",
     titleId: "page.title.dojo",
+    titleSuffix: SITE_NAME,
+  },
+  {
+    path: "schedule",
+    component: Schedule,
+    titleId: "page.title.schedule",
     titleSuffix: SITE_NAME,
   },
   {

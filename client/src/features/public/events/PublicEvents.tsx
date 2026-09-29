@@ -3,22 +3,21 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
-  Box,
   Button,
   CardContent,
   CardMedia,
   Chip,
   Container,
-  Divider,
   Grid,
   Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
-import { motion } from "framer-motion";
 import { useIntl } from "react-intl";
 
+import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import PublicPageHeader from "@components/ui/PublicPageHeader/PublicPageHeader";
 import { useEvents } from "@features/admin/events/hooks/useEvents";
 import { PURPLE_ALPHA_30, SKELETON_SX } from "@style/tokens";
 import type { IntlMessageID } from "i18n/messages";
@@ -27,44 +26,18 @@ import {
   chipSx,
   DetailsTypography,
   EventCard,
-  eyebrowSx,
   ICON_SX,
   ImagePlaceholder,
-  pageHeaderDividerSx,
-  pageHeaderSx,
-  pageKanjiSx,
-  pageTitleSx,
   PageWrapper,
   SkeletonCard,
   TICKET_BUTTON_SX,
   TYPE_COLORS,
 } from "./PublicEvents.style";
 
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
-
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => (
-  <motion.div
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-40px" }}
-    variants={fadeUp}
-    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
-  >
-    {children}
-  </motion.div>
-);
-
 const formatEventDate = (
   locale: string,
   start: string,
-  end?: string | null,
+  end?: string | null
 ): string => {
   const opts: Intl.DateTimeFormatOptions = {
     day: "2-digit",
@@ -88,16 +61,7 @@ const PublicEvents = () => {
     <PageWrapper>
       <Container maxWidth="lg">
         {/* ── Page header ─────────────────────────────────────────────── */}
-        <Box sx={pageHeaderSx}>
-          <FadeIn>
-            <Typography sx={eyebrowSx}>Senshinkan · Romania</Typography>
-            <Typography component="h1" sx={pageTitleSx}>
-              <FormattedMessage id="page.events.title" />
-            </Typography>
-            <Typography sx={pageKanjiSx}>行事</Typography>
-            <Divider sx={pageHeaderDividerSx} />
-          </FadeIn>
-        </Box>
+        <PublicPageHeader titleId="page.events.title" kanji="行事" />
 
         {/* ── Error state ──────────────────────────────────────────────── */}
         {isError && (
@@ -177,7 +141,7 @@ const PublicEvents = () => {
                         })}
                         size="small"
                         sx={chipSx(
-                          TYPE_COLORS[event.type] ?? TYPE_COLORS.other,
+                          TYPE_COLORS[event.type] ?? TYPE_COLORS.other
                         )}
                       />
                     </Stack>
@@ -192,7 +156,7 @@ const PublicEvents = () => {
                         {formatEventDate(
                           intl.locale,
                           event.startDate,
-                          event.endDate,
+                          event.endDate
                         )}
                       </Typography>
                     </Stack>

@@ -1,10 +1,12 @@
-import { Box, Container, Divider, Grid, Typography } from "@mui/material";
-import { motion } from "framer-motion";
+import { Box, Container, Grid, Typography } from "@mui/material";
 
 import contactLowQualityImage from "@assets/images/254-small.webp";
 import contactHighQualityImage from "@assets/images/254.webp";
+import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import BlurredUpImage from "@components/ui/Image/BlurredUpImage";
+import KanjiWatermark from "@components/ui/KanjiWatermark/KanjiWatermark";
+import PublicPageHeader from "@components/ui/PublicPageHeader/PublicPageHeader";
 
 import AddressMediaItem from "./AddressMediaItem";
 import EmailMediaItem from "./EmailMediaItem";
@@ -12,62 +14,20 @@ import PhoneMediaItem from "./PhoneMediaItem";
 import ScheduleMediaItem from "./ScheduleMediaItem";
 import SocialMediaItem from "./SocialMediaItem";
 
-import {
-  bgKanjiSx,
-  contactBlockSx,
-  contactBlockTitleSx,
-  descriptionSx,
-  dividerSx,
-  eyebrowSx,
-  imageSx,
-  pageHeaderSx,
-  pageKanjiSx,
-  pageTitleSx,
-} from "./Contact.style";
-
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
-
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => (
-  <motion.div
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-40px" }}
-    variants={fadeUp}
-    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
-  >
-    {children}
-  </motion.div>
-);
+import { contactBlockSx, contactBlockTitleSx, imageSx } from "./Contact.style";
 
 const Contact = () => (
   <Box sx={{ position: "relative", overflow: "hidden" }}>
     {/* Background kanji watermark */}
-    <Typography sx={bgKanjiSx} aria-hidden>
-      連
-    </Typography>
+    <KanjiWatermark kanji="連" />
 
     <Container maxWidth="lg" disableGutters>
       {/* ── Page header ─────────────────────────────────────────────────── */}
-      <Box sx={pageHeaderSx}>
-        <FadeIn>
-          <Typography sx={eyebrowSx}>Senshinkan · Romania</Typography>
-          <Typography component="h1" sx={pageTitleSx}>
-            <FormattedMessage id="page.contact.title" />
-          </Typography>
-          <Typography sx={pageKanjiSx}>連絡先</Typography>
-          <Divider sx={dividerSx} />
-          <Typography sx={descriptionSx}>
-            <FormattedMessage id="page.contact.description" />
-          </Typography>
-        </FadeIn>
-      </Box>
+      <PublicPageHeader
+        titleId="page.contact.title"
+        kanji="連絡先"
+        descriptionId="page.contact.description"
+      />
 
       {/* ── Content split ───────────────────────────────────────────────── */}
       <Grid container spacing={{ xs: 4, md: 6 }} alignItems="flex-start">
