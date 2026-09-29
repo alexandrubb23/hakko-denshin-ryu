@@ -1,5 +1,6 @@
 import { Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useIntl } from "react-intl";
 
 import {
   BORDER_COLOR,
@@ -9,16 +10,17 @@ import {
   SURFACE_BG,
   TEXT_MUTED,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
 import { CalendarView } from "./calendarView";
 
 export { CalendarView };
 
-const VIEWS: { value: CalendarView; label: string }[] = [
-  { value: CalendarView.day, label: "Day" },
-  { value: CalendarView.week, label: "Week" },
-  { value: CalendarView.month, label: "Month" },
-  { value: CalendarView.year, label: "Year" },
+const VIEWS: { value: CalendarView; label: IntlMessageID }[] = [
+  { value: CalendarView.day, label: "common.day" },
+  { value: CalendarView.week, label: "common.week" },
+  { value: CalendarView.month, label: "common.month" },
+  { value: CalendarView.year, label: "common.year" },
 ];
 
 interface Props {
@@ -68,6 +70,7 @@ const StyledTabs = styled(Tabs)({
 });
 
 const AttendanceNavBar = ({ view, onChange }: Props) => {
+  const intl = useIntl();
   const activeIndex = VIEWS.findIndex((v) => v.value === view);
 
   return (
@@ -85,7 +88,7 @@ const AttendanceNavBar = ({ view, onChange }: Props) => {
         }}
       >
         {VIEWS.map(({ value, label }) => (
-          <Tab key={value} label={label} />
+          <Tab key={value} label={intl.formatMessage({ id: label })} />
         ))}
       </StyledTabs>
     </NavBarRoot>

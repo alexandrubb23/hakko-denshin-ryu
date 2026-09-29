@@ -9,8 +9,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useIntl } from "react-intl";
 
 import ParticipantsList from "@components/shared/ParticipantsList";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import { useTrainingDayAttendance } from "@features/admin/attendance/hooks/useTrainingDayAttendance";
@@ -27,13 +29,14 @@ interface Props {
 }
 
 const TrainingDayModal = ({ open, date, onClose }: Props) => {
+  const intl = useIntl();
   const { data: students, isLoading: loadingStudents } = useStudents();
   const { data: attendanceData, isLoading: loadingAttendance } =
     useTrainingDayAttendance(date);
   const { mutate: upsert, isPending } = useUpsertTrainingDayAttendance(date);
 
   const recordMap = new Map(
-    attendanceData?.records.map((r) => [r.userId, r.attended]) ?? [],
+    attendanceData?.records.map((r) => [r.userId, r.attended]) ?? []
   );
 
   const isLoading = loadingStudents || loadingAttendance;
@@ -45,12 +48,15 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
     upsert({ studentId, attended });
   };
 
-  const displayDate = new Date(date + "T00:00:00").toLocaleDateString("ro-RO", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const displayDate = new Date(date + "T00:00:00").toLocaleDateString(
+    intl.locale,
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   return (
     <ModalDialog open={open} onClose={onClose} maxWidth="sm">
@@ -58,7 +64,7 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
         <FitnessCenterIcon fontSize="small" />
         <Stack flex={1}>
           <Typography fontWeight={700} component="span">
-            Training Attendance
+            <FormattedMessage id="admin.attendance.trainingDay.title" />
           </Typography>
           <Typography variant="caption" color="text.secondary" component="span">
             {displayDate}
@@ -93,7 +99,7 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
                   disabled={isPending}
                   onClick={() => mark(student.id, true)}
                 >
-                  Yes
+                  <FormattedMessage id="common.yes" />
                 </YesButton>
                 <NoButton
                   size="small"
@@ -102,7 +108,7 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
                   disabled={isPending}
                   onClick={() => mark(student.id, false)}
                 >
-                  No
+                  <FormattedMessage id="common.no" />
                 </NoButton>
               </Stack>
             );
@@ -124,7 +130,7 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
       >
         {isPending && <CircularProgress size={16} sx={{ color: PURPLE }} />}
         <Button onClick={onClose} sx={{ color: "text.secondary" }}>
-          Close
+          <FormattedMessage id="common.close" />
         </Button>
       </Box>
     </ModalDialog>

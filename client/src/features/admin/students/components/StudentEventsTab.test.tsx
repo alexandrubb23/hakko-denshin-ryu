@@ -180,7 +180,7 @@ describe("StudentEventsTab", () => {
     it("renders the formatted start date for each event", () => {
       for (const event of mockEvents) {
         expect(
-          screen.getByText(formatDate(event.startDate)),
+          screen.getByText(formatDate(event.startDate, "en")),
         ).toBeInTheDocument();
       }
     });
@@ -191,9 +191,11 @@ describe("StudentEventsTab", () => {
       }
     });
 
-    it("renders the event type for each event", () => {
+    it("renders the translated event type for each event", () => {
       for (const event of mockEvents) {
-        expect(screen.getByText(event.type)).toBeInTheDocument();
+        expect(
+          screen.getByText(new RegExp(`^${event.type}$`, "i")),
+        ).toBeInTheDocument();
       }
     });
 

@@ -2,6 +2,7 @@ import { useMyRanks } from "@features/student/ranks/hooks/useMyRanks";
 
 import ErrorAlert from "@components/shared/ErrorAlert";
 import InfoAlert from "@components/shared/InfoAlert";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import RankTable from "@features/admin/ranks/components/RankTable";
 
 const noop = () => {};
@@ -12,11 +13,15 @@ const MyRankTab = () => {
   return (
     <>
       {isError && (
-        <ErrorAlert>Failed to load rank history. Please try again.</ErrorAlert>
+        <ErrorAlert>
+          <FormattedMessage id="student.ranks.error" />
+        </ErrorAlert>
       )}
 
       {!isLoading && !isError && ranks?.length === 0 && (
-        <InfoAlert>No ranks assigned yet.</InfoAlert>
+        <InfoAlert>
+          <FormattedMessage id="student.ranks.empty" />
+        </InfoAlert>
       )}
 
       {(isLoading || (ranks && ranks.length > 0)) && (

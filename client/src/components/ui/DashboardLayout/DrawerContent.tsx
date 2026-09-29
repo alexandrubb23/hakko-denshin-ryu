@@ -19,6 +19,7 @@ import {
 import { Link, useLocation } from "react-router";
 
 import LogoIcon from "@assets/images/logo.webp";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import useIsMobile from "@hooks/isMobile";
 import useIsAdmin from "@hooks/useIsAdmin";
 import { Routes } from "@lib/routes";
@@ -28,19 +29,37 @@ import {
   PURPLE_ALPHA_15,
   SKELETON_SX,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
-const NAV_ITEMS = [
-  { label: "Dashboard", path: Routes.dashboard, icon: <DashboardIcon /> },
+const NAV_ITEMS: {
+  labelId: IntlMessageID;
+  path: string;
+  icon: React.ReactElement;
+  adminOnly?: boolean;
+}[] = [
   {
-    label: "Events",
+    labelId: "header.menu.dashboard",
+    path: Routes.dashboard,
+    icon: <DashboardIcon />,
+  },
+  {
+    labelId: "header.menu.events",
     path: Routes.adminEvents,
     icon: <EventIcon />,
     adminOnly: true,
   },
-  { label: "Techniques", path: Routes.techniques, icon: <MenuBookIcon /> },
-  { label: "Kyu Program", path: Routes.kyuProgram, icon: <EmojiEventsIcon /> },
   {
-    label: "Students",
+    labelId: "header.menu.techniques",
+    path: Routes.techniques,
+    icon: <MenuBookIcon />,
+  },
+  {
+    labelId: "header.menu.kyu-program",
+    path: Routes.kyuProgram,
+    icon: <EmojiEventsIcon />,
+  },
+  {
+    labelId: "header.menu.students",
     path: Routes.students,
     icon: <PeopleIcon />,
     adminOnly: true,
@@ -71,7 +90,7 @@ const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
 
   const showAdminItems = isPending || isAdmin;
   const visibleItems = NAV_ITEMS.filter(
-    (item) => !item.adminOnly || showAdminItems,
+    (item) => !item.adminOnly || showAdminItems
   );
 
   return (
@@ -105,7 +124,7 @@ const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
         <Divider />
 
         <List disablePadding>
-          {visibleItems.map(({ label, path, icon }) => {
+          {visibleItems.map(({ labelId, path, icon }) => {
             const active =
               path === Routes.dashboard
                 ? location.pathname === path
@@ -120,7 +139,7 @@ const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
                   sx={SELECTED_SX}
                 >
                   <ListItemIcon sx={{ minWidth: 36 }}>{icon}</ListItemIcon>
-                  <ListItemText primary={label} />
+                  <ListItemText primary={<FormattedMessage id={labelId} />} />
                 </ListItemButton>
               </ListItem>
             );
@@ -136,7 +155,9 @@ const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Sign Out" />
+              <ListItemText
+                primary={<FormattedMessage id="layout.drawer.signOut" />}
+              />
             </ListItemButton>
           </ListItem>
         </List>

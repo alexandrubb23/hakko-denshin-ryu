@@ -1,6 +1,8 @@
 import EditIcon from "@mui/icons-material/Edit";
+import { useIntl } from "react-intl";
 
 import { type StudentRankEntry } from "@api/students";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 
 import StudentRankDialog from "./StudentRankDialog";
 import StudentRankFormFields from "./StudentRankFormFields";
@@ -14,6 +16,7 @@ interface Props {
 }
 
 const EditStudentRankModal = ({ studentId, entry, open, onClose }: Props) => {
+  const intl = useIntl();
   const {
     control,
     register,
@@ -32,12 +35,17 @@ const EditStudentRankModal = ({ studentId, entry, open, onClose }: Props) => {
       onClose={onClose}
       title={
         <>
-          <EditIcon fontSize="small" /> Edit Rank
+          <EditIcon fontSize="small" />{" "}
+          <FormattedMessage id="admin.ranks.edit.title" />
         </>
       }
       onSubmit={handleSubmit(onSubmit)}
       isPending={isPending}
-      submitLabel={isPending ? "Saving…" : "Save Changes"}
+      submitLabel={intl.formatMessage({
+        id: isPending
+          ? "admin.ranks.form.saving"
+          : "admin.ranks.form.saveChanges",
+      })}
       submitDisabled={!isDirty}
     >
       <StudentRankFormFields

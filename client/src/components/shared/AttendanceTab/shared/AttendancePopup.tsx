@@ -1,16 +1,13 @@
 import { CircularProgress, Popover, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useIntl } from "react-intl";
 
 import { type AttendanceRecord } from "@api/attendance";
-import { MONTH_NAMES } from "@constants/dateNames";
+import useDateNames from "@hooks/useDateNames";
 import { BACKDROP_BLUR, BORDER_COLOR, DARK_BG, PURPLE } from "@style/tokens";
 
 import useAttendanceMark from "./useAttendanceMark";
 import YesNoButtons from "./YesNoButtons";
-
-const LABEL_MARK = "Mark attendance:";
-const LABEL_PRESENT = "✓ Present";
-const LABEL_ABSENT = "✗ Absent";
 
 interface Props {
   anchorEl: HTMLElement | null;
@@ -56,6 +53,8 @@ const AttendancePopup = ({
   records,
   onClose,
 }: Props) => {
+  const intl = useIntl();
+  const { MONTH_NAMES } = useDateNames();
   const open = Boolean(anchorEl) && date !== null;
 
   const year = date?.getUTCFullYear() ?? 0;
@@ -84,11 +83,14 @@ const AttendancePopup = ({
             {date.getUTCDate()} {MONTH_NAMES[date.getUTCMonth()]}
           </DateLabel>
           <StatusCaption variant="caption">
-            {attended === null
-              ? LABEL_MARK
-              : attended
-                ? LABEL_PRESENT
-                : LABEL_ABSENT}
+            {intl.formatMessage({
+              id:
+                attended === null
+                  ? "attendance.popup.mark"
+                  : attended
+                    ? "attendance.popup.present"
+                    : "attendance.popup.absent",
+            })}
           </StatusCaption>
           {isPending ? (
             <PurpleSpinner size={20} />

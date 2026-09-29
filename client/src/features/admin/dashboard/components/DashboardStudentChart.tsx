@@ -7,8 +7,10 @@ import {
 } from "chart.js";
 import { useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { useIntl } from "react-intl";
 
 import { type AttendancePeriod, type DashboardStudent } from "@api/dashboard";
+import { TRAINING_DAYS } from "@constants/trainingSchedule";
 import { useDashboardStudents } from "@features/admin/dashboard/hooks/useDashboardStudents";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -34,6 +36,7 @@ import { BORDER_COLOR, PURPLE, SKELETON_SX } from "@style/tokens";
 
 import BeltChipLabel from "@components/shared/BeltChipLabel";
 import ChipFilterRow from "@components/shared/ChipFilterRow";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import TrainingDayModal from "@features/admin/attendance/components/TrainingDayModal";
 import {
   ChartHeader,
@@ -48,8 +51,6 @@ import PeriodAttendanceFilter, {
 } from "./PeriodAttendanceFilter";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
-
-const TRAINING_DAYS = new Set([2, 4, 6]); // Tue, Thu, Sat
 
 const BELT_COLORS: Record<string, string> = {
   white: BELT_WHITE,
@@ -91,6 +92,7 @@ function filterStudents(
 }
 
 const DashboardStudentChart = () => {
+  const intl = useIntl();
   const [period, setPeriod] = useState<AttendancePeriod>("all");
   const [rankFilter, setRankFilter] = useState<string>(ALL_RANK_FILTER);
   const [attendanceFilter, setAttendanceFilter] = useState<string>(
@@ -99,7 +101,7 @@ const DashboardStudentChart = () => {
   const [trainingModalOpen, setTrainingModalOpen] = useState(false);
 
   const today = new Date();
-  const isTodayTrainingDay = TRAINING_DAYS.has(today.getDay());
+  const isTodayTrainingDay = TRAINING_DAYS.includes(today.getDay());
   const todayStr = today.toLocaleDateString("en-CA"); // "YYYY-MM-DD"
 
   const { data, isLoading, isFetching } = useDashboardStudents(period);
@@ -138,10 +140,18 @@ const DashboardStudentChart = () => {
           label: (ctx: import("chart.js").TooltipItem<"bar">) => {
             const count = ctx.parsed.x ?? 0;
             const student = filtered[ctx.dataIndex];
-            const rank = student?.rankName ?? "Unranked";
+            const rank =
+              student?.rankName ??
+              intl.formatMessage({ id: "admin.dashboard.students.unranked" });
             return [
-              ` ${count} session${count !== 1 ? "s" : ""} attended`,
-              ` Rank: ${rank}`,
+              ` ${intl.formatMessage(
+                { id: "admin.dashboard.students.tooltip.sessions" },
+                { count }
+              )}`,
+              ` ${intl.formatMessage(
+                { id: "admin.dashboard.students.tooltip.rank" },
+                { rank }
+              )}`,
             ];
           },
         },
@@ -179,14 +189,26 @@ const DashboardStudentChart = () => {
 
   const rankOptions = useMemo(
     () => [
-      { value: ALL_RANK_FILTER, label: "All" },
+      {
+        value: ALL_RANK_FILTER,
+        label: intl.formatMessage({ id: "common.all" }),
+      },
       ...(data?.ranks ?? []).map((rank) => ({
         value: String(rank.id),
         label: <BeltChipLabel belt={rank.belt} name={rank.name} />,
       })),
-      ...(hasUnranked ? [{ value: UNRANKED_FILTER, label: "Unranked" }] : []),
+      ...(hasUnranked
+        ? [
+            {
+              value: UNRANKED_FILTER,
+              label: intl.formatMessage({
+                id: "admin.dashboard.students.unranked",
+              }),
+            },
+          ]
+        : []),
     ],
-    [data?.ranks, hasUnranked]
+    [data?.ranks, hasUnranked, intl]
   );
 
   const chartHeight = Math.max(120, filtered.length * 36);
@@ -210,11 +232,14 @@ const DashboardStudentChart = () => {
     >
       <ChartHeader sx={{ flexWrap: "wrap", rowGap: { xs: 1.5, sm: 0 } }}>
         <ChartTitle variant="caption">
-          Students — Attendance Overview
+          <FormattedMessage id="admin.dashboard.students.title" />
         </ChartTitle>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <StudentCountBadge>
-            {filtered.length} student{filtered.length !== 1 ? "s" : ""}
+            <FormattedMessage
+              id="admin.dashboard.students.count"
+              values={{ count: filtered.length }}
+            />
           </StudentCountBadge>
           {/* Desktop: inline with badge */}
           {isTodayTrainingDay && (
@@ -227,7 +252,7 @@ const DashboardStudentChart = () => {
                 display: { xs: "none", sm: "inline-flex" },
               }}
             >
-              Training Day
+              <FormattedMessage id="admin.dashboard.students.trainingDay" />
             </Button>
           )}
         </Box>
@@ -245,7 +270,7 @@ const DashboardStudentChart = () => {
               fontSize: "0.75rem",
             }}
           >
-            Training Day
+            <FormattedMessage id="admin.dashboard.students.trainingDay" />
           </Button>
         )}
       </ChartHeader>
@@ -282,7 +307,9 @@ const DashboardStudentChart = () => {
               labels: chartData.labels,
               datasets: [
                 {
-                  label: "Attended sessions",
+                  label: intl.formatMessage({
+                    id: "admin.dashboard.students.dataset",
+                  }),
                   data: chartData.values,
                   backgroundColor: chartData.colors,
                   borderRadius: 4,

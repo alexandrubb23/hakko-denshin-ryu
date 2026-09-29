@@ -1,6 +1,8 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
+import FadeIn from "@components/ui/FadeIn/FadeIn";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import BlurredUpImage from "@components/ui/Image/BlurredUpImage";
 
 import contactLowQualityImage from "@assets/images/--58-small.webp";
@@ -15,6 +17,8 @@ import hakkoRyuLowQualityImage from "@assets/images/53-small.webp";
 import hakkoRyuHighQualityImage from "@assets/images/53.webp";
 import goshinTaisoLowQualityImage from "@assets/images/89-small.webp";
 import goshinTaisoHighQualityImage from "@assets/images/89.webp";
+
+import { EASE_OUT } from "@constants/animationsTiming";
 
 import {
   bodyTextSx,
@@ -37,31 +41,6 @@ import {
   sectionWrapperSx,
 } from "./HakkoRyu.style";
 
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => (
-  <motion.div
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-40px" }}
-    variants={fadeUp}
-    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
-  >
-    {children}
-  </motion.div>
-);
-
 const HakkoRyu = () => (
   <>
     {/* ── Hero ─────────────────────────────────────────────────────────── */}
@@ -77,13 +56,13 @@ const HakkoRyu = () => (
           transition={{ duration: 0.9, ease: EASE_OUT }}
         >
           <Typography sx={heroEyebrowSx}>
-            Founded 1941 · Okuyama Ryuho
+            <FormattedMessage id="page.hakko-ryu.hero.eyebrow" />
           </Typography>
           <Typography component="h1" sx={heroTitleSx}>
             Hakko Ryu
           </Typography>
           <Typography component="p" sx={heroSubtitleSx}>
-            The Eighth Light
+            <FormattedMessage id="page.hakko-ryu.hero.subtitle" />
           </Typography>
         </motion.div>
       </Box>
@@ -103,22 +82,10 @@ const HakkoRyu = () => (
               <Divider sx={sectionDividerSx} />
 
               <Typography sx={bodyTextSx}>
-                <strong>Hakkō-ryū</strong> (八光流) is a school of jujutsu
-                founded in <strong>1941</strong> by{" "}
-                <strong>Okuyama Ryuho</strong> (1901–1987), descendant of{" "}
-                <strong>Daito-ryu</strong> and practitioner of{" "}
-                <strong>shiatsu</strong>. The name translates as{" "}
-                <strong>"The Style of the Eighth Light"</strong>, referring to
-                the <strong>ultraviolet band</strong> — invisible yet powerful,
-                like the techniques themselves.
+                <FormattedMessage id="page.hakko-ryu.origins.p1" />
               </Typography>
               <Typography sx={bodyTextSx}>
-                This <strong>humanitarian martial technique</strong> focuses on{" "}
-                <strong>qi meridian points</strong> sensitive to pain, allowing
-                defenders to create sharp distracting pain without causing
-                serious injury. True efficiency is{" "}
-                <strong>invisible to the eyes</strong>, just as ultraviolet rays
-                are invisible but very powerful.
+                <FormattedMessage id="page.hakko-ryu.origins.p2" />
               </Typography>
             </FadeIn>
           </Grid>
@@ -156,23 +123,10 @@ const HakkoRyu = () => (
               <Divider sx={sectionDividerSx} />
 
               <Typography sx={bodyTextSx}>
-                <strong>Hakko Denshin Ryu Jujutsu</strong> (八光伝心流柔術) was
-                founded in <strong>1997</strong> by{" "}
-                <strong>Yasuhiro Irie</strong>,{" "}
-                <strong>Michael LaMonica</strong>, and{" "}
-                <strong>Antonio Garcia</strong> — all high-ranking Hakko Ryu
-                practitioners. The name means{" "}
-                <strong>"Heart and Spirit of Hakko Ryu"</strong>, known in Japan
-                as <strong>Kokodo</strong> (皇光道).
+                <FormattedMessage id="page.hakko-ryu.denshin.p1" />
               </Typography>
               <Typography sx={bodyTextSx}>
-                Each founder became a director (<strong>"Soke"</strong>) in
-                their respective regions (<strong>Japan</strong>,{" "}
-                <strong>USA</strong>, <strong>Europe</strong>) and formed the{" "}
-                <strong>Kokodo Renmei</strong> federation. Other descendants
-                include <strong>Dentokan Jujutsu</strong> founded by Roy Hobbs,
-                and <strong>Hakko Densho Ryu</strong> founded by Palumbo in
-                Colorado.
+                <FormattedMessage id="page.hakko-ryu.denshin.p2" />
               </Typography>
             </FadeIn>
           </Grid>
@@ -188,36 +142,18 @@ const HakkoRyu = () => (
             <FadeIn>
               <Typography sx={sectionNumberSx}>03</Typography>
               <Typography sx={pullQuoteSx}>
-                "Pain as a tool of distraction, blended with humility and
-                harmony."
+                <FormattedMessage id="page.hakko-ryu.philosophy.quote" />
               </Typography>
               <Divider sx={sectionDividerSx} />
 
               <Typography sx={bodyTextSx}>
-                <strong>Hakko Denshin Ryu</strong> is based on the same
-                fundamental principles as traditional Hakko Ryu, enriched with
-                philosophies that promote not only{" "}
-                <strong>physical strength</strong> but also{" "}
-                <strong>mental resilience</strong> and{" "}
-                <strong>personal growth</strong>.
+                <FormattedMessage id="page.hakko-ryu.philosophy.p1" />
               </Typography>
               <Typography sx={bodyTextSx}>
-                Our curriculum incorporates both{" "}
-                <strong>unarmed techniques</strong> and training with
-                traditional Japanese weapons — the <strong>tambo</strong>,{" "}
-                <strong>jo</strong>, <strong>katana</strong>,{" "}
-                <strong>tanto</strong>, <strong>sensu</strong>,{" "}
-                <strong>kasa</strong>, and many more. These tools symbolize the{" "}
-                <strong>adaptability</strong> and <strong>grace</strong>{" "}
-                inherent in Hakko Denshin Ryu.
+                <FormattedMessage id="page.hakko-ryu.philosophy.p2" />
               </Typography>
               <Typography sx={bodyTextSx}>
-                At the heart of our practice are <strong>datsuryoku</strong>{" "}
-                (effortless power) and <strong>kuzushi</strong> (balance
-                breaking). Hakko Denshin Ryu is a <strong>philosophy</strong>{" "}
-                that cultivates <strong>confident, humble individuals</strong>{" "}
-                who embody <strong>respect</strong> and{" "}
-                <strong>tradition</strong> in all areas of life.
+                <FormattedMessage id="page.hakko-ryu.philosophy.p3" />
               </Typography>
             </FadeIn>
           </Grid>
@@ -252,23 +188,10 @@ const HakkoRyu = () => (
               <Divider sx={sectionDividerSx} />
 
               <Typography sx={bodyTextSx}>
-                The term <strong>Ju-Jutsu</strong> (柔術) refers to disciplines
-                whose efficiency lies in an{" "}
-                <strong>appropriate and precise gesture</strong> whatever the
-                situation may be — not only a{" "}
-                <strong>self-defense method</strong> traceable to the{" "}
-                <strong>Samurai</strong> (侍) period, but also a way of{" "}
-                <strong>improving oneself</strong> through traditional practice.
+                <FormattedMessage id="page.hakko-ryu.jujutsu.p1" />
               </Typography>
               <Typography sx={bodyTextSx}>
-                <strong>Shirobei Akiyama</strong>, a doctor from Nagasaki,
-                observed a <strong>willow tree</strong> during a snowy winter.
-                Its branches bent under the weight of the snow, then sprang
-                back. The <strong>cherry tree</strong>, which resisted, had its
-                branches broken. From this, Akiyama founded{" "}
-                <strong>Yoshin Ryu</strong> (楊心流) — the{" "}
-                <strong>non-resistance principle</strong> that would shape all
-                jujutsu that followed.
+                <FormattedMessage id="page.hakko-ryu.jujutsu.p2" />
               </Typography>
             </FadeIn>
           </Grid>
@@ -291,22 +214,12 @@ const HakkoRyu = () => (
           >
             <Grid size={{ xs: 12, md: 6 }}>
               <Typography sx={bodyTextSx}>
-                Around <strong>1600</strong>, after centuries of wars, a long
-                era of <strong>relative peace</strong> was established in{" "}
-                <strong>Edo</strong>. Influenced by <strong>Bushido</strong>{" "}
-                (武士道) and spiritual values, Ju-Jutsu schools became{" "}
-                <strong>Budo</strong> (武道: the Path of Combat) — a support for{" "}
-                <strong>spiritual improvement</strong>.
+                <FormattedMessage id="page.hakko-ryu.jujutsu.p3" />
               </Typography>
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <Typography sx={bodyTextSx}>
-                More than defeating opponents, <strong>Ju-Jutsu</strong>{" "}
-                develops <strong>observation</strong>, <strong>control</strong>,{" "}
-                <strong>stability</strong>, <strong>adaptability</strong>,{" "}
-                <strong>respect</strong>, and <strong>harmony</strong>. This is
-                the challenge traditional Ju-Jutsu schools offer in our modern
-                world.
+                <FormattedMessage id="page.hakko-ryu.jujutsu.p4" />
               </Typography>
             </Grid>
           </Grid>
@@ -320,7 +233,7 @@ const HakkoRyu = () => (
             05 &amp; 06
           </Typography>
           <Typography component="h2" sx={{ ...sectionTitleSx, mb: 4 }}>
-            Companion Practices
+            <FormattedMessage id="page.hakko-ryu.companion.title" />
           </Typography>
 
           <Grid container spacing={3}>
@@ -344,11 +257,7 @@ const HakkoRyu = () => (
                   </Typography>
                   <Typography sx={sectionKanjiSx}>指圧</Typography>
                   <Typography sx={bodyTextSx}>
-                    <strong>Shi</strong> (指) means <strong>"finger"</strong>{" "}
-                    and <strong>atsu</strong> (圧) means{" "}
-                    <strong>"pressure"</strong>. Shiatsu aims at maintaining or
-                    recovering the <strong>energetic balance</strong> our body
-                    needs to be healthy.
+                    <FormattedMessage id="page.hakko-ryu.companion.shiatsu.description" />
                   </Typography>
                 </Box>
               </Box>
@@ -374,12 +283,7 @@ const HakkoRyu = () => (
                   </Typography>
                   <Typography sx={sectionKanjiSx}>護身体操</Typography>
                   <Typography sx={bodyTextSx}>
-                    <strong>Goshin</strong> (護身) means{" "}
-                    <strong>"protection"</strong> and <strong>taiso</strong>{" "}
-                    (体操) means <strong>"gymnastics"</strong>. Goshin Taiso is
-                    a gymnastic system to maintain the equilibrium of forces in
-                    our body — practiced alone for{" "}
-                    <strong>energetic evaluation</strong>.
+                    <FormattedMessage id="page.hakko-ryu.companion.goshin-taiso.description" />
                   </Typography>
                 </Box>
               </Box>

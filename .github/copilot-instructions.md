@@ -161,6 +161,44 @@ const { from, to } = parseYearMonthParams(
 const file = requireFile(req); // throws if no file uploaded
 ```
 
+### Server Repositories (`server/src/repositories/`)
+
+Prisma query logic lives exclusively in repository files, never in route handlers.
+
+#### Repository ownership
+
+| Repository                 | Owns                                                                              |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| `students.repository.ts`   | All student-related Prisma queries — the canonical source for student data        |
+| `me.repository.ts`         | `updateUserImageById` only; all read exports delegate to `students.repository.ts` |
+| `ranks.repository.ts`      | Rank catalogue queries                                                            |
+| `events.repository.ts`     | Event CRUD and participation                                                      |
+| `attendance.repository.ts` | Admin attendance queries                                                          |
+| `dashboard.repository.ts`  | Aggregate / stats queries                                                         |
+
+#### Delegation pattern in `me.repository.ts`
+
+The `me` namespace is a view over student data scoped to the authenticated user. All read operations **delegate** to `students.repository.ts` — do not duplicate the Prisma query:
+
+```ts
+// ✓ delegate — never copy-paste the Prisma query
+export const findMyAttendance = (query: AttendanceQuery) =>
+  findStudentAttendance(query);
+
+export const findMyEvents = (userId: string) => findStudentEvents(userId);
+
+export const findUserImageById = (userId: string) =>
+  findStudentImageById(userId);
+```
+
+#### Shared Prisma selects
+
+`RANK_ENTRY_SELECT` is exported from `students.repository.ts`. Import it wherever the same select shape is needed — **never redeclare it inline**:
+
+```ts
+import { RANK_ENTRY_SELECT } from "../repositories/students.repository.js";
+```
+
 ### Function Parameter Convention
 
 Functions must have **at most two parameters**. When a function requires more than two arguments, consolidate them into a single options object:
@@ -205,11 +243,65 @@ Apply this rule consistently to repository functions, utilities, and any other m
 - Two locales: `ro` (default) and `en`
 - Message files: `client/src/locales/ro.json` and `en.json`
 - Language state persisted via Zustand (`useLangStore`) with localStorage key `lang-storage`
+- The Jarene font (theme default: headings h1–h6, subtitles, `caption`, `overline`, buttons, tabs, chips, tooltips, dialog titles, form helper text, and `*.style.ts` blocks using `Jarene`) has **no Romanian diacritics**. Romanian values rendered in Jarene must be written without diacritics (ă→a, â/î→a/i, ș→s, ț→t); Inter text (`body1`/`body2`, inputs, alerts, tables) keeps them. For runtime text in Jarene (e.g. month/day names from `useDateNames`) use `stripDiacritics` from `@utils/string`.
 
 ### Path Aliases (client)
 
 All imports use Vite aliases resolving to `client/src/`:
-`@api`, `@assets`, `@components`, `@hooks`, `@providers`, `@utils`, `@style`, `@routes`, `@store`, `@types`, `@locales`, `@pages`, `@lib`, `@test`
+`@api`, `@assets`, `@components`, `@hooks`, `@providers`, `@utils`, `@style`, `@routes`, `@store`, `@types`, `@locales`, `@pages`, `@lib`, `@test`, `@features`
+
+### Component Architecture
+
+Client components are organised into three areas:
+
+| Directory             | Contents                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `components/shared/`  | Cross-domain UI reused by both admin and student features (e.g. `EventsTab`, `AttendanceTab`, `AttendedChip`, etc.) |
+| `components/ui/`      | Generic layout and shell components (`DashboardLayout`, `Header`, `Footer`, `SkeletonText`, `Spinner`, etc.)        |
+| `features/admin/`     | Admin-only pages and components                                                                                     |
+| `features/student/`   | Student-only pages and components                                                                                   |
+| `features/public/`    | Unauthenticated pages                                                                                               |
+| `features/auth/`      | Authentication pages (login, set-password, etc.)                                                                    |
+| `features/dashboard/` | Shared dashboard entry point                                                                                        |
+
+#### `EventsTab` shared component
+
+`client/src/components/shared/EventsTab.tsx` is the single component for rendering a student's event list. It handles all three display states (loading, empty, rows). Use it in any context — admin or student — instead of duplicating the UI.
+
+```tsx
+import EventsTab from "@components/shared/EventsTab";
+
+// thin wrapper — just supply the query result
+const StudentEventsTab = ({ studentId }: { studentId: string }) => {
+  const { data: events, isLoading, isError } = useStudentEvents(studentId);
+  return <EventsTab events={events} isLoading={isLoading} isError={isError} />;
+};
+```
+
+| Prop        | Type                          | Description                                   |
+| ----------- | ----------------------------- | --------------------------------------------- |
+| `events`    | `StudentEvent[] \| undefined` | Data from the query (undefined while loading) |
+| `isLoading` | `boolean`                     | Shows skeleton rows while true                |
+| `isError`   | `boolean`                     | Shows an error message when true              |
+
+#### `readOnly` prop on attendance views
+
+All four calendar views (`DayView`, `WeekView`, `MonthView`, `YearView`) accept a `readOnly` boolean prop:
+
+- `readOnly={false}` (default) — admin context: uses admin data hooks, shows Yes/No attendance buttons / `AttendancePopup`
+- `readOnly={true}` — student context: uses student (`useMyAttendance*`) data hooks, shows `AttendedChip` instead of controls, hides the popup
+
+`YearView` additionally requires a `studentId` prop even in read-only mode (pass `""` — the student hook ignores it):
+
+```tsx
+// student attendance tab — pass readOnly; studentId is unused but required
+<YearView studentId="" cursor={cursor} onCursorChange={handleCursorChange} readOnly />
+
+// admin attendance tab — default, no readOnly
+<YearView studentId={student.id} cursor={cursor} onCursorChange={handleCursorChange} />
+```
+
+`YearView` implements the dual-hook pattern internally: both `useAttendanceByYear` (admin) and `useMyAttendanceByYear` (student) are called, but the admin hook is disabled via `enabled: !readOnly`. TanStack Query handles the disabled state cleanly — do not replicate this pattern externally.
 
 ## UI Design Tokens
 

@@ -2,7 +2,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@mui/material/styles";
 import { render } from "@testing-library/react";
 import type { ReactElement } from "react";
+import { IntlProvider } from "react-intl";
 import { MemoryRouter } from "react-router";
+
+import { messages } from "../i18n/messages";
 
 import theme from "@style/theme";
 
@@ -22,11 +25,13 @@ const renderUi = (
   });
 
   return render(
-    <MemoryRouter initialEntries={initialEntries}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>{ui}</ThemeProvider>
-      </QueryClientProvider>
-    </MemoryRouter>,
+    <IntlProvider locale="en" messages={messages.en}>
+      <MemoryRouter initialEntries={initialEntries}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>{ui}</ThemeProvider>
+        </QueryClientProvider>
+      </MemoryRouter>
+    </IntlProvider>,
   );
 };
 

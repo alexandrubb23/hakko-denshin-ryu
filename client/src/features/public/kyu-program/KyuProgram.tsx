@@ -1,3 +1,5 @@
+import { useIntl } from "react-intl";
+
 import { BELT_IMAGES } from "@assets/beltImages";
 import TabbedContent from "@components/shared/TabbedPageLayout/TabbedContent";
 
@@ -14,15 +16,16 @@ import {
 } from "./KyuProgram.style";
 
 const KyuProgram = () => {
+  const intl = useIntl();
   const { data: levels, isLoading, isError } = useKyuProgram();
   const { activeTabIndex, handleTabChange } = useUrlTab(levels, "level");
 
   return (
     <TabbedPageLayout
-      title="Kyu Program"
+      title={intl.formatMessage({ id: "page.kyu-program.title" })}
       isLoading={isLoading}
       isError={isError}
-      errorMessage="Failed to load kyu program. Please try again."
+      errorMessage={intl.formatMessage({ id: "page.kyu-program.error" })}
     >
       {levels && (
         <TabbedContent
@@ -34,7 +37,10 @@ const KyuProgram = () => {
             <TabLabelWrapper>
               <BeltImage
                 src={BELT_IMAGES[level.belt]}
-                alt={`${level.belt} belt`}
+                alt={intl.formatMessage(
+                  { id: "page.kyu-program.belt.alt" },
+                  { belt: level.belt },
+                )}
               />
               {level.shortName}
             </TabLabelWrapper>

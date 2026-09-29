@@ -1,6 +1,7 @@
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import { Box, Button } from "@mui/material";
 
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { BORDER_COLOR, PURPLE, PURPLE_ALPHA_08 } from "@style/tokens";
 
 interface Props {
@@ -26,7 +27,7 @@ const NextRankButton = ({ onClick }: Props) => (
         },
       }}
     >
-      Next Rank
+      <FormattedMessage id="student.ranks.nextRank" />
     </Button>
   </Box>
 );

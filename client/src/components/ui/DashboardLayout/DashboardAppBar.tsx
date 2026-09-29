@@ -1,5 +1,6 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box, Skeleton, Typography } from "@mui/material";
+import { useIntl } from "react-intl";
 import { Link } from "react-router";
 
 import LogoIcon from "@assets/images/logo.webp";
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const DashboardAppBar = ({ onMenuClick }: Props) => {
+  const intl = useIntl();
   const { isPending } = authClient.useSession();
 
   return (
@@ -25,7 +27,9 @@ const DashboardAppBar = ({ onMenuClick }: Props) => {
         <MenuButton
           edge="start"
           onClick={onMenuClick}
-          aria-label="open navigation"
+          aria-label={intl.formatMessage({
+            id: "layout.appBar.openNavigation",
+          })}
         >
           <MenuIcon />
         </MenuButton>

@@ -10,8 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import type { UseMutationResult } from "@tanstack/react-query";
+import { useIntl } from "react-intl";
 
 import { type StudentRankEntry } from "@api/students";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import SkeletonText from "@components/ui/SkeletonText/SkeletonText";
 import { SUCCESS, SUCCESS_ALPHA_10 } from "@style/status.tokens";
 import {
@@ -48,134 +50,145 @@ const StudentCard = ({
   user,
   isLoading,
   isError,
-  errorMessage = "Failed to load profile. Please try again.",
+  errorMessage,
   uploadMutation,
   latestRank,
   isRankLoading,
   children,
-}: Props) => (
-  <Paper
-    elevation={0}
-    sx={{
-      backgroundColor: SURFACE_BG,
-      border: `1px solid ${BORDER_COLOR}`,
-      borderRadius: 3,
-      backdropFilter: BACKDROP_BLUR,
-      p: 4,
-    }}
-  >
-    {isError ? (
-      <Typography color="error">{errorMessage}</Typography>
-    ) : (
-      <Stack spacing={3}>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          alignItems={{ xs: "center", sm: "center" }}
-          spacing={2.5}
-          sx={{ textAlign: { xs: "center", sm: "left" } }}
-        >
-          <StudentAvatar
-            studentId={user?.id ?? ""}
-            name={user?.name}
-            imageUrl={user?.image}
-            isLoading={isLoading}
-            uploadMutation={uploadMutation}
-          />
+}: Props) => {
+  const intl = useIntl();
 
-          <Box>
-            <SkeletonText
-              isLoading={isLoading}
-              skeletonWidth={180}
-              variant="h5"
-              fontWeight={700}
-            >
-              {user?.name}
-            </SkeletonText>
-            <SkeletonText
-              isLoading={isLoading}
-              skeletonWidth={220}
-              variant="body2"
-              color="text.secondary"
-              mt={0.5}
-            >
-              {user?.email}
-            </SkeletonText>
-          </Box>
-
-          <StudentCurrentRank
-            latestRank={latestRank}
-            isLoading={isRankLoading}
-          />
-        </Stack>
-
-        <Divider sx={{ borderColor: BORDER_COLOR }} />
-
-        <Stack spacing={2}>
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        backgroundColor: SURFACE_BG,
+        border: `1px solid ${BORDER_COLOR}`,
+        borderRadius: 3,
+        backdropFilter: BACKDROP_BLUR,
+        p: 4,
+      }}
+    >
+      {isError ? (
+        <Typography color="error">
+          {errorMessage ??
+            intl.formatMessage({ id: "admin.students.card.error" })}
+        </Typography>
+      ) : (
+        <Stack spacing={3}>
           <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
+            direction={{ xs: "column", sm: "row" }}
+            alignItems={{ xs: "center", sm: "center" }}
+            spacing={2.5}
+            sx={{ textAlign: { xs: "center", sm: "left" } }}
           >
-            <Typography variant="body2" color="text.secondary">
-              Email verification
-            </Typography>
-            {isLoading ? (
-              <Skeleton
-                variant="rounded"
-                width={90}
-                height={24}
-                sx={SKELETON_SX}
-              />
-            ) : user?.emailVerified ? (
-              <Chip
-                icon={<CheckCircleOutlineIcon sx={{ fontSize: 16 }} />}
-                label="Verified"
-                size="small"
-                sx={{
-                  color: SUCCESS,
-                  borderColor: SUCCESS,
-                  backgroundColor: SUCCESS_ALPHA_10,
-                }}
-                variant="outlined"
-              />
-            ) : (
-              <Chip
-                icon={<RadioButtonUncheckedIcon sx={{ fontSize: 16 }} />}
-                label="Not verified"
-                size="small"
-                sx={{ color: "text.disabled", borderColor: BORDER_COLOR }}
-                variant="outlined"
-              />
-            )}
+            <StudentAvatar
+              studentId={user?.id ?? ""}
+              name={user?.name}
+              imageUrl={user?.image}
+              isLoading={isLoading}
+              uploadMutation={uploadMutation}
+            />
+
+            <Box>
+              <SkeletonText
+                isLoading={isLoading}
+                skeletonWidth={180}
+                variant="h5"
+                fontWeight={700}
+              >
+                {user?.name}
+              </SkeletonText>
+              <SkeletonText
+                isLoading={isLoading}
+                skeletonWidth={220}
+                variant="body2"
+                color="text.secondary"
+                mt={0.5}
+              >
+                {user?.email}
+              </SkeletonText>
+            </Box>
+
+            <StudentCurrentRank
+              latestRank={latestRank}
+              isLoading={isRankLoading}
+            />
           </Stack>
 
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="body2" color="text.secondary">
-              Member since
-            </Typography>
-            <SkeletonText
-              isLoading={isLoading}
-              skeletonWidth={100}
-              variant="body2"
-            >
-              {user?.createdAt && new Date(user.createdAt).toLocaleDateString()}
-            </SkeletonText>
-          </Stack>
-        </Stack>
+          <Divider sx={{ borderColor: BORDER_COLOR }} />
 
-        {children && (
-          <>
-            <Divider sx={{ borderColor: BORDER_COLOR }} />
-            {children}
-          </>
-        )}
-      </Stack>
-    )}
-  </Paper>
-);
+          <Stack spacing={2}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="body2" color="text.secondary">
+                <FormattedMessage id="admin.students.card.emailVerification" />
+              </Typography>
+              {isLoading ? (
+                <Skeleton
+                  variant="rounded"
+                  width={90}
+                  height={24}
+                  sx={SKELETON_SX}
+                />
+              ) : user?.emailVerified ? (
+                <Chip
+                  icon={<CheckCircleOutlineIcon sx={{ fontSize: 16 }} />}
+                  label={intl.formatMessage({
+                    id: "admin.students.card.verified",
+                  })}
+                  size="small"
+                  sx={{
+                    color: SUCCESS,
+                    borderColor: SUCCESS,
+                    backgroundColor: SUCCESS_ALPHA_10,
+                  }}
+                  variant="outlined"
+                />
+              ) : (
+                <Chip
+                  icon={<RadioButtonUncheckedIcon sx={{ fontSize: 16 }} />}
+                  label={intl.formatMessage({
+                    id: "admin.students.card.notVerified",
+                  })}
+                  size="small"
+                  sx={{ color: "text.disabled", borderColor: BORDER_COLOR }}
+                  variant="outlined"
+                />
+              )}
+            </Stack>
+
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="body2" color="text.secondary">
+                <FormattedMessage id="admin.students.card.memberSince" />
+              </Typography>
+              <SkeletonText
+                isLoading={isLoading}
+                skeletonWidth={100}
+                variant="body2"
+              >
+                {user?.createdAt && intl.formatDate(user.createdAt)}
+              </SkeletonText>
+            </Stack>
+          </Stack>
+
+          {children && (
+            <>
+              <Divider sx={{ borderColor: BORDER_COLOR }} />
+              {children}
+            </>
+          )}
+        </Stack>
+      )}
+    </Paper>
+  );
+};
 
 export default StudentCard;

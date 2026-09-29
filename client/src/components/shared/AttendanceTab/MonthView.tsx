@@ -4,7 +4,6 @@ import { CircularProgress, IconButton, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { type AttendanceRecord } from "@api/attendance";
-import { DAY_HEADERS, MONTH_NAMES } from "@constants/dateNames";
 import {
   formatDateKey,
   getCalendarGrid,
@@ -12,12 +11,14 @@ import {
   isTrainingDay,
   toUtcDate,
 } from "@constants/trainingSchedule";
+import useDateNames from "@hooks/useDateNames";
 import {
   BORDER_COLOR,
   PURPLE,
   PURPLE_ALPHA_30,
   SURFACE_BG,
 } from "@style/tokens";
+import { stripDiacritics } from "@utils/string";
 
 import AttendedChip from "../AttendedChip";
 import useAttendanceMark from "./shared/useAttendanceMark";
@@ -163,6 +164,7 @@ const MonthView = ({
   records,
   readOnly,
 }: Props) => {
+  const { DAY_HEADERS, MONTH_NAMES } = useDateNames();
   const year = cursor.getUTCFullYear();
   const month = cursor.getUTCMonth() + 1;
   const today = getLatestTrainingDay();
@@ -170,17 +172,13 @@ const MonthView = ({
 
   const prevMonth = () => {
     onCursorChange(
-      toUtcDate(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, 1),
+      toUtcDate(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1, 1)
     );
   };
 
   const nextMonth = () => {
     onCursorChange(
-      toUtcDate(
-        month === 12 ? year + 1 : year,
-        month === 12 ? 1 : month + 1,
-        1,
-      ),
+      toUtcDate(month === 12 ? year + 1 : year, month === 12 ? 1 : month + 1, 1)
     );
   };
 
@@ -195,7 +193,7 @@ const MonthView = ({
           <ChevronLeftIcon />
         </NavIconButton>
         <MonthTitle variant="h6">
-          {MONTH_NAMES[month - 1]} {year}
+          {stripDiacritics(MONTH_NAMES[month - 1])} {year}
         </MonthTitle>
         <NavIconButton onClick={nextMonth} disabled={isNextDisabled}>
           <ChevronRightIcon />
@@ -205,7 +203,7 @@ const MonthView = ({
       <DayHeadersGrid>
         {DAY_HEADERS.map((h) => (
           <DayHeaderText key={h} variant="caption">
-            {h}
+            {stripDiacritics(h)}
           </DayHeaderText>
         ))}
       </DayHeadersGrid>
@@ -225,7 +223,7 @@ const MonthView = ({
             />
           ) : (
             <EmptyCell key={`empty-${i}`} />
-          ),
+          )
         )}
       </CalendarGrid>
     </MonthViewRoot>

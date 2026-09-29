@@ -1,8 +1,10 @@
 import { type ComponentType } from "react";
 
 import { type AttendanceRecord } from "@api/attendance";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { useAttendanceByMonth } from "@features/admin/attendance/hooks/useAttendance";
 
+import ErrorAlert from "../ErrorAlert";
 import AttendanceChart from "./AttendanceChart";
 import DayView from "./DayView";
 import MonthView from "./MonthView";
@@ -16,7 +18,6 @@ import { CalendarView } from "./shared/calendarView";
 import useAttendanceTabParams from "./shared/useAttendanceTabParams";
 import WeekView from "./WeekView";
 import YearView from "./YearView";
-import ErrorAlert from "../ErrorAlert";
 
 interface Props {
   studentId: string;
@@ -62,7 +63,7 @@ const StudentAttendanceTab = ({ studentId }: Props) => {
 
       {isError && view !== CalendarView.year && (
         <ErrorAlert>
-          Failed to load attendance data. Please try again.
+          <FormattedMessage id="attendance.error.load" />
         </ErrorAlert>
       )}
 

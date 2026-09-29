@@ -19,10 +19,12 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useIntl } from "react-intl";
 import { Link, useSearchParams } from "react-router";
 import { z } from "zod";
 
 import { inviteApi } from "@api/invite";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import Header from "@components/ui/Header/Header";
 import { Routes } from "@lib/routes";
 import {
@@ -41,14 +43,20 @@ import {
   SURFACE_BG,
   TEXT_MUTED,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
+// Validation messages are translation IDs, formatted when displayed
 const setPasswordFormSchema = z
   .object({
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
+    password: z
+      .string()
+      .min(8, "error.validation.password.min8" satisfies IntlMessageID),
+    confirmPassword: z
+      .string()
+      .min(1, "auth.setPassword.confirm.required" satisfies IntlMessageID),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "auth.setPassword.mismatch" satisfies IntlMessageID,
     path: ["confirmPassword"],
   });
 
@@ -68,15 +76,16 @@ const fieldSx: SxProps<Theme> = {
 };
 
 const SetPassword = () => {
+  const intl = useIntl();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") ?? "";
 
   const [verifying, setVerifying] = useState(true);
-  const [verifyError, setVerifyError] = useState<string | null>(null);
+  const [verifyError, setVerifyError] = useState<IntlMessageID | null>(null);
   const [studentName, setStudentName] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<IntlMessageID | null>(null);
   const [success, setSuccess] = useState(false);
 
   const {
@@ -89,7 +98,7 @@ const SetPassword = () => {
 
   useEffect(() => {
     if (!token) {
-      setVerifyError("No invitation token found. This link may be invalid.");
+      setVerifyError("auth.setPassword.error.noToken");
       setVerifying(false);
       return;
     }
@@ -101,9 +110,7 @@ const SetPassword = () => {
         setVerifying(false);
       })
       .catch(() => {
-        setVerifyError(
-          "This invitation link is invalid or has expired. Please contact your administrator.",
-        );
+        setVerifyError("auth.setPassword.error.invalidLink");
         setVerifying(false);
       });
   }, [token]);
@@ -115,14 +122,15 @@ const SetPassword = () => {
       setSuccess(true);
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
-        setServerError(
-          "This invitation link is invalid or has expired. Please contact your administrator.",
-        );
+        setServerError("auth.setPassword.error.invalidLink");
       } else {
-        setServerError("Something went wrong. Please try again.");
+        setServerError("error.generic");
       }
     }
   };
+
+  const formatFieldError = (message?: string) =>
+    message ? intl.formatMessage({ id: message as IntlMessageID }) : undefined;
 
   return (
     <>
@@ -165,7 +173,7 @@ const SetPassword = () => {
                     mb: 3,
                   }}
                 >
-                  {verifyError}
+                  <FormattedMessage id={verifyError} />
                 </Alert>
                 <Button
                   component={Link}
@@ -177,7 +185,7 @@ const SetPassword = () => {
                     "&:hover": { borderColor: PURPLE, color: PURPLE },
                   }}
                 >
-                  Go to login
+                  <FormattedMessage id="auth.setPassword.goToLogin" />
                 </Button>
               </Box>
             )}
@@ -191,10 +199,10 @@ const SetPassword = () => {
                   variant="h6"
                   sx={{ color: SUCCESS, fontWeight: 700, mb: 1 }}
                 >
-                  Your password has been set
+                  <FormattedMessage id="auth.setPassword.success.title" />
                 </Typography>
                 <Typography variant="body2" sx={{ color: TEXT_MUTED, mb: 3 }}>
-                  You can now log in to the Senshinkan Romania portal.
+                  <FormattedMessage id="auth.setPassword.success.description" />
                 </Typography>
                 <Button
                   component={Link}
@@ -207,7 +215,7 @@ const SetPassword = () => {
                     "&:hover": { backgroundColor: PURPLE_HOVER },
                   }}
                 >
-                  Go to login
+                  <FormattedMessage id="auth.setPassword.goToLogin" />
                 </Button>
               </Box>
             )}
@@ -218,11 +226,14 @@ const SetPassword = () => {
                   variant="h6"
                   sx={{ color: PURPLE, fontWeight: 700, mb: 0.5 }}
                 >
-                  Set your password
+                  <FormattedMessage id="auth.setPassword.title" />
                 </Typography>
                 {studentName && (
                   <Typography variant="body2" sx={{ color: TEXT_MUTED, mb: 3 }}>
-                    Welcome, {studentName}
+                    <FormattedMessage
+                      id="auth.setPassword.welcome"
+                      values={{ name: studentName }}
+                    />
                   </Typography>
                 )}
 
@@ -235,7 +246,7 @@ const SetPassword = () => {
                       mb: 2,
                     }}
                   >
-                    {serverError}
+                    <FormattedMessage id={serverError} />
                   </Alert>
                 )}
 
@@ -247,12 +258,12 @@ const SetPassword = () => {
                 >
                   <TextField
                     id="set-password-password"
-                    label="Password"
+                    label={intl.formatMessage({ id: "common.password" })}
                     type={showPassword ? "text" : "password"}
                     fullWidth
                     {...register("password")}
                     error={!!errors.password}
-                    helperText={errors.password?.message}
+                    helperText={formatFieldError(errors.password?.message)}
                     sx={fieldSx}
                     slotProps={{
                       input: {
@@ -276,12 +287,16 @@ const SetPassword = () => {
 
                   <TextField
                     id="set-password-confirm"
-                    label="Confirm Password"
+                    label={intl.formatMessage({
+                      id: "auth.setPassword.confirm.label",
+                    })}
                     type={showConfirm ? "text" : "password"}
                     fullWidth
                     {...register("confirmPassword")}
                     error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword?.message}
+                    helperText={formatFieldError(
+                      errors.confirmPassword?.message,
+                    )}
                     sx={fieldSx}
                     slotProps={{
                       input: {
@@ -312,7 +327,13 @@ const SetPassword = () => {
                       "&:hover": { backgroundColor: PURPLE_HOVER },
                     }}
                   >
-                    {isSubmitting ? "Setting password…" : "Set password"}
+                    <FormattedMessage
+                      id={
+                        isSubmitting
+                          ? "auth.setPassword.submitting"
+                          : "auth.setPassword.submit"
+                      }
+                    />
                   </Button>
                 </Box>
               </>

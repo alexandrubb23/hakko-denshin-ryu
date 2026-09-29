@@ -2,6 +2,9 @@ import { Box, Container, Divider, Grid, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
 import hakkoDenshinRyuHighQualityImage from "@assets/images/200.webp";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+
+import type { IntlMessageID } from "i18n/messages";
 
 import {
   bodyTextSx,
@@ -46,43 +49,12 @@ const FadeIn = ({
   </motion.div>
 );
 
-const trainingItems = [
-  {
-    label: (
-      <>
-        Hakko Denshin Ryu Jujutsu <strong>techniques and forms</strong>
-      </>
-    ),
-  },
-  {
-    label: (
-      <>
-        <strong>Traditional weapons training</strong> — tambo, jo, katana,
-        tanto, sensu
-      </>
-    ),
-  },
-  {
-    label: (
-      <>
-        <strong>Shiatsu</strong> therapeutic massage techniques
-      </>
-    ),
-  },
-  {
-    label: (
-      <>
-        <strong>Goshin Taiso</strong> health and fitness exercises
-      </>
-    ),
-  },
-  {
-    label: (
-      <>
-        <strong>Meditation</strong> and breathing practices
-      </>
-    ),
-  },
+const trainingItems: IntlMessageID[] = [
+  "page.dojo.offer.techniques",
+  "page.dojo.offer.weapons",
+  "page.dojo.offer.shiatsu",
+  "page.dojo.offer.goshin-taiso",
+  "page.dojo.offer.meditation",
 ];
 
 const Dojo = () => (
@@ -97,12 +69,14 @@ const Dojo = () => (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: EASE_OUT }}
         >
-          <Typography sx={heroEyebrowSx}>The Dojo · Romania</Typography>
+          <Typography sx={heroEyebrowSx}>
+            <FormattedMessage id="page.dojo.hero.eyebrow" />
+          </Typography>
           <Typography component="h1" sx={heroTitleSx}>
-            Senshinkan Romania
+            <FormattedMessage id="page.dojo.title" />
           </Typography>
           <Typography component="p" sx={heroSubtitleSx}>
-            Hall of Heart Purification
+            <FormattedMessage id="page.dojo.hero.subtitle" />
           </Typography>
         </motion.div>
       </Box>
@@ -121,35 +95,19 @@ const Dojo = () => (
           <FadeIn>
             <Typography sx={sectionNumberSx}>01</Typography>
             <Typography component="h2" sx={sectionTitleSx}>
-              Senshinkan Romania
+              <FormattedMessage id="page.dojo.title" />
             </Typography>
             <Typography sx={sectionKanjiSx}>洗心館</Typography>
             <Divider sx={dividerSx} />
 
             <Typography sx={bodyTextSx}>
-              <strong>Senshinkan Romania</strong> (洗心館) is the official
-              Romanian dojo dedicated to the practice and teaching of{" "}
-              <strong>Hakko Denshin Ryu Jujutsu</strong>. The name{" "}
-              <strong>"Senshinkan"</strong> translates to{" "}
-              <strong>"Hall of Heart Purification"</strong> — reflecting our
-              commitment to both physical training and spiritual development.
+              <FormattedMessage id="page.dojo.p1" />
             </Typography>
             <Typography sx={bodyTextSx}>
-              Our dojo follows the traditional teachings of{" "}
-              <strong>Hakko Denshin Ryu</strong>, emphasizing the principles of{" "}
-              <strong>datsuryoku</strong> (effortless power) and{" "}
-              <strong>harmony</strong> in both technique and daily life. We
-              maintain direct lineage connections to{" "}
-              <strong>Menkyo Kaiden Shihan Leempoels Eric San Dai Kichu</strong>
-              , ensuring authentic transmission of the art.
+              <FormattedMessage id="page.dojo.p2" />
             </Typography>
             <Typography sx={bodyTextSx}>
-              Our training environment emphasizes <strong>respect</strong>,{" "}
-              <strong>discipline</strong>, and <strong>mutual growth</strong>.
-              Students develop not only effective self-defence techniques but
-              also <strong>mental clarity</strong>,{" "}
-              <strong>emotional balance</strong>, and{" "}
-              <strong>spiritual awareness</strong> through consistent practice.
+              <FormattedMessage id="page.dojo.p3" />
             </Typography>
           </FadeIn>
         </Grid>
@@ -158,13 +116,15 @@ const Dojo = () => (
         <Grid size={{ xs: 12, md: 5 }}>
           <FadeIn delay={0.15}>
             <Typography sx={{ ...sectionNumberSx, mb: 1.5 }}>
-              We offer
+              <FormattedMessage id="page.dojo.offer.title" />
             </Typography>
             <Box sx={trainingListSx}>
-              {trainingItems.map((item, i) => (
-                <Box key={i} sx={trainingItemSx}>
+              {trainingItems.map((id) => (
+                <Box key={id} sx={trainingItemSx}>
                   <Box sx={trainingDotSx} />
-                  <Typography sx={trainingTextSx}>{item.label}</Typography>
+                  <Typography sx={trainingTextSx}>
+                    <FormattedMessage id={id} />
+                  </Typography>
                 </Box>
               ))}
             </Box>
@@ -178,12 +138,7 @@ const Dojo = () => (
       <Container maxWidth="lg">
         <FadeIn>
           <Typography sx={closingTextSx}>
-            Whether you are a beginner seeking the fundamentals of martial arts
-            or an experienced practitioner looking to deepen your understanding,{" "}
-            <strong>Senshinkan Romania</strong> provides a welcoming and
-            traditional environment for your martial arts journey. We honor the
-            legacy of our predecessors while adapting the teachings to serve the
-            needs of modern practitioners.
+            <FormattedMessage id="page.dojo.closing" />
           </Typography>
           <Typography sx={closingBgCounterSx}>道</Typography>
         </FadeIn>

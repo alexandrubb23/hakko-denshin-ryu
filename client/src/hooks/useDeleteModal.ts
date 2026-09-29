@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 interface Options {
   id: string;
@@ -19,6 +20,7 @@ const useDeleteModal = ({
   onClose,
   fallbackError,
 }: Options) => {
+  const intl = useIntl();
   const [error, setError] = useState<string | null>(null);
 
   const handleClose = () => {
@@ -35,7 +37,7 @@ const useDeleteModal = ({
         setError(
           axios.isAxiosError(err)
             ? (err.response?.data?.error ?? fallbackError)
-            : "An unexpected error occurred.",
+            : intl.formatMessage({ id: "shared.error.unexpected" }),
         );
       },
     });

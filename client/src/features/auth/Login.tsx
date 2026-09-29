@@ -10,12 +10,16 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useIntl } from "react-intl";
 import { Navigate, useNavigate } from "react-router";
 import { z } from "zod";
 
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import Header from "@components/ui/Header/Header";
+import useTranslateError from "@hooks/useTranslateError";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
+import type { IntlMessageID } from "i18n/messages";
 
 import {
   AccentBar,
@@ -33,14 +37,19 @@ import {
   darkFieldSx,
 } from "./Login.style";
 
+// Validation messages are translation IDs, formatted when displayed
 const loginSchema = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: z.email("auth.login.email.invalid" satisfies IntlMessageID),
+  password: z
+    .string()
+    .min(1, "auth.login.password.required" satisfies IntlMessageID),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
+  const intl = useIntl();
+  const translateError = useTranslateError();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -68,14 +77,22 @@ const Login = () => {
     return <Navigate to={Routes.dashboard} replace />;
   }
 
+  const formatFieldError = (message?: string) =>
+    message ? intl.formatMessage({ id: message as IntlMessageID }) : undefined;
+
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
 
     const { error } = await authClient.signIn.email(data);
 
     if (error) {
+      const invalidCredentials = intl.formatMessage({
+        id: "auth.login.error.invalidCredentials",
+      });
       setServerError(
-        error.message ?? "Invalid email or password. Please try again.",
+        error.code === "INVALID_EMAIL_OR_PASSWORD" || !error.message
+          ? invalidCredentials
+          : translateError(error.message),
       );
       return;
     }
@@ -99,7 +116,7 @@ const Login = () => {
           <LoginPaper elevation={0}>
             <Box className="flex flex-col items-center gap-1">
               <Typography variant="h5" fontWeight={700} sx={TITLE_SX}>
-                Log In
+                <FormattedMessage id="auth.login.title" />
               </Typography>
               <AccentBar />
             </Box>
@@ -121,34 +138,36 @@ const Login = () => {
             >
               <TextField
                 id="email"
-                label="Email"
+                label={intl.formatMessage({ id: "common.email" })}
                 type="email"
                 autoComplete="email"
                 fullWidth
                 {...register("email")}
                 error={!!errors.email}
-                helperText={errors.email?.message}
+                helperText={formatFieldError(errors.email?.message)}
                 sx={darkFieldSx}
               />
 
               <TextField
                 id="password"
-                label="Password"
+                label={intl.formatMessage({ id: "common.password" })}
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 fullWidth
                 {...register("password")}
                 error={!!errors.password}
-                helperText={errors.password?.message}
+                helperText={formatFieldError(errors.password?.message)}
                 sx={darkFieldSx}
                 slotProps={{
                   input: {
                     endAdornment: (
                       <InputAdornment position="end">
                         <TogglePasswordButton
-                          aria-label={
-                            showPassword ? "Hide password" : "Show password"
-                          }
+                          aria-label={intl.formatMessage({
+                            id: showPassword
+                              ? "auth.password.hide"
+                              : "auth.password.show",
+                          })}
                           onClick={() => setShowPassword((prev) => !prev)}
                           edge="end"
                         >
@@ -172,7 +191,11 @@ const Login = () => {
                   ) : null
                 }
               >
-                {isSubmitting ? "Signing in…" : "Sign In"}
+                <FormattedMessage
+                  id={
+                    isSubmitting ? "auth.login.submitting" : "auth.login.submit"
+                  }
+                />
               </SubmitButton>
             </Box>
           </LoginPaper>

@@ -13,6 +13,7 @@ import {
 
 import type { Event } from "@api/events";
 import ParticipantsList from "@components/shared/ParticipantsList";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import { useEventParticipants } from "@features/admin/events/hooks/useEventParticipants";
@@ -56,7 +57,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
         <GroupIcon fontSize="small" />
         <Stack flex={1}>
           <Typography fontWeight={700} component="span">
-            Participants
+            <FormattedMessage id="admin.events.participants.title" />
           </Typography>
           <Typography variant="caption" color="text.secondary" component="span">
             {event.name}
@@ -93,7 +94,13 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
                   )
                 }
               >
-                {attended ? "Attended" : "Mark"}
+                <FormattedMessage
+                  id={
+                    attended
+                      ? "admin.events.participants.attended"
+                      : "admin.events.participants.mark"
+                  }
+                />
               </ToggleButton>
             );
           }}
@@ -105,7 +112,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
       <FooterBox>
         {isPending && <CircularProgress size={16} sx={SPINNER_SX} />}
         <Button onClick={onClose} sx={CLOSE_BUTTON_SX}>
-          Close
+          <FormattedMessage id="common.close" />
         </Button>
       </FooterBox>
     </ModalDialog>

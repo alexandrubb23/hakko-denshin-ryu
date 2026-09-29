@@ -2,6 +2,7 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import { Paper, Typography } from "@mui/material";
 
 import type { StudentEvent } from "@api/events";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import StudentEventsTable from "@features/admin/students/components/StudentEventsTable";
 import { SURFACE_BG } from "@style/tokens";
 
@@ -15,7 +16,7 @@ const EventsTab = ({ events, isLoading, isError }: Props) => {
   if (isError) {
     return (
       <Typography color="error" mt={4}>
-        Failed to load events. Please try again.
+        <FormattedMessage id="shared.events.error" />
       </Typography>
     );
   }
@@ -27,7 +28,9 @@ const EventsTab = ({ events, isLoading, isError }: Props) => {
         sx={{ p: 6, textAlign: "center", backgroundColor: SURFACE_BG, mt: 3 }}
       >
         <EventNoteIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
-        <Typography color="text.secondary">No events found.</Typography>
+        <Typography color="text.secondary">
+          <FormattedMessage id="shared.events.empty" />
+        </Typography>
       </Paper>
     );
   }

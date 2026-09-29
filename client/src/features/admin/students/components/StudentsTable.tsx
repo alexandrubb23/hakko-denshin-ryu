@@ -17,10 +17,13 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router";
 
 import { type Student } from "@api/students";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
+import { STUDENT_CATEGORY_LABEL_IDS } from "@features/admin/students/utils/categoryLabels";
 
 import { Routes } from "@lib/routes";
 import {
@@ -52,6 +55,7 @@ const StudentsTable = ({
   isLoading,
   isError,
 }: StudentsTableProps) => {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
@@ -59,7 +63,7 @@ const StudentsTable = ({
   if (isError) {
     return (
       <Typography color="error" mt={4}>
-        Failed to load students. Please try again.
+        <FormattedMessage id="admin.students.table.error" />
       </Typography>
     );
   }
@@ -77,7 +81,9 @@ const StudentsTable = ({
         }}
       >
         <PeopleIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
-        <Typography color="text.secondary">No students found.</Typography>
+        <Typography color="text.secondary">
+          <FormattedMessage id="admin.students.table.empty" />
+        </Typography>
       </Paper>
     );
   }
@@ -97,28 +103,28 @@ const StudentsTable = ({
           <TableHead>
             <TableRow sx={{ "& th": { borderBottomColor: BORDER_COLOR } }}>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Student
+                <FormattedMessage id="admin.students.table.student" />
               </TableCell>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Email
+                <FormattedMessage id="common.email" />
               </TableCell>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Category
+                <FormattedMessage id="admin.students.category" />
               </TableCell>
               <TableCell
                 sx={{ fontWeight: 700, color: "text.secondary" }}
                 align="center"
               >
-                Verified
+                <FormattedMessage id="admin.students.table.verified" />
               </TableCell>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Joined
+                <FormattedMessage id="admin.students.table.joined" />
               </TableCell>
               <TableCell
                 sx={{ fontWeight: 700, color: "text.secondary" }}
                 align="right"
               >
-                Actions
+                <FormattedMessage id="common.actions" />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -170,10 +176,9 @@ const StudentsTable = ({
                 <TableCell>
                   {student.category ? (
                     <CategoryChip
-                      label={
-                        student.category.charAt(0).toUpperCase() +
-                        student.category.slice(1)
-                      }
+                      label={intl.formatMessage({
+                        id: STUDENT_CATEGORY_LABEL_IDS[student.category],
+                      })}
                       size="small"
                       variant="outlined"
                       category={student.category}
@@ -187,7 +192,13 @@ const StudentsTable = ({
                 <TableCell align="center">
                   <Tooltip
                     title={
-                      student.emailVerified ? "Email verified" : "Not verified"
+                      student.emailVerified
+                        ? intl.formatMessage({
+                            id: "admin.students.table.emailVerified",
+                          })
+                        : intl.formatMessage({
+                            id: "admin.students.table.notVerified",
+                          })
                     }
                   >
                     {student.emailVerified ? (
@@ -203,13 +214,19 @@ const StudentsTable = ({
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    {new Date(student.createdAt).toLocaleDateString()}
+                    {intl.formatDate(student.createdAt)}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Tooltip title="Edit student">
+                  <Tooltip
+                    title={intl.formatMessage({
+                      id: "admin.students.table.edit",
+                    })}
+                  >
                     <IconButton
-                      aria-label="Edit student"
+                      aria-label={intl.formatMessage({
+                        id: "admin.students.table.edit",
+                      })}
                       size="small"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -225,9 +242,15 @@ const StudentsTable = ({
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Delete student">
+                  <Tooltip
+                    title={intl.formatMessage({
+                      id: "admin.students.table.delete",
+                    })}
+                  >
                     <IconButton
-                      aria-label="Delete student"
+                      aria-label={intl.formatMessage({
+                        id: "admin.students.table.delete",
+                      })}
                       size="small"
                       onClick={(e) => {
                         e.stopPropagation();

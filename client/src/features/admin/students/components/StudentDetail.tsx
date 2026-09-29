@@ -1,7 +1,9 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box, Button } from "@mui/material";
+import { useIntl } from "react-intl";
 import { useNavigate, useParams } from "react-router";
 
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { useStudent } from "@features/admin/students/hooks/useStudent";
 import { Routes } from "@lib/routes";
 import { PURPLE, PURPLE_ALPHA_08 } from "@style/tokens";
@@ -11,6 +13,7 @@ import StudentDetailTabs from "./StudentDetailTabs";
 
 const StudentDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const intl = useIntl();
   const navigate = useNavigate();
   const { data: student, isLoading, isError } = useStudent(id!);
 
@@ -25,14 +28,16 @@ const StudentDetail = () => {
           "&:hover": { backgroundColor: PURPLE_ALPHA_08 },
         }}
       >
-        Back to Students
+        <FormattedMessage id="admin.students.detail.back" />
       </Button>
 
       <StudentCard
         user={student}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load student. Please try again."
+        errorMessage={intl.formatMessage({
+          id: "admin.students.detail.error",
+        })}
       />
 
       <StudentDetailTabs studentId={id!} />

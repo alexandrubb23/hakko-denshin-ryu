@@ -8,6 +8,7 @@ import { DARK_BG, PURPLE, PURPLE_HOVER } from "@style/tokens";
 
 import ErrorAlert from "@components/shared/ErrorAlert";
 import InfoAlert from "@components/shared/InfoAlert";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import CreateStudentRankModal from "./CreateStudentRankModal";
 import DeleteRankModal from "./DeleteRankModal";
 import EditStudentRankModal from "./EditStudentRankModal";
@@ -37,7 +38,7 @@ const StudentRankTab = ({ studentId }: Props) => {
             "&:hover": { backgroundColor: PURPLE_HOVER },
           }}
         >
-          Assign Rank
+          <FormattedMessage id="admin.ranks.assign" />
         </Button>
       </Box>
 
@@ -66,11 +67,15 @@ const StudentRankTab = ({ studentId }: Props) => {
       )}
 
       {isError && (
-        <ErrorAlert>Failed to load rank history. Please try again.</ErrorAlert>
+        <ErrorAlert>
+          <FormattedMessage id="admin.ranks.loadError" />
+        </ErrorAlert>
       )}
 
       {!isLoading && !isError && ranks?.length === 0 && (
-        <InfoAlert>This student has no ranks assigned yet.</InfoAlert>
+        <InfoAlert>
+          <FormattedMessage id="admin.ranks.empty" />
+        </InfoAlert>
       )}
 
       {(isLoading || (ranks && ranks.length > 0)) && (

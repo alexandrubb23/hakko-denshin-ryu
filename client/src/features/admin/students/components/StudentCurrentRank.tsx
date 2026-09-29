@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 import { type StudentRankEntry } from "@api/students";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { useNextKyuLevel } from "@hooks/useNextKyuLevel";
 import { Box, Divider, Skeleton, Typography } from "@mui/material";
 import { BORDER_COLOR, SKELETON_SX } from "@style/tokens";
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
+  const intl = useIntl();
   const [modalOpen, setModalOpen] = useState(false);
   const nextKyuLevel = useNextKyuLevel(latestRank);
 
@@ -37,7 +40,7 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
             fontSize: "0.65rem",
           }}
         >
-          Current Rank
+          <FormattedMessage id="admin.students.rank.current" />
         </Typography>
         {isLoading ? (
           <Box mt={0.75}>
@@ -61,7 +64,10 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
               {latestRank.rank.name}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Since {new Date(latestRank.awardedAt).toLocaleDateString()}
+              <FormattedMessage
+                id="admin.students.rank.since"
+                values={{ date: intl.formatDate(latestRank.awardedAt) }}
+              />
             </Typography>
 
             {nextKyuLevel && (
