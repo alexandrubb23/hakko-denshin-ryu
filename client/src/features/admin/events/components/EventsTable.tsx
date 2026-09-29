@@ -18,8 +18,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 import type { Event } from "@api/events";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import {
+  EVENT_STATUS_LABEL_IDS,
+  EVENT_TYPE_LABEL_IDS,
+} from "@features/admin/events/utils/eventLabels";
 import {
   ERROR_SOFT,
   ERROR_SOFT_ALPHA_12,
@@ -56,6 +62,7 @@ const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
 };
 
 const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
+  const intl = useIntl();
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [deletingEvent, setDeletingEvent] = useState<Event | null>(null);
   const [participantsEvent, setParticipantsEvent] = useState<Event | null>(
@@ -65,7 +72,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
   if (isError) {
     return (
       <Typography color="error" mt={4}>
-        Failed to load events. Please try again.
+        <FormattedMessage id="admin.events.table.error" />
       </Typography>
     );
   }
@@ -77,7 +84,9 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
         sx={{ p: 6, textAlign: "center", backgroundColor: SURFACE_BG }}
       >
         <EventNoteIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
-        <Typography color="text.secondary">No events found.</Typography>
+        <Typography color="text.secondary">
+          <FormattedMessage id="admin.events.table.empty" />
+        </Typography>
       </Paper>
     );
   }
@@ -97,25 +106,25 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
           <TableHead>
             <TableRow sx={cellBorder}>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Event
+                <FormattedMessage id="admin.events.table.event" />
               </TableCell>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Type
+                <FormattedMessage id="common.type" />
               </TableCell>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Status
+                <FormattedMessage id="common.status" />
               </TableCell>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Start Date
+                <FormattedMessage id="admin.events.table.startDate" />
               </TableCell>
               <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-                Location
+                <FormattedMessage id="common.location" />
               </TableCell>
               <TableCell
                 align="right"
                 sx={{ fontWeight: 700, color: "text.secondary" }}
               >
-                Actions
+                <FormattedMessage id="common.actions" />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -190,12 +199,22 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                           color="text.secondary"
                           sx={{ textTransform: "capitalize" }}
                         >
-                          {event.type}
+                          {EVENT_TYPE_LABEL_IDS[event.type]
+                            ? intl.formatMessage({
+                                id: EVENT_TYPE_LABEL_IDS[event.type],
+                              })
+                            : event.type}
                         </Typography>
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={event.status}
+                          label={
+                            EVENT_STATUS_LABEL_IDS[event.status]
+                              ? intl.formatMessage({
+                                  id: EVENT_STATUS_LABEL_IDS[event.status],
+                                })
+                              : event.status
+                          }
                           size="small"
                           sx={{
                             backgroundColor: statusStyle.bg,
@@ -207,7 +226,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                       </TableCell>
                       <TableCell>
                         <Typography variant="body2" color="text.secondary">
-                          {formatDate(event.startDate)}
+                          {formatDate(event.startDate, intl.locale)}
                         </Typography>
                       </TableCell>
                       <TableCell>
@@ -225,7 +244,11 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <Tooltip title="Manage participants">
+                        <Tooltip
+                          title={intl.formatMessage({
+                            id: "admin.events.table.participants",
+                          })}
+                        >
                           <IconButton
                             size="small"
                             onClick={() => setParticipantsEvent(event)}
@@ -239,7 +262,11 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                             <GroupIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Edit event">
+                        <Tooltip
+                          title={intl.formatMessage({
+                            id: "admin.events.table.edit",
+                          })}
+                        >
                           <IconButton
                             size="small"
                             onClick={() => setEditingEvent(event)}
@@ -253,7 +280,11 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                             <EditIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Delete event">
+                        <Tooltip
+                          title={intl.formatMessage({
+                            id: "admin.events.table.delete",
+                          })}
+                        >
                           <IconButton
                             size="small"
                             onClick={() => setDeletingEvent(event)}

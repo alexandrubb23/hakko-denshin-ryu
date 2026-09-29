@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import type { ReactNode } from "react";
+import { useIntl } from "react-intl";
 
 import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
 import ErrorAlert from "../ErrorAlert";
@@ -17,20 +18,28 @@ const TabbedPageLayout = ({
   title,
   isLoading,
   isError,
-  errorMessage = "Failed to load data. Please try again.",
+  errorMessage,
   children,
-}: TabbedPageLayoutProps) => (
-  <PageWrapper>
-    <Typography variant="h5" fontWeight={700}>
-      {title}
-    </Typography>
+}: TabbedPageLayoutProps) => {
+  const intl = useIntl();
 
-    {isLoading && <CenterSpinner />}
+  return (
+    <PageWrapper>
+      <Typography variant="h5" fontWeight={700}>
+        {title}
+      </Typography>
 
-    {isError && <ErrorAlert>{errorMessage}</ErrorAlert>}
+      {isLoading && <CenterSpinner />}
 
-    {children}
-  </PageWrapper>
-);
+      {isError && (
+        <ErrorAlert>
+          {errorMessage ?? intl.formatMessage({ id: "ui.tabbedPage.error" })}
+        </ErrorAlert>
+      )}
+
+      {children}
+    </PageWrapper>
+  );
+};
 
 export default TabbedPageLayout;

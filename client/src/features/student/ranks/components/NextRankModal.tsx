@@ -5,11 +5,13 @@ import {
   DialogContent,
   Divider,
 } from "@mui/material";
+import { useIntl } from "react-intl";
 
 import { type KyuLevel } from "@api/kyuProgram";
 import { BELT_IMAGES } from "@assets/beltImages";
 import { ContentDivider } from "@components/shared/TabbedPageLayout/TabbedPageLayout.style";
 import TechniqueGroupsList from "@components/shared/TabbedPageLayout/TechniqueGroupsList";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import {
@@ -25,49 +27,61 @@ interface Props {
   onClose: () => void;
 }
 
-const NextRankModal = ({ level, open, onClose }: Props) => (
-  <ModalDialog open={open} onClose={onClose} maxWidth="sm">
-    <ModalTitle>
-      <Box
-        component="img"
-        src={BELT_IMAGES[level.belt] ?? BELT_IMAGES.white}
-        alt={`${level.belt} belt`}
-        sx={{ height: 20, width: "auto", maxWidth: 52, objectFit: "contain" }}
-      />
-      {level.name}
-    </ModalTitle>
+const NextRankModal = ({ level, open, onClose }: Props) => {
+  const intl = useIntl();
 
-    <Divider sx={{ borderColor: BORDER_COLOR }} />
+  return (
+    <ModalDialog open={open} onClose={onClose} maxWidth="sm">
+      <ModalTitle>
+        <Box
+          component="img"
+          src={BELT_IMAGES[level.belt] ?? BELT_IMAGES.white}
+          alt={intl.formatMessage(
+            { id: "shared.belt.alt" },
+            { belt: level.belt },
+          )}
+          sx={{
+            height: 20,
+            width: "auto",
+            maxWidth: 52,
+            objectFit: "contain",
+          }}
+        />
+        {level.name}
+      </ModalTitle>
 
-    <DialogContent sx={{ pt: 2.5 }}>
-      <KihonLegend sx={{ mb: 2 }}>
-        <LegendItem>
-          <LegendDot isKihon />
-          <span>Kihon waza</span>
-        </LegendItem>
-        <LegendItem sx={{ color: TEXT_MUTED }}>
-          <LegendDot isKihon={false} />
-          <span>Henka</span>
-        </LegendItem>
-      </KihonLegend>
+      <Divider sx={{ borderColor: BORDER_COLOR }} />
 
-      <ContentDivider />
+      <DialogContent sx={{ pt: 2.5 }}>
+        <KihonLegend sx={{ mb: 2 }}>
+          <LegendItem>
+            <LegendDot isKihon />
+            <span>Kihon waza</span>
+          </LegendItem>
+          <LegendItem sx={{ color: TEXT_MUTED }}>
+            <LegendDot isKihon={false} />
+            <span>Henka</span>
+          </LegendItem>
+        </KihonLegend>
 
-      <TechniqueGroupsList
-        groups={level.groups}
-        getTechniqueSx={(t) => ({
-          color: t.isKihon ? WHITE_ALPHA_90 : TEXT_MUTED,
-          fontWeight: t.isKihon ? 600 : 400,
-        })}
-      />
-    </DialogContent>
+        <ContentDivider />
 
-    <DialogActions sx={{ px: 3, pb: 3 }}>
-      <Button onClick={onClose} sx={{ color: "text.secondary" }}>
-        Close
-      </Button>
-    </DialogActions>
-  </ModalDialog>
-);
+        <TechniqueGroupsList
+          groups={level.groups}
+          getTechniqueSx={(t) => ({
+            color: t.isKihon ? WHITE_ALPHA_90 : TEXT_MUTED,
+            fontWeight: t.isKihon ? 600 : 400,
+          })}
+        />
+      </DialogContent>
+
+      <DialogActions sx={{ px: 3, pb: 3 }}>
+        <Button onClick={onClose} sx={{ color: "text.secondary" }}>
+          <FormattedMessage id="common.close" />
+        </Button>
+      </DialogActions>
+    </ModalDialog>
+  );
+};
 
 export default NextRankModal;

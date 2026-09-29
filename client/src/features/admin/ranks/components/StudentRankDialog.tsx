@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import type { ReactNode } from "react";
 
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import { BORDER_COLOR, DARK_BG, PURPLE, PURPLE_HOVER } from "@style/tokens";
@@ -61,7 +62,7 @@ const StudentRankDialog = ({
           disabled={isPending}
           sx={{ color: "text.secondary" }}
         >
-          Cancel
+          <FormattedMessage id="common.cancel" />
         </Button>
         <Button
           type="submit"

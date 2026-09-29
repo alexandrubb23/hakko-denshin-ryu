@@ -2,20 +2,22 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CircularProgress, IconButton, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useIntl } from "react-intl";
 
 import { type AttendanceRecord } from "@api/attendance";
-import { DAY_NAMES, MONTH_NAMES } from "@constants/dateNames";
 import {
   getLatestTrainingDay,
   getNextTrainingDay,
   getPrevTrainingDay,
 } from "@constants/trainingSchedule";
+import useDateNames from "@hooks/useDateNames";
 import {
   BORDER_COLOR,
   PURPLE,
   PURPLE_ALPHA_30,
   SURFACE_BG,
 } from "@style/tokens";
+import { stripDiacritics } from "@utils/string";
 
 import AttendedChip from "../AttendedChip";
 import useAttendanceMark from "./shared/useAttendanceMark";
@@ -97,6 +99,8 @@ const DayView = ({
   records,
   readOnly,
 }: Props) => {
+  const intl = useIntl();
+  const { DAY_NAMES, MONTH_NAMES } = useDateNames();
   const today = getLatestTrainingDay();
   const isAtOrBeforeToday = cursor <= today;
 
@@ -126,7 +130,9 @@ const DayView = ({
         </NavIconButton>
 
         <DateCard>
-          <DayNameCaption variant="caption">{dayName}</DayNameCaption>
+          <DayNameCaption variant="caption">
+            {stripDiacritics(dayName)}
+          </DayNameCaption>
           <DayNumber variant="h4">{day}</DayNumber>
           <MonthYearText variant="body1">
             {monthName} {fullYear}
@@ -143,9 +149,12 @@ const DayView = ({
 
       <ActionSection>
         <ActionLabel variant="body2">
-          {attended === null
-            ? "Mark attendance for this session:"
-            : "Attendance marked:"}
+          {intl.formatMessage({
+            id:
+              attended === null
+                ? "attendance.day.mark"
+                : "attendance.day.marked",
+          })}
         </ActionLabel>
         {readOnly ? (
           <AttendedChip attended={attended} />

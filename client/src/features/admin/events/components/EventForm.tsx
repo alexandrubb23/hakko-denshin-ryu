@@ -23,11 +23,13 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useIntl } from "react-intl";
 import { z } from "zod";
 
 import { eventsApi, type Event } from "@api/events";
 import ErrorAlert from "@components/shared/ErrorAlert";
 import DarkSelect from "@components/ui/DarkSelect/DarkSelect";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ImageDropZone, {
   ACCEPTED_IMAGE_TYPES,
   MAX_IMAGE_SIZE_BYTES,
@@ -38,6 +40,11 @@ import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import { useCreateEvent } from "@features/admin/events/hooks/useCreateEvent";
 import { useUpdateEvent } from "@features/admin/events/hooks/useUpdateEvent";
 import {
+  EVENT_STATUS_LABEL_IDS,
+  EVENT_TYPE_LABEL_IDS,
+} from "@features/admin/events/utils/eventLabels";
+import useTranslateError from "@hooks/useTranslateError";
+import {
   BORDER_COLOR,
   BORDER_HOVER,
   DARK_BG,
@@ -45,6 +52,7 @@ import {
   PURPLE_HOVER,
   SURFACE_BG,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
 const fieldSx: SxProps<Theme> = {
   "& .MuiOutlinedInput-root": {
@@ -58,9 +66,10 @@ const fieldSx: SxProps<Theme> = {
 
 /** datetime-local input produces "YYYY-MM-DDTHH:MM" — no timezone suffix */
 const datetimeLocalRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+const INVALID_DATE_TIME = "Invalid date/time";
 const datetimeLocalString = z
   .string()
-  .regex(datetimeLocalRegex, "Invalid date/time");
+  .regex(datetimeLocalRegex, INVALID_DATE_TIME);
 
 /**
  * Form-level schema: validates datetime-local strings (browser format).
@@ -119,24 +128,39 @@ export type EventFormProps =
       event: Event;
     };
 
-const modeConfig = {
+const modeConfig: Record<
+  EventFormMode,
+  {
+    title: IntlMessageID;
+    Icon: typeof AddIcon;
+    submitLabel: IntlMessageID;
+    pendingLabel: IntlMessageID;
+  }
+> = {
   [EventFormMode.create]: {
-    title: "Add Event",
+    title: "admin.events.form.title.create",
     Icon: AddIcon,
-    submitLabel: "Create Event",
-    pendingLabel: "Creating…",
+    submitLabel: "admin.events.form.submit.create",
+    pendingLabel: "admin.events.form.pending.create",
   },
   [EventFormMode.edit]: {
-    title: "Edit Event",
+    title: "admin.events.form.title.edit",
     Icon: EditIcon,
-    submitLabel: "Save Changes",
-    pendingLabel: "Saving…",
+    submitLabel: "admin.events.form.submit.edit",
+    pendingLabel: "admin.events.form.pending.edit",
   },
 };
 
 const EventForm = (props: EventFormProps) => {
   const { mode, open, onClose } = props;
   const { title, Icon, submitLabel, pendingLabel } = modeConfig[mode];
+  const intl = useIntl();
+  const translateError = useTranslateError();
+
+  const fieldError = (message?: string) =>
+    message === INVALID_DATE_TIME
+      ? intl.formatMessage({ id: "admin.events.form.error.dateTime" })
+      : translateError(message);
 
   const event = mode === EventFormMode.edit ? props.event : null;
 
@@ -190,12 +214,17 @@ const EventForm = (props: EventFormProps) => {
   const handleFileSelect = (file: File) => {
     setImageValidationError(null);
     if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      setImageValidationError("Only JPEG, PNG, and WebP images are accepted.");
+      setImageValidationError(
+        intl.formatMessage({ id: "admin.events.form.image.invalidType" }),
+      );
       return;
     }
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
       setImageValidationError(
-        `File must be smaller than ${MAX_IMAGE_SIZE_MB} MB.`,
+        intl.formatMessage(
+          { id: "admin.events.form.image.tooLarge" },
+          { size: MAX_IMAGE_SIZE_MB },
+        ),
       );
       return;
     }
@@ -246,16 +275,19 @@ const EventForm = (props: EventFormProps) => {
   const serverErrorMessage = (() => {
     if (!isError || !error) return null;
     if (axios.isAxiosError(error)) {
-      return error.response?.data?.error ?? "Failed to save event.";
+      return (
+        translateError(error.response?.data?.error) ??
+        intl.formatMessage({ id: "admin.events.form.error.save" })
+      );
     }
-    return "Something went wrong. Please try again.";
+    return intl.formatMessage({ id: "error.generic" });
   })();
 
   return (
     <ModalDialog open={open} onClose={onClose} maxWidth="sm">
       <ModalTitle>
         <Icon fontSize="small" />
-        {title}
+        <FormattedMessage id={title} />
       </ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
@@ -267,12 +299,12 @@ const EventForm = (props: EventFormProps) => {
           {serverErrorMessage && <ErrorAlert>{serverErrorMessage}</ErrorAlert>}
 
           <TextField
-            label="Event Name"
+            label={intl.formatMessage({ id: "admin.events.form.name.label" })}
             fullWidth
             autoFocus
             {...register("name")}
             error={!!errors.name}
-            helperText={errors.name?.message}
+            helperText={fieldError(errors.name?.message)}
             sx={fieldSx}
           />
 
@@ -283,7 +315,7 @@ const EventForm = (props: EventFormProps) => {
                 color="text.secondary"
                 sx={{ mb: 0.5, display: "block" }}
               >
-                Type
+                <FormattedMessage id="common.type" />
               </Typography>
               <Controller
                 name="type"
@@ -297,7 +329,7 @@ const EventForm = (props: EventFormProps) => {
                   >
                     {EventTypeValues.map((t) => (
                       <MenuItem key={t} value={t}>
-                        {t.charAt(0).toUpperCase() + t.slice(1)}
+                        {intl.formatMessage({ id: EVENT_TYPE_LABEL_IDS[t] })}
                       </MenuItem>
                     ))}
                   </DarkSelect>
@@ -311,7 +343,7 @@ const EventForm = (props: EventFormProps) => {
                 color="text.secondary"
                 sx={{ mb: 0.5, display: "block" }}
               >
-                Status
+                <FormattedMessage id="common.status" />
               </Typography>
               <Controller
                 name="status"
@@ -325,7 +357,7 @@ const EventForm = (props: EventFormProps) => {
                   >
                     {EventStatusValues.map((s) => (
                       <MenuItem key={s} value={s}>
-                        {s.charAt(0).toUpperCase() + s.slice(1)}
+                        {intl.formatMessage({ id: EVENT_STATUS_LABEL_IDS[s] })}
                       </MenuItem>
                     ))}
                   </DarkSelect>
@@ -336,55 +368,61 @@ const EventForm = (props: EventFormProps) => {
 
           <Stack direction={{ xs: "column", sm: "row" }} gap={2}>
             <TextField
-              label="Start Date & Time"
+              label={intl.formatMessage({
+                id: "admin.events.form.startDate.label",
+              })}
               type="datetime-local"
               fullWidth
               slotProps={{ inputLabel: { shrink: true } }}
               {...register("startDate")}
               error={!!errors.startDate}
-              helperText={errors.startDate?.message}
+              helperText={fieldError(errors.startDate?.message)}
               sx={fieldSx}
             />
             <TextField
-              label="End Date & Time (optional)"
+              label={intl.formatMessage({
+                id: "admin.events.form.endDate.label",
+              })}
               type="datetime-local"
               fullWidth
               slotProps={{ inputLabel: { shrink: true } }}
               {...register("endDate")}
               error={!!errors.endDate}
-              helperText={errors.endDate?.message}
+              helperText={fieldError(errors.endDate?.message)}
               sx={fieldSx}
             />
           </Stack>
 
           <TextField
-            label="Location"
+            label={intl.formatMessage({ id: "common.location" })}
             fullWidth
             {...register("location")}
             error={!!errors.location}
-            helperText={errors.location?.message}
+            helperText={fieldError(errors.location?.message)}
             sx={fieldSx}
           />
 
           <TextField
-            label="Details"
+            label={intl.formatMessage({ id: "common.details" })}
             fullWidth
             multiline
             minRows={3}
             {...register("details")}
             error={!!errors.details}
-            helperText={errors.details?.message}
+            helperText={fieldError(errors.details?.message)}
             sx={fieldSx}
           />
 
           <TextField
-            label="Ticket URL (optional)"
+            label={intl.formatMessage({
+              id: "admin.events.form.ticketUrl.label",
+            })}
             type="url"
             fullWidth
             placeholder="https://..."
             {...register("ticketUrl")}
             error={!!errors.ticketUrl}
-            helperText={errors.ticketUrl?.message}
+            helperText={fieldError(errors.ticketUrl?.message)}
             sx={fieldSx}
           />
 
@@ -394,13 +432,13 @@ const EventForm = (props: EventFormProps) => {
               color="text.secondary"
               sx={{ mb: 0.5, display: "block" }}
             >
-              Event Image (optional)
+              <FormattedMessage id="admin.events.form.image.label" />
             </Typography>
             {event?.image && !stagedFile && (
               <Box
                 component="img"
                 src={event.image}
-                alt="Current event image"
+                alt={intl.formatMessage({ id: "admin.events.form.image.alt" })}
                 sx={{
                   width: "100%",
                   height: 120,
@@ -427,7 +465,7 @@ const EventForm = (props: EventFormProps) => {
             disabled={isBusy}
             sx={{ color: "text.secondary" }}
           >
-            Cancel
+            <FormattedMessage id="common.cancel" />
           </Button>
           <Button
             type="submit"
@@ -440,11 +478,15 @@ const EventForm = (props: EventFormProps) => {
               "&:hover": { backgroundColor: PURPLE_HOVER },
             }}
           >
-            {isUploadingImage
-              ? "Uploading image…"
-              : isPending
-                ? pendingLabel
-                : submitLabel}
+            <FormattedMessage
+              id={
+                isUploadingImage
+                  ? "admin.events.form.uploading"
+                  : isPending
+                    ? pendingLabel
+                    : submitLabel
+              }
+            />
           </Button>
         </DialogActions>
       </Box>

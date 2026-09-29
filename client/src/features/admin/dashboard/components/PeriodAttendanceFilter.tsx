@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 
 import { motion } from "framer-motion";
+import { useIntl } from "react-intl";
 
 import type { AttendancePeriod } from "@api/dashboard";
 import Chip from "@mui/material/Chip";
@@ -8,6 +9,7 @@ import Chip from "@mui/material/Chip";
 import { defaultChipSx } from "@components/shared/ChipFilterRow";
 import useIsMobile from "@hooks/isMobile";
 import { PURPLE } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
 import {
   ChipRow,
@@ -19,17 +21,23 @@ import {
 export const ALL_ATTENDANCE_FILTER = "all";
 export const ACTIVE_ATTENDANCE_FILTER = "active";
 
-const ATTENDANCE_OPTIONS = [
-  { value: ALL_ATTENDANCE_FILTER, label: "All Students" },
-  { value: ACTIVE_ATTENDANCE_FILTER, label: "With Attendance" },
+const ATTENDANCE_OPTIONS: { value: string; labelId: IntlMessageID }[] = [
+  {
+    value: ALL_ATTENDANCE_FILTER,
+    labelId: "admin.dashboard.filter.allStudents",
+  },
+  {
+    value: ACTIVE_ATTENDANCE_FILTER,
+    labelId: "admin.dashboard.filter.withAttendance",
+  },
 ];
 
-const PERIOD_OPTIONS: { value: AttendancePeriod; label: string }[] = [
-  { value: "all", label: "All Time" },
-  { value: "day", label: "Today" },
-  { value: "week", label: "This Week" },
-  { value: "month", label: "This Month" },
-  { value: "year", label: "This Year" },
+const PERIOD_OPTIONS: { value: AttendancePeriod; labelId: IntlMessageID }[] = [
+  { value: "all", labelId: "admin.dashboard.filter.allTime" },
+  { value: "day", labelId: "common.today" },
+  { value: "week", labelId: "admin.dashboard.filter.thisWeek" },
+  { value: "month", labelId: "admin.dashboard.filter.thisMonth" },
+  { value: "year", labelId: "admin.dashboard.filter.thisYear" },
 ];
 
 type Props = {
@@ -45,6 +53,7 @@ const PeriodAttendanceFilter = ({
   attendanceFilter,
   onAttendanceChange,
 }: Props) => {
+  const intl = useIntl();
   const isMobile = useIsMobile();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -71,13 +80,13 @@ const PeriodAttendanceFilter = ({
     const subRowRect = subRowRef.current.getBoundingClientRect();
 
     const periodCx = Math.round(
-      periodChipRect.left - containerRect.left + periodChipRect.width / 2
+      periodChipRect.left - containerRect.left + periodChipRect.width / 2,
     );
     const periodBottom = Math.round(periodChipRect.bottom - containerRect.top);
     const attendanceCx = Math.round(
       attendanceChipRect.left -
         containerRect.left +
-        attendanceChipRect.width / 2
+        attendanceChipRect.width / 2,
     );
     const subRowTop = Math.round(subRowRect.top - containerRect.top);
     const containerHeight = Math.round(subRowRect.bottom - containerRect.top);
@@ -86,7 +95,7 @@ const PeriodAttendanceFilter = ({
     setSvgHeight(containerHeight);
     // Path: drop from period chip → horizontal to attendance chip x → drop into attendance chip
     setConnectorPath(
-      `M ${periodCx} ${periodBottom} L ${periodCx} ${midY} L ${attendanceCx} ${midY} L ${attendanceCx} ${subRowTop}`
+      `M ${periodCx} ${periodBottom} L ${periodCx} ${midY} L ${attendanceCx} ${midY} L ${attendanceCx} ${subRowTop}`,
     );
   }, [period, attendanceFilter, isMobile]);
 
@@ -116,7 +125,7 @@ const PeriodAttendanceFilter = ({
           return (
             <Chip
               key={opt.value}
-              label={opt.label}
+              label={intl.formatMessage({ id: opt.labelId })}
               size="small"
               variant="outlined"
               onClick={() => onPeriodChange(opt.value)}
@@ -138,7 +147,7 @@ const PeriodAttendanceFilter = ({
           return (
             <Chip
               key={opt.value}
-              label={opt.label}
+              label={intl.formatMessage({ id: opt.labelId })}
               size="small"
               variant="outlined"
               onClick={() => onAttendanceChange(opt.value)}
@@ -147,7 +156,7 @@ const PeriodAttendanceFilter = ({
                 if (el)
                   attendanceChipRefs.current.set(
                     opt.value,
-                    el as HTMLDivElement
+                    el as HTMLDivElement,
                   );
                 else attendanceChipRefs.current.delete(opt.value);
               }}

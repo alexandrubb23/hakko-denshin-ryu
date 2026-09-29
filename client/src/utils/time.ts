@@ -10,9 +10,12 @@ export const getQuoteDisplayTime = (text: string) => {
   return Math.max(readingTime, baseDelay) + 1000; // Add 1s padding
 };
 
-/** Formats a UTC ISO date string to a human-readable date in Romanian locale (Europe/Bucharest). */
-export const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("ro-RO", {
+/**
+ * Formats a UTC ISO date string to a human-readable date (Europe/Bucharest).
+ * Defaults to the Romanian locale; pass `intl.locale` to follow the active language.
+ */
+export const formatDate = (iso: string, locale = "ro-RO") =>
+  new Date(iso).toLocaleDateString(locale, {
     day: "2-digit",
     month: "short",
     year: "numeric",

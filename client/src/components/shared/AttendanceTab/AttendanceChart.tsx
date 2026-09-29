@@ -8,15 +8,17 @@ import {
 } from "chart.js";
 import { useLayoutEffect, useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { useIntl } from "react-intl";
 
 import { type AttendanceRecord } from "@api/attendance";
-import { DAY_NAMES_SHORT, MONTH_NAMES_SHORT } from "@constants/dateNames";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import {
   formatDateKey,
   getTrainingDaysInMonth,
   getTrainingDaysInWeek,
 } from "@constants/trainingSchedule";
 import { useAttendanceByYear } from "@features/admin/attendance/hooks/useAttendance";
+import useDateNames from "@hooks/useDateNames";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import {
@@ -37,6 +39,7 @@ import {
   PURPLE_ALPHA_18,
   SURFACE_BG,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
 import { CalendarView } from "./shared/calendarView";
 
@@ -122,12 +125,21 @@ enum SessionLabel {
   NotYet = "Not yet",
 }
 
+const SESSION_LABEL_IDS: Record<SessionLabel, IntlMessageID> = {
+  [SessionLabel.Present]: "attendance.chart.session.present",
+  [SessionLabel.Absent]: "attendance.chart.session.absent",
+  [SessionLabel.Unmarked]: "attendance.chart.session.unmarked",
+  [SessionLabel.NotYet]: "attendance.chart.session.notYet",
+};
+
+type DateNames = ReturnType<typeof useDateNames>;
+
 interface ChartData {
   labels: string[];
   data: number[];
   colors: string[];
   maxY: number;
-  tooltipLabels?: string[];
+  tooltipLabels?: SessionLabel[];
   absentData?: number[];
   presentCount: number;
   absentCount: number;
@@ -137,9 +149,9 @@ function makeSingleBarData(
   label: string,
   value: number,
   color: string,
-  tooltipLabel: string,
+  tooltipLabel: SessionLabel,
   presentCount: number,
-  absentCount: number,
+  absentCount: number
 ): ChartData {
   return {
     labels: [label],
@@ -152,7 +164,11 @@ function makeSingleBarData(
   };
 }
 
-function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
+function buildDayData(
+  cursor: Date,
+  records: AttendanceRecord[],
+  { DAY_NAMES_SHORT, MONTH_NAMES_SHORT }: DateNames
+): ChartData {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
   const isFuture = cursor > today;
@@ -166,7 +182,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
       PURPLE_ALPHA_18,
       SessionLabel.NotYet,
       0,
-      0,
+      0
     );
 
   const record = records.find((r) => r.date.startsWith(key));
@@ -177,7 +193,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
       PURPLE_ALPHA_18,
       SessionLabel.Unmarked,
       0,
-      0,
+      0
     );
   if (record.attended)
     return makeSingleBarData(
@@ -186,7 +202,7 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
       ATTENDED_COLOR,
       SessionLabel.Present,
       1,
-      0,
+      0
     );
   return makeSingleBarData(
     label,
@@ -194,11 +210,15 @@ function buildDayData(cursor: Date, records: AttendanceRecord[]): ChartData {
     ERROR_DARK_ALPHA_80,
     SessionLabel.Absent,
     0,
-    1,
+    1
   );
 }
 
-function buildWeekData(cursor: Date, records: AttendanceRecord[]): ChartData {
+function buildWeekData(
+  cursor: Date,
+  records: AttendanceRecord[],
+  { DAY_NAMES_SHORT }: DateNames
+): ChartData {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
   const trainingDays = getTrainingDaysInWeek(cursor);
@@ -206,7 +226,7 @@ function buildWeekData(cursor: Date, records: AttendanceRecord[]): ChartData {
   const labels: string[] = [];
   const data: number[] = [];
   const colors: string[] = [];
-  const tooltipLabels: string[] = [];
+  const tooltipLabels: SessionLabel[] = [];
 
   trainingDays.forEach((d) => {
     const isFuture = d > today;
@@ -252,7 +272,11 @@ function buildWeekData(cursor: Date, records: AttendanceRecord[]): ChartData {
   };
 }
 
-function buildMonthData(cursor: Date, records: AttendanceRecord[]): ChartData {
+function buildMonthData(
+  cursor: Date,
+  records: AttendanceRecord[],
+  { DAY_NAMES_SHORT }: DateNames
+): ChartData {
   const year = cursor.getUTCFullYear();
   const month = cursor.getUTCMonth() + 1;
   const today = new Date();
@@ -262,7 +286,7 @@ function buildMonthData(cursor: Date, records: AttendanceRecord[]): ChartData {
   const labels: string[] = [];
   const data: number[] = [];
   const colors: string[] = [];
-  const tooltipLabels: string[] = [];
+  const tooltipLabels: SessionLabel[] = [];
 
   trainingDays.forEach((d) => {
     const isFuture = d > today;
@@ -310,18 +334,19 @@ function buildMonthData(cursor: Date, records: AttendanceRecord[]): ChartData {
 function buildYearData(
   yearRecords: AttendanceRecord[],
   year: number,
+  { MONTH_NAMES_SHORT }: DateNames
 ): ChartData {
   const labels = MONTH_NAMES_SHORT.map((m) => `${m} ${year}`);
   const attendedData = Array.from({ length: 12 }, (_, i) => {
     const monthStr = String(i + 1).padStart(2, "0");
     return yearRecords.filter(
-      (r) => r.date.slice(5, 7) === monthStr && r.attended,
+      (r) => r.date.slice(5, 7) === monthStr && r.attended
     ).length;
   });
   const absentData = Array.from({ length: 12 }, (_, i) => {
     const monthStr = String(i + 1).padStart(2, "0");
     return yearRecords.filter(
-      (r) => r.date.slice(5, 7) === monthStr && !r.attended,
+      (r) => r.date.slice(5, 7) === monthStr && !r.attended
     ).length;
   });
   const maxY = Math.max(...attendedData.map((a, i) => a + absentData[i]), 4);
@@ -338,11 +363,11 @@ function buildYearData(
   };
 }
 
-const CHART_LABEL: Record<CalendarView, string> = {
-  [CalendarView.day]: "Selected session",
-  [CalendarView.week]: "This week",
-  [CalendarView.month]: "This month",
-  [CalendarView.year]: "Sessions per month",
+const CHART_LABEL: Record<CalendarView, IntlMessageID> = {
+  [CalendarView.day]: "attendance.chart.title.day",
+  [CalendarView.week]: "attendance.chart.title.week",
+  [CalendarView.month]: "attendance.chart.title.month",
+  [CalendarView.year]: "attendance.chart.title.year",
 };
 
 const AttendanceChart = ({
@@ -352,6 +377,8 @@ const AttendanceChart = ({
   studentId,
   yearData: yearDataProp,
 }: Props) => {
+  const intl = useIntl();
+  const dateNames = useDateNames();
   const [mounted, setMounted] = useState(false);
   useLayoutEffect(() => {
     setMounted(true);
@@ -369,18 +396,20 @@ const AttendanceChart = ({
 
   const chartData = useMemo<ChartData>(() => {
     if (view === CalendarView.year)
-      return buildYearData(resolvedYearData, year);
-    if (view === CalendarView.month) return buildMonthData(cursor, records);
-    if (view === CalendarView.day) return buildDayData(cursor, records);
-    return buildWeekData(cursor, records);
-  }, [view, cursor, records, resolvedYearData]);
+      return buildYearData(resolvedYearData, year, dateNames);
+    if (view === CalendarView.month)
+      return buildMonthData(cursor, records, dateNames);
+    if (view === CalendarView.day)
+      return buildDayData(cursor, records, dateNames);
+    return buildWeekData(cursor, records, dateNames);
+  }, [view, cursor, records, resolvedYearData, dateNames]);
 
   if (!mounted) return null;
 
   const isYearView = view === CalendarView.year;
 
   const attendedDataset = {
-    label: "Attended",
+    label: intl.formatMessage({ id: "attendance.chart.attended" }),
     data: chartData.data,
     backgroundColor: chartData.colors,
     borderRadius: isYearView ? 0 : 4,
@@ -392,7 +421,7 @@ const AttendanceChart = ({
 
   const absentDataset = chartData.absentData
     ? {
-        label: "Not attended",
+        label: intl.formatMessage({ id: "attendance.chart.notAttended" }),
         data: chartData.absentData,
         backgroundColor: chartData.absentData.map(() => ERROR_DARK_ALPHA_80),
         borderRadius: 4,
@@ -428,10 +457,16 @@ const AttendanceChart = ({
           label: (ctx: import("chart.js").TooltipItem<"bar">) => {
             if (isYearView) {
               const v = ctx.parsed.y ?? 0;
-              return ` ${v} session${v !== 1 ? "s" : ""} ${ctx.dataset.label?.toLowerCase()}`;
+              const id: IntlMessageID =
+                ctx.datasetIndex === 0
+                  ? "attendance.chart.tooltip.attended"
+                  : "attendance.chart.tooltip.notAttended";
+              return ` ${intl.formatMessage({ id }, { count: v })}`;
             }
-            const label = chartData.tooltipLabels?.[ctx.dataIndex] ?? "";
-            return ` ${label}`;
+            const label = chartData.tooltipLabels?.[ctx.dataIndex];
+            return label
+              ? ` ${intl.formatMessage({ id: SESSION_LABEL_IDS[label] })}`
+              : " ";
           },
         },
         backgroundColor: CHART_TOOLTIP_BG,
@@ -477,15 +512,23 @@ const AttendanceChart = ({
   return (
     <ChartRoot>
       <ChartHeader>
-        <ChartTitle variant="caption">{CHART_LABEL[view]}</ChartTitle>
+        <ChartTitle variant="caption">
+          <FormattedMessage id={CHART_LABEL[view]} />
+        </ChartTitle>
         <StatsBadges>
           <StatBadge variant="present">
             <StatDot variant="present" />
-            {chartData.presentCount} present
+            <FormattedMessage
+              id="attendance.chart.presentCount"
+              values={{ count: chartData.presentCount }}
+            />
           </StatBadge>
           <StatBadge variant="absent">
             <StatDot variant="absent" />
-            {chartData.absentCount} not present
+            <FormattedMessage
+              id="attendance.chart.absentCount"
+              values={{ count: chartData.absentCount }}
+            />
           </StatBadge>
         </StatsBadges>
       </ChartHeader>

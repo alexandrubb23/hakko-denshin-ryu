@@ -1,4 +1,5 @@
 import { Box, Button, SxProps, Theme } from "@mui/material";
+import { useIntl } from "react-intl";
 
 import { styled } from "@mui/material/styles";
 import {
@@ -63,6 +64,11 @@ const YesNoButtons = ({
   size = "small",
   compact = false,
 }: Props) => {
+  const intl = useIntl();
+  const yesLabel = intl.formatMessage({ id: "common.yes" });
+  const noLabel = intl.formatMessage({ id: "common.no" });
+  const yesShort = intl.formatMessage({ id: "attendance.yes.short" });
+  const noShort = intl.formatMessage({ id: "attendance.no.short" });
   const btnSx: SxProps<Theme> | undefined = compact
     ? { padding: "1px 5px", fontSize: "0.65rem", lineHeight: 1.4 }
     : undefined;
@@ -76,10 +82,10 @@ const YesNoButtons = ({
         onClick={onYes}
         active={attended === true}
         locked={attended === true}
-        aria-label="Yes"
+        aria-label={yesLabel}
         sx={btnSx}
       >
-        {compact ? "Y" : "Yes"}
+        {compact ? yesShort : yesLabel}
       </YesButton>
       <NoButton
         variant="outlined"
@@ -88,10 +94,10 @@ const YesNoButtons = ({
         onClick={onNo}
         active={attended === false}
         locked={attended === false}
-        aria-label="No"
+        aria-label={noLabel}
         sx={btnSx}
       >
-        {compact ? "N" : "No"}
+        {compact ? noShort : noLabel}
       </NoButton>
     </Box>
   );

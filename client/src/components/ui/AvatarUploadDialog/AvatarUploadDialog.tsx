@@ -5,10 +5,13 @@ import {
   Divider,
 } from "@mui/material";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
+import ErrorAlert from "@components/shared/ErrorAlert";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
-import ErrorAlert from "@components/shared/ErrorAlert";
+import useTranslateError from "@hooks/useTranslateError";
 import { BORDER_COLOR } from "@style/tokens";
 import { UseMutationResult } from "@tanstack/react-query";
 import { getInitials } from "@utils/string";
@@ -40,6 +43,8 @@ const AvatarUploadDialog = ({
   displayName,
   uploadMutation,
 }: AvatarUploadDialogProps) => {
+  const intl = useIntl();
+  const translateError = useTranslateError();
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -60,11 +65,18 @@ const AvatarUploadDialog = ({
     reset();
 
     if (!ACCEPTED_TYPES.includes(file.type)) {
-      setValidationError("Only JPEG, PNG, and WebP images are accepted.");
+      setValidationError(
+        intl.formatMessage({ id: "ui.avatarUpload.error.type" })
+      );
       return;
     }
     if (file.size > MAX_SIZE_BYTES) {
-      setValidationError(`File must be smaller than ${MAX_SIZE_MB} MB.`);
+      setValidationError(
+        intl.formatMessage(
+          { id: "ui.avatarUpload.error.size" },
+          { maxSize: MAX_SIZE_MB }
+        )
+      );
       return;
     }
 
@@ -81,7 +93,9 @@ const AvatarUploadDialog = ({
 
   return (
     <ModalDialog open={open} onClose={handleClose} maxWidth="xs">
-      <ModalTitle>Update Profile Photo</ModalTitle>
+      <ModalTitle>
+        <FormattedMessage id="ui.avatarUpload.title" />
+      </ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
 
@@ -104,7 +118,8 @@ const AvatarUploadDialog = ({
 
         {isError && !validationError && (
           <ErrorAlert>
-            {error?.message ?? "Upload failed. Please try again."}
+            {translateError(error?.message) ??
+              intl.formatMessage({ id: "ui.avatarUpload.error.upload" })}
           </ErrorAlert>
         )}
       </DialogContent>
@@ -113,7 +128,7 @@ const AvatarUploadDialog = ({
 
       <DialogActions sx={{ px: 3, py: 2, gap: 1 }}>
         <CancelButton onClick={handleClose} disabled={isPending}>
-          Cancel
+          <FormattedMessage id="common.cancel" />
         </CancelButton>
         <UploadButton
           variant="contained"
@@ -123,7 +138,11 @@ const AvatarUploadDialog = ({
             isPending ? <CircularProgress size={16} color="inherit" /> : null
           }
         >
-          {isPending ? "Uploading…" : "Upload"}
+          <FormattedMessage
+            id={
+              isPending ? "ui.avatarUpload.uploading" : "ui.avatarUpload.upload"
+            }
+          />
         </UploadButton>
       </DialogActions>
     </ModalDialog>

@@ -1,10 +1,13 @@
 import { type StudentRankEntry } from "@api/students";
 import getServerError from "@utils/getServerError";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 import { useDeleteStudentRank } from "@features/admin/ranks/hooks/useDeleteStudentRank";
 
 import ConfirmDeleteModal from "@components/shared/ConfirmDeleteModal";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import useTranslateError from "@hooks/useTranslateError";
 
 interface Props {
   studentId: string;
@@ -14,6 +17,8 @@ interface Props {
 }
 
 const DeleteRankModal = ({ studentId, entry, open, onClose }: Props) => {
+  const intl = useIntl();
+  const translateError = useTranslateError();
   const { mutate, isPending } = useDeleteStudentRank(studentId);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,24 +33,29 @@ const DeleteRankModal = ({ studentId, entry, open, onClose }: Props) => {
     mutate(entry.id, {
       onSuccess: handleClose,
       onError: (err) =>
-        setError(getServerError(err) ?? "Failed to delete rank entry."),
+        setError(
+          translateError(getServerError(err)) ??
+            intl.formatMessage({ id: "admin.ranks.delete.error" }),
+        ),
     });
   };
 
   return (
     <ConfirmDeleteModal
       open={open}
-      title="Delete Rank Entry"
+      title={intl.formatMessage({ id: "admin.ranks.delete.title" })}
       message={
-        <>
-          Are you sure you want to remove{" "}
-          <strong style={{ color: "white" }}>{entry.rank.name}</strong> awarded
-          on{" "}
-          <strong style={{ color: "white" }}>
-            {new Date(entry.awardedAt).toLocaleDateString()}
-          </strong>
-          ? This action cannot be undone.
-        </>
+        <FormattedMessage
+          id="admin.ranks.delete.message"
+          values={{
+            name: <strong style={{ color: "white" }}>{entry.rank.name}</strong>,
+            date: (
+              <strong style={{ color: "white" }}>
+                {new Date(entry.awardedAt).toLocaleDateString(intl.locale)}
+              </strong>
+            ),
+          }}
+        />
       }
       onClose={handleClose}
       onConfirm={handleConfirm}

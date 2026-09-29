@@ -3,30 +3,33 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { Tooltip } from "@mui/material";
 import type { ReactElement } from "react";
+import { useIntl } from "react-intl";
+
+import type { IntlMessageID } from "i18n/messages";
 
 import { AttendedStatus, StyledChip } from "./AttendedChip.style";
 
 interface ChipConfig {
   icon: ReactElement;
-  label: string;
-  tooltip: string;
+  label: IntlMessageID | null;
+  tooltip: IntlMessageID;
 }
 
 const CONFIG: Record<AttendedStatus, ChipConfig> = {
   [AttendedStatus.yes]: {
     icon: <CheckCircleIcon sx={{ fontSize: 14 }} />,
-    label: "Yes",
-    tooltip: "Attended",
+    label: "common.yes",
+    tooltip: "shared.attended.tooltip.yes",
   },
   [AttendedStatus.no]: {
     icon: <CancelIcon sx={{ fontSize: 14 }} />,
-    label: "No",
-    tooltip: "Did not attend",
+    label: "common.no",
+    tooltip: "shared.attended.tooltip.no",
   },
   [AttendedStatus.unmarked]: {
     icon: <HelpOutlineIcon sx={{ fontSize: 14 }} />,
-    label: "—",
-    tooltip: "Not yet marked",
+    label: null,
+    tooltip: "shared.attended.tooltip.unmarked",
   },
 };
 
@@ -41,15 +44,16 @@ interface Props {
 }
 
 const AttendedChip = ({ attended }: Props) => {
+  const intl = useIntl();
   const status = toStatus(attended);
   const { icon, label, tooltip } = CONFIG[status];
 
   return (
-    <Tooltip title={tooltip}>
+    <Tooltip title={intl.formatMessage({ id: tooltip })}>
       <StyledChip
         attendedStatus={status}
         icon={icon}
-        label={label}
+        label={label ? intl.formatMessage({ id: label }) : "—"}
         size="small"
       />
     </Tooltip>

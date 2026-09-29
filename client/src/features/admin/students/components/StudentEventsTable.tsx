@@ -9,10 +9,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useIntl } from "react-intl";
 
 import type { StudentEvent } from "@api/events";
 import AttendedChip from "@components/shared/AttendedChip";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
+import { EVENT_TYPE_LABEL_IDS } from "@features/admin/events/utils/eventLabels";
 import { BORDER_COLOR, PURPLE_ALPHA_04, SURFACE_BG } from "@style/tokens";
 import { formatDate } from "@utils/time";
 
@@ -24,6 +27,8 @@ interface Props {
 const cellBorder = { "& td, & th": { borderBottomColor: BORDER_COLOR } };
 
 const StudentEventsTable = ({ events, isLoading }: Props) => {
+  const intl = useIntl();
+
   if (isLoading) return <CenterSpinner />;
 
   return (
@@ -36,19 +41,19 @@ const StudentEventsTable = ({ events, isLoading }: Props) => {
         <TableHead>
           <TableRow sx={cellBorder}>
             <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-              Event
+              <FormattedMessage id="admin.events.table.event" />
             </TableCell>
             <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-              Type
+              <FormattedMessage id="common.type" />
             </TableCell>
             <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-              Start Date
+              <FormattedMessage id="admin.events.table.startDate" />
             </TableCell>
             <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-              Location
+              <FormattedMessage id="common.location" />
             </TableCell>
             <TableCell sx={{ fontWeight: 700, color: "text.secondary" }}>
-              Attended
+              <FormattedMessage id="admin.events.participants.attended" />
             </TableCell>
           </TableRow>
         </TableHead>
@@ -73,12 +78,16 @@ const StudentEventsTable = ({ events, isLoading }: Props) => {
                   color="text.secondary"
                   sx={{ textTransform: "capitalize" }}
                 >
-                  {event.type}
+                  {EVENT_TYPE_LABEL_IDS[event.type]
+                    ? intl.formatMessage({
+                        id: EVENT_TYPE_LABEL_IDS[event.type],
+                      })
+                    : event.type}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="body2" color="text.secondary">
-                  {formatDate(event.startDate)}
+                  {formatDate(event.startDate, intl.locale)}
                 </Typography>
               </TableCell>
               <TableCell>

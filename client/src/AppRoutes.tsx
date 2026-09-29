@@ -1,12 +1,13 @@
 import AdminRoute from "@components/AdminRoute";
+import ProtectedRoute from "@components/ProtectedRoute";
 import DashboardLayout from "@components/ui/DashboardLayout/DashboardLayout";
 import StudentDetail from "@features/admin/students/components/StudentDetail";
-import ProtectedRoute from "@components/ProtectedRoute";
 import { normalizePath } from "@utils/routes";
 import { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { Route, Routes, useLocation } from "react-router";
 import App from "./App";
-import { pages } from "./pages";
+import { getPageTitle, pages } from "./pages";
 
 interface AppRoutesProps {
   initialLoaderData: any;
@@ -14,11 +15,12 @@ interface AppRoutesProps {
 
 export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
   const { pathname } = useLocation();
+  const intl = useIntl();
 
   useEffect(() => {
     const page = pages.find((p) => normalizePath(p.path) === pathname);
-    if (page) document.title = page.title;
-  }, [pathname]);
+    if (page) document.title = getPageTitle(page, intl);
+  }, [pathname, intl]);
 
   const standalonePages = pages.filter((p) => p.standalone);
   const publicPages = pages.filter((p) => !p.protected && !p.standalone);

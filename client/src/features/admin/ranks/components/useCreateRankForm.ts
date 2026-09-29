@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useCreateStudentRank } from "@features/admin/ranks/hooks/useCreateStudentRank";
 import { useRanks } from "@hooks/useRanks";
+import useTranslateError from "@hooks/useTranslateError";
 import getServerError from "@utils/getServerError";
 
 import useRankForm from "./useRankForm";
@@ -23,6 +24,7 @@ const useCreateRankForm = (
 ) => {
   const mutation = useCreateStudentRank(studentId);
   const { data: ranks = [] } = useRanks();
+  const translateError = useTranslateError();
 
   const { control, register, handleSubmit, errors } = useRankForm({
     resolver: zodResolver(createStudentRankSchema),
@@ -46,7 +48,9 @@ const useCreateRankForm = (
     errors,
     ranks,
     isPending: mutation.isPending,
-    serverError: getServerError(mutation.error, mutation.isError),
+    serverError: translateError(
+      getServerError(mutation.error, mutation.isError),
+    ),
   };
 };
 

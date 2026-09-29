@@ -7,6 +7,7 @@ import {
 } from "chart.js";
 import { useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { useIntl } from "react-intl";
 
 import {
   type DashboardEvent,
@@ -47,8 +48,10 @@ import {
   WHITE_ALPHA_10,
   WHITE_ALPHA_25,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
 import ChipFilterRow, { defaultChipSx } from "@components/shared/ChipFilterRow";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import {
   ChartHeader,
   ChartRoot,
@@ -86,20 +89,25 @@ const EVENT_STATUS_COLORS: Record<
   },
 };
 
-const TYPE_OPTIONS: { value: EventTypeFilter; label: string }[] = [
-  { value: "all", label: "All Types" },
-  { value: "seminar", label: "Seminar" },
-  { value: "demo", label: "Demo" },
-  { value: "camp", label: "Camp" },
-  { value: "other", label: "Other" },
+const TYPE_OPTIONS: { value: EventTypeFilter; labelId: IntlMessageID }[] = [
+  { value: "all", labelId: "admin.dashboard.events.filter.allTypes" },
+  { value: "seminar", labelId: "page.events.type.seminar" },
+  { value: "demo", labelId: "page.events.type.demo" },
+  { value: "camp", labelId: "page.events.type.camp" },
+  { value: "other", labelId: "page.events.type.other" },
 ];
 
-const STATUS_OPTIONS: { value: EventStatusFilter; label: string }[] = [
-  { value: "all", label: "All Statuses" },
-  { value: "draft", label: "Draft" },
-  { value: "published", label: "Published" },
-  { value: "cancelled", label: "Cancelled" },
+const STATUS_OPTIONS: { value: EventStatusFilter; labelId: IntlMessageID }[] = [
+  { value: "all", labelId: "admin.dashboard.events.filter.allStatuses" },
+  { value: "draft", labelId: "admin.dashboard.events.status.draft" },
+  { value: "published", labelId: "admin.dashboard.events.status.published" },
+  { value: "cancelled", labelId: "admin.dashboard.events.status.cancelled" },
 ];
+
+const findLabelId = <T extends string>(
+  options: { value: T; labelId: IntlMessageID }[],
+  value: string,
+) => options.find((o) => o.value === value)?.labelId;
 
 const statusChipSx = (
   value: EventStatusFilter,
@@ -135,6 +143,7 @@ function filterEvents(
 }
 
 const DashboardEventChart = () => {
+  const intl = useIntl();
   const [type, setType] = useState<EventTypeFilter>("all");
   const [status, setStatus] = useState<EventStatusFilter>("all");
   const [year, setYear] = useState<number | "all">("all");
@@ -164,12 +173,43 @@ const DashboardEventChart = () => {
 
   const availableYears = data?.availableYears ?? [];
 
+  const typeOptions = useMemo(
+    () =>
+      TYPE_OPTIONS.map(({ value, labelId }) => ({
+        value,
+        label: intl.formatMessage({ id: labelId }),
+      })),
+    [intl],
+  );
+
+  const statusOptions = useMemo(
+    () =>
+      STATUS_OPTIONS.map(({ value, labelId }) => ({
+        value,
+        label: intl.formatMessage({ id: labelId }),
+      })),
+    [intl],
+  );
+
+  const formatOption = <T extends string>(
+    options: { value: T; labelId: IntlMessageID }[],
+    value: string,
+  ) => {
+    const labelId = findLabelId(options, value);
+    return labelId ? intl.formatMessage({ id: labelId }) : value;
+  };
+
   const yearOptions = useMemo(
     () => [
-      { value: "all" as const, label: "All Years" },
+      {
+        value: "all" as const,
+        label: intl.formatMessage({
+          id: "admin.dashboard.events.filter.allYears",
+        }),
+      },
       ...availableYears.map((y) => ({ value: y, label: String(y) })),
     ],
-    [availableYears],
+    [availableYears, intl],
   );
 
   const options = {
@@ -185,10 +225,22 @@ const DashboardEventChart = () => {
             const event = filtered[ctx.dataIndex];
             if (!event) return [];
             return [
-              ` ${event.attendedCount} attended`,
-              ` ${event.registeredCount} registered`,
-              ` Type: ${event.type}`,
-              ` Status: ${event.status}`,
+              ` ${intl.formatMessage(
+                { id: "admin.dashboard.events.tooltip.attended" },
+                { count: event.attendedCount },
+              )}`,
+              ` ${intl.formatMessage(
+                { id: "admin.dashboard.events.tooltip.registered" },
+                { count: event.registeredCount },
+              )}`,
+              ` ${intl.formatMessage(
+                { id: "admin.dashboard.events.tooltip.type" },
+                { type: formatOption(TYPE_OPTIONS, event.type) },
+              )}`,
+              ` ${intl.formatMessage(
+                { id: "admin.dashboard.events.tooltip.status" },
+                { status: formatOption(STATUS_OPTIONS, event.status) },
+              )}`,
             ];
           },
         },
@@ -241,21 +293,24 @@ const DashboardEventChart = () => {
     >
       <ChartHeader>
         <ChartTitle variant="caption">
-          Events — Participation Overview
+          <FormattedMessage id="admin.dashboard.events.title" />
         </ChartTitle>
         <CountBadge>
-          {filtered.length} event{filtered.length !== 1 ? "s" : ""}
+          <FormattedMessage
+            id="admin.dashboard.events.count"
+            values={{ count: filtered.length }}
+          />
         </CountBadge>
       </ChartHeader>
 
       {/* Type filter */}
-      <ChipFilterRow options={TYPE_OPTIONS} value={type} onChange={setType} />
+      <ChipFilterRow options={typeOptions} value={type} onChange={setType} />
 
       <Divider sx={{ borderColor: BORDER_COLOR, mb: 2 }} />
 
       {/* Status filter */}
       <ChipFilterRow
-        options={STATUS_OPTIONS}
+        options={statusOptions}
         value={status}
         onChange={setStatus}
         getChipSx={(v, active) => statusChipSx(v, active, status)}
@@ -271,7 +326,7 @@ const DashboardEventChart = () => {
           variant="body2"
           sx={{ color: TEXT_SUBTLE, textAlign: "center", py: 4 }}
         >
-          No events match the selected filters.
+          <FormattedMessage id="admin.dashboard.events.empty" />
         </Typography>
       ) : (
         <div style={{ height: chartHeight }}>
@@ -280,7 +335,9 @@ const DashboardEventChart = () => {
               labels: chartData.labels,
               datasets: [
                 {
-                  label: "Attended",
+                  label: intl.formatMessage({
+                    id: "admin.dashboard.events.dataset",
+                  }),
                   data: chartData.values,
                   backgroundColor: chartData.colors,
                   borderRadius: 4,

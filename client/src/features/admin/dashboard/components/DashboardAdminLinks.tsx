@@ -4,14 +4,17 @@ import EventIcon from "@mui/icons-material/Event";
 import GroupIcon from "@mui/icons-material/Group";
 import SportsKabaddiIcon from "@mui/icons-material/SportsKabaddi";
 import { Box, CardActionArea, Typography } from "@mui/material";
+import { useIntl } from "react-intl";
 import { Link } from "react-router";
 
 import CountBadge from "@components/shared/CountBadge";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { useDashboardEvents } from "@features/admin/dashboard/hooks/useDashboardEvents";
 import { useDashboardStudents } from "@features/admin/dashboard/hooks/useDashboardStudents";
 import { useKyuProgram } from "@features/public/kyu-program/useKyuProgram";
 import { useTechniques } from "@features/public/techniques/useTechniques";
 import { Routes } from "@lib/routes";
+import type { IntlMessageID } from "i18n/messages";
 
 import {
   CARD_ACTION_SX,
@@ -23,7 +26,7 @@ import {
 } from "./DashboardAdminLinks.style";
 
 interface AdminLinkItem {
-  label: string;
+  labelId: IntlMessageID;
   to: string;
   Icon: SvgIconComponent;
   count: number | undefined;
@@ -31,6 +34,7 @@ interface AdminLinkItem {
 }
 
 const DashboardAdminLinks = () => {
+  const intl = useIntl();
   const { data: studentStats, isLoading: studentsLoading } =
     useDashboardStudents();
   const { data: eventStats, isLoading: eventsLoading } = useDashboardEvents();
@@ -43,28 +47,28 @@ const DashboardAdminLinks = () => {
 
   const adminLinks: AdminLinkItem[] = [
     {
-      label: "Manage Students",
+      labelId: "admin.dashboard.links.students",
       to: Routes.students,
       Icon: GroupIcon,
       count: studentStats?.total,
       isLoading: studentsLoading,
     },
     {
-      label: "Manage Events",
+      labelId: "header.menu.admin/events",
       to: Routes.adminEvents,
       Icon: EventIcon,
       count: eventStats?.total,
       isLoading: eventsLoading,
     },
     {
-      label: "Manage Techniques",
+      labelId: "admin.dashboard.links.techniques",
       to: Routes.techniques,
       Icon: SportsKabaddiIcon,
       count: techniqueCount,
       isLoading: techniquesLoading,
     },
     {
-      label: "Kyu Program",
+      labelId: "header.menu.kyu-program",
       to: Routes.kyuProgram,
       Icon: EmojiEventsIcon,
       count: kyuProgram?.length,
@@ -75,16 +79,16 @@ const DashboardAdminLinks = () => {
   return (
     <Box>
       <SectionLabel variant="subtitle2" color="text.secondary">
-        Admin
+        <FormattedMessage id="admin.dashboard.links.title" />
       </SectionLabel>
       <LinksGrid>
-        {adminLinks.map(({ label, to, Icon, count, isLoading }) => (
+        {adminLinks.map(({ labelId, to, Icon, count, isLoading }) => (
           <LinkCard key={to}>
             <CardActionArea component={Link} to={to} sx={CARD_ACTION_SX}>
               <StyledCardContent>
                 <Icon sx={ICON_SX} />
                 <Typography variant="body2" fontWeight={600} textAlign="center">
-                  {label}
+                  {intl.formatMessage({ id: labelId })}
                 </Typography>
                 <CountBadge count={count} isLoading={isLoading} />
               </StyledCardContent>

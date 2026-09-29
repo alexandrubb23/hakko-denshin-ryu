@@ -17,6 +17,7 @@ import { CalendarView } from "@components/shared/AttendanceTab/shared/calendarVi
 import useAttendanceTabParams from "@components/shared/AttendanceTab/shared/useAttendanceTabParams";
 import WeekView from "@components/shared/AttendanceTab/WeekView";
 import ErrorAlert from "@components/shared/ErrorAlert";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 
 const PLACEHOLDER_STUDENT_ID = "";
 
@@ -45,7 +46,7 @@ const MyAttendanceTab = () => {
 
       {isError && view !== CalendarView.year && (
         <ErrorAlert>
-          Failed to load attendance data. Please try again.
+          <FormattedMessage id="attendance.error.load" />
         </ErrorAlert>
       )}
 

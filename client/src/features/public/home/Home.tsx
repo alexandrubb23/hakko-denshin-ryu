@@ -70,7 +70,7 @@ const Home = () => {
           <Box sx={badgeSx}>
             <Box sx={pulseDotSx} />
             <Typography variant="caption" sx={badgeLabelSx}>
-              Senshinkan Romania
+              <FormattedMessage id="page.home.badge" />
             </Typography>
           </Box>
 

@@ -16,9 +16,12 @@ import {
   Typography,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import { useIntl } from "react-intl";
 
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { useEvents } from "@features/admin/events/hooks/useEvents";
 import { PURPLE_ALPHA_30, SKELETON_SX } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 import {
   CARD_CONTENT_SX,
   chipSx,
@@ -58,7 +61,11 @@ const FadeIn = ({
   </motion.div>
 );
 
-const formatEventDate = (start: string, end?: string | null): string => {
+const formatEventDate = (
+  locale: string,
+  start: string,
+  end?: string | null,
+): string => {
   const opts: Intl.DateTimeFormatOptions = {
     day: "2-digit",
     month: "short",
@@ -67,13 +74,14 @@ const formatEventDate = (start: string, end?: string | null): string => {
     minute: "2-digit",
     timeZone: "Europe/Bucharest",
   };
-  const startStr = new Date(start).toLocaleString("en-GB", opts);
+  const startStr = new Date(start).toLocaleString(locale, opts);
   if (!end) return startStr;
-  const endStr = new Date(end).toLocaleString("en-GB", opts);
+  const endStr = new Date(end).toLocaleString(locale, opts);
   return `${startStr} – ${endStr}`;
 };
 
 const PublicEvents = () => {
+  const intl = useIntl();
   const { data: events, isLoading, isError } = useEvents();
 
   return (
@@ -84,7 +92,7 @@ const PublicEvents = () => {
           <FadeIn>
             <Typography sx={eyebrowSx}>Senshinkan · Romania</Typography>
             <Typography component="h1" sx={pageTitleSx}>
-              Events
+              <FormattedMessage id="page.events.title" />
             </Typography>
             <Typography sx={pageKanjiSx}>行事</Typography>
             <Divider sx={pageHeaderDividerSx} />
@@ -94,7 +102,7 @@ const PublicEvents = () => {
         {/* ── Error state ──────────────────────────────────────────────── */}
         {isError && (
           <Typography color="error" sx={{ mb: 4 }}>
-            Failed to load events. Please try again.
+            <FormattedMessage id="page.events.error" />
           </Typography>
         )}
 
@@ -103,10 +111,10 @@ const PublicEvents = () => {
           <Stack alignItems="center" py={10} gap={1}>
             <EventNoteIcon sx={{ fontSize: 56, color: "text.disabled" }} />
             <Typography color="text.secondary" variant="h6">
-              No upcoming events at the moment.
+              <FormattedMessage id="page.events.empty" />
             </Typography>
             <Typography color="text.secondary" variant="body2">
-              Check back soon!
+              <FormattedMessage id="page.events.empty.subtitle" />
             </Typography>
           </Stack>
         )}
@@ -164,7 +172,9 @@ const PublicEvents = () => {
                   <CardContent sx={CARD_CONTENT_SX}>
                     <Stack direction="row" gap={1} flexWrap="wrap">
                       <Chip
-                        label={event.type}
+                        label={intl.formatMessage({
+                          id: `page.events.type.${event.type}` as IntlMessageID,
+                        })}
                         size="small"
                         sx={chipSx(
                           TYPE_COLORS[event.type] ?? TYPE_COLORS.other,
@@ -179,7 +189,11 @@ const PublicEvents = () => {
                     <Stack direction="row" alignItems="flex-start" gap={0.75}>
                       <CalendarMonthIcon sx={ICON_SX} />
                       <Typography variant="caption" color="text.secondary">
-                        {formatEventDate(event.startDate, event.endDate)}
+                        {formatEventDate(
+                          intl.locale,
+                          event.startDate,
+                          event.endDate,
+                        )}
                       </Typography>
                     </Stack>
 
@@ -205,7 +219,7 @@ const PublicEvents = () => {
                         endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
                         sx={TICKET_BUTTON_SX}
                       >
-                        Get Tickets
+                        <FormattedMessage id="page.events.get.tickets" />
                       </Button>
                     )}
                   </CardContent>

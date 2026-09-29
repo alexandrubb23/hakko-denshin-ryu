@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import { useState } from "react";
 
 import { type AttendanceRecord } from "@api/attendance";
-import { DAY_HEADERS_MINI, MONTH_NAMES_SHORT } from "@constants/dateNames";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import {
   formatDateKey,
   getCalendarGrid,
@@ -15,6 +15,7 @@ import {
 } from "@constants/trainingSchedule";
 import { useAttendanceByYear } from "@features/admin/attendance/hooks/useAttendance";
 import { useMyAttendanceByYear } from "@features/student/attendance/hooks/useMyAttendance";
+import useDateNames from "@hooks/useDateNames";
 import {
   BORDER_COLOR,
   PURPLE,
@@ -22,6 +23,7 @@ import {
   PURPLE_ALPHA_30,
   SURFACE_BG,
 } from "@style/tokens";
+import { stripDiacritics } from "@utils/string";
 
 import AttendanceDayDot, { AttendanceStatus } from "./shared/AttendanceDayDot";
 import AttendancePopup from "./shared/AttendancePopup";
@@ -30,7 +32,7 @@ import { LoadingContainer, PurpleSpinner } from "./shared/AttendanceTab.style";
 function getStatus(
   date: Date,
   records: AttendanceRecord[],
-  today: Date,
+  today: Date
 ): AttendanceStatus {
   if (date > today) return AttendanceStatus.unmarked;
   const record = records.find((r) => r.date.startsWith(formatDateKey(date)));
@@ -132,19 +134,20 @@ const MiniMonth = ({
   today,
   onDayClick,
 }: MiniMonthProps) => {
+  const { DAY_HEADERS_MINI, MONTH_NAMES_SHORT } = useDateNames();
   const grid = getCalendarGrid(year, month);
   const interactive = !!onDayClick;
 
   return (
     <MiniMonthCard>
       <MiniMonthTitle variant="caption">
-        {MONTH_NAMES_SHORT[month - 1]}
+        {stripDiacritics(MONTH_NAMES_SHORT[month - 1])}
       </MiniMonthTitle>
 
       <DayHeadersGrid>
         {DAY_HEADERS_MINI.map((h, i) => (
           <DayHeaderText key={i} variant="caption">
-            {h}
+            {stripDiacritics(h)}
           </DayHeaderText>
         ))}
       </DayHeadersGrid>
@@ -174,7 +177,7 @@ const MiniMonth = ({
             </DayCell>
           ) : (
             <EmptyDayCell key={`e-${i}`} />
-          ),
+          )
         )}
       </CellsGrid>
     </MiniMonthCard>
@@ -240,7 +243,7 @@ const YearView = ({ studentId, cursor, onCursorChange, readOnly }: Props) => {
 
       {isError && (
         <Typography color="error" sx={{ textAlign: "center" }}>
-          Failed to load attendance data.
+          <FormattedMessage id="attendance.error.loadShort" />
         </Typography>
       )}
 

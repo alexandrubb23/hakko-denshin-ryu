@@ -7,8 +7,10 @@ import {
 } from "chart.js";
 import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
+import { useIntl } from "react-intl";
 
 import type { StudentEvent } from "@api/events";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { useMyEvents } from "@features/student/events/hooks/useMyEvents";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
@@ -26,6 +28,7 @@ import {
   SKELETON_SX,
   TEXT_SUBTLE,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
 import {
   ChartHeader,
@@ -45,6 +48,7 @@ function eventColor(event: StudentEvent): string {
 }
 
 const MyEventChart = () => {
+  const intl = useIntl();
   const { data: events, isLoading } = useMyEvents();
 
   const chartData = useMemo(() => {
@@ -68,13 +72,17 @@ const MyEventChart = () => {
           label: (ctx: import("chart.js").TooltipItem<"bar">) => {
             const event = (events ?? [])[ctx.dataIndex];
             if (!event) return "";
-            const status =
+            const statusId: IntlMessageID =
               event.attended === true
-                ? "Attended"
+                ? "student.events.chart.attended"
                 : event.attended === false
-                  ? "Not attended"
-                  : "Unmarked";
-            return ` ${status} · ${event.type}`;
+                  ? "student.events.chart.notAttended"
+                  : "student.events.chart.unmarked";
+            const status = intl.formatMessage({ id: statusId });
+            const type = intl.formatMessage({
+              id: `page.events.type.${event.type}` as IntlMessageID,
+            });
+            return ` ${status} · ${type}`;
           },
         },
         backgroundColor: CHART_TOOLTIP_BG,
@@ -118,9 +126,14 @@ const MyEventChart = () => {
   return (
     <ChartRoot>
       <ChartHeader>
-        <ChartTitle variant="caption">Participation Overview</ChartTitle>
+        <ChartTitle variant="caption">
+          <FormattedMessage id="student.events.chart.title" />
+        </ChartTitle>
         <CountBadge>
-          {attendedCount} / {events.length} attended
+          <FormattedMessage
+            id="student.events.chart.attendedCount"
+            values={{ attended: attendedCount, total: events.length }}
+          />
         </CountBadge>
       </ChartHeader>
 
@@ -129,7 +142,7 @@ const MyEventChart = () => {
           variant="body2"
           sx={{ color: TEXT_SUBTLE, textAlign: "center", py: 4 }}
         >
-          No events yet.
+          <FormattedMessage id="student.events.chart.empty" />
         </Typography>
       ) : (
         <div style={{ height: chartHeight }}>
@@ -138,7 +151,9 @@ const MyEventChart = () => {
               labels: chartData.labels,
               datasets: [
                 {
-                  label: "Event",
+                  label: intl.formatMessage({
+                    id: "student.events.chart.dataset",
+                  }),
                   data: chartData.values,
                   backgroundColor: chartData.colors,
                   borderRadius: 4,

@@ -29,13 +29,17 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useIntl } from "react-intl";
 
 import { type Student } from "@api/students";
 import ErrorAlert from "@components/shared/ErrorAlert";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import { useCreateStudent } from "@features/admin/students/hooks/useCreateStudent";
 import { useUpdateStudent } from "@features/admin/students/hooks/useUpdateStudent";
+import { STUDENT_CATEGORY_LABEL_IDS } from "@features/admin/students/utils/categoryLabels";
+import useTranslateError from "@hooks/useTranslateError";
 import {
   BORDER_COLOR,
   BORDER_HOVER,
@@ -44,6 +48,7 @@ import {
   PURPLE_HOVER,
   SURFACE_BG,
 } from "@style/tokens";
+import type { IntlMessageID } from "i18n/messages";
 
 const fieldSx: SxProps<Theme> = {
   "& .MuiOutlinedInput-root": {
@@ -101,20 +106,29 @@ export type StudentFormProps =
       student: Student;
     };
 
-const modeConfig = {
+const modeConfig: Record<
+  StudentFormMode,
+  {
+    title: IntlMessageID;
+    Icon: typeof PersonAddIcon;
+    submitLabel: IntlMessageID;
+    pendingLabel: IntlMessageID;
+    passwordPlaceholder?: IntlMessageID;
+  }
+> = {
   [StudentFormMode.create]: {
-    title: "Add Student",
+    title: "admin.students.form.title.create",
     Icon: PersonAddIcon,
-    submitLabel: "Create Student",
-    pendingLabel: "Creating…",
-    passwordPlaceholder: undefined as string | undefined,
+    submitLabel: "admin.students.form.submit.create",
+    pendingLabel: "admin.students.form.pending.create",
+    passwordPlaceholder: undefined,
   },
   [StudentFormMode.edit]: {
-    title: "Edit Student",
+    title: "admin.students.form.title.edit",
     Icon: EditIcon,
-    submitLabel: "Save Changes",
-    pendingLabel: "Saving…",
-    passwordPlaceholder: "Leave blank to keep unchanged",
+    submitLabel: "admin.students.form.submit.edit",
+    pendingLabel: "admin.students.form.pending.edit",
+    passwordPlaceholder: "admin.students.form.password.placeholder",
   },
 };
 
@@ -122,6 +136,8 @@ const StudentForm = (props: StudentFormProps) => {
   const { mode, open, onClose } = props;
   const { title, Icon, submitLabel, pendingLabel, passwordPlaceholder } =
     modeConfig[mode];
+  const intl = useIntl();
+  const translateError = useTranslateError();
 
   const student = mode === StudentFormMode.edit ? props.student : null;
 
@@ -181,7 +197,7 @@ const StudentForm = (props: StudentFormProps) => {
           sendInvite: values.sendInvite ?? true,
           password: values.password,
         } as CreateStudentInput,
-        { onSuccess: () => onClose() }
+        { onSuccess: () => onClose() },
       );
     } else {
       updateMutation.mutate(
@@ -193,7 +209,7 @@ const StudentForm = (props: StudentFormProps) => {
           sendInvite: values.sendInvite,
           password: values.password || undefined,
         } as { id: string } & UpdateStudentInput,
-        { onSuccess: () => onClose() }
+        { onSuccess: () => onClose() },
       );
     }
   };
@@ -201,16 +217,16 @@ const StudentForm = (props: StudentFormProps) => {
   const serverErrorMessage = (() => {
     if (!isError || !error) return null;
     if (axios.isAxiosError(error) && error.response?.status === 409) {
-      return "Email already in use.";
+      return intl.formatMessage({ id: "admin.students.form.error.emailInUse" });
     }
-    return "Something went wrong. Please try again.";
+    return intl.formatMessage({ id: "error.generic" });
   })();
 
   return (
     <ModalDialog open={open} onClose={onClose} maxWidth="xs">
       <ModalTitle>
         <Icon fontSize="small" />
-        {title}
+        <FormattedMessage id={title} />
       </ModalTitle>
 
       <Divider sx={{ borderColor: BORDER_COLOR }} />
@@ -222,22 +238,22 @@ const StudentForm = (props: StudentFormProps) => {
           {serverErrorMessage && <ErrorAlert>{serverErrorMessage}</ErrorAlert>}
 
           <TextField
-            label="Name"
+            label={intl.formatMessage({ id: "common.name" })}
             fullWidth
             autoFocus
             {...register("name")}
             error={!!errors.name}
-            helperText={errors.name?.message}
+            helperText={translateError(errors.name?.message)}
             sx={fieldSx}
           />
 
           <TextField
-            label="Email"
+            label={intl.formatMessage({ id: "common.email" })}
             type="email"
             fullWidth
             {...register("email")}
             error={!!errors.email}
-            helperText={errors.email?.message}
+            helperText={translateError(errors.email?.message)}
             sx={fieldSx}
           />
 
@@ -246,20 +262,26 @@ const StudentForm = (props: StudentFormProps) => {
             control={control}
             render={({ field }) => (
               <FormControl fullWidth error={!!errors.category} sx={fieldSx}>
-                <InputLabel>Category</InputLabel>
+                <InputLabel>
+                  <FormattedMessage id="admin.students.category" />
+                </InputLabel>
                 <Select
                   {...field}
-                  label="Category"
+                  label={intl.formatMessage({ id: "admin.students.category" })}
                   MenuProps={categoryMenuProps}
                 >
                   {STUDENT_CATEGORIES.map((cat) => (
                     <MenuItem key={cat} value={cat}>
-                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                      {intl.formatMessage({
+                        id: STUDENT_CATEGORY_LABEL_IDS[cat],
+                      })}
                     </MenuItem>
                   ))}
                 </Select>
                 {errors.category && (
-                  <FormHelperText>{errors.category.message}</FormHelperText>
+                  <FormHelperText>
+                    {translateError(errors.category.message)}
+                  </FormHelperText>
                 )}
               </FormControl>
             )}
@@ -276,19 +298,24 @@ const StudentForm = (props: StudentFormProps) => {
                 }}
               />
             }
-            label="Send invitation email to student"
+            label={intl.formatMessage({
+              id: "admin.students.form.sendInvite",
+            })}
             sx={{ color: "text.secondary", ml: 0 }}
           />
 
           {!sendInvite && (
             <TextField
-              label="Password"
+              label={intl.formatMessage({ id: "common.password" })}
               type="password"
               fullWidth
-              placeholder={passwordPlaceholder}
+              placeholder={
+                passwordPlaceholder &&
+                intl.formatMessage({ id: passwordPlaceholder })
+              }
               {...register("password")}
               error={!!errors.password}
-              helperText={errors.password?.message}
+              helperText={translateError(errors.password?.message)}
               sx={fieldSx}
             />
           )}
@@ -300,7 +327,7 @@ const StudentForm = (props: StudentFormProps) => {
             disabled={isPending}
             sx={{ color: "text.secondary" }}
           >
-            Cancel
+            <FormattedMessage id="common.cancel" />
           </Button>
           <Button
             type="submit"
@@ -313,7 +340,7 @@ const StudentForm = (props: StudentFormProps) => {
               "&:hover": { backgroundColor: PURPLE_HOVER },
             }}
           >
-            {isPending ? pendingLabel : submitLabel}
+            <FormattedMessage id={isPending ? pendingLabel : submitLabel} />
           </Button>
         </DialogActions>
       </Box>

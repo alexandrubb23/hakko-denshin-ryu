@@ -167,14 +167,14 @@ Prisma query logic lives exclusively in repository files, never in route handler
 
 #### Repository ownership
 
-| Repository                  | Owns                                                                                  |
-| --------------------------- | ------------------------------------------------------------------------------------- |
-| `students.repository.ts`    | All student-related Prisma queries — the canonical source for student data            |
-| `me.repository.ts`          | `updateUserImageById` only; all read exports delegate to `students.repository.ts`     |
-| `ranks.repository.ts`       | Rank catalogue queries                                                                |
-| `events.repository.ts`      | Event CRUD and participation                                                          |
-| `attendance.repository.ts`  | Admin attendance queries                                                              |
-| `dashboard.repository.ts`   | Aggregate / stats queries                                                             |
+| Repository                 | Owns                                                                              |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| `students.repository.ts`   | All student-related Prisma queries — the canonical source for student data        |
+| `me.repository.ts`         | `updateUserImageById` only; all read exports delegate to `students.repository.ts` |
+| `ranks.repository.ts`      | Rank catalogue queries                                                            |
+| `events.repository.ts`     | Event CRUD and participation                                                      |
+| `attendance.repository.ts` | Admin attendance queries                                                          |
+| `dashboard.repository.ts`  | Aggregate / stats queries                                                         |
 
 #### Delegation pattern in `me.repository.ts`
 
@@ -243,6 +243,7 @@ Apply this rule consistently to repository functions, utilities, and any other m
 - Two locales: `ro` (default) and `en`
 - Message files: `client/src/locales/ro.json` and `en.json`
 - Language state persisted via Zustand (`useLangStore`) with localStorage key `lang-storage`
+- The Jarene font (theme default: headings h1–h6, subtitles, `caption`, `overline`, buttons, tabs, chips, tooltips, dialog titles, form helper text, and `*.style.ts` blocks using `Jarene`) has **no Romanian diacritics**. Romanian values rendered in Jarene must be written without diacritics (ă→a, â/î→a/i, ș→s, ț→t); Inter text (`body1`/`body2`, inputs, alerts, tables) keeps them. For runtime text in Jarene (e.g. month/day names from `useDateNames`) use `stripDiacritics` from `@utils/string`.
 
 ### Path Aliases (client)
 
@@ -253,15 +254,15 @@ All imports use Vite aliases resolving to `client/src/`:
 
 Client components are organised into three areas:
 
-| Directory             | Contents                                                                                                              |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `components/shared/`  | Cross-domain UI reused by both admin and student features (e.g. `EventsTab`, `AttendanceTab`, `AttendedChip`, etc.)  |
-| `components/ui/`      | Generic layout and shell components (`DashboardLayout`, `Header`, `Footer`, `SkeletonText`, `Spinner`, etc.)          |
-| `features/admin/`     | Admin-only pages and components                                                                                       |
-| `features/student/`   | Student-only pages and components                                                                                     |
-| `features/public/`    | Unauthenticated pages                                                                                                 |
-| `features/auth/`      | Authentication pages (login, set-password, etc.)                                                                      |
-| `features/dashboard/` | Shared dashboard entry point                                                                                          |
+| Directory             | Contents                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `components/shared/`  | Cross-domain UI reused by both admin and student features (e.g. `EventsTab`, `AttendanceTab`, `AttendedChip`, etc.) |
+| `components/ui/`      | Generic layout and shell components (`DashboardLayout`, `Header`, `Footer`, `SkeletonText`, `Spinner`, etc.)        |
+| `features/admin/`     | Admin-only pages and components                                                                                     |
+| `features/student/`   | Student-only pages and components                                                                                   |
+| `features/public/`    | Unauthenticated pages                                                                                               |
+| `features/auth/`      | Authentication pages (login, set-password, etc.)                                                                    |
+| `features/dashboard/` | Shared dashboard entry point                                                                                        |
 
 #### `EventsTab` shared component
 
@@ -277,11 +278,11 @@ const StudentEventsTab = ({ studentId }: { studentId: string }) => {
 };
 ```
 
-| Prop        | Type                       | Description                               |
-| ----------- | -------------------------- | ----------------------------------------- |
+| Prop        | Type                          | Description                                   |
+| ----------- | ----------------------------- | --------------------------------------------- |
 | `events`    | `StudentEvent[] \| undefined` | Data from the query (undefined while loading) |
-| `isLoading` | `boolean`                  | Shows skeleton rows while true            |
-| `isError`   | `boolean`                  | Shows an error message when true          |
+| `isLoading` | `boolean`                     | Shows skeleton rows while true                |
+| `isError`   | `boolean`                     | Shows an error message when true              |
 
 #### `readOnly` prop on attendance views
 

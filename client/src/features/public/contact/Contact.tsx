@@ -77,13 +77,15 @@ const Contact = () => (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={contactBlockSx}>
                 <Typography sx={contactBlockTitleSx}>
-                  Location &amp; Hours
+                  <FormattedMessage id="page.contact.block.location" />
                 </Typography>
                 <AddressMediaItem />
                 <ScheduleMediaItem />
               </Box>
               <Box sx={contactBlockSx}>
-                <Typography sx={contactBlockTitleSx}>Get in touch</Typography>
+                <Typography sx={contactBlockTitleSx}>
+                  <FormattedMessage id="page.contact.block.touch" />
+                </Typography>
                 <EmailMediaItem />
                 <PhoneMediaItem />
                 <SocialMediaItem />

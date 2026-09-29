@@ -1,3 +1,5 @@
+import { useIntl } from "react-intl";
+
 import TabbedContent from "@components/shared/TabbedPageLayout/TabbedContent";
 import TabbedPageLayout from "@components/shared/TabbedPageLayout/TabbedPageLayout";
 import { useTechniques } from "@features/public/techniques/useTechniques";
@@ -12,15 +14,16 @@ const SUITE_SHORT: Record<string, string> = {
 };
 
 const Techniques = () => {
+  const intl = useIntl();
   const { data: suites, isLoading, isError } = useTechniques();
   const { activeTabIndex, handleTabChange } = useUrlTab(suites, "suite");
 
   return (
     <TabbedPageLayout
-      title="Techniques"
+      title={intl.formatMessage({ id: "page.techniques.title" })}
       isLoading={isLoading}
       isError={isError}
-      errorMessage="Failed to load techniques. Please try again."
+      errorMessage={intl.formatMessage({ id: "page.techniques.error" })}
     >
       {suites && (
         <TabbedContent

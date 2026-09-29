@@ -1,6 +1,7 @@
 import PersonIcon from "@mui/icons-material/Person";
 import { Skeleton, Tooltip } from "@mui/material";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 import AvatarUploadDialog from "@components/ui/AvatarUploadDialog/AvatarUploadDialog";
 import { useUploadStudentImage } from "@features/admin/students/hooks/useUploadStudentImage";
@@ -24,6 +25,7 @@ const StudentAvatar = ({
   isLoading,
   uploadMutation,
 }: StudentAvatarProps) => {
+  const intl = useIntl();
   const [dialogOpen, setDialogOpen] = useState(false);
   const defaultMutation = useUploadStudentImage(studentId);
   const mutation = uploadMutation ?? defaultMutation;
@@ -36,7 +38,10 @@ const StudentAvatar = ({
 
   return (
     <>
-      <Tooltip title="Change profile photo" placement="right">
+      <Tooltip
+        title={intl.formatMessage({ id: "admin.students.avatar.change" })}
+        placement="right"
+      >
         <StyledAvatar
           data-testid="student-avatar"
           src={imageUrl ?? undefined}

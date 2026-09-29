@@ -15,8 +15,11 @@ import type {
   UseFormRegister,
 } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { useIntl } from "react-intl";
 
 import DarkSelect from "@components/ui/DarkSelect/DarkSelect";
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import useTranslateError from "@hooks/useTranslateError";
 import { ERROR_DARK_ALPHA_12, ERROR_DARK_TEXT } from "@style/status.tokens";
 import { BORDER_COLOR, BORDER_HOVER, PURPLE, SURFACE_BG } from "@style/tokens";
 
@@ -59,83 +62,97 @@ const StudentRankFormFields = ({
   serverError,
   rankEditable = true,
   displayRankId,
-}: Props) => (
-  <>
-    {serverError && (
-      <Alert
-        severity="error"
-        sx={{ backgroundColor: ERROR_DARK_ALPHA_12, color: ERROR_DARK_TEXT }}
-      >
-        {serverError}
-      </Alert>
-    )}
+}: Props) => {
+  const intl = useIntl();
+  const translateError = useTranslateError();
+  const rankLabel = intl.formatMessage({ id: "admin.ranks.form.rank" });
 
-    {rankEditable ? (
+  return (
+    <>
+      {serverError && (
+        <Alert
+          severity="error"
+          sx={{ backgroundColor: ERROR_DARK_ALPHA_12, color: ERROR_DARK_TEXT }}
+        >
+          {serverError}
+        </Alert>
+      )}
+
+      {rankEditable ? (
+        <Controller
+          name="rankId"
+          control={control}
+          render={({ field }) => (
+            <FormControl fullWidth error={!!errors.rankId} sx={labelFocusSx}>
+              <InputLabel>
+                <FormattedMessage id="admin.ranks.form.rank" />
+              </InputLabel>
+              <DarkSelect
+                {...field}
+                label={rankLabel}
+                value={field.value || ""}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              >
+                {ranks.map((r) => (
+                  <MenuItem key={r.id} value={r.id}>
+                    {r.name}
+                  </MenuItem>
+                ))}
+              </DarkSelect>
+              {errors.rankId && (
+                <FormHelperText>
+                  {translateError(errors.rankId.message as string)}
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      ) : (
+        <FormControl fullWidth disabled sx={labelFocusSx}>
+          <InputLabel shrink>
+            <FormattedMessage id="admin.ranks.form.rank" />
+          </InputLabel>
+          <DarkSelect value={displayRankId ?? ""} label={rankLabel} notched>
+            {ranks.map((r) => (
+              <MenuItem key={r.id} value={r.id}>
+                {r.name}
+              </MenuItem>
+            ))}
+          </DarkSelect>
+        </FormControl>
+      )}
+
       <Controller
-        name="rankId"
+        name="awardedAt"
         control={control}
         render={({ field }) => (
-          <FormControl fullWidth error={!!errors.rankId} sx={labelFocusSx}>
-            <InputLabel>Rank</InputLabel>
-            <DarkSelect
-              {...field}
-              label="Rank"
-              value={field.value || ""}
-              onChange={(e) => field.onChange(Number(e.target.value))}
-            >
-              {ranks.map((r) => (
-                <MenuItem key={r.id} value={r.id}>
-                  {r.name}
-                </MenuItem>
-              ))}
-            </DarkSelect>
-            {errors.rankId && (
-              <FormHelperText>{errors.rankId.message as string}</FormHelperText>
+          <TextField
+            {...field}
+            label={intl.formatMessage({ id: "admin.ranks.form.awardedOn" })}
+            type="date"
+            fullWidth
+            slotProps={{ inputLabel: { shrink: true } }}
+            error={!!errors.awardedAt}
+            helperText={translateError(
+              errors.awardedAt?.message as string | undefined,
             )}
-          </FormControl>
+            sx={fieldSx}
+          />
         )}
       />
-    ) : (
-      <FormControl fullWidth disabled sx={labelFocusSx}>
-        <InputLabel shrink>Rank</InputLabel>
-        <DarkSelect value={displayRankId ?? ""} label="Rank" notched>
-          {ranks.map((r) => (
-            <MenuItem key={r.id} value={r.id}>
-              {r.name}
-            </MenuItem>
-          ))}
-        </DarkSelect>
-      </FormControl>
-    )}
 
-    <Controller
-      name="awardedAt"
-      control={control}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Awarded on"
-          type="date"
-          fullWidth
-          slotProps={{ inputLabel: { shrink: true } }}
-          error={!!errors.awardedAt}
-          helperText={errors.awardedAt?.message as string | undefined}
-          sx={fieldSx}
-        />
-      )}
-    />
-
-    <TextField
-      label="Notes"
-      fullWidth
-      multiline
-      rows={3}
-      {...register("notes")}
-      error={!!errors.notes}
-      helperText={errors.notes?.message as string | undefined}
-      sx={fieldSx}
-    />
-  </>
-);
+      <TextField
+        label={intl.formatMessage({ id: "common.notes" })}
+        fullWidth
+        multiline
+        rows={3}
+        {...register("notes")}
+        error={!!errors.notes}
+        helperText={translateError(errors.notes?.message as string | undefined)}
+        sx={fieldSx}
+      />
+    </>
+  );
+};
 
 export default StudentRankFormFields;

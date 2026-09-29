@@ -1,4 +1,7 @@
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { useIntl } from "react-intl";
+
+import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 
 import StudentRankDialog from "./StudentRankDialog";
 import StudentRankFormFields from "./StudentRankFormFields";
@@ -11,6 +14,7 @@ interface Props {
 }
 
 const CreateStudentRankModal = ({ studentId, open, onClose }: Props) => {
+  const intl = useIntl();
   const {
     control,
     register,
@@ -28,12 +32,15 @@ const CreateStudentRankModal = ({ studentId, open, onClose }: Props) => {
       onClose={onClose}
       title={
         <>
-          <EmojiEventsIcon fontSize="small" /> Assign Rank
+          <EmojiEventsIcon fontSize="small" />{" "}
+          <FormattedMessage id="admin.ranks.assign" />
         </>
       }
       onSubmit={handleSubmit(onSubmit)}
       isPending={isPending}
-      submitLabel={isPending ? "Saving…" : "Assign Rank"}
+      submitLabel={intl.formatMessage({
+        id: isPending ? "admin.ranks.form.saving" : "admin.ranks.assign",
+      })}
     >
       <StudentRankFormFields
         control={control}

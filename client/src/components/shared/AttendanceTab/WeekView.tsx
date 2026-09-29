@@ -4,19 +4,20 @@ import { CircularProgress, IconButton, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { type AttendanceRecord } from "@api/attendance";
-import { DAY_NAMES_SHORT, MONTH_NAMES } from "@constants/dateNames";
 import {
   formatDateKey,
   getLatestTrainingDay,
   isTrainingDay,
   toUtcDate,
 } from "@constants/trainingSchedule";
+import useDateNames from "@hooks/useDateNames";
 import {
   BORDER_COLOR,
   PURPLE,
   PURPLE_ALPHA_30,
   SURFACE_BG,
 } from "@style/tokens";
+import { stripDiacritics } from "@utils/string";
 
 import AttendedChip from "../AttendedChip";
 import useAttendanceMark from "./shared/useAttendanceMark";
@@ -125,6 +126,7 @@ const DayCell = ({
   month,
   readOnly,
 }: DayCellProps) => {
+  const { DAY_NAMES_SHORT } = useDateNames();
   const training = isTrainingDay(date);
   const isFuture = date > today;
 
@@ -139,7 +141,7 @@ const DayCell = ({
   return (
     <DayCellRoot training={training}>
       <DayCellLabel variant="caption">
-        {DAY_NAMES_SHORT[date.getUTCDay()]}
+        {stripDiacritics(DAY_NAMES_SHORT[date.getUTCDay()])}
       </DayCellLabel>
       <DayCellNumber variant="h6" training={training}>
         {date.getUTCDate()}
@@ -181,6 +183,7 @@ const WeekView = ({
   records,
   readOnly,
 }: Props) => {
+  const { MONTH_NAMES } = useDateNames();
   const today = getLatestTrainingDay();
   const weekDates = getWeekDates(cursor);
   const firstDay = weekDates[0];
@@ -213,7 +216,7 @@ const WeekView = ({
         <NavIconButton onClick={prevWeek}>
           <ChevronLeftIcon />
         </NavIconButton>
-        <WeekTitle variant="h6">{headerLabel}</WeekTitle>
+        <WeekTitle variant="h6">{stripDiacritics(headerLabel)}</WeekTitle>
         <NavIconButton onClick={nextWeek} disabled={isNextDisabled}>
           <ChevronRightIcon />
         </NavIconButton>
