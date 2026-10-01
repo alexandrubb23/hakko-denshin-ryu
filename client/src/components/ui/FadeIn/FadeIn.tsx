@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 import { EASE_OUT } from "@constants/animationsTiming";
 
-const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
+export const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
 
 interface FadeInProps {
   children: React.ReactNode;

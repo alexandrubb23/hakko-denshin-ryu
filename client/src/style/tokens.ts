@@ -49,6 +49,7 @@ export const WHITE_ALPHA_35 = "rgba(255,255,255,0.35)";
 export const WHITE_ALPHA_45 = "rgba(255,255,255,0.45)";
 export const WHITE_ALPHA_60 = "rgba(255,255,255,0.6)";
 export const WHITE_ALPHA_65 = "rgba(255,255,255,0.65)";
+export const WHITE_ALPHA_75 = "rgba(255,255,255,0.75)";
 export const WHITE_ALPHA_85 = "rgba(255,255,255,0.85)";
 export const WHITE_ALPHA_90 = "rgba(255,255,255,0.9)";
 

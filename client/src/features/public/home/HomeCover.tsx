@@ -1,45 +1,41 @@
 import img180 from "@assets/images/180.webp";
-import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import ArcNavMenu from "@components/ui/Header/NavMenu/ArcNavMenu";
 import LanguageSwitcher from "@components/ui/LanguageSwitcher/LanguageSwitcher";
-import Quotes from "@components/ui/Quotes/Quotes";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { mergeSx } from "@utils/sx";
 
 import { motion } from "framer-motion";
 
-import { heroWrapperSx, topAccentSx } from "./Home.style";
+import { CoverMotto, CoverTitle } from "./CoverText";
+import HankoSeal from "./HankoSeal";
 import {
-  arcMenuPositionSx,
+  arcMenuSx,
   coverBlockSx,
-  coverCaptionSx,
-  coverCountrySx,
-  coverQuotesSx,
-  coverRuleSx,
-  coverTaglineSx,
-  coverTitleSx,
-  desktopGridSx,
-  desktopNavColSx,
-  desktopPhotoColSx,
-  desktopPhotoSx,
-  langSwitcherSx,
-  sealSx,
+  gridSx,
+  heroSx,
+  langSwitcherPositionSx,
+  navColSx,
+  photoColSx,
+  photoSx,
+  sealPositionSx,
   verticalKanjiSx,
 } from "./HomeCover.style";
+import { heroWrapperSx, langSwitcherSx, topAccentSx } from "./cover.style";
 import { heroReveal } from "./heroReveal";
 
-/** Wide-screen home hero: moon art with the arc menu, photo and title */
+/** Wide-screen home cover: moon art with the arc menu, photo and title */
 const HomeCover = () => (
-  <Box sx={heroWrapperSx}>
+  <Box sx={mergeSx(heroWrapperSx, heroSx)}>
     <Box sx={topAccentSx} aria-hidden />
 
-    <Box sx={desktopGridSx}>
+    <Box sx={gridSx}>
       {/* Moon art; the arc menu's rays start from the painted moon */}
-      <Box sx={desktopNavColSx}>
-        <ArcNavMenu sx={arcMenuPositionSx} />
+      <Box sx={navColSx}>
+        <ArcNavMenu sx={arcMenuSx} />
       </Box>
 
-      <Box sx={desktopPhotoColSx}>
-        <Box component="img" src={img180} alt="" sx={desktopPhotoSx} />
+      <Box sx={photoColSx}>
+        <Box component="img" src={img180} alt="" sx={photoSx} />
 
         <motion.div {...heroReveal} style={{ position: "relative", zIndex: 1 }}>
           <Box sx={coverBlockSx}>
@@ -49,39 +45,17 @@ const HomeCover = () => (
             </Box>
 
             <Box>
-              <Typography sx={coverCaptionSx}>
-                Hakko Denshin Ryu Jujutsu
-              </Typography>
-              <Typography component="h1" sx={coverTitleSx}>
-                Senshinkan
-              </Typography>
-              <Typography sx={coverCountrySx}>Romania</Typography>
-
-              <Box sx={coverRuleSx} lang="ja">
-                八光伝心流柔術
-              </Box>
-
-              <Typography sx={coverTaglineSx}>
-                <FormattedMessage id="page.home.subtitle" />
-              </Typography>
-
-              <Box sx={coverQuotesSx}>
-                <Quotes />
-              </Box>
+              <CoverTitle />
+              <CoverMotto align="start" />
             </Box>
           </Box>
         </motion.div>
 
-        <Box sx={langSwitcherSx}>
+        <Box sx={mergeSx(langSwitcherSx, langSwitcherPositionSx)}>
           <LanguageSwitcher />
         </Box>
 
-        {/* Hanko seal: 洗心道館 */}
-        <Box sx={sealSx} lang="ja" aria-hidden>
-          洗心
-          <br />
-          道館
-        </Box>
+        <HankoSeal sx={sealPositionSx} />
       </Box>
     </Box>
   </Box>

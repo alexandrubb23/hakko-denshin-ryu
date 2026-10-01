@@ -1,32 +1,28 @@
-import { Box } from "@mui/material";
-import { useEffect } from "react";
-
-import { ARC_NAV_HIDDEN_SX, ARC_NAV_ONLY_SX } from "@style/arcNavLayout";
+import { Box, GlobalStyles } from "@mui/material";
 
 import HomeCover from "./HomeCover";
-import HomeHero from "./HomeHero";
+import HomeCoverMobile from "./HomeCoverMobile";
 
-const Home = () => {
-  // Prevent page scroll on the full-screen hero
-  useEffect(() => {
-    document.documentElement.style.overflowY = "hidden";
-    return () => {
-      document.documentElement.style.overflowY = "";
-    };
-  }, []);
+// Both covers are rendered and switched in CSS, so the server-rendered
+// markup already matches the screen size (no layout jump on hydration)
+const WIDE_ONLY_SX = { display: { xs: "none", lg: "block" } };
+const NARROW_ONLY_SX = { display: { lg: "none" } };
 
-  // Both layouts are rendered and switched in CSS, so the server-rendered
-  // markup already matches the screen size (no layout jump on hydration)
-  return (
-    <>
-      <Box sx={ARC_NAV_ONLY_SX}>
-        <HomeCover />
-      </Box>
-      <Box sx={ARC_NAV_HIDDEN_SX}>
-        <HomeHero />
-      </Box>
-    </>
-  );
-};
+const Home = () => (
+  <>
+    {/* The wide cover is exactly one screen tall; the narrow one may scroll */}
+    <GlobalStyles
+      styles={(theme) => ({
+        [theme.breakpoints.up("lg")]: { html: { overflowY: "hidden" } },
+      })}
+    />
+    <Box sx={WIDE_ONLY_SX}>
+      <HomeCover />
+    </Box>
+    <Box sx={NARROW_ONLY_SX}>
+      <HomeCoverMobile />
+    </Box>
+  </>
+);
 
 export default Home;

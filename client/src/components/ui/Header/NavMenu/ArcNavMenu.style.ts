@@ -12,13 +12,17 @@ const itemDelay = (index: number) => 0.15 + index * 0.08;
 const MOON_GLOW_REST = `0 0 30px ${MOONLIGHT_ALPHA_25}, 0 0 80px ${PURPLE_ALPHA_30}`;
 const MOON_GLOW_PEAK = `0 0 45px ${MOONLIGHT_ALPHA_45}, 0 0 120px ${PURPLE_ALPHA_30}`;
 
-// The menu only renders on wide screens (`lg` and up), so sizes aren't responsive
+// Sizes are CSS variables so each layout can scale the menu through `sx`
 export const arcWrapperSx = (itemCount: number): SxProps<Theme> => ({
   "--moon-size": "96px",
+  // Horizontal reach of the arc's midpoint; the outer items sit at the left edge
+  "--arc-radius": "160px",
+  "--arc-gap": "40px",
+  "--arc-item-size": "1.6rem",
   position: "relative",
   display: "flex",
   alignItems: "center",
-  gap: 5,
+  gap: "var(--arc-gap)",
 
   // Light up a link's ray while the link is hovered (or is the current page)
   ...Object.fromEntries(
@@ -79,8 +83,6 @@ export const moonSx: SxProps<Theme> = {
 };
 
 export const arcListSx: SxProps<Theme> = {
-  // Horizontal reach of the arc's midpoint; the outer items sit at the left edge
-  "--arc-radius": "160px",
   position: "relative",
   zIndex: 1,
   display: "flex",
@@ -100,7 +102,7 @@ export const arcItemSx = (index: number, count: number): SxProps<Theme> => ({
   width: "fit-content",
   whiteSpace: "nowrap",
   textAlign: "left",
-  fontSize: "1.6rem",
+  fontSize: "var(--arc-item-size)",
   opacity: 0,
   // `translate` (not `transform`) so the hover scale in ListItemStyle still works
   animation: "arcItemIn 0.6s ease-out forwards",
