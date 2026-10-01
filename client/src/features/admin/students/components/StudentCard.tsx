@@ -22,6 +22,7 @@ import {
   SKELETON_SX,
   SURFACE_BG,
 } from "@style/tokens";
+import { stripDiacritics } from "@utils/string";
 
 import StudentAvatar from "./StudentAvatar";
 import StudentCurrentRank from "./StudentCurrentRank";
@@ -97,7 +98,7 @@ const StudentCard = ({
                 variant="h5"
                 fontWeight={700}
               >
-                {user?.name}
+                {stripDiacritics(user?.name)}
               </SkeletonText>
               <SkeletonText
                 isLoading={isLoading}

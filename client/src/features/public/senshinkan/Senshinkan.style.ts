@@ -2,10 +2,12 @@ import { SxProps, Theme } from "@mui/material";
 
 import {
   BORDER_COLOR,
+  DARK_BG,
   PURPLE,
   PURPLE_ALPHA_08,
   SURFACE_BG,
   TEXT_MUTED,
+  TEXT_PRIMARY,
 } from "@style/tokens";
 
 // ─── Hero ────────────────────────────────────────────────────────────────────
@@ -177,4 +179,64 @@ export const portraitWrapperSx: SxProps<Theme> = {
   borderRadius: 2,
   overflow: "hidden",
   backgroundColor: SURFACE_BG,
+};
+
+// ─── Bridge quote (old ways → new) ───────────────────────────────────────────
+
+export const bridgeSx: SxProps<Theme> = {
+  position: "relative",
+  overflow: "hidden",
+  minHeight: { xs: "70vh", md: "90vh" },
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+  mx: -2,
+  mt: 0,
+  mb: { xs: 8, md: 12 },
+  px: { xs: 3, md: 6 },
+  py: { xs: 8, md: 12 },
+  background: `radial-gradient(ellipse at center, ${PURPLE_ALPHA_08} 0%, ${DARK_BG} 70%)`,
+  borderTop: `1px solid ${BORDER_COLOR}`,
+  borderBottom: `1px solid ${BORDER_COLOR}`,
+};
+
+// Overrides the KanjiWatermark defaults: larger, centred and a touch brighter
+export const bridgeKanjiSx: SxProps<Theme> = {
+  fontSize: { xs: "16rem", md: "32rem" },
+  opacity: 0.06,
+  top: "50%",
+  left: "50%",
+  right: "auto",
+  transform: "translate(-50%, -50%)",
+};
+
+export const bridgeQuoteSx: SxProps<Theme> = {
+  position: "relative",
+  fontFamily: "Jarene, serif",
+  fontSize: "clamp(2rem, 6vw, 4.5rem)",
+  fontWeight: 400,
+  lineHeight: 1.15,
+  color: TEXT_PRIMARY,
+  maxWidth: 900,
+  m: 0,
+  padding: 0,
+};
+
+export const bridgeRuleSx: SxProps<Theme> = {
+  width: 80,
+  borderColor: PURPLE,
+  my: 4,
+};
+
+export const bridgeCiteSx: SxProps<Theme> = {
+  position: "relative",
+  fontFamily: "Inter, sans-serif",
+  fontSize: { xs: "0.7rem", md: "0.8rem" },
+  fontStyle: "normal",
+  letterSpacing: "0.25em",
+  textTransform: "uppercase",
+  color: TEXT_MUTED,
+  padding: 0,
 };

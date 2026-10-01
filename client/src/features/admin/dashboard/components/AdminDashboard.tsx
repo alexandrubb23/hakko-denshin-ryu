@@ -3,6 +3,7 @@ import { useIntl } from "react-intl";
 
 import SkeletonText from "@components/ui/SkeletonText/SkeletonText";
 import useIsAdmin from "@hooks/useIsAdmin";
+import { stripDiacritics } from "@utils/string";
 
 import DashboardAdminLinks from "./DashboardAdminLinks";
 import DashboardEventChart from "./DashboardEventChart";
@@ -22,7 +23,7 @@ const AdminDashboard = () => {
       >
         {intl.formatMessage(
           { id: "admin.dashboard.welcome" },
-          { name: session?.user.name },
+          { name: stripDiacritics(session?.user.name) }
         )}
       </SkeletonText>
 

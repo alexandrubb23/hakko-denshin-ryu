@@ -20,6 +20,7 @@ import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import PublicPageHeader from "@components/ui/PublicPageHeader/PublicPageHeader";
 import { useEvents } from "@features/admin/events/hooks/useEvents";
 import { PURPLE_ALPHA_30, SKELETON_SX } from "@style/tokens";
+import { stripDiacritics } from "@utils/string";
 import type { IntlMessageID } from "i18n/messages";
 import {
   CARD_CONTENT_SX,
@@ -147,7 +148,7 @@ const PublicEvents = () => {
                     </Stack>
 
                     <Typography variant="h6" fontWeight={700} lineHeight={1.3}>
-                      {event.name}
+                      {stripDiacritics(event.name)}
                     </Typography>
 
                     <Stack direction="row" alignItems="flex-start" gap={0.75}>
@@ -164,7 +165,7 @@ const PublicEvents = () => {
                     <Stack direction="row" alignItems="flex-start" gap={0.75}>
                       <LocationOnIcon sx={ICON_SX} />
                       <Typography variant="caption" color="text.secondary">
-                        {event.location}
+                        {stripDiacritics(event.location)}
                       </Typography>
                     </Stack>
 

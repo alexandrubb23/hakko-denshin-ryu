@@ -4,12 +4,20 @@ import { motion } from "framer-motion";
 import mobileHighQuality from "@assets/images/--262.webp";
 import senshinkanLowQualityImage from "@assets/images/279-small.webp";
 import senshinkanHighQualityImage from "@assets/images/279.webp";
+import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import BlurredUpImage from "@components/ui/Image/BlurredUpImage";
+import KanjiWatermark from "@components/ui/KanjiWatermark/KanjiWatermark";
+import { EASE_OUT } from "@constants/animationsTiming";
 
 import {
   bandSx,
   bodyTextSx,
+  bridgeCiteSx,
+  bridgeKanjiSx,
+  bridgeQuoteSx,
+  bridgeRuleSx,
+  bridgeSx,
   dividerSx,
   heroBgSx,
   heroContentSx,
@@ -26,9 +34,6 @@ import {
   sectionWrapperSx,
 } from "./Senshinkan.style";
 
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
-
 // Rich-text tag for messages linking to the Hombu Dojo website
 const richText = {
   link: (chunks: React.ReactNode) => (
@@ -41,24 +46,6 @@ const richText = {
     </a>
   ),
 };
-
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => (
-  <motion.div
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-40px" }}
-    variants={fadeUp}
-    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
-  >
-    {children}
-  </motion.div>
-);
 
 const Senshinkan = () => (
   <>
@@ -117,6 +104,31 @@ const Senshinkan = () => (
           </Grid>
         </FadeIn>
       </Container>
+    </Box>
+
+    {/* ── Bridge: the old ways joined the new (full-bleed) ─────────────── */}
+    <Box component="figure" sx={bridgeSx}>
+      <KanjiWatermark kanji="刀" sx={bridgeKanjiSx} />
+      <FadeIn>
+        <Typography component="blockquote" sx={bridgeQuoteSx}>
+          <FormattedMessage id="page.senshinkan.bridge.quote" />
+        </Typography>
+      </FadeIn>
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0 }}
+        whileInView={{ opacity: 1, scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.6, ease: EASE_OUT }}
+      >
+        <Divider sx={bridgeRuleSx} />
+      </motion.div>
+      <FadeIn delay={0.9}>
+        <Box component="figcaption">
+          <Typography component="cite" sx={bridgeCiteSx}>
+            <FormattedMessage id="page.senshinkan.bridge.cite" />
+          </Typography>
+        </Box>
+      </FadeIn>
     </Box>
 
     <Container maxWidth="lg">

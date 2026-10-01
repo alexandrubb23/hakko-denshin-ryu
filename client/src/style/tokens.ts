@@ -4,6 +4,11 @@ import { SxProps, Theme } from "@mui/material";
 export const PURPLE = "#AB96FF";
 export const PURPLE_HOVER = "#c4b4ff";
 
+// ─── Moonlight (home hero moon and rays) ─────────────────────────────────────
+export const MOONLIGHT = "#fff4d6";
+export const MOONLIGHT_ALPHA_25 = "rgba(255,244,214,0.25)";
+export const MOONLIGHT_ALPHA_45 = "rgba(255,244,214,0.45)";
+
 // ─── Dark backgrounds ────────────────────────────────────────────────────────
 export const DARK_BG = "#0a0619";
 export const DARK_BG_OVERLAY = "rgba(10,6,25,0.65)";

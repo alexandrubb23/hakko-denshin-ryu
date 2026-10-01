@@ -2,7 +2,7 @@ import { ListItem, styled } from "@mui/material";
 
 import { PURPLE } from "@style/tokens";
 
-export const ListItemStyle = styled(ListItem)(({ sx }) => ({
+export const ListItemStyle = styled(ListItem)({
   cursor: "pointer",
   display: "block",
   fontSize: "2rem",
@@ -13,6 +13,4 @@ export const ListItemStyle = styled(ListItem)(({ sx }) => ({
     cursor: "pointer",
     transform: "scale(1.1)",
   },
-
-  ...(sx as Object),
-}));
+});

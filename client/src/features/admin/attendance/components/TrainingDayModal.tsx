@@ -19,6 +19,7 @@ import { useTrainingDayAttendance } from "@features/admin/attendance/hooks/useTr
 import { useUpsertTrainingDayAttendance } from "@features/admin/attendance/hooks/useUpsertTrainingDayAttendance";
 import { useStudents } from "@features/admin/students/hooks/useStudents";
 import { BORDER_COLOR, PURPLE, PURPLE_ALPHA_15 } from "@style/tokens";
+import { stripDiacritics } from "@utils/string";
 
 import { NoButton, YesButton } from "./AttendanceButton.style";
 
@@ -48,14 +49,14 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
     upsert({ studentId, attended });
   };
 
-  const displayDate = new Date(date + "T00:00:00").toLocaleDateString(
-    intl.locale,
-    {
+  // Rendered in Jarene (caption), which has no diacritic glyphs
+  const displayDate = stripDiacritics(
+    new Date(date + "T00:00:00").toLocaleDateString(intl.locale, {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
-    }
+    })
   );
 
   return (

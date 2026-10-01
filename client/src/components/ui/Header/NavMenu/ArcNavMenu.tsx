@@ -1,0 +1,75 @@
+import { Box, List, type SxProps, type Theme } from "@mui/material";
+import { useId, useRef } from "react";
+
+import { MOONLIGHT, PURPLE } from "@style/tokens";
+import { mergeSx } from "@utils/sx";
+
+import {
+  arcItemSx,
+  arcListSx,
+  arcWrapperSx,
+  moonSx,
+  rayGlowSx,
+  raysSvgSx,
+} from "./ArcNavMenu.style";
+import PageItems from "./PageItems";
+import useMoonRays from "./useMoonRays";
+
+interface Props {
+  /** Positions the menu, e.g. to put the moon over a painted one */
+  sx?: SxProps<Theme>;
+}
+
+/**
+ * Hakko (八光) — "eight lights": a moon at the centre of the arc sends
+ * one ray to each of the eight menu items.
+ */
+const ArcNavMenu = ({ sx }: Props) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const moonRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const rays = useMoonRays(wrapperRef, moonRef, listRef);
+  const gradientId = useId();
+
+  return (
+    <Box ref={wrapperRef} sx={mergeSx(arcWrapperSx(rays.length), sx)}>
+      <Box component="svg" sx={raysSvgSx} aria-hidden>
+        <defs>
+          {rays.map((ray, i) => (
+            <linearGradient
+              key={i}
+              id={`${gradientId}-ray-${i}`}
+              gradientUnits="userSpaceOnUse"
+              x1={ray.x1}
+              y1={ray.y1}
+              x2={ray.x2}
+              y2={ray.y2}
+            >
+              {/* Moonlight at the moon's edge fading into purple at the link */}
+              <stop offset="0%" stopColor={MOONLIGHT} stopOpacity={0.9} />
+              <stop offset="100%" stopColor={PURPLE} stopOpacity={0.5} />
+            </linearGradient>
+          ))}
+        </defs>
+        {rays.map((ray, i) => (
+          <Box
+            component="line"
+            key={i}
+            {...ray}
+            pathLength={1}
+            stroke={`url(#${gradientId}-ray-${i})`}
+            sx={rayGlowSx(i)}
+          />
+        ))}
+      </Box>
+
+      <Box ref={moonRef} sx={moonSx} aria-hidden />
+
+      <List ref={listRef} component="nav" sx={arcListSx}>
+        <PageItems getItemSx={arcItemSx} />
+      </List>
+    </Box>
+  );
+};
+
+export default ArcNavMenu;

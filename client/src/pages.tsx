@@ -154,6 +154,9 @@ export const pages: Page[] = [
   },
 ] as const;
 
+/** Pages listed in the site menus (header, mobile drawer, home arc) */
+export const navPages = pages.filter((page) => !page.hideFromNav);
+
 export const getPageTitle = (
   page: Pick<Page, "titleId" | "titleSuffix">,
   intl: Pick<IntlShape, "formatMessage">

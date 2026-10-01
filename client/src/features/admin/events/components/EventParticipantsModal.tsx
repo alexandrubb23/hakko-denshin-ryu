@@ -19,6 +19,7 @@ import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
 import { useEventParticipants } from "@features/admin/events/hooks/useEventParticipants";
 import { useUpsertEventParticipation } from "@features/admin/events/hooks/useUpsertEventParticipation";
 import { useStudents } from "@features/admin/students/hooks/useStudents";
+import { stripDiacritics } from "@utils/string";
 import {
   CHECK_ICON_SX,
   CLOSE_BUTTON_SX,
@@ -60,7 +61,7 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
             <FormattedMessage id="admin.events.participants.title" />
           </Typography>
           <Typography variant="caption" color="text.secondary" component="span">
-            {event.name}
+            {stripDiacritics(event.name)}
           </Typography>
         </Stack>
         <Chip
