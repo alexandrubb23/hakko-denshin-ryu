@@ -16,19 +16,22 @@ import {
   rayGlowSx,
   raysSvgSx,
 } from "./ArcNavMenu.style";
-import type { MoonArt } from "./moonArt";
+import type { Painting } from "./moonArt";
 import useMoonRays from "./useMoonRays";
 
 interface Props {
   /** Which way the links fan out from the moon; defaults to the right */
   direction?: ArcDirection;
-  /** A painting drawn behind the menu, its moon under the menu's moon */
-  art?: MoonArt;
-  /** Extra styles for the painting, e.g. a fade mask */
-  artSx?: SxProps<Theme>;
+  /**
+   * Paintings drawn behind the menu, their moons under the menu's moon,
+   * e.g. one per screen size; each shows where its `sx` lets it
+   */
+  paintings?: readonly Painting[];
   /** Positions and sizes the menu (through its CSS variables) */
   sx?: SxProps<Theme>;
 }
+
+const NO_PAINTINGS: readonly Painting[] = [];
 
 /**
  * Hakko (八光) — "eight lights": a moon at the centre of the arc sends
@@ -36,8 +39,7 @@ interface Props {
  */
 const ArcNavMenu = ({
   direction = "right",
-  art,
-  artSx: artExtraSx,
+  paintings = NO_PAINTINGS,
   sx,
 }: Props) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -46,9 +48,12 @@ const ArcNavMenu = ({
   const rays = useMoonRays(wrapperRef, moonRef, listRef);
   const gradientId = useId();
   // Rays re-render the menu on every resize; the art's styles stay the same
-  const paintingSx = useMemo(
-    () => art && mergeSx(artSx(art, direction), artExtraSx),
-    [art, direction, artExtraSx]
+  const paintingsSx = useMemo(
+    () =>
+      paintings.map((painting) =>
+        mergeSx(artSx(painting.art, direction), painting.sx)
+      ),
+    [paintings, direction]
   );
 
   return (
@@ -56,7 +61,9 @@ const ArcNavMenu = ({
       ref={wrapperRef}
       sx={mergeSx(arcWrapperSx(rays.length, direction), sx)}
     >
-      {paintingSx && <Box sx={paintingSx} aria-hidden />}
+      {paintingsSx.map((paintingSx, i) => (
+        <Box key={i} sx={paintingSx} aria-hidden />
+      ))}
 
       <Box component="svg" sx={raysSvgSx} aria-hidden>
         <defs>

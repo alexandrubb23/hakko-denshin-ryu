@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
@@ -9,6 +9,7 @@ import KanjiCard from "@components/ui/PageSections/KanjiCard";
 import PageSection from "@components/ui/PageSections/PageSection";
 import Paragraphs from "@components/ui/PageSections/Paragraphs";
 import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
+import PullQuote from "@components/ui/PageSections/PullQuote";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
 import pinLowQualityImage from "@assets/images/200-small.webp";
@@ -21,8 +22,6 @@ import {
   denshinGridSx,
   denshinKanjiSx,
   jujutsuNotesSx,
-  pullQuoteSx,
-  quoteRuleSx,
 } from "./HakkoRyu.style";
 import { HAKKO_RYU_MOON_ART } from "./hakkoRyuArt";
 
@@ -85,10 +84,7 @@ const HakkoRyu = () => (
     {/* ── 03. Philosophy (moonlit valley band) ─────────────────────────── */}
     <ArtBand src={valleyArt}>
       <SectionHeading number="03" />
-      <Typography sx={pullQuoteSx}>
-        <FormattedMessage id="page.hakko-ryu.philosophy.quote" />
-      </Typography>
-      <Box sx={quoteRuleSx} />
+      <PullQuote id="page.hakko-ryu.philosophy.quote" />
 
       <Paragraphs
         ids={[

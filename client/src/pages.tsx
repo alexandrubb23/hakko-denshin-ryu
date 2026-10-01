@@ -88,6 +88,7 @@ export const pages: Page[] = [
     component: Schedule,
     titleId: "page.title.schedule",
     titleSuffix: SITE_NAME,
+    cover: true,
   },
   {
     path: "contact",

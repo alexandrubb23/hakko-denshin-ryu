@@ -1,3 +1,5 @@
+import type { SxProps, Theme } from "@mui/material";
+
 /** Which way the arc fans out from the moon */
 export type ArcDirection = "left" | "right";
 
@@ -11,6 +13,12 @@ export interface MoonArt {
   moonY: number;
   /** Moon diameter, as a fraction of the height */
   moonDiameter: number;
+}
+
+/** A painting behind the arc menu, with its own styles (fade, visibility…) */
+export interface Painting {
+  art: MoonArt;
+  sx?: SxProps<Theme>;
 }
 
 /** CSS width of the art when it is `height` tall */

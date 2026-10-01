@@ -1,28 +1,19 @@
 import { Box, Typography } from "@mui/material";
 
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import { bodyTextSx } from "@components/ui/PageSections/PageSections.style";
+import PullQuote from "@components/ui/PageSections/PullQuote";
 
-import {
-  quoteAuthorSx,
-  quoteMarkSx,
-  quoteMoralSx,
-  quoteSx,
-  quoteTextSx,
-} from "./Schedule.style";
+import { quoteAuthorSx, quoteSx } from "./Schedule.style";
 
 const ScheduleQuote = () => (
   <Box component="figure" sx={quoteSx}>
-    <Typography sx={quoteMarkSx} aria-hidden>
-      “
-    </Typography>
-    <Typography component="blockquote" sx={quoteTextSx}>
-      <FormattedMessage id="page.schedule.quote.text" />
-    </Typography>
+    <PullQuote id="page.schedule.quote.text" component="blockquote" />
     <Box component="figcaption">
       <Typography component="cite" sx={quoteAuthorSx}>
         Marcus Aurelius
       </Typography>
-      <Typography sx={quoteMoralSx}>
+      <Typography sx={bodyTextSx}>
         <FormattedMessage id="page.schedule.quote.moral" />
       </Typography>
     </Box>

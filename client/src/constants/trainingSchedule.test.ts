@@ -31,18 +31,9 @@ describe("trainingSchedule", () => {
     expect(getGroupStats("senior")).toEqual({ count: 3, minutes: 270 });
   });
 
-  it("groups every session by day when no group is given", () => {
+  it("groups every session by day", () => {
     const byDay = getSessionsByDay();
     expect(byDay.map(({ day }) => day)).toEqual([2, 4, 6]);
     expect(byDay.map(({ sessions }) => sessions.length)).toEqual([2, 1, 2]);
-  });
-
-  it("omits days without sessions for the selected group", () => {
-    const byDay = getSessionsByDay("kid");
-    expect(byDay.map(({ day }) => day)).toEqual([2, 6]);
-    const groups = byDay.flatMap(({ sessions }) =>
-      sessions.map((s) => s.group)
-    );
-    expect(new Set(groups)).toEqual(new Set(["kid"]));
   });
 });

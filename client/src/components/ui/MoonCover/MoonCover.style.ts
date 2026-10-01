@@ -14,18 +14,28 @@ import {
 import { mergeSx } from "@utils/sx";
 
 import { COMPACT_ARC_SIZE } from "@components/ui/ArcNavMenu/ArcNavMenu.style";
-import { type MoonArt, menuOnArt } from "@components/ui/ArcNavMenu/moonArt";
+import {
+  type MoonArt,
+  artWidth,
+  menuOnArt,
+} from "@components/ui/ArcNavMenu/moonArt";
 
 // Wide screens: the art is one screen tall and flush right. A moon painted
 // high up is lowered, with the art, so the arc menu has room above it.
 const MIN_MOON_TOP = 0.3; // of the screen height
 const wideArtTop = (art: MoonArt) =>
   `${(Math.max(0, MIN_MOON_TOP - art.moonY) * 100).toFixed(2)}dvh`;
-const WIDE_ART_FADE = [
-  "linear-gradient(180deg, transparent 0%, black 24%, black 70%, transparent 100%)",
-  // The painting's left half is empty sky; let it dissolve gradually
-  "linear-gradient(90deg, transparent 0%, black 45%)",
-].join(", ");
+/**
+ * Mask for the art on wide screens; `bottom` sets how its foot fades out,
+ * e.g. later, to keep details painted low on the art clear
+ */
+export const wideArtFade = (bottom = "black 70%, transparent 100%") =>
+  [
+    `linear-gradient(180deg, transparent 0%, black 24%, ${bottom})`,
+    // The painting's left half is empty sky; let it dissolve gradually
+    "linear-gradient(90deg, transparent 0%, black 45%)",
+  ].join(", ");
+const WIDE_ART_FADE = wideArtFade();
 
 export const heroSx = mergeSx(coverWrapperSx, {
   minHeight: COVER_HEIGHT,
@@ -55,10 +65,39 @@ export const heroMenuSx =
     },
   });
 
-export const heroArtSx: SxProps<Theme> = (theme) => ({
-  ...fadeMask(NARROW_COVER_ART_FADE),
-  [theme.breakpoints.up("lg")]: fadeMask(WIDE_ART_FADE),
-});
+export const heroArtSx =
+  (wideFade = WIDE_ART_FADE): SxProps<Theme> =>
+  (theme) => ({
+    ...fadeMask(NARROW_COVER_ART_FADE),
+    [theme.breakpoints.up("lg")]: fadeMask(wideFade),
+  });
+
+// With a separate narrow painting, each shows on its own side of `lg`
+export const wideOnlySx: SxProps<Theme> = {
+  display: { xs: "none", lg: "block" },
+};
+export const narrowOnlySx: SxProps<Theme> = { display: { lg: "none" } };
+
+// Lies exactly over the art on wide screens; its children are placed in
+// fractions of the art, and can size themselves in `cqh` (1% of its height)
+export const heroOnArtSx =
+  (art: MoonArt): SxProps<Theme> =>
+  (theme) => ({
+    display: "none",
+    [theme.breakpoints.up("lg")]: {
+      display: "block",
+      position: "absolute",
+      zIndex: 1,
+      right: 0,
+      top: wideArtTop(art),
+      width: artWidth(art, COVER_HEIGHT),
+      height: COVER_HEIGHT,
+      containerType: "size",
+      // It covers the whole art, menu included: let clicks through to the
+      // menu; content that needs the pointer opts back in
+      pointerEvents: "none",
+    },
+  });
 
 export const heroContentSx: SxProps<Theme> = {
   position: "relative",
@@ -90,6 +129,13 @@ export const heroTitleSx = mergeSx(coverTitleSx, {
   lineHeight: 1.05,
 });
 
+// For longer titles, or covers whose art holds content of its own
+export const heroCompactTitleSx = mergeSx(heroTitleSx, {
+  fontSize: "clamp(2.2rem, 7vw, 3.6rem)",
+  // Long titles wrap rather than run into the painting
+  maxWidth: { lg: 480 },
+});
+
 export const heroSubtitleSx = mergeSx(coverSubtitleSx, {
   fontSize: "clamp(1.1rem, 2.2vw, 2.2rem)",
   letterSpacing: "0.4em",
@@ -102,4 +148,6 @@ export const heroRuleSx: SxProps<Theme> = {
 
 export const heroTaglineSx = mergeSx(coverTaglineSx, {
   textAlign: { xs: "center", lg: "left" },
+  // Keep clear of the painting on the right
+  maxWidth: { lg: 560 },
 });

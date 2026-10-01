@@ -49,15 +49,11 @@ export interface TrainingDaySessions {
   sessions: TrainingSession[];
 }
 
-/** Sessions grouped by weekday, optionally limited to one group; days without sessions are omitted. */
-export const getSessionsByDay = (
-  group: StudentCategory | null = null
-): TrainingDaySessions[] =>
+/** Sessions grouped by weekday; days without sessions are omitted. */
+export const getSessionsByDay = (): TrainingDaySessions[] =>
   TRAINING_DAYS.map((day) => ({
     day,
-    sessions: TRAINING_SESSIONS.filter(
-      (s) => s.day === day && (!group || s.group === group)
-    ),
+    sessions: TRAINING_SESSIONS.filter((s) => s.day === day),
   })).filter(({ sessions }) => sessions.length > 0);
 
 // ─── Calendar helpers ───────────────────────────────────────────────────────

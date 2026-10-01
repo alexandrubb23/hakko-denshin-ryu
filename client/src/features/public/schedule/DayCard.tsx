@@ -5,6 +5,7 @@ import type { TrainingDaySessions } from "@constants/trainingSchedule";
 import useDateNames from "@hooks/useDateNames";
 import { stripDiacritics } from "@utils/string";
 
+import { DAY_KANJI } from "./dayKanji";
 import SessionItem from "./SessionItem";
 
 import {
@@ -16,16 +17,13 @@ import {
   sessionListSx,
 } from "./Schedule.style";
 
-// Japanese weekday kanji, indexed by JS getDay()
-const DAY_KANJI = ["日", "月", "火", "水", "木", "金", "土"] as const;
-
-/** Card listing one weekday's training sessions. */
+/** One weekday's training sessions, on a board like those of the dojo front */
 const DayCard = ({ day, sessions }: TrainingDaySessions) => {
   const { DAY_NAMES } = useDateNames();
 
   return (
     <Box component="article" sx={dayCardSx}>
-      <Typography sx={dayKanjiSx} aria-hidden>
+      <Typography sx={dayKanjiSx} lang="ja" aria-hidden>
         {DAY_KANJI[day]}
       </Typography>
       <Typography component="h3" sx={dayNameSx}>

@@ -1,10 +1,7 @@
 import type { StudentCategory } from "@hakko/core";
 import { SxProps, Theme } from "@mui/material";
 
-import {
-  descriptionSx,
-  eyebrowSx,
-} from "@components/ui/PublicPageHeader/PublicPageHeader.style";
+import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW } from "@style/art";
 import { CATEGORY_COLORS } from "@style/categories.tokens";
 import {
   BACKDROP_BLUR,
@@ -13,17 +10,15 @@ import {
   PURPLE,
   PURPLE_ALPHA_08,
   PURPLE_ALPHA_30,
+  PURPLE_ALPHA_50,
   SURFACE_BG,
   SURFACE_BG_02,
   TEXT_MUTED,
+  TEXT_PRIMARY,
   TEXT_SUBTLE,
 } from "@style/tokens";
 
-export const pageSx: SxProps<Theme> = {
-  position: "relative",
-  overflow: "hidden",
-  pb: 8,
-};
+import { BOARDS_MEDIA } from "./facadeArt";
 
 // ─── Group summary ────────────────────────────────────────────────────────────
 
@@ -40,30 +35,16 @@ const groupTintSx = (group: StudentCategory) => ({
   backgroundColor: CATEGORY_COLORS[group].bg,
 });
 
-export const groupCardSx = (
-  group: StudentCategory,
-  { isSelected, isDimmed }: { isSelected: boolean; isDimmed: boolean }
-): SxProps<Theme> => {
-  const { color, bg } = CATEGORY_COLORS[group];
-
-  return {
-    ...glassSx,
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 2,
-    px: { xs: 2.5, md: 3 },
-    py: 2.5,
-    textAlign: "left",
-    borderLeft: `3px solid ${color}`,
-    opacity: isDimmed ? 0.5 : 1,
-    transition: "border-color 0.2s, background-color 0.2s, opacity 0.2s",
-    ...(isSelected && { borderColor: color, backgroundColor: bg }),
-    "&:hover": { borderColor: isSelected ? color : BORDER_HOVER, opacity: 1 },
-    "&.Mui-focusVisible": { outline: `2px solid ${PURPLE}`, outlineOffset: 2 },
-  };
-};
+export const groupCardSx = (group: StudentCategory): SxProps<Theme> => ({
+  ...glassSx,
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  gap: 2,
+  px: { xs: 2.5, md: 3 },
+  py: 2.5,
+  borderLeft: `3px solid ${CATEGORY_COLORS[group].color}`,
+});
 
 export const groupDotSx = (group: StudentCategory): SxProps<Theme> => ({
   width: 40,
@@ -76,69 +57,67 @@ export const groupDotSx = (group: StudentCategory): SxProps<Theme> => ({
 });
 
 export const groupNameSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
+  fontFamily: DISPLAY_FONT,
   fontSize: "1.35rem",
   lineHeight: 1.2,
-  color: "#fff",
+  color: TEXT_PRIMARY,
   padding: 0,
 };
 
 export const groupSummarySx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
   fontSize: "0.85rem",
   color: TEXT_MUTED,
   padding: 0,
 };
 
-export const groupHintSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  fontSize: "0.8rem",
-  color: TEXT_SUBTLE,
-  mt: 1.5,
-  mb: { xs: 3, md: 4 },
-  padding: 0,
+// ─── Day cards (where the cover's boards don't show the timetable) ─────────────
+
+export const timetableSx: SxProps<Theme> = {
+  [BOARDS_MEDIA]: { display: "none" },
 };
 
-// ─── Day cards ────────────────────────────────────────────────────────────────
+// Like the boards on the painted dojo front: a dark panel in a thin frame
+const BOARD_BG = "rgba(19,19,34,0.92)";
+const BOARD_FRAME = "rgba(150,132,138,0.7)";
 
 export const dayCardSx: SxProps<Theme> = {
-  ...glassSx,
   position: "relative",
   overflow: "hidden",
   height: "100%",
   p: { xs: 2.5, md: 3 },
-  transition: "border-color 0.2s, transform 0.2s",
-  "&:hover": {
-    borderColor: BORDER_HOVER,
-    transform: "translateY(-2px)",
-  },
+  backgroundColor: BOARD_BG,
+  border: `2px solid ${BOARD_FRAME}`,
+  borderRadius: "3px",
+  boxShadow: `inset 0 0 0 6px ${BOARD_BG}, inset 0 0 0 7px ${BORDER_COLOR}`,
+  transition: "border-color 0.2s",
+  "&:hover": { borderColor: BORDER_HOVER },
 };
 
 export const dayKanjiSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: "6.5rem",
+  fontFamily: KANJI_FONT,
+  fontSize: "3.5rem",
   lineHeight: 1,
   color: PURPLE,
-  opacity: 0.06,
+  opacity: 0.35,
+  textShadow: TITLE_GLOW,
   position: "absolute",
-  top: 8,
-  right: 12,
+  top: 20,
+  right: 22,
   userSelect: "none",
   pointerEvents: "none",
   padding: 0,
 };
 
 export const dayNameSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
+  fontFamily: DISPLAY_FONT,
   fontSize: { xs: "1.75rem", md: "2rem" },
   fontWeight: 400,
   lineHeight: 1.1,
-  color: "#fff",
+  color: TEXT_PRIMARY,
   padding: 0,
 };
 
 export const dayMetaSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
   fontSize: "0.7rem",
   letterSpacing: "0.3em",
   textTransform: "uppercase",
@@ -176,18 +155,16 @@ export const sessionSx = (group: StudentCategory): SxProps<Theme> => ({
 });
 
 export const sessionTimeSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
   fontSize: { xs: "1.2rem", md: "1.3rem" },
   fontWeight: 600,
   fontVariantNumeric: "tabular-nums",
   letterSpacing: "0.02em",
-  color: "#fff",
+  color: TEXT_PRIMARY,
   lineHeight: 1.2,
   padding: 0,
 };
 
 export const sessionDurationSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
   fontSize: "0.78rem",
   color: TEXT_SUBTLE,
   mt: 0.25,
@@ -205,7 +182,6 @@ export const groupChipSx = (group: StudentCategory): SxProps<Theme> => ({
 
 export const ctaSx: SxProps<Theme> = {
   ...glassSx,
-  mt: { xs: 5, md: 7 },
   px: { xs: 3, md: 5 },
   py: { xs: 3.5, md: 4 },
   display: "flex",
@@ -217,10 +193,10 @@ export const ctaSx: SxProps<Theme> = {
 };
 
 export const ctaTitleSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
+  fontFamily: DISPLAY_FONT,
   fontSize: { xs: "1.6rem", md: "1.9rem" },
   lineHeight: 1.15,
-  color: "#fff",
+  color: TEXT_PRIMARY,
   mb: 0.75,
   padding: 0,
 };
@@ -236,62 +212,25 @@ export const ctaButtonSx: SxProps<Theme> = {
   },
 };
 
-// ─── Featured quote ───────────────────────────────────────────────────────────
+// ─── Quote (valley art band) ─────────────────────────────────────────────────
 
-export const quoteSx: SxProps<Theme> = {
-  position: "relative",
-  m: 0,
-  mt: { xs: 7, md: 10 },
-  px: { xs: 1, md: 8 },
-  textAlign: "center",
-};
+export const quoteSx: SxProps<Theme> = { m: 0 };
 
-export const quoteMarkSx: SxProps<Theme> = {
-  fontFamily: "Georgia, serif",
-  fontSize: { xs: "6rem", md: "8rem" },
-  lineHeight: 1,
-  height: { xs: "3rem", md: "4rem" },
-  overflow: "hidden",
-  color: PURPLE,
-  opacity: 0.35,
-  userSelect: "none",
-  padding: 0,
-  mb: 1,
-};
-
-export const quoteTextSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  fontSize: { xs: "1.5rem", md: "2.25rem" },
-  fontWeight: 300,
-  fontStyle: "italic",
-  lineHeight: 1.35,
-  textWrap: "balance",
-  color: "#fff",
-  maxWidth: 820,
-  mx: "auto",
-  my: 0,
-  padding: 0,
-};
-
+// "——— MARCUS AURELIUS"
 export const quoteAuthorSx: SxProps<Theme> = {
-  ...eyebrowSx,
-  display: "inline-flex",
+  display: "flex",
   alignItems: "center",
   gap: 1.5,
   fontStyle: "normal",
-  mt: 3,
-  mb: 0,
-  "&::before, &::after": {
+  fontSize: "0.8rem",
+  letterSpacing: "0.3em",
+  textTransform: "uppercase",
+  color: PURPLE,
+  mb: 2,
+  "&::before": {
     content: '""',
     width: 32,
     height: "1px",
-    backgroundColor: PURPLE_ALPHA_30,
+    backgroundColor: PURPLE_ALPHA_50,
   },
-} as SxProps<Theme>;
-
-export const quoteMoralSx: SxProps<Theme> = {
-  ...descriptionSx,
-  maxWidth: 560,
-  mx: "auto",
-  mt: 2.5,
-} as SxProps<Theme>;
+};

@@ -1,18 +1,27 @@
-import { fireEvent, screen, within } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import renderUi from "@test/renderUi";
 
 import Schedule from "./Schedule";
 
+// The day cards below the cover (the cover's boards repeat them on wide screens)
+const getTimetable = () => within(screen.getByTestId("timetable"));
+
 const getDayCard = (name: string) =>
-  screen.getByRole("heading", { level: 3, name }).closest("article")!;
+  getTimetable().getByRole("heading", { level: 3, name }).closest("article")!;
+
+// Sessions of the timetable (the cover's menu links are list items too)
+const getSessions = () =>
+  getTimetable()
+    .getAllByRole("article")
+    .flatMap((day) => within(day).getAllByRole("listitem"));
 
 describe("Schedule page", () => {
   it("renders the page heading", () => {
     renderUi(<Schedule />);
     expect(
-      screen.getByRole("heading", { level: 1, name: "Training Schedule" }),
+      screen.getByRole("heading", { level: 1, name: "Training Schedule" })
     ).toBeInTheDocument();
   });
 
@@ -24,7 +33,7 @@ describe("Schedule page", () => {
 
   it("renders one card per training day", () => {
     renderUi(<Schedule />);
-    expect(screen.getAllByRole("article")).toHaveLength(3);
+    expect(getTimetable().getAllByRole("article")).toHaveLength(3);
   });
 
   it("lists Tuesday's kids and seniors sessions", () => {
@@ -48,70 +57,21 @@ describe("Schedule page", () => {
   it("renders the motivational quote", () => {
     renderUi(<Schedule />);
     expect(
-      screen.getByText("Words are but opinions. Action is the only truth."),
+      screen.getByText(/Words are but opinions\. Action is the only truth\./)
     ).toBeInTheDocument();
     expect(screen.getByText("Marcus Aurelius")).toBeInTheDocument();
   });
 
-  describe("group filter", () => {
-    const groupButton = (name: RegExp) => screen.getByRole("button", { name });
-
-    it("shows every group by default", () => {
-      renderUi(<Schedule />);
-      expect(groupButton(/^kids/i)).toHaveAttribute("aria-pressed", "false");
-      expect(groupButton(/^seniors/i)).toHaveAttribute("aria-pressed", "false");
-      expect(screen.getAllByRole("listitem")).toHaveLength(5);
-    });
-
-    it("shows only kids sessions and hides days without them", () => {
-      renderUi(<Schedule />);
-      fireEvent.click(groupButton(/^kids/i));
-
-      expect(groupButton(/^kids/i)).toHaveAttribute("aria-pressed", "true");
-      expect(screen.getAllByRole("article")).toHaveLength(2);
-      expect(
-        screen.queryByRole("heading", { name: "Thursday" }),
-      ).not.toBeInTheDocument();
-      screen.getAllByRole("listitem").forEach((item) => {
-        expect(within(item).getByText("Kids")).toBeInTheDocument();
-      });
-    });
-
-    it("shows only seniors sessions", () => {
-      renderUi(<Schedule />);
-      fireEvent.click(groupButton(/^seniors/i));
-
-      expect(screen.getAllByRole("article")).toHaveLength(3);
-      expect(screen.getAllByRole("listitem")).toHaveLength(3);
-      expect(screen.queryByText("60 min")).not.toBeInTheDocument();
-    });
-
-    it("clears the filter when the selected group is clicked again", () => {
-      renderUi(<Schedule />);
-      fireEvent.click(groupButton(/^kids/i));
-      fireEvent.click(groupButton(/^kids/i));
-
-      expect(groupButton(/^kids/i)).toHaveAttribute("aria-pressed", "false");
-      expect(screen.getAllByRole("listitem")).toHaveLength(5);
-    });
-
-    it("reads the selected group from the URL", () => {
-      renderUi(<Schedule />, { initialEntries: ["/schedule?group=senior"] });
-      expect(groupButton(/^seniors/i)).toHaveAttribute("aria-pressed", "true");
-      expect(screen.getAllByRole("listitem")).toHaveLength(3);
-    });
-
-    it("ignores an unknown group in the URL", () => {
-      renderUi(<Schedule />, { initialEntries: ["/schedule?group=foo"] });
-      expect(screen.getAllByRole("listitem")).toHaveLength(5);
-    });
+  it("lists every session of the week", () => {
+    renderUi(<Schedule />);
+    expect(getSessions()).toHaveLength(5);
   });
 
   it("links to the contact page", () => {
     renderUi(<Schedule />);
     expect(screen.getByRole("link", { name: /contact us/i })).toHaveAttribute(
       "href",
-      "/contact",
+      "/contact"
     );
   });
 });

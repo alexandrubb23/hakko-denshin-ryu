@@ -24,6 +24,8 @@ import {
 import { heroWrapperSx } from "./cover.style";
 import { HOME_MOON_ART } from "./homeArt";
 
+const PAINTINGS = [{ art: HOME_MOON_ART, sx: arcArtSx }];
+
 /** Wide-screen home cover: moon art with the arc menu, photo and title */
 const HomeCover = () => (
   <Box sx={mergeSx(heroWrapperSx, heroSx)}>
@@ -32,7 +34,7 @@ const HomeCover = () => (
     <Box sx={gridSx}>
       {/* The arc menu, drawing the moon art behind itself */}
       <Box sx={navColSx}>
-        <ArcNavMenu art={HOME_MOON_ART} artSx={arcArtSx} sx={arcMenuSx} />
+        <ArcNavMenu paintings={PAINTINGS} sx={arcMenuSx} />
       </Box>
 
       <Box sx={photoColSx}>

@@ -1,6 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
 
-import { DISPLAY_FONT, KANJI_FONT, fadeMask } from "@style/art";
+import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW, fadeMask } from "@style/art";
 import {
   BORDER_COLOR,
   BORDER_HOVER,
@@ -17,7 +17,7 @@ import {
   WHITE_ALPHA_75,
 } from "@style/tokens";
 
-// Content sections shared by the cover pages (hakko-ryu, dojo)
+// Content sections shared by the cover pages (hakko-ryu, dojo, schedule)
 
 // Melts the black studio backdrop of the photos into the page background
 const PHOTO_FADE =
@@ -184,4 +184,24 @@ export const kanjiCardTitleSx: SxProps<Theme> = {
   color: TEXT_PRIMARY,
   mb: 3,
   padding: 0,
+};
+
+// ─── Pull quote, e.g. on an art band ──────────────────────────────────────────
+
+export const pullQuoteSx: SxProps<Theme> = {
+  fontFamily: DISPLAY_FONT,
+  fontSize: "clamp(1.6rem, 3.8vw, 2.8rem)",
+  fontWeight: 400,
+  lineHeight: 1.3,
+  color: TEXT_PRIMARY,
+  textShadow: TITLE_GLOW,
+  mb: 4,
+  padding: 0,
+};
+
+export const quoteRuleSx: SxProps<Theme> = {
+  width: 80,
+  height: "1px",
+  backgroundColor: PURPLE,
+  mb: 4,
 };
