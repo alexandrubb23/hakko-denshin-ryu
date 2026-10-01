@@ -3,8 +3,9 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 
-import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
+import PageLoader from "@components/ui/PageLoader/PageLoader";
 import useBodyOverflow from "@hooks/useBodyOverflow";
+import useMounted from "@hooks/useMounted";
 import useLangStore from "@store/useLangStore";
 import "./App.css";
 import Content from "./components/ui/Content/Content";
@@ -23,7 +24,7 @@ const StackStyled = styled(Stack, {
   justifyContent: "space-between",
   gap: 4,
   opacity: 0,
-  animation: `fadeIn ${PAGE_TRANSITION_DURATION / 1000}s ease-in forwards`,
+  animation: `fadeIn ${PAGE_TRANSITION_DURATION / 1000}s ease-in-out forwards`,
 }));
 
 // TODO: Just for testing heroku deployment, remove later
@@ -31,6 +32,10 @@ const App = () => {
   useBodyOverflow();
 
   const hydrated = useLangStore((state) => state.hydrated);
+  // The server renders the loading screen; the page takes over once the
+  // client has mounted, so the first client render matches the server's
+  const mounted = useMounted();
+  const ready = hydrated && mounted;
 
   useEffect(() => {
     AOS.init({
@@ -40,8 +45,8 @@ const App = () => {
 
   return (
     <>
-      {!hydrated && <CenterSpinner />}
-      <StackStyled hydrated={hydrated}>
+      <PageLoader loading={!ready} />
+      <StackStyled hydrated={ready}>
         <Header />
         <Content />
         <Footer />

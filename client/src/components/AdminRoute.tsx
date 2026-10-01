@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 
-import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
+import PageLoader from "@components/ui/PageLoader/PageLoader";
 import useIsAdmin from "@hooks/useIsAdmin";
 import { Routes } from "@lib/routes";
 
@@ -8,7 +8,7 @@ const AdminRoute = () => {
   const { isAdmin, isPending } = useIsAdmin();
 
   if (isPending) {
-    return <CenterSpinner minHeight="100vh" />;
+    return <PageLoader loading />;
   }
 
   if (!isAdmin) {

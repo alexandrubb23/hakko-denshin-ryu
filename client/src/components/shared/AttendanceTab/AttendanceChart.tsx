@@ -6,7 +6,7 @@ import {
   LinearScale,
   Tooltip,
 } from "chart.js";
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import { useIntl } from "react-intl";
 
@@ -19,6 +19,7 @@ import {
 } from "@constants/trainingSchedule";
 import { useAttendanceByYear } from "@features/admin/attendance/hooks/useAttendance";
 import useDateNames from "@hooks/useDateNames";
+import useMounted from "@hooks/useMounted";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import {
@@ -379,10 +380,7 @@ const AttendanceChart = ({
 }: Props) => {
   const intl = useIntl();
   const dateNames = useDateNames();
-  const [mounted, setMounted] = useState(false);
-  useLayoutEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMounted();
 
   const year = cursor.getUTCFullYear();
 

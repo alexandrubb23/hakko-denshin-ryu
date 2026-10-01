@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 
-import CenterSpinner from "@components/ui/Spinner/CenterSpinner";
+import PageLoader from "@components/ui/PageLoader/PageLoader";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
 
@@ -8,7 +8,7 @@ const ProtectedRoute = () => {
   const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {
-    return <CenterSpinner minHeight="100vh" />;
+    return <PageLoader loading />;
   }
 
   if (!session) {
