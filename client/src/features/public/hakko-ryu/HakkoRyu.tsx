@@ -1,78 +1,30 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
-import BlurredUpImage from "@components/ui/Image/BlurredUpImage";
+import MoonCover from "@components/ui/MoonCover/MoonCover";
+import ArtBand from "@components/ui/PageSections/ArtBand";
+import CardGrid from "@components/ui/PageSections/CardGrid";
+import KanjiCard from "@components/ui/PageSections/KanjiCard";
+import PageSection from "@components/ui/PageSections/PageSection";
+import Paragraphs from "@components/ui/PageSections/Paragraphs";
+import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
+import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
 import pinLowQualityImage from "@assets/images/200-small.webp";
 import pinHighQualityImage from "@assets/images/200.webp";
 import wristLockLowQualityImage from "@assets/images/53-small.webp";
 import wristLockHighQualityImage from "@assets/images/53.webp";
+import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import {
-  bodyTextSx,
-  companionCardSx,
-  companionKanjiSx,
-  companionTitleSx,
   denshinGridSx,
   denshinKanjiSx,
   jujutsuNotesSx,
-  philosophyBandSx,
-  philosophyContentSx,
-  photoCaptionSx,
-  photoFrameSx,
-  photoSx,
   pullQuoteSx,
   quoteRuleSx,
-  sectionKanjiSx,
-  sectionNumberSx,
-  sectionTitleSx,
-  sectionWrapperSx,
 } from "./HakkoRyu.style";
-import HakkoRyuHero from "./HakkoRyuHero";
-
-interface SectionHeadingProps {
-  number: string;
-  title?: React.ReactNode;
-  kanji?: string;
-}
-
-const SectionHeading = ({ number, title, kanji }: SectionHeadingProps) => (
-  <>
-    <Typography sx={sectionNumberSx}>{number}</Typography>
-    {title && (
-      <Typography component="h2" sx={sectionTitleSx}>
-        {title}
-      </Typography>
-    )}
-    {kanji && (
-      <Typography sx={sectionKanjiSx} lang="ja">
-        {kanji}
-      </Typography>
-    )}
-  </>
-);
-
-interface PhotoProps {
-  lowQualitySrc: string;
-  highQualitySrc: string;
-  caption: string;
-}
-
-/** A studio photo melted into the page, over a soft moon glow */
-const Photo = ({ lowQualitySrc, highQualitySrc, caption }: PhotoProps) => (
-  <Box sx={photoFrameSx}>
-    <BlurredUpImage
-      lowQualitySrc={lowQualitySrc}
-      highQualitySrc={highQualitySrc}
-      sx={photoSx}
-      animate="none"
-    />
-    <Typography sx={photoCaptionSx} lang="ja">
-      {caption}
-    </Typography>
-  </Box>
-);
+import { HAKKO_RYU_MOON_ART } from "./hakkoRyuArt";
 
 const COMPANIONS = [
   {
@@ -89,121 +41,92 @@ const COMPANIONS = [
 
 const HakkoRyu = () => (
   <>
-    <HakkoRyuHero />
+    <MoonCover
+      art={HAKKO_RYU_MOON_ART}
+      kanji="八光流"
+      eyebrow={<FormattedMessage id="page.hakko-ryu.hero.eyebrow" />}
+      title="Hakko Ryu"
+      subtitle={<FormattedMessage id="page.hakko-ryu.hero.subtitle" />}
+    />
 
     <Container maxWidth="lg">
       {/* ── 01. Origins ──────────────────────────────────────────────────── */}
-      <Box sx={sectionWrapperSx}>
-        <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
-          <Grid size={{ xs: 12, md: 6 }}>
-            <FadeIn>
-              <SectionHeading number="01" title="Hakko Ryu" kanji="八光流" />
-              <Typography sx={bodyTextSx}>
-                <FormattedMessage id="page.hakko-ryu.origins.p1" />
-              </Typography>
-              <Typography sx={bodyTextSx}>
-                <FormattedMessage id="page.hakko-ryu.origins.p2" />
-              </Typography>
-            </FadeIn>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <FadeIn delay={0.15}>
-              <Photo
-                lowQualitySrc={wristLockLowQualityImage}
-                highQualitySrc={wristLockHighQualityImage}
-                caption="柔よく剛を制す"
-              />
-            </FadeIn>
-          </Grid>
-        </Grid>
-      </Box>
+      <PageSection>
+        <PhotoSplit
+          photo={{
+            lowQualitySrc: wristLockLowQualityImage,
+            highQualitySrc: wristLockHighQualityImage,
+            caption: "柔よく剛を制す",
+          }}
+        >
+          <SectionHeading number="01" title="Hakko Ryu" kanji="八光流" />
+          <Paragraphs
+            ids={["page.hakko-ryu.origins.p1", "page.hakko-ryu.origins.p2"]}
+          />
+        </PhotoSplit>
+      </PageSection>
 
       {/* ── 02. Hakko Denshin Ryu ─────────────────────────────────────────── */}
-      <Box sx={sectionWrapperSx}>
+      <PageSection>
         <FadeIn>
           <SectionHeading number="02" title="Hakko Denshin Ryu Jujutsu" />
           <Box sx={denshinGridSx}>
             <Box sx={denshinKanjiSx} lang="ja" aria-hidden>
               八光伝心流
             </Box>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.hakko-ryu.denshin.p1" />
-            </Typography>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.hakko-ryu.denshin.p2" />
-            </Typography>
+            <Paragraphs
+              ids={["page.hakko-ryu.denshin.p1", "page.hakko-ryu.denshin.p2"]}
+            />
           </Box>
         </FadeIn>
-      </Box>
+      </PageSection>
     </Container>
 
     {/* ── 03. Philosophy (moonlit valley band) ─────────────────────────── */}
-    <Box sx={philosophyBandSx}>
-      <Container maxWidth="lg">
-        <Box sx={philosophyContentSx}>
-          <FadeIn>
-            <SectionHeading number="03" />
-            <Typography sx={pullQuoteSx}>
-              <FormattedMessage id="page.hakko-ryu.philosophy.quote" />
-            </Typography>
-            <Box sx={quoteRuleSx} />
+    <ArtBand src={valleyArt}>
+      <SectionHeading number="03" />
+      <Typography sx={pullQuoteSx}>
+        <FormattedMessage id="page.hakko-ryu.philosophy.quote" />
+      </Typography>
+      <Box sx={quoteRuleSx} />
 
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.hakko-ryu.philosophy.p1" />
-            </Typography>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.hakko-ryu.philosophy.p2" />
-            </Typography>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.hakko-ryu.philosophy.p3" />
-            </Typography>
-          </FadeIn>
-        </Box>
-      </Container>
-    </Box>
+      <Paragraphs
+        ids={[
+          "page.hakko-ryu.philosophy.p1",
+          "page.hakko-ryu.philosophy.p2",
+          "page.hakko-ryu.philosophy.p3",
+        ]}
+      />
+    </ArtBand>
 
     <Container maxWidth="lg">
       {/* ── 04. Ju Jutsu ─────────────────────────────────────────────────── */}
-      <Box sx={sectionWrapperSx}>
-        <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
-          <Grid size={{ xs: 12, md: 6 }} order={{ xs: 1, md: 0 }}>
-            <FadeIn>
-              <Photo
-                lowQualitySrc={pinLowQualityImage}
-                highQualitySrc={pinHighQualityImage}
-                caption="崩し"
-              />
-            </FadeIn>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }} order={{ xs: 0, md: 1 }}>
-            <FadeIn delay={0.15}>
-              <SectionHeading number="04" title="Ju Jutsu" kanji="柔術" />
-              <Typography sx={bodyTextSx}>
-                <FormattedMessage id="page.hakko-ryu.jujutsu.p1" />
-              </Typography>
-              <Typography sx={bodyTextSx}>
-                <FormattedMessage id="page.hakko-ryu.jujutsu.p2" />
-              </Typography>
-            </FadeIn>
-          </Grid>
-        </Grid>
+      <PageSection>
+        <PhotoSplit
+          photoFirst
+          photo={{
+            lowQualitySrc: pinLowQualityImage,
+            highQualitySrc: pinHighQualityImage,
+            caption: "崩し",
+          }}
+        >
+          <SectionHeading number="04" title="Ju Jutsu" kanji="柔術" />
+          <Paragraphs
+            ids={["page.hakko-ryu.jujutsu.p1", "page.hakko-ryu.jujutsu.p2"]}
+          />
+        </PhotoSplit>
 
         <FadeIn>
           <Box sx={jujutsuNotesSx}>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.hakko-ryu.jujutsu.p3" />
-            </Typography>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.hakko-ryu.jujutsu.p4" />
-            </Typography>
+            <Paragraphs
+              ids={["page.hakko-ryu.jujutsu.p3", "page.hakko-ryu.jujutsu.p4"]}
+            />
           </Box>
         </FadeIn>
-      </Box>
+      </PageSection>
 
       {/* ── 05 & 06. Companion Practices ─────────────────────────────────── */}
-      <Box sx={sectionWrapperSx}>
+      <PageSection>
         <FadeIn>
           <SectionHeading
             number="05 & 06"
@@ -211,26 +134,14 @@ const HakkoRyu = () => (
           />
         </FadeIn>
 
-        <Grid container spacing={3} sx={{ mt: 4 }}>
-          {COMPANIONS.map(({ title, kanji, descriptionId }, i) => (
-            <Grid key={title} size={{ xs: 12, md: 6 }}>
-              <FadeIn delay={i * 0.12} fullHeight>
-                <Box sx={companionCardSx}>
-                  <Box sx={companionKanjiSx} lang="ja" aria-hidden>
-                    {kanji}
-                  </Box>
-                  <Typography component="h3" sx={companionTitleSx}>
-                    {title}
-                  </Typography>
-                  <Typography sx={bodyTextSx}>
-                    <FormattedMessage id={descriptionId} />
-                  </Typography>
-                </Box>
-              </FadeIn>
-            </Grid>
+        <CardGrid size={{ xs: 12, md: 6 }} stagger={0.12}>
+          {COMPANIONS.map(({ title, kanji, descriptionId }) => (
+            <KanjiCard key={title} kanji={kanji} title={title}>
+              <Paragraphs ids={[descriptionId]} />
+            </KanjiCard>
           ))}
-        </Grid>
-      </Box>
+        </CardGrid>
+      </PageSection>
     </Container>
   </>
 );

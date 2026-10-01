@@ -1,6 +1,8 @@
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import KanjiRule from "@components/ui/KanjiRule/KanjiRule";
 import Quotes from "@components/ui/Quotes/Quotes";
 import { Box, Typography, type SxProps, type Theme } from "@mui/material";
+import { coverTaglineSx } from "@style/art";
 import { mergeSx } from "@utils/sx";
 
 import {
@@ -9,7 +11,6 @@ import {
   coverQuotesStartSx,
   coverQuotesSx,
   coverRuleSx,
-  coverTaglineSx,
   coverTitleSx,
 } from "./CoverText.style";
 
@@ -38,9 +39,7 @@ export const CoverMotto = ({ align, quotesSx }: CoverMottoProps) => {
 
   return (
     <>
-      <Box sx={mergeSx(coverRuleSx, isCentered && CENTERED_SX)} lang="ja">
-        八光伝心流柔術
-      </Box>
+      <KanjiRule sx={mergeSx(coverRuleSx, isCentered && CENTERED_SX)} />
 
       <Typography sx={mergeSx(coverTaglineSx, { textAlign: align })}>
         <FormattedMessage id="page.home.subtitle" />

@@ -1,7 +1,7 @@
-import { fadeUp } from "@components/ui/FadeIn/FadeIn";
 import type { MotionProps } from "framer-motion";
+import { fadeUp } from "./FadeIn";
 
-/** Entry animation shared by both home hero layouts */
+/** Entry animation for a cover's content, played once on load */
 export const heroReveal: MotionProps = {
   variants: fadeUp,
   initial: "hidden",

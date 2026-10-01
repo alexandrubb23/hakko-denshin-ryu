@@ -1,10 +1,6 @@
 import type { SxProps, Theme } from "@mui/material";
 
-import {
-  COVER_HEIGHT,
-  fadeMask,
-  verticalKanjiSx as verticalKanjiBaseSx,
-} from "@style/art";
+import { COVER_HEIGHT, coverVerticalKanjiSx, fadeMask } from "@style/art";
 import { mergeSx } from "@utils/sx";
 
 import { artWidth, menuOnArt } from "@components/ui/ArcNavMenu/moonArt";
@@ -73,9 +69,7 @@ export const coverBlockSx: SxProps<Theme> = {
   pr: 4,
 };
 
-export const verticalKanjiSx = mergeSx(verticalKanjiBaseSx, {
-  fontSize: "clamp(2.5rem, 3.6vw, 4rem)",
-  letterSpacing: "0.12em",
+export const verticalKanjiSx = mergeSx(coverVerticalKanjiSx, {
   pl: { lg: 3, xl: 4 },
   mt: 6,
 });

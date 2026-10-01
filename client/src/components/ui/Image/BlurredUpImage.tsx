@@ -9,27 +9,32 @@ type BlurredUpImageProps = UseProgressiveImg & {
   className?: string;
   animate?: "fade" | "none";
   aspectRatio?: string;
+  alt?: string;
 };
 
 const BoxStyled = styled(Box, {
   shouldForwardProp: (prop) => prop !== "blur",
-})<{ blur: boolean; component: React.ElementType; src: string }>(
-  ({ blur }) => ({
-    backfaceVisibility: "hidden",
-    filter: blur ? "blur(10px)" : "none",
-    height: "100%",
-    maxHeight: "100vh",
-    MozBackfaceVisibility: "hidden",
-    objectFit: "cover",
-    objectPosition: "center",
-    transition: blur ? "none" : "filter 0.3s ease-out",
-    WebkitBackfaceVisibility: "hidden",
-    width: "100%",
-    willChange: "filter",
-  }),
-);
+})<{
+  blur: boolean;
+  component: React.ElementType;
+  src: string;
+  alt?: string;
+}>(({ blur }) => ({
+  backfaceVisibility: "hidden",
+  filter: blur ? "blur(10px)" : "none",
+  height: "100%",
+  maxHeight: "100vh",
+  MozBackfaceVisibility: "hidden",
+  objectFit: "cover",
+  objectPosition: "center",
+  transition: blur ? "none" : "filter 0.3s ease-out",
+  WebkitBackfaceVisibility: "hidden",
+  width: "100%",
+  willChange: "filter",
+}));
 
 const BlurredUpImage = ({
+  alt,
   animate = "fade",
   className,
   highQualitySrc,
@@ -51,7 +56,13 @@ const BlurredUpImage = ({
       }}
       margin="auto"
     >
-      <BoxStyled blur={blur} component="img" src={src} className={className} />
+      <BoxStyled
+        blur={blur}
+        component="img"
+        src={src}
+        alt={alt}
+        className={className}
+      />
     </Box>
   );
 };

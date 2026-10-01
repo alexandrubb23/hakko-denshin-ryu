@@ -81,6 +81,7 @@ export const pages: Page[] = [
     path: "dojo",
     titleId: "page.title.dojo",
     titleSuffix: SITE_NAME,
+    cover: true,
   },
   {
     path: "schedule",

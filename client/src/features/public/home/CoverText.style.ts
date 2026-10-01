@@ -4,9 +4,7 @@ import {
   coverEyebrowSx,
   coverSubtitleSx,
   coverTitleSx as coverTitleBaseSx,
-  kanjiRuleSx,
 } from "@style/art";
-import { WHITE_ALPHA_75 } from "@style/tokens";
 import { mergeSx } from "@utils/sx";
 
 export const coverCaptionSx = mergeSx(coverEyebrowSx, {
@@ -26,17 +24,7 @@ export const coverCountrySx = mergeSx(coverSubtitleSx, {
   letterSpacing: "0.6em",
 });
 
-export const coverRuleSx = mergeSx(kanjiRuleSx, {
-  mt: 3,
-  fontSize: "clamp(1rem, 1.3vw, 1.3rem)",
-});
-
-export const coverTaglineSx: SxProps<Theme> = {
-  fontStyle: "italic",
-  fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
-  color: WHITE_ALPHA_75,
-  mt: 3,
-};
+export const coverRuleSx: SxProps<Theme> = { mt: 3 };
 
 export const coverQuotesSx: SxProps<Theme> = {
   maxWidth: 560,

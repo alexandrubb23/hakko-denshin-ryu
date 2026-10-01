@@ -1,149 +1,89 @@
-import { Box, Container, Divider, Grid, Typography } from "@mui/material";
-import { motion } from "framer-motion";
+import { Container, Typography } from "@mui/material";
 
-import hakkoDenshinRyuHighQualityImage from "@assets/images/200.webp";
+import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import MoonCover from "@components/ui/MoonCover/MoonCover";
+import ArtBand from "@components/ui/PageSections/ArtBand";
+import CardGrid from "@components/ui/PageSections/CardGrid";
+import KanjiCard from "@components/ui/PageSections/KanjiCard";
+import PageSection from "@components/ui/PageSections/PageSection";
+import Paragraphs from "@components/ui/PageSections/Paragraphs";
+import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
+import SectionHeading from "@components/ui/PageSections/SectionHeading";
+
+import trainingLowQualityImage from "@assets/images/108-small.jpg";
+import trainingHighQualityImage from "@assets/images/108.webp";
+import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import type { IntlMessageID } from "i18n/messages";
 
-import {
-  bodyTextSx,
-  closingBandSx,
-  closingBgCounterSx,
-  closingTextSx,
-  dividerSx,
-  heroBgSx,
-  heroContentSx,
-  heroEyebrowSx,
-  heroKanjiSx,
-  heroSubtitleSx,
-  heroSx,
-  heroTitleSx,
-  sectionKanjiSx,
-  sectionNumberSx,
-  sectionTitleSx,
-  trainingDotSx,
-  trainingItemSx,
-  trainingListSx,
-  trainingTextSx,
-} from "./Dojo.style";
+import { closingKanjiSx, closingTextSx, offerTextSx } from "./Dojo.style";
+import { DOJO_MOON_ART } from "./dojoArt";
 
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const fadeUp = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } };
-
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => (
-  <motion.div
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-40px" }}
-    variants={fadeUp}
-    transition={{ duration: 0.7, ease: EASE_OUT, delay }}
-  >
-    {children}
-  </motion.div>
-);
-
-const trainingItems: IntlMessageID[] = [
-  "page.dojo.offer.techniques",
-  "page.dojo.offer.weapons",
-  "page.dojo.offer.shiatsu",
-  "page.dojo.offer.goshin-taiso",
-  "page.dojo.offer.meditation",
+const OFFERS: { kanji: string; textId: IntlMessageID }[] = [
+  { kanji: "技", textId: "page.dojo.offer.techniques" }, // waza — techniques
+  { kanji: "武器", textId: "page.dojo.offer.weapons" }, // buki — weapons
+  { kanji: "指圧", textId: "page.dojo.offer.shiatsu" },
+  { kanji: "護身", textId: "page.dojo.offer.goshin-taiso" },
+  { kanji: "瞑想", textId: "page.dojo.offer.meditation" }, // meisō — meditation
 ];
 
 const Dojo = () => (
   <>
-    {/* ── Hero ─────────────────────────────────────────────────────────── */}
-    <Box sx={heroSx}>
-      <Box sx={heroBgSx(hakkoDenshinRyuHighQualityImage)} />
-      <Typography sx={heroKanjiSx}>洗心館</Typography>
-      <Box sx={heroContentSx}>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: EASE_OUT }}
-        >
-          <Typography sx={heroEyebrowSx}>
-            <FormattedMessage id="page.dojo.hero.eyebrow" />
-          </Typography>
-          <Typography component="h1" sx={heroTitleSx}>
-            <FormattedMessage id="page.dojo.title" />
-          </Typography>
-          <Typography component="p" sx={heroSubtitleSx}>
-            <FormattedMessage id="page.dojo.hero.subtitle" />
-          </Typography>
-        </motion.div>
-      </Box>
-    </Box>
+    <MoonCover
+      art={DOJO_MOON_ART}
+      kanji="洗心館"
+      eyebrow={<FormattedMessage id="page.dojo.hero.eyebrow" />}
+      title="Senshinkan"
+      tagline={<FormattedMessage id="page.dojo.hero.tagline" />}
+    />
 
     <Container maxWidth="lg">
-      {/* ── Main content ─────────────────────────────────────────────────── */}
-      <Grid
-        container
-        spacing={{ xs: 4, md: 6 }}
-        alignItems="flex-start"
-        sx={{ mb: { xs: 8, md: 10 } }}
-      >
-        {/* Text column */}
-        <Grid size={{ xs: 12, md: 7 }}>
-          <FadeIn>
-            <Typography sx={sectionNumberSx}>01</Typography>
-            <Typography component="h2" sx={sectionTitleSx}>
-              <FormattedMessage id="page.dojo.title" />
-            </Typography>
-            <Typography sx={sectionKanjiSx}>洗心館</Typography>
-            <Divider sx={dividerSx} />
+      {/* ── 01. The dojo ─────────────────────────────────────────────────── */}
+      <PageSection>
+        <PhotoSplit
+          photo={{
+            lowQualitySrc: trainingLowQualityImage,
+            highQualitySrc: trainingHighQualityImage,
+            caption: "洗心",
+          }}
+        >
+          <SectionHeading
+            number="01"
+            title={<FormattedMessage id="page.dojo.title" />}
+            kanji="洗心館"
+          />
+          <Paragraphs ids={["page.dojo.p1", "page.dojo.p2", "page.dojo.p3"]} />
+        </PhotoSplit>
+      </PageSection>
 
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.dojo.p1" />
-            </Typography>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.dojo.p2" />
-            </Typography>
-            <Typography sx={bodyTextSx}>
-              <FormattedMessage id="page.dojo.p3" />
-            </Typography>
-          </FadeIn>
-        </Grid>
+      {/* ── 02. What we offer ────────────────────────────────────────────── */}
+      <PageSection>
+        <FadeIn>
+          <SectionHeading
+            number="02"
+            title={<FormattedMessage id="page.dojo.offer.title" />}
+          />
+        </FadeIn>
 
-        {/* Training list column */}
-        <Grid size={{ xs: 12, md: 5 }}>
-          <FadeIn delay={0.15}>
-            <Typography sx={{ ...sectionNumberSx, mb: 1.5 }}>
-              <FormattedMessage id="page.dojo.offer.title" />
-            </Typography>
-            <Box sx={trainingListSx}>
-              {trainingItems.map((id) => (
-                <Box key={id} sx={trainingItemSx}>
-                  <Box sx={trainingDotSx} />
-                  <Typography sx={trainingTextSx}>
-                    <FormattedMessage id={id} />
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </FadeIn>
-        </Grid>
-      </Grid>
+        <CardGrid size={{ xs: 12, sm: 6, md: 4 }} stagger={0.08}>
+          {OFFERS.map(({ kanji, textId }) => (
+            <KanjiCard key={textId} kanji={kanji}>
+              <Paragraphs ids={[textId]} sx={offerTextSx} />
+            </KanjiCard>
+          ))}
+        </CardGrid>
+      </PageSection>
     </Container>
 
-    {/* ── Closing band ─────────────────────────────────────────────────── */}
-    <Box sx={closingBandSx}>
-      <Container maxWidth="lg">
-        <FadeIn>
-          <Typography sx={closingTextSx}>
-            <FormattedMessage id="page.dojo.closing" />
-          </Typography>
-          <Typography sx={closingBgCounterSx}>道</Typography>
-        </FadeIn>
-      </Container>
-    </Box>
+    {/* ── 03. Closing (moonlit valley band) ────────────────────────────── */}
+    <ArtBand src={valleyArt}>
+      <SectionHeading number="03" />
+      <Typography sx={closingKanjiSx} lang="ja" aria-hidden>
+        道
+      </Typography>
+      <Paragraphs ids={["page.dojo.closing"]} sx={closingTextSx} />
+    </ArtBand>
   </>
 );
 

@@ -6,6 +6,7 @@ import { mergeSx } from "@utils/sx";
 
 import { motion } from "framer-motion";
 
+import { heroReveal } from "@components/ui/FadeIn/heroReveal";
 import { CoverMotto, CoverTitle } from "./CoverText";
 import HankoSeal from "./HankoSeal";
 import {
@@ -21,7 +22,6 @@ import {
   verticalKanjiSx,
 } from "./HomeCover.style";
 import { heroWrapperSx } from "./cover.style";
-import { heroReveal } from "./heroReveal";
 import { HOME_MOON_ART } from "./homeArt";
 
 /** Wide-screen home cover: moon art with the arc menu, photo and title */

@@ -1,12 +1,11 @@
 import type { SxProps, Theme } from "@mui/material";
 
+import { coverWrapperSx } from "@style/art";
 import { DARK_BG } from "@style/tokens";
+import { mergeSx } from "@utils/sx";
 
 // Shared by the wide and the narrow home cover
 
-// Each layout adds its own height and layout on top
-export const heroWrapperSx: SxProps<Theme> = {
-  position: "relative",
-  overflow: "hidden",
+export const heroWrapperSx: SxProps<Theme> = mergeSx(coverWrapperSx, {
   backgroundColor: DARK_BG,
-};
+});

@@ -1,6 +1,7 @@
 import type { SxProps, Theme } from "@mui/material";
 
 import {
+  DARK_BG,
   MOONLIGHT,
   MOONLIGHT_ALPHA_25,
   MOONLIGHT_ALPHA_45,
@@ -140,6 +141,8 @@ export const arcItemSx = byDirection(
       whiteSpace: "nowrap",
       textAlign: direction === "left" ? "right" : "left",
       fontSize: "var(--arc-item-size)",
+      // Keeps the links legible where they cross bright parts of a painting
+      textShadow: `0 0 10px ${DARK_BG}, 0 0 18px ${DARK_BG}`,
       opacity: 0,
       // `translate` (not `transform`) so the hover scale in ListItemStyle still works
       animation: "arcItemIn 0.6s ease-out forwards",
