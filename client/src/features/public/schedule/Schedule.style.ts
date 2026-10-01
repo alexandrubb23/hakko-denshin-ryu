@@ -16,6 +16,7 @@ import {
   TEXT_MUTED,
   TEXT_PRIMARY,
   TEXT_SUBTLE,
+  WHITE_ALPHA_65,
 } from "@style/tokens";
 
 import { BOARDS_MEDIA } from "./facadeArt";
@@ -197,6 +198,15 @@ export const ctaTitleSx: SxProps<Theme> = {
   lineHeight: 1.15,
   color: TEXT_PRIMARY,
   mb: 0.75,
+  padding: 0,
+};
+
+export const ctaDescriptionSx: SxProps<Theme> = {
+  fontFamily: "Inter, sans-serif",
+  color: WHITE_ALPHA_65,
+  lineHeight: 1.75,
+  fontSize: { xs: "0.93rem", md: "1rem" },
+  maxWidth: "480px",
   padding: 0,
 };
 

@@ -1,3 +1,4 @@
+import type { EventType } from "@hakko/core";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
@@ -19,24 +20,33 @@ import {
   SURFACE_BG,
 } from "@style/tokens";
 
-export const TYPE_COLORS: Record<string, string> = {
+export const TYPE_COLORS: Record<EventType, string> = {
   seminar: EVENT_SEMINAR_BG,
   demo: EVENT_DEMO_BG,
   camp: EVENT_CAMP_BG,
   other: EVENT_OTHER_BG,
 };
 
-export const PageWrapper = styled(Box)({
-  minHeight: "60vh",
-  padding: "0 0 64px",
-});
+// Keeps the section from collapsing while loading, empty or short-listed
+export const EVENTS_LIST_SX = { minHeight: "40vh" } as const;
 
-export const EventCard = styled(Card)({
+// Card size in the grid; shared by the cards and their skeletons
+export const EVENT_CARD_SIZE = { xs: 12, sm: 6, md: 4 } as const;
+
+export const EVENT_IMAGE_HEIGHT = 180;
+
+const cardBase = {
   boxShadow: "none",
   backgroundColor: SURFACE_BG,
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 8,
   height: "100%",
+} as const;
+
+export const SkeletonCard = styled(Card)(cardBase);
+
+export const EventCard = styled(Card)({
+  ...cardBase,
   display: "flex",
   flexDirection: "column",
   transition: "border-color 0.2s, transform 0.2s",
@@ -46,16 +56,8 @@ export const EventCard = styled(Card)({
   },
 });
 
-export const SkeletonCard = styled(Card)({
-  boxShadow: "none",
-  backgroundColor: SURFACE_BG,
-  border: `1px solid ${BORDER_COLOR}`,
-  borderRadius: 8,
-  height: "100%",
-});
-
 export const ImagePlaceholder = styled(Box)({
-  height: 180,
+  height: EVENT_IMAGE_HEIGHT,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -90,6 +92,7 @@ export const ICON_SX = {
 } as const;
 
 export const chipSx = (bgColor: string) => ({
+  alignSelf: "flex-start" as const,
   backgroundColor: bgColor,
   color: PURPLE,
   fontWeight: 600,

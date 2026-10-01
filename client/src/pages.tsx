@@ -155,6 +155,7 @@ export const pages: Page[] = [
     component: PublicEvents,
     titleId: "page.title.events",
     titleSuffix: DOJO_NAME,
+    cover: true,
   },
   {
     path: "admin/events",
