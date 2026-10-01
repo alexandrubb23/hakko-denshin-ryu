@@ -190,6 +190,8 @@
   "page.kyu-program.error": "Nu am putut încărca programul Kyu. Te rugăm să încerci din nou.",
   "page.kyu-program.belt.alt": "Centură {belt, select, white {albă} yellow {galbenă} orange {portocalie} green {verde} blue {albastră} brown {maro} black {neagră} other {{belt}}}",
   "auth.login.title": "Autentificare",
+  "auth.login.hero.eyebrow": "Senshinkan · Membri",
+  "auth.login.tagline": "Doar pentru membri — cheia ta deschide ușa.",
   "auth.login.email.invalid": "Te rugam sa introduci o adresa de email valida",
   "auth.login.password.required": "Parola este obligatorie",
   "auth.login.error.invalidCredentials": "Email sau parolă greșită. Te rugăm să încerci din nou.",

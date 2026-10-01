@@ -13,7 +13,31 @@ export interface MoonArt {
   moonY: number;
   /** Moon diameter, as a fraction of the height */
   moonDiameter: number;
+  /**
+   * How far down the moon must sit on wide screens, as a fraction of the
+   * screen height, so the menu fits above it; lower it for art whose
+   * subject sits low and would otherwise drop off the screen
+   */
+  minMoonTop?: number;
 }
+
+/** A rectangle painted on the art, as fractions of its width and height */
+export interface ArtRect {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+/** Places an element (absolutely) exactly over `rect` on the art */
+export const rectOnArt = ({ left, top, width, height }: ArtRect) =>
+  ({
+    position: "absolute",
+    left: `${left * 100}%`,
+    top: `${top * 100}%`,
+    width: `${width * 100}%`,
+    height: `${height * 100}%`,
+  }) as const;
 
 /** A painting behind the arc menu, with its own styles (fade, visibility…) */
 export interface Painting {

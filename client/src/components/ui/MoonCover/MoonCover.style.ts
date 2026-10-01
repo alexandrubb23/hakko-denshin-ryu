@@ -23,8 +23,9 @@ import {
 // Wide screens: the art is one screen tall and flush right. A moon painted
 // high up is lowered, with the art, so the arc menu has room above it.
 const MIN_MOON_TOP = 0.3; // of the screen height
-const wideArtTop = (art: MoonArt) =>
-  `${(Math.max(0, MIN_MOON_TOP - art.moonY) * 100).toFixed(2)}dvh`;
+const wideArtTop = ({ moonY, minMoonTop = MIN_MOON_TOP }: MoonArt) =>
+  `${(Math.max(0, minMoonTop - moonY) * 100).toFixed(2)}dvh`;
+
 /**
  * Mask for the art on wide screens; `bottom` sets how its foot fades out,
  * e.g. later, to keep details painted low on the art clear
@@ -50,12 +51,13 @@ export const heroSx = mergeSx(coverWrapperSx, {
 });
 
 export const heroMenuSx =
-  (art: MoonArt): SxProps<Theme> =>
+  (art: MoonArt, onArtBelowMenu: boolean): SxProps<Theme> =>
   (theme) => ({
     ...COMPACT_ARC_SIZE,
     mt: 4,
-    // Leave the scene painted below the moon in view
-    mb: "clamp(200px, 62vw, 340px)",
+    // Leave the scene painted below the moon in view (below the `onArt`
+    // content, when it follows the menu)
+    mb: onArtBelowMenu ? 4 : "clamp(200px, 62vw, 340px)",
     [theme.breakpoints.up("lg")]: {
       ...menuOnArt(art, "left", COVER_HEIGHT, wideArtTop(art)),
       "--arc-radius": "clamp(90px, 16dvh, 160px)",
@@ -79,15 +81,18 @@ export const wideOnlySx: SxProps<Theme> = {
 export const narrowOnlySx: SxProps<Theme> = { display: { lg: "none" } };
 
 // Lies exactly over the art on wide screens; its children are placed in
-// fractions of the art, and can size themselves in `cqh` (1% of its height)
+// fractions of the art, and can size themselves in `cqh` (1% of its height).
+// Below `lg` it is hidden, or follows the menu as a plain block.
 export const heroOnArtSx =
-  (art: MoonArt): SxProps<Theme> =>
+  (art: MoonArt, onArtBelowMenu: boolean): SxProps<Theme> =>
   (theme) => ({
-    display: "none",
+    position: "relative",
+    zIndex: 1,
+    [theme.breakpoints.down("lg")]: onArtBelowMenu
+      ? { width: "100%", px: 2.5, mb: "clamp(160px, 50vw, 300px)" }
+      : { display: "none" },
     [theme.breakpoints.up("lg")]: {
-      display: "block",
       position: "absolute",
-      zIndex: 1,
       right: 0,
       top: wideArtTop(art),
       width: artWidth(art, COVER_HEIGHT),

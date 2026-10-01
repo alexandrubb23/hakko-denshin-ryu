@@ -190,6 +190,8 @@
   "page.kyu-program.error": "Failed to load kyu program. Please try again.",
   "page.kyu-program.belt.alt": "{belt} belt",
   "auth.login.title": "Log In",
+  "auth.login.hero.eyebrow": "Senshinkan · Members",
+  "auth.login.tagline": "Members only — your key opens the door.",
   "auth.login.email.invalid": "Please enter a valid email address",
   "auth.login.password.required": "Password is required",
   "auth.login.error.invalidCredentials": "Invalid email or password. Please try again.",

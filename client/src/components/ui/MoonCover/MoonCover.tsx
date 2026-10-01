@@ -46,11 +46,14 @@ interface Props {
   /** Mask for the art on wide screens, built with `wideArtFade` */
   wideArtFade?: string;
   /**
-   * Content laid over the art on wide screens (hidden on narrow ones):
-   * position it in fractions of the art, size it in `cqh`. It doesn't get
+   * Content laid over the art on wide screens (hidden on narrow ones,
+   * unless `onArtBelowMenu`): position it in fractions of the art, e.g.
+   * with `rectOnArt`, and size it in `cqh`. It doesn't get
    * pointer events unless it sets `pointerEvents: "auto"`.
    */
   onArt?: React.ReactNode;
+  /** Below `lg`, show `onArt` under the menu rather than hiding it */
+  onArtBelowMenu?: boolean;
 }
 
 // The cover's art; a narrow painting takes over below `lg`
@@ -83,6 +86,7 @@ const MoonCover = ({
   compactTitle = false,
   wideArtFade,
   onArt,
+  onArtBelowMenu = false,
 }: Props) => (
   <Box sx={heroSx}>
     <CoverChrome />
@@ -113,10 +117,10 @@ const MoonCover = ({
     <ArcNavMenu
       direction="left"
       paintings={coverPaintings(art, narrowArt, wideArtFade)}
-      sx={heroMenuSx(art)}
+      sx={heroMenuSx(art, onArtBelowMenu)}
     />
 
-    {onArt && <Box sx={heroOnArtSx(art)}>{onArt}</Box>}
+    {onArt && <Box sx={heroOnArtSx(art, onArtBelowMenu)}>{onArt}</Box>}
   </Box>
 );
 

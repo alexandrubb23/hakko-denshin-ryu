@@ -1,5 +1,5 @@
 import src from "@assets/images/dojo-facade.webp";
-import type { MoonArt } from "@components/ui/ArcNavMenu/moonArt";
+import type { ArtRect, MoonArt } from "@components/ui/ArcNavMenu/moonArt";
 import { wideArtFade } from "@components/ui/MoonCover/MoonCover.style";
 import theme from "@style/theme";
 
@@ -12,16 +12,8 @@ export const FACADE_MOON_ART: MoonArt = {
   moonDiameter: 0.138,
 };
 
-/** Inside of a blank board painted on the front wall, as fractions of the art */
-export interface BoardRect {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-}
-
-// The three boards between the pillars, left to right
-export const FACADE_BOARDS: readonly BoardRect[] = [
+// The insides of the three blank boards between the pillars, left to right
+export const FACADE_BOARDS: readonly ArtRect[] = [
   { left: 0.5104, top: 0.5996, width: 0.0716, height: 0.1455 },
   { left: 0.6341, top: 0.5996, width: 0.0716, height: 0.1455 },
   { left: 0.7617, top: 0.5996, width: 0.0677, height: 0.1455 },

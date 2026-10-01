@@ -1,19 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   Alert,
   Box,
   Button,
   CircularProgress,
   Container,
-  IconButton,
-  InputAdornment,
   Paper,
-  SxProps,
   TextField,
-  Theme,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -35,15 +29,15 @@ import {
 import {
   BACKDROP_BLUR,
   BORDER_COLOR,
-  BORDER_HOVER,
   DARK_BG,
   PURPLE,
-  PURPLE_ALPHA_25,
   PURPLE_HOVER,
-  SURFACE_BG,
   TEXT_MUTED,
 } from "@style/tokens";
 import type { IntlMessageID } from "i18n/messages";
+
+import PasswordToggle from "./PasswordToggle";
+import { darkFieldSx } from "./auth.style";
 
 // Validation messages are translation IDs, formatted when displayed
 const setPasswordFormSchema = z
@@ -61,19 +55,6 @@ const setPasswordFormSchema = z
   });
 
 type SetPasswordFormData = z.infer<typeof setPasswordFormSchema>;
-
-const fieldSx: SxProps<Theme> = {
-  "& .MuiOutlinedInput-root": {
-    color: "#fff",
-    backgroundColor: SURFACE_BG,
-    "& fieldset": { borderColor: PURPLE_ALPHA_25 },
-    "&:hover fieldset": { borderColor: BORDER_HOVER },
-    "&.Mui-focused fieldset": { borderColor: PURPLE },
-  },
-  "& .MuiInputLabel-root": { color: TEXT_MUTED },
-  "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
-  "& .MuiSvgIcon-root": { color: TEXT_MUTED },
-};
 
 const SetPassword = () => {
   const intl = useIntl();
@@ -264,22 +245,14 @@ const SetPassword = () => {
                     {...register("password")}
                     error={!!errors.password}
                     helperText={formatFieldError(errors.password?.message)}
-                    sx={fieldSx}
+                    sx={darkFieldSx}
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => setShowPassword((p) => !p)}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
+                          <PasswordToggle
+                            shown={showPassword}
+                            onToggle={() => setShowPassword((p) => !p)}
+                          />
                         ),
                       },
                     }}
@@ -295,20 +268,16 @@ const SetPassword = () => {
                     {...register("confirmPassword")}
                     error={!!errors.confirmPassword}
                     helperText={formatFieldError(
-                      errors.confirmPassword?.message,
+                      errors.confirmPassword?.message
                     )}
-                    sx={fieldSx}
+                    sx={darkFieldSx}
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => setShowConfirm((p) => !p)}
-                              edge="end"
-                            >
-                              {showConfirm ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                          </InputAdornment>
+                          <PasswordToggle
+                            shown={showConfirm}
+                            onToggle={() => setShowConfirm((p) => !p)}
+                          />
                         ),
                       },
                     }}

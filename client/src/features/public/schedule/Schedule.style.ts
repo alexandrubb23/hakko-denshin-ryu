@@ -5,6 +5,7 @@ import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW } from "@style/art";
 import { CATEGORY_COLORS } from "@style/categories.tokens";
 import {
   BACKDROP_BLUR,
+  BOARD_FRAME,
   BORDER_COLOR,
   BORDER_HOVER,
   PURPLE,
@@ -77,7 +78,6 @@ export const timetableSx: SxProps<Theme> = {
 
 // Like the boards on the painted dojo front: a dark panel in a thin frame
 const BOARD_BG = "rgba(19,19,34,0.92)";
-const BOARD_FRAME = "rgba(150,132,138,0.7)";
 
 export const dayCardSx: SxProps<Theme> = {
   position: "relative",

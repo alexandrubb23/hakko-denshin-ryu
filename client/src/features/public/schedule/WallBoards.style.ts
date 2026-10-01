@@ -10,7 +10,9 @@ import {
   WHITE_ALPHA_60,
 } from "@style/tokens";
 
-import { BOARDS_MEDIA, type BoardRect } from "./facadeArt";
+import { type ArtRect, rectOnArt } from "@components/ui/ArcNavMenu/moonArt";
+
+import { BOARDS_MEDIA } from "./facadeArt";
 
 // Everything is sized in cqh — 1% of the art's height — so the writing
 // scales with the painted boards
@@ -20,17 +22,8 @@ export const wallSx: SxProps<Theme> = {
   [BOARDS_MEDIA]: { display: "block" },
 };
 
-export const boardSx = ({
-  left,
-  top,
-  width,
-  height,
-}: BoardRect): SxProps<Theme> => ({
-  position: "absolute",
-  left: `${left * 100}%`,
-  top: `${top * 100}%`,
-  width: `${width * 100}%`,
-  height: `${height * 100}%`,
+export const boardSx = (board: ArtRect): SxProps<Theme> => ({
+  ...rectOnArt(board),
   display: "flex",
   flexDirection: "column",
   alignItems: "center",

@@ -46,6 +46,8 @@ export interface Page {
   titleSuffix: typeof SITE_NAME | typeof DOJO_NAME;
   bgImage?: string;
   hideFromNav?: boolean;
+  /** Keep the page out of search engines */
+  noIndex?: boolean;
   /** The page opens on a moon cover with its own arc menu, so it has no header */
   cover?: boolean;
   protected?: boolean;
@@ -103,7 +105,8 @@ export const pages: Page[] = [
     component: Login,
     titleId: "page.title.login",
     titleSuffix: DOJO_NAME,
-    standalone: true,
+    cover: true,
+    noIndex: true,
   },
   {
     path: "set-password",
@@ -111,6 +114,7 @@ export const pages: Page[] = [
     titleId: "page.title.set-password",
     titleSuffix: DOJO_NAME,
     standalone: true,
+    noIndex: true,
     hideFromNav: true,
   },
   {

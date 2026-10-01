@@ -30,7 +30,7 @@ export async function render(url: string) {
   const lang = useLangStore.getState().lang;
   const intl = createIntl({ locale: lang, messages: messages[lang] });
   const title = page ? getPageTitle(page, intl) : "Default Title";
-  const noIndex = page?.protected || page?.standalone;
+  const noIndex = page?.protected || page?.noIndex;
 
   const loaderData = await prefetch(normalizedPathname);
 
