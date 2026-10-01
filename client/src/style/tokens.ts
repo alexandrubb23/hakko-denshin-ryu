@@ -11,6 +11,8 @@ export const MOONLIGHT_ALPHA_45 = "rgba(255,244,214,0.45)";
 
 // ─── Dark backgrounds ────────────────────────────────────────────────────────
 export const DARK_BG = "#0a0619";
+export const DARK_BG_ALPHA_20 = "rgba(10,6,25,0.2)";
+export const DARK_BG_ALPHA_55 = "rgba(10,6,25,0.55)";
 export const DARK_BG_OVERLAY = "rgba(10,6,25,0.65)";
 export const DARK_BG_GRADIENT =
   "linear-gradient(180deg, rgba(10,6,25,0) 0%, rgba(10,6,25,0.8) 100%)";

@@ -9,6 +9,8 @@ export interface MistPhotoProps {
   highQualitySrc: string;
   /** A few kanji under the photo */
   caption: string;
+  /** CSS aspect ratio of the crop; landscape by default */
+  aspectRatio?: string;
 }
 
 /** A studio photo melted into the page, over a soft moon glow */
@@ -16,6 +18,7 @@ const MistPhoto = ({
   lowQualitySrc,
   highQualitySrc,
   caption,
+  aspectRatio = "3 / 2",
 }: MistPhotoProps) => (
   <Box sx={photoFrameSx}>
     <BlurredUpImage
@@ -23,7 +26,7 @@ const MistPhoto = ({
       highQualitySrc={highQualitySrc}
       // Illustrates the text beside it
       alt=""
-      sx={photoSx}
+      sx={photoSx(aspectRatio)}
       animate="none"
     />
     <Typography sx={photoCaptionSx} lang="ja">

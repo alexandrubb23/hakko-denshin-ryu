@@ -76,6 +76,11 @@ export const bodyTextSx: SxProps<Theme> = {
     color: TEXT_PRIMARY,
     fontWeight: 600,
   },
+  "& a": {
+    color: PURPLE,
+    textDecoration: "none",
+    "&:hover": { textDecoration: "underline" },
+  },
 };
 
 // ─── Photos ───────────────────────────────────────────────────────────────────
@@ -92,11 +97,11 @@ export const photoFrameSx: SxProps<Theme> = {
   },
 };
 
-export const photoSx: SxProps<Theme> = {
+export const photoSx = (aspectRatio: string): SxProps<Theme> => ({
   position: "relative",
-  aspectRatio: "3 / 2",
+  aspectRatio,
   ...fadeMask(PHOTO_FADE),
-};
+});
 
 export const photoCaptionSx: SxProps<Theme> = {
   position: "relative",

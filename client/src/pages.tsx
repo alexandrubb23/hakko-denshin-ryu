@@ -75,6 +75,7 @@ export const pages: Page[] = [
     path: "senshinkan",
     titleId: "page.title.senshinkan",
     titleSuffix: SITE_NAME,
+    cover: true,
   },
   {
     component: Dojo,
