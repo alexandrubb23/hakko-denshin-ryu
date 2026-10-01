@@ -1,5 +1,5 @@
-import ArcNavMenu from "@components/ui/Header/NavMenu/ArcNavMenu";
-import LanguageSwitcher from "@components/ui/LanguageSwitcher/LanguageSwitcher";
+import ArcNavMenu from "@components/ui/ArcNavMenu/ArcNavMenu";
+import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
 import { Box } from "@mui/material";
 import { mergeSx } from "@utils/sx";
 
@@ -8,16 +8,17 @@ import { motion } from "framer-motion";
 import { CoverMotto, CoverTitle } from "./CoverText";
 import HankoSeal from "./HankoSeal";
 import {
+  arcArtSx,
   arcMenuSx,
   heroSx,
-  langSwitcherPositionSx,
   mottoSx,
   quotesSx,
   sealPositionSx,
   titleSx,
 } from "./HomeCoverMobile.style";
-import { heroWrapperSx, langSwitcherSx, topAccentSx } from "./cover.style";
+import { heroWrapperSx } from "./cover.style";
 import { delayedHeroReveal, heroReveal } from "./heroReveal";
+import { HOME_MOON_ART } from "./homeArt";
 
 // Reveal the motto while the arc menu is still drawing its rays
 const MOTTO_DELAY = 1;
@@ -25,11 +26,8 @@ const MOTTO_DELAY = 1;
 /** Home cover below `lg`: title, the moon with the arc menu, then the motto */
 const HomeCoverMobile = () => (
   <Box sx={mergeSx(heroWrapperSx, heroSx)}>
-    <Box sx={topAccentSx} aria-hidden />
+    <CoverChrome />
     <HankoSeal sx={sealPositionSx} />
-    <Box sx={mergeSx(langSwitcherSx, langSwitcherPositionSx)}>
-      <LanguageSwitcher />
-    </Box>
 
     <motion.div {...heroReveal}>
       <Box sx={titleSx}>
@@ -37,7 +35,7 @@ const HomeCoverMobile = () => (
       </Box>
     </motion.div>
 
-    <ArcNavMenu sx={arcMenuSx} />
+    <ArcNavMenu art={HOME_MOON_ART} artSx={arcArtSx} sx={arcMenuSx} />
 
     <motion.div {...delayedHeroReveal(MOTTO_DELAY)} style={{ width: "100%" }}>
       <Box sx={mottoSx}>

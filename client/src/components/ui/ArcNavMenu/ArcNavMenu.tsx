@@ -1,22 +1,32 @@
 import { Box, List, type SxProps, type Theme } from "@mui/material";
-import { useId, useRef } from "react";
+import { useId, useMemo, useRef } from "react";
 
 import { MOONLIGHT, PURPLE } from "@style/tokens";
 import { mergeSx } from "@utils/sx";
 
+import PageItems from "@components/ui/Header/NavMenu/PageItems";
+
 import {
+  type ArcDirection,
   arcItemSx,
   arcListSx,
   arcWrapperSx,
+  artSx,
   moonSx,
   rayGlowSx,
   raysSvgSx,
 } from "./ArcNavMenu.style";
-import PageItems from "./PageItems";
+import type { MoonArt } from "./moonArt";
 import useMoonRays from "./useMoonRays";
 
 interface Props {
-  /** Positions the menu, e.g. to put the moon over a painted one */
+  /** Which way the links fan out from the moon; defaults to the right */
+  direction?: ArcDirection;
+  /** A painting drawn behind the menu, its moon under the menu's moon */
+  art?: MoonArt;
+  /** Extra styles for the painting, e.g. a fade mask */
+  artSx?: SxProps<Theme>;
+  /** Positions and sizes the menu (through its CSS variables) */
   sx?: SxProps<Theme>;
 }
 
@@ -24,15 +34,30 @@ interface Props {
  * Hakko (八光) — "eight lights": a moon at the centre of the arc sends
  * one ray to each of the eight menu items.
  */
-const ArcNavMenu = ({ sx }: Props) => {
+const ArcNavMenu = ({
+  direction = "right",
+  art,
+  artSx: artExtraSx,
+  sx,
+}: Props) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const moonRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const rays = useMoonRays(wrapperRef, moonRef, listRef);
   const gradientId = useId();
+  // Rays re-render the menu on every resize; the art's styles stay the same
+  const paintingSx = useMemo(
+    () => art && mergeSx(artSx(art, direction), artExtraSx),
+    [art, direction, artExtraSx]
+  );
 
   return (
-    <Box ref={wrapperRef} sx={mergeSx(arcWrapperSx(rays.length), sx)}>
+    <Box
+      ref={wrapperRef}
+      sx={mergeSx(arcWrapperSx(rays.length, direction), sx)}
+    >
+      {paintingSx && <Box sx={paintingSx} aria-hidden />}
+
       <Box component="svg" sx={raysSvgSx} aria-hidden>
         <defs>
           {rays.map((ray, i) => (
@@ -65,8 +90,8 @@ const ArcNavMenu = ({ sx }: Props) => {
 
       <Box ref={moonRef} sx={moonSx} aria-hidden />
 
-      <List ref={listRef} component="nav" sx={arcListSx}>
-        <PageItems getItemSx={arcItemSx} />
+      <List ref={listRef} component="nav" sx={arcListSx[direction]}>
+        <PageItems getItemSx={arcItemSx[direction]} />
       </List>
     </Box>
   );

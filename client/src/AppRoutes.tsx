@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { Route, Routes, useLocation } from "react-router";
 import App from "./App";
-import { getPageTitle, pages } from "./pages";
+import { findPage, getPageTitle, pages } from "./pages";
 
 interface AppRoutesProps {
   initialLoaderData: any;
@@ -18,7 +18,7 @@ export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
   const intl = useIntl();
 
   useEffect(() => {
-    const page = pages.find((p) => normalizePath(p.path) === pathname);
+    const page = findPage(pathname);
     if (page) document.title = getPageTitle(page, intl);
   }, [pathname, intl]);
 

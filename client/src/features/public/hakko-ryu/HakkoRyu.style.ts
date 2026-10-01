@@ -1,189 +1,235 @@
 import { SxProps, Theme } from "@mui/material";
 
+import valleyArt from "@assets/images/hakko-ryu-valley.webp";
+import {
+  DISPLAY_FONT,
+  KANJI_FONT,
+  TITLE_GLOW,
+  fadeMask,
+  verticalKanjiSx,
+} from "@style/art";
 import {
   BORDER_COLOR,
+  BORDER_HOVER,
+  DARK_BG,
   PURPLE,
   PURPLE_ALPHA_08,
+  PURPLE_ALPHA_15,
+  PURPLE_ALPHA_50,
   SURFACE_BG,
+  SURFACE_BG_02,
   TEXT_MUTED,
+  TEXT_PRIMARY,
+  WHITE_ALPHA_45,
+  WHITE_ALPHA_75,
 } from "@style/tokens";
+import { mergeSx } from "@utils/sx";
 
-// ─── Hero ────────────────────────────────────────────────────────────────────
-
-export const heroSx: SxProps<Theme> = {
-  position: "relative",
-  height: { xs: "70vh", md: "85vh" },
-  overflow: "hidden",
-  mx: -2,
-  mt: -2,
-  mb: { xs: 6, md: 10 },
-};
-
-export const heroBgSx = (src: string): SxProps<Theme> => ({
-  position: "absolute",
-  inset: 0,
-  backgroundImage: `url(${src})`,
-  backgroundSize: "cover",
-  backgroundPosition: "center 20%",
-  backgroundRepeat: "no-repeat",
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    inset: 0,
-    background:
-      "linear-gradient(180deg, rgba(10,6,25,0.35) 0%, rgba(10,6,25,0.65) 55%, rgba(10,6,25,1) 100%)",
-  },
-});
-
-export const heroKanjiSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: { xs: "6rem", md: "14rem" },
-  lineHeight: 1,
-  color: PURPLE,
-  opacity: 0.1,
-  position: "absolute",
-  top: { xs: "8%", md: "6%" },
-  right: { xs: "4%", md: "7%" },
-  userSelect: "none",
-  pointerEvents: "none",
-  padding: 0,
-};
-
-export const heroContentSx: SxProps<Theme> = {
-  position: "relative",
-  zIndex: 1,
-  height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-end",
-  pb: { xs: 4, md: 6 },
-  px: { xs: 3, md: 6 },
-  maxWidth: "lg",
-  mx: "auto",
-};
-
-export const heroEyebrowSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  fontSize: { xs: "0.75rem", md: "0.85rem" },
-  letterSpacing: "0.25em",
-  textTransform: "uppercase",
-  color: PURPLE,
-  mb: 1.5,
-  padding: 0,
-};
-
-export const heroTitleSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: { xs: "clamp(2.5rem, 9vw, 5.5rem)" },
-  fontWeight: 400,
-  lineHeight: 1.0,
-  color: "#fff",
-  mb: 0.5,
-  padding: 0,
-};
-
-export const heroSubtitleSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: { xs: "clamp(1.3rem, 4vw, 2.8rem)" },
-  fontWeight: 400,
-  lineHeight: 1.1,
-  color: "rgba(255,255,255,0.45)",
-  mb: 0,
-  padding: 0,
-};
+// Melts the black studio backdrop of the photos into the page background
+const PHOTO_FADE =
+  "radial-gradient(ellipse 70% 72% at 50% 50%, black 55%, transparent 100%)";
 
 // ─── Sections ─────────────────────────────────────────────────────────────────
 
 export const sectionWrapperSx: SxProps<Theme> = {
-  mb: { xs: 8, md: 12 },
+  mb: { xs: 10, md: 16 },
 };
 
+// "01 ———" index above each section title
 export const sectionNumberSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  fontSize: "0.7rem",
+  display: "flex",
+  alignItems: "center",
+  gap: 2,
+  fontSize: "0.75rem",
   letterSpacing: "0.3em",
   color: PURPLE,
-  opacity: 0.7,
-  mb: 0.5,
-  textTransform: "uppercase",
+  mb: 2,
   padding: 0,
+  "&::after": {
+    content: '""',
+    width: 56,
+    height: "1px",
+    background: `linear-gradient(90deg, ${PURPLE_ALPHA_50}, transparent)`,
+  },
 };
 
 export const sectionTitleSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: { xs: "clamp(1.6rem, 4vw, 2.5rem)" },
+  fontFamily: DISPLAY_FONT,
+  fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
   fontWeight: 400,
   lineHeight: 1.15,
-  color: "#fff",
-  mb: 0.25,
+  color: TEXT_PRIMARY,
   padding: 0,
 };
 
 export const sectionKanjiSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  fontSize: "0.8rem",
-  letterSpacing: "0.2em",
+  fontFamily: KANJI_FONT,
+  fontSize: "1rem",
+  letterSpacing: "0.3em",
   color: TEXT_MUTED,
-  mb: 2.5,
+  mt: 1,
+  mb: 3.5,
   padding: 0,
-};
-
-export const sectionDividerSx: SxProps<Theme> = {
-  borderColor: BORDER_COLOR,
-  mb: 3,
 };
 
 export const bodyTextSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  color: "rgba(255,255,255,0.78)",
+  color: WHITE_ALPHA_75,
   lineHeight: 1.85,
-  fontSize: { xs: "0.93rem", md: "1rem" },
-  mb: 2,
+  fontSize: { xs: "0.95rem", md: "1.02rem" },
+  mb: 2.5,
   padding: 0,
   "& strong": {
-    color: "#fff",
+    color: TEXT_PRIMARY,
     fontWeight: 600,
   },
 };
 
-// ─── Philosophy (full-bleed band) ─────────────────────────────────────────────
+// ─── Photos ───────────────────────────────────────────────────────────────────
+
+// A soft moon glow behind the photo
+export const photoFrameSx: SxProps<Theme> = {
+  position: "relative",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    inset: "-8% -4%",
+    background: `radial-gradient(circle at 50% 45%, ${PURPLE_ALPHA_15} 0%, transparent 65%)`,
+    pointerEvents: "none",
+  },
+};
+
+export const photoSx: SxProps<Theme> = {
+  position: "relative",
+  aspectRatio: "3 / 2",
+  ...fadeMask(PHOTO_FADE),
+};
+
+export const photoCaptionSx: SxProps<Theme> = {
+  position: "relative",
+  fontFamily: KANJI_FONT,
+  fontSize: "0.85rem",
+  letterSpacing: "0.3em",
+  color: WHITE_ALPHA_45,
+  textAlign: "center",
+  mt: 1,
+};
+
+// ─── Hakko Denshin Ryu (text with a vertical kanji column) ───────────────────
+
+export const denshinGridSx: SxProps<Theme> = {
+  display: "grid",
+  gridTemplateColumns: { xs: "1fr", md: "auto 1fr 1fr" },
+  columnGap: { md: 6 },
+  alignItems: "start",
+  mt: 4,
+};
+
+export const denshinKanjiSx = mergeSx(verticalKanjiSx, {
+  display: { xs: "none", md: "block" },
+  fontSize: "2.4rem",
+  letterSpacing: "0.18em",
+  opacity: 0.85,
+});
+
+// ─── Philosophy (valley art band)──────────────────────────────────────────────
 
 export const philosophyBandSx: SxProps<Theme> = {
-  mb: { xs: 8, md: 12 },
+  position: "relative",
+  overflow: "hidden",
   mx: -2,
-  px: { xs: 3, md: 6 },
-  py: { xs: 6, md: 8 },
-  backgroundColor: PURPLE_ALPHA_08,
+  mb: { xs: 10, md: 16 },
+  py: { xs: 8, md: 14 },
+  backgroundColor: DARK_BG,
   borderTop: `1px solid ${BORDER_COLOR}`,
   borderBottom: `1px solid ${BORDER_COLOR}`,
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    inset: 0,
+    backgroundImage: `url(${valleyArt})`,
+    backgroundSize: "cover",
+    // The moonlit valley sits around 75% of the width; the left stays dark
+    // for the text
+    backgroundPosition: "75% 30%",
+    opacity: { xs: 0.35, md: 0.7 },
+    ...fadeMask(
+      "linear-gradient(180deg, transparent 0%, black 18%, black 82%, transparent 100%)"
+    ),
+  },
+};
+
+export const philosophyContentSx: SxProps<Theme> = {
+  position: "relative",
+  maxWidth: { md: "58%" },
 };
 
 export const pullQuoteSx: SxProps<Theme> = {
-  fontFamily: "Jarene, serif",
-  fontSize: { xs: "clamp(1.4rem, 3.5vw, 2.25rem)" },
+  fontFamily: DISPLAY_FONT,
+  fontSize: "clamp(1.6rem, 3.8vw, 2.8rem)",
   fontWeight: 400,
-  lineHeight: 1.35,
-  color: PURPLE,
-  mb: 3,
-  maxWidth: "600px",
+  lineHeight: 1.3,
+  color: TEXT_PRIMARY,
+  textShadow: TITLE_GLOW,
+  mb: 4,
   padding: 0,
 };
 
-// ─── Companion cards ──────────────────────────────────────────────────────────
+export const quoteRuleSx: SxProps<Theme> = {
+  width: 80,
+  height: "1px",
+  backgroundColor: PURPLE,
+  mb: 4,
+};
+
+// ─── Ju Jutsu closing paragraphs ──────────────────────────────────────────────
+
+export const jujutsuNotesSx: SxProps<Theme> = {
+  display: "grid",
+  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+  gap: { xs: 0, md: 6 },
+  mt: { xs: 4, md: 8 },
+  pt: { xs: 4, md: 6 },
+  borderTop: `1px solid ${BORDER_COLOR}`,
+};
+
+// ─── Companion practices ──────────────────────────────────────────────────────
 
 export const companionCardSx: SxProps<Theme> = {
-  backgroundColor: SURFACE_BG,
-  border: `1px solid ${BORDER_COLOR}`,
-  borderRadius: 2,
+  position: "relative",
   overflow: "hidden",
   height: "100%",
+  p: { xs: 3.5, md: 5 },
+  borderRadius: 3,
+  border: `1px solid ${BORDER_COLOR}`,
+  background: `linear-gradient(160deg, ${SURFACE_BG} 0%, ${SURFACE_BG_02} 100%)`,
+  transition: "border-color 0.3s ease, background-color 0.3s ease",
+  "&:hover": {
+    borderColor: BORDER_HOVER,
+    backgroundColor: PURPLE_ALPHA_08,
+  },
 };
 
-export const companionImgSx: SxProps<Theme> = {
-  width: "100%",
-  aspectRatio: "16/9",
+// Oversized kanji glowing in the card's corner
+export const companionKanjiSx: SxProps<Theme> = {
+  position: "absolute",
+  top: { xs: 16, md: 24 },
+  right: { xs: 16, md: 28 },
+  writingMode: "vertical-rl",
+  fontFamily: KANJI_FONT,
+  fontSize: { xs: "2.6rem", md: "3.6rem" },
+  lineHeight: 1,
+  whiteSpace: "nowrap",
+  color: PURPLE,
+  opacity: 0.18,
+  userSelect: "none",
+  pointerEvents: "none",
 };
 
-export const companionBodySx: SxProps<Theme> = {
-  p: 3,
+export const companionTitleSx: SxProps<Theme> = {
+  fontFamily: DISPLAY_FONT,
+  fontSize: "clamp(1.4rem, 3vw, 2rem)",
+  fontWeight: 400,
+  color: TEXT_PRIMARY,
+  mb: 3,
+  padding: 0,
 };

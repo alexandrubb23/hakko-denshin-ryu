@@ -42,7 +42,12 @@ const useMoonRays = (
       const items = Array.from(list.children) as HTMLElement[];
       setRays(
         items.map((item) => {
-          const tx = list.offsetLeft + item.offsetLeft + RAY_ITEM_GAP;
+          // Aim at the side of the link facing the moon
+          const left = list.offsetLeft + item.offsetLeft;
+          const isRightOfMoon = left > cx;
+          const tx = isRightOfMoon
+            ? left + RAY_ITEM_GAP
+            : left + item.offsetWidth - RAY_ITEM_GAP;
           const ty = list.offsetTop + item.offsetTop + item.offsetHeight / 2;
           const angle = Math.atan2(ty - cy, tx - cx);
           return {

@@ -16,6 +16,7 @@ import Techniques from "@features/public/techniques/Techniques";
 
 import HakkoRyuRGB from "@features/public/hakko-ryu/HakkoRyu";
 import Home from "@features/public/home/Home";
+import { normalizePath } from "@utils/routes";
 import type { IntlMessageID } from "i18n/messages";
 
 // Brand names appended to every document title (not translated)
@@ -45,6 +46,8 @@ export interface Page {
   titleSuffix: typeof SITE_NAME | typeof DOJO_NAME;
   bgImage?: string;
   hideFromNav?: boolean;
+  /** The page opens on a moon cover with its own arc menu, so it has no header */
+  cover?: boolean;
   protected?: boolean;
   adminOnly?: boolean;
   standalone?: boolean;
@@ -58,12 +61,14 @@ export const pages: Page[] = [
     path: "home",
     titleId: "page.title.home",
     titleSuffix: SITE_NAME,
+    cover: true,
   },
   {
     component: HakkoRyuRGB,
     path: "hakko-ryu",
     titleId: "page.title.hakko-ryu",
     titleSuffix: SITE_NAME,
+    cover: true,
   },
   {
     component: Senshinkan,
@@ -156,6 +161,10 @@ export const pages: Page[] = [
 
 /** Pages listed in the site menus (header, mobile drawer, home arc) */
 export const navPages = pages.filter((page) => !page.hideFromNav);
+
+/** The page served at `pathname` (e.g. "/" or "/hakko-ryu"), if any */
+export const findPage = (pathname: string) =>
+  pages.find((page) => normalizePath(page.path) === pathname);
 
 export const getPageTitle = (
   page: Pick<Page, "titleId" | "titleSuffix">,

@@ -10,7 +10,7 @@ import { normalizePath } from "@utils/routes";
 import { AppRoutes } from "./AppRoutes";
 import createEmotionCache from "./createEmotionCache";
 import { messages } from "./i18n/messages";
-import { getPageTitle, pages } from "./pages";
+import { findPage, getPageTitle } from "./pages";
 
 export async function render(url: string) {
   const cache = createEmotionCache();
@@ -23,9 +23,7 @@ export async function render(url: string) {
   const normalizedPathname = normalizePath(rawPathname);
   const search = rawSearch ? `?${rawSearch}` : "";
 
-  const page = pages.find(
-    (route) => normalizePath(route.path) === normalizedPathname
-  );
+  const page = findPage(normalizedPathname);
   // The language preference lives in localStorage, so the server always
   // renders with the store's default language (the client updates the title
   // after hydration if the user picked another language).

@@ -1,6 +1,6 @@
 import img180 from "@assets/images/180.webp";
-import ArcNavMenu from "@components/ui/Header/NavMenu/ArcNavMenu";
-import LanguageSwitcher from "@components/ui/LanguageSwitcher/LanguageSwitcher";
+import ArcNavMenu from "@components/ui/ArcNavMenu/ArcNavMenu";
+import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
 import { Box } from "@mui/material";
 import { mergeSx } from "@utils/sx";
 
@@ -9,29 +9,30 @@ import { motion } from "framer-motion";
 import { CoverMotto, CoverTitle } from "./CoverText";
 import HankoSeal from "./HankoSeal";
 import {
+  arcArtSx,
   arcMenuSx,
   coverBlockSx,
   gridSx,
   heroSx,
-  langSwitcherPositionSx,
   navColSx,
   photoColSx,
   photoSx,
   sealPositionSx,
   verticalKanjiSx,
 } from "./HomeCover.style";
-import { heroWrapperSx, langSwitcherSx, topAccentSx } from "./cover.style";
+import { heroWrapperSx } from "./cover.style";
 import { heroReveal } from "./heroReveal";
+import { HOME_MOON_ART } from "./homeArt";
 
 /** Wide-screen home cover: moon art with the arc menu, photo and title */
 const HomeCover = () => (
   <Box sx={mergeSx(heroWrapperSx, heroSx)}>
-    <Box sx={topAccentSx} aria-hidden />
+    <CoverChrome />
 
     <Box sx={gridSx}>
-      {/* Moon art; the arc menu's rays start from the painted moon */}
+      {/* The arc menu, drawing the moon art behind itself */}
       <Box sx={navColSx}>
-        <ArcNavMenu sx={arcMenuSx} />
+        <ArcNavMenu art={HOME_MOON_ART} artSx={arcArtSx} sx={arcMenuSx} />
       </Box>
 
       <Box sx={photoColSx}>
@@ -50,10 +51,6 @@ const HomeCover = () => (
             </Box>
           </Box>
         </motion.div>
-
-        <Box sx={mergeSx(langSwitcherSx, langSwitcherPositionSx)}>
-          <LanguageSwitcher />
-        </Box>
 
         <HankoSeal sx={sealPositionSx} />
       </Box>

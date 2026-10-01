@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
-import { normalizePath } from "@utils/routes";
 import { useLocation } from "react-router";
+
+import { findPage } from "../../../pages";
 
 import Logo from "./Logo";
 import NavMenu from "./NavMenu/NavMenu";
@@ -8,8 +9,8 @@ import NavMenu from "./NavMenu/NavMenu";
 const Header = () => {
   const location = useLocation();
 
-  // The home cover has its own arc menu and language switcher
-  if (location.pathname === normalizePath("home")) return null;
+  // Moon covers have their own arc menu and language switcher
+  if (findPage(location.pathname)?.cover) return null;
 
   return (
     <Box className="header">

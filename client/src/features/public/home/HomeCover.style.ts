@@ -1,15 +1,21 @@
 import type { SxProps, Theme } from "@mui/material";
 
-import { PURPLE, PURPLE_ALPHA_30 } from "@style/tokens";
+import {
+  COVER_HEIGHT,
+  fadeMask,
+  verticalKanjiSx as verticalKanjiBaseSx,
+} from "@style/art";
+import { mergeSx } from "@utils/sx";
 
-import { COVER_HEIGHT, KANJI_FONT, fadeMask } from "./cover.style";
-import { MOON_DIAMETER, MOON_X, MOON_Y, artWidth, moonArt } from "./moonArt";
+import { artWidth, menuOnArt } from "@components/ui/ArcNavMenu/moonArt";
+
+import { HOME_MOON_ART } from "./homeArt";
 
 // Wide screens: moon art + arc menu left, photo + title right
 
 // The art fills the hero height
 const ART_HEIGHT = COVER_HEIGHT;
-const ART_WIDTH = artWidth(ART_HEIGHT);
+const ART_WIDTH = artWidth(HOME_MOON_ART, ART_HEIGHT);
 // Fade the art's right edge into the page background
 const ART_EDGE_FADE = "linear-gradient(90deg, black 75%, transparent 100%)";
 // Fade the photo in from the title side and towards the bottom
@@ -29,26 +35,15 @@ export const gridSx: SxProps<Theme> = {
 export const navColSx: SxProps<Theme> = {
   position: "relative",
   height: "100%",
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    inset: 0,
-    backgroundImage: `url(${moonArt})`,
-    backgroundSize: "cover",
-    backgroundPosition: "left top",
-    ...fadeMask(ART_EDGE_FADE),
-  },
 };
 
-// Puts the menu's moon exactly over the painted moon
+// Sizes the menu so its painting fills the column, top-left aligned
 export const arcMenuSx: SxProps<Theme> = {
-  "--moon-size": `calc(${ART_HEIGHT} * ${MOON_DIAMETER})`,
-  position: "absolute",
-  top: `${MOON_Y * 100}%`,
-  left: `calc(${ART_WIDTH} * ${MOON_X} - var(--moon-size) / 2)`,
-  translate: "0 -50%",
+  ...menuOnArt(HOME_MOON_ART, "right", ART_HEIGHT),
   zIndex: 1,
 };
+
+export const arcArtSx: SxProps<Theme> = fadeMask(ART_EDGE_FADE);
 
 export const photoColSx: SxProps<Theme> = {
   position: "relative",
@@ -78,18 +73,11 @@ export const coverBlockSx: SxProps<Theme> = {
   pr: 4,
 };
 
-export const verticalKanjiSx: SxProps<Theme> = {
-  writingMode: "vertical-rl",
-  fontFamily: KANJI_FONT,
+export const verticalKanjiSx = mergeSx(verticalKanjiBaseSx, {
   fontSize: "clamp(2.5rem, 3.6vw, 4rem)",
-  lineHeight: 1,
   letterSpacing: "0.12em",
-  color: PURPLE,
   pl: { lg: 3, xl: 4 },
   mt: 6,
-  borderLeft: `1px solid ${PURPLE_ALPHA_30}`,
-};
-
-export const langSwitcherPositionSx: SxProps<Theme> = { top: 24, right: 32 };
+});
 
 export const sealPositionSx: SxProps<Theme> = { right: 40, bottom: 40 };
