@@ -1,38 +1,21 @@
 import { SxProps, Theme } from "@mui/material";
 
-import { BORDER_COLOR, PURPLE, SURFACE_BG } from "@style/tokens";
+import { kanjiCardBodySx } from "@components/ui/PageSections/PageSections.style";
 
-// ─── Contact items container ──────────────────────────────────────────────────
+// ─── 01. Get in touch ─────────────────────────────────────────────────────────
 
-export const contactBlockSx: SxProps<Theme> = {
+// Long e-mail addresses wrap instead of running under the corner kanji
+export const contactItemSx: SxProps<Theme> = {
+  ...kanjiCardBodySx,
+  overflowWrap: "anywhere",
+};
+
+export const socialLinksSx: SxProps<Theme> = {
   display: "flex",
-  flexDirection: "column",
-  gap: 1.5,
-  backgroundColor: SURFACE_BG,
-  border: `1px solid ${BORDER_COLOR}`,
-  borderRadius: 2,
-  px: { xs: 2.5, md: 3 },
-  py: { xs: 2.5, md: 3 },
-  backdropFilter: "blur(20px)",
+  gap: 2,
+  mt: 1,
 };
 
-export const contactBlockTitleSx: SxProps<Theme> = {
-  fontFamily: "Inter, sans-serif",
-  fontSize: "0.7rem",
-  letterSpacing: "0.3em",
-  textTransform: "uppercase",
-  color: PURPLE,
-  opacity: 0.7,
-  mb: 1,
-  padding: 0,
-};
+// ─── 02. Visit the dojo ───────────────────────────────────────────────────────
 
-// ─── Portrait image ────────────────────────────────────────────────────────────
-
-export const imageSx: SxProps<Theme> = {
-  width: "100%",
-  aspectRatio: "auto 360 / 540",
-  borderRadius: 2,
-  overflow: "hidden",
-  border: `1px solid ${BORDER_COLOR}`,
-};
+export const scheduleButtonSx: SxProps<Theme> = { mt: 2 };

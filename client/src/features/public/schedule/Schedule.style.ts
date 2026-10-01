@@ -9,7 +9,6 @@ import {
   BORDER_HOVER,
   PURPLE,
   PURPLE_ALPHA_08,
-  PURPLE_ALPHA_30,
   PURPLE_ALPHA_50,
   SURFACE_BG,
   SURFACE_BG_02,
@@ -201,16 +200,7 @@ export const ctaTitleSx: SxProps<Theme> = {
   padding: 0,
 };
 
-export const ctaButtonSx: SxProps<Theme> = {
-  flexShrink: 0,
-  borderColor: PURPLE_ALPHA_30,
-  color: PURPLE,
-  px: 3,
-  "&:hover": {
-    borderColor: PURPLE,
-    backgroundColor: PURPLE_ALPHA_08,
-  },
-};
+export const ctaButtonSx: SxProps<Theme> = { flexShrink: 0 };
 
 // ─── Quote (valley art band) ─────────────────────────────────────────────────
 

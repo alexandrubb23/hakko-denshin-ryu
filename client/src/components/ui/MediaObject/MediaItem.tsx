@@ -1,12 +1,10 @@
 import { Typography } from "@mui/material";
-import { PropsWithChildren } from "react";
 import type { IntlMessageID } from "i18n/messages";
+import { PropsWithChildren } from "react";
 
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import type { MediaObjectProps } from "./MediaObject";
 import MediaObject from "./MediaObject";
-
-const descriptionSx = { span: { display: "block" } };
 
 interface MediaItemProps extends MediaObjectProps {
   localeId: {
@@ -26,7 +24,7 @@ const MediaItem = ({
         <FormattedMessage id={localeId.title} />
       </Typography>
       {localeId.description && (
-        <Typography variant="body1" sx={descriptionSx}>
+        <Typography variant="body1">
           <FormattedMessage id={localeId.description} />
         </Typography>
       )}

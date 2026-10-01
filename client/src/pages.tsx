@@ -96,6 +96,7 @@ export const pages: Page[] = [
     component: Contact,
     titleId: "page.title.contact",
     titleSuffix: SITE_NAME,
+    cover: true,
   },
   {
     path: "login",

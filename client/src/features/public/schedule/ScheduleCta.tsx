@@ -1,8 +1,7 @@
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Box, Button, Typography } from "@mui/material";
-import { Link } from "react-router";
+import { Box, Typography } from "@mui/material";
 
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import LinkButton from "@components/ui/PageSections/LinkButton";
 import { descriptionSx } from "@components/ui/PublicPageHeader/PublicPageHeader.style";
 import { Routes } from "@lib/routes";
 
@@ -19,15 +18,9 @@ const ScheduleCta = () => (
         <FormattedMessage id="page.schedule.cta.description" />
       </Typography>
     </Box>
-    <Button
-      component={Link}
-      to={Routes.contact}
-      variant="outlined"
-      endIcon={<ArrowForwardIcon />}
-      sx={ctaButtonSx}
-    >
+    <LinkButton to={Routes.contact} sx={ctaButtonSx}>
       <FormattedMessage id="page.schedule.cta.button" />
-    </Button>
+    </LinkButton>
   </Box>
 );
 

@@ -3,6 +3,7 @@ import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
+import { outlinedButtonSx } from "@components/ui/PageSections/PageSections.style";
 import {
   EVENT_CAMP_BG,
   EVENT_DEMO_BG,
@@ -15,8 +16,6 @@ import {
   BORDER_HOVER,
   PURPLE,
   PURPLE_ALPHA_06,
-  PURPLE_ALPHA_08,
-  PURPLE_ALPHA_30,
   SURFACE_BG,
 } from "@style/tokens";
 
@@ -72,13 +71,8 @@ export const DetailsTypography = styled(Typography)({
 });
 
 export const TICKET_BUTTON_SX = {
+  ...outlinedButtonSx,
   mt: "auto",
-  borderColor: PURPLE_ALPHA_30,
-  color: PURPLE,
-  "&:hover": {
-    borderColor: PURPLE,
-    backgroundColor: PURPLE_ALPHA_08,
-  },
 } as const;
 
 export const CARD_CONTENT_SX = {

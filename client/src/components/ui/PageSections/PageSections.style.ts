@@ -8,6 +8,7 @@ import {
   PURPLE,
   PURPLE_ALPHA_08,
   PURPLE_ALPHA_15,
+  PURPLE_ALPHA_30,
   PURPLE_ALPHA_50,
   SURFACE_BG,
   SURFACE_BG_02,
@@ -190,6 +191,23 @@ export const kanjiCardTitleSx: SxProps<Theme> = {
   mb: 3,
   padding: 0,
 };
+
+// Leaves room for the card's corner kanji; spread into the card's text
+export const kanjiCardBodySx = { pr: { xs: 7, md: 9 } };
+
+// ─── Link button ──────────────────────────────────────────────────────────────
+
+// Outlined purple; also spread into one-off buttons, e.g. external links
+export const outlinedButtonSx = {
+  borderColor: PURPLE_ALPHA_30,
+  color: PURPLE,
+  "&:hover": {
+    borderColor: PURPLE,
+    backgroundColor: PURPLE_ALPHA_08,
+  },
+};
+
+export const linkButtonSx: SxProps<Theme> = { ...outlinedButtonSx, px: 3 };
 
 // ─── Pull quote, e.g. on an art band ──────────────────────────────────────────
 

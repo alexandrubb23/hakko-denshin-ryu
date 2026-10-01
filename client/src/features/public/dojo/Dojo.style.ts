@@ -1,15 +1,12 @@
 import { SxProps, Theme } from "@mui/material";
 
+import { kanjiCardBodySx } from "@components/ui/PageSections/PageSections.style";
 import { KANJI_FONT, TITLE_GLOW } from "@style/art";
 import { PURPLE } from "@style/tokens";
 
 // ─── 02. What we offer ────────────────────────────────────────────────────────
 
-// Leaves room for the card's corner kanji
-export const offerTextSx: SxProps<Theme> = {
-  pr: { xs: 7, md: 9 },
-  mb: 0,
-};
+export const offerTextSx: SxProps<Theme> = { ...kanjiCardBodySx, mb: 0 };
 
 // ─── 03. Closing (valley art band) ────────────────────────────────────────────
 
