@@ -15,8 +15,10 @@ import {
   moonSx,
   rayGlowSx,
   raysSvgSx,
+  restingArcSx,
 } from "./ArcNavMenu.style";
 import type { Painting } from "./moonArt";
+import useArcIntro from "./useArcIntro";
 import useMoonRays from "./useMoonRays";
 
 interface Props {
@@ -46,6 +48,7 @@ const ArcNavMenu = ({
   const moonRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const rays = useMoonRays(wrapperRef, moonRef, listRef);
+  const intro = useArcIntro();
   const gradientId = useId();
   // Rays re-render the menu on every resize; the art's styles stay the same
   const paintingsSx = useMemo(
@@ -59,7 +62,11 @@ const ArcNavMenu = ({
   return (
     <Box
       ref={wrapperRef}
-      sx={mergeSx(arcWrapperSx(rays.length, direction), sx)}
+      sx={mergeSx(
+        arcWrapperSx(rays.length, direction),
+        !intro && restingArcSx,
+        sx
+      )}
     >
       {paintingsSx.map((paintingSx, i) => (
         <Box key={i} sx={paintingSx} aria-hidden />

@@ -1,4 +1,5 @@
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import TransitionLink from "@components/ui/TransitionLink/TransitionLink";
 import { authClient } from "@lib/auth-client";
 import { SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
@@ -6,7 +7,7 @@ import { PURPLE } from "@style/tokens";
 import { normalizePath } from "@utils/routes";
 import { mergeSx } from "@utils/sx";
 import type { IntlMessageID } from "i18n/messages";
-import { Link, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { navPages } from "../../../../pages";
 
 import { ListItemStyle } from "./ListPages.style";
@@ -29,7 +30,8 @@ const PageItems = ({ itemSx, getItemSx, onPageChange }: Props) => {
   const { data: session } = authClient.useSession();
 
   return navPages.map((page, index) => {
-    const isActive = location.pathname === normalizePath(page.path);
+    const to = normalizePath(page.path);
+    const isActive = location.pathname === to;
 
     const messageId =
       page.path === "login" && session
@@ -45,13 +47,13 @@ const PageItems = ({ itemSx, getItemSx, onPageChange }: Props) => {
           variant="body1"
           sx={{ textAlign: "center", ...(isActive && ACTIVE_ITEM_SX) }}
         >
-          <Link
-            to={normalizePath(page.path)}
+          <TransitionLink
+            to={to}
             aria-current={isActive ? "page" : undefined}
             onClick={onPageChange}
           >
             <FormattedMessage id={messageId} />
-          </Link>
+          </TransitionLink>
         </Typography>
       </ListItemStyle>
     );

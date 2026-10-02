@@ -1,4 +1,4 @@
-import { type RefObject, useEffect, useState } from "react";
+import { type RefObject, useLayoutEffect, useState } from "react";
 
 // Gap between the moon's rim / the link text and the ray ends
 const RAY_MOON_GAP = 8;
@@ -14,6 +14,8 @@ export interface Ray {
 /**
  * Measures one ray from the moon's rim to each item of the list, in the
  * wrapper's coordinates. Re-measures on resize and once web fonts load.
+ * Measures before paint, so a menu mounted by a navigation shows its rays
+ * in its first frame.
  */
 const useMoonRays = (
   wrapperRef: RefObject<HTMLElement | null>,
@@ -22,7 +24,7 @@ const useMoonRays = (
 ) => {
   const [rays, setRays] = useState<Ray[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const wrapper = wrapperRef.current;
     const moon = moonRef.current;
     const list = listRef.current;

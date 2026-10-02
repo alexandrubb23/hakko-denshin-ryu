@@ -2,6 +2,8 @@ import AdminRoute from "@components/AdminRoute";
 import ProtectedRoute from "@components/ProtectedRoute";
 import DashboardLayout from "@components/ui/DashboardLayout/DashboardLayout";
 import StudentDetail from "@features/admin/students/components/StudentDetail";
+import useScrollToTop from "@hooks/useScrollToTop";
+import { useViewTransitionCommit } from "@hooks/useViewTransitionNavigate";
 import { normalizePath } from "@utils/routes";
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -16,6 +18,8 @@ interface AppRoutesProps {
 export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
   const { pathname } = useLocation();
   const intl = useIntl();
+  useScrollToTop();
+  useViewTransitionCommit();
 
   useEffect(() => {
     const page = findPage(pathname);

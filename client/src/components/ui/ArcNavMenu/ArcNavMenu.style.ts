@@ -67,7 +67,24 @@ export const arcWrapperSx = (
   ),
 });
 
+// Rays and links once drawn in: the end of the intro, shown straight away
+// with reduced motion or after the first page
+const RAY_AT_REST = { animation: "none", strokeDashoffset: 0 };
+const ITEM_AT_REST = { animation: "none", opacity: 1 };
+
+// Menus that skip the intro (see useArcIntro) show their rays and links at rest
+export const restingArcSx: SxProps<Theme> = {
+  "& line": RAY_AT_REST,
+  "& li": ITEM_AT_REST,
+};
+
+// The moon, rays and links carry view transition names, so navigating
+// between covers (see useViewTransitionNavigate) glides them to their new
+// place. Names must be unique, so only one menu may show at a time (Home's
+// wide and narrow covers both mount one; the hidden copy is `display: none`,
+// which view transitions don't capture).
 export const raysSvgSx: SxProps<Theme> = {
+  viewTransitionName: "arc-rays",
   position: "absolute",
   inset: 0,
   width: "100%",
@@ -88,15 +105,13 @@ export const rayGlowSx = (index: number): SxProps<Theme> => ({
   animation: "rayDraw 0.7s ease-out forwards",
   animationDelay: `${itemDelay(index)}s`,
   "@keyframes rayDraw": { to: { strokeDashoffset: 0 } },
-  "@media (prefers-reduced-motion: reduce)": {
-    animation: "none",
-    strokeDashoffset: 0,
-  },
+  "@media (prefers-reduced-motion: reduce)": RAY_AT_REST,
 });
 
 // Halo over the moon; `--moon-size` matches the moon painted in the background
 // art, so the disc itself is left transparent and only the glow breathes
 export const moonSx: SxProps<Theme> = {
+  viewTransitionName: "arc-moon",
   position: "relative",
   zIndex: 1,
   flexShrink: 0,
@@ -133,6 +148,7 @@ export const arcListSx = byDirection<SxProps<Theme>>((direction) => ({
 export const arcItemSx = byDirection(
   (direction) =>
     (index: number, count: number): SxProps<Theme> => ({
+      viewTransitionName: `arc-link-${index}`,
       // sin() over the half-turn gives the ")" curve (or "(" when fanning left):
       // 0 at the ends, 1 in the middle
       [direction === "left" ? "mr" : "ml"]:
@@ -147,10 +163,7 @@ export const arcItemSx = byDirection(
       // `translate` (not `transform`) so the hover scale in ListItemStyle still works
       animation: "arcItemIn 0.6s ease-out forwards",
       animationDelay: `${itemDelay(index) + 0.25}s`,
-      "@media (prefers-reduced-motion: reduce)": {
-        animation: "none",
-        opacity: 1,
-      },
+      "@media (prefers-reduced-motion: reduce)": ITEM_AT_REST,
     })
 );
 
