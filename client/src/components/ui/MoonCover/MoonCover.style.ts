@@ -107,6 +107,10 @@ export const heroOnArtSx =
 export const heroContentSx: SxProps<Theme> = {
   position: "relative",
   zIndex: 1,
+  // Its own layer from the start: otherwise Safari composites it only while
+  // a menu link's hover scale animates beneath it, and the title flashes as
+  // the layer comes and goes
+  willChange: "transform",
   width: "100%",
   maxWidth: "lg",
   mx: "auto",
