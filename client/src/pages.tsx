@@ -44,6 +44,10 @@ export interface Page {
   /** Translation ID of the document title (without the brand suffix) */
   titleId: IntlMessageID;
   titleSuffix: typeof SITE_NAME | typeof DOJO_NAME;
+  /** Translation ID of the meta description (falls back to the site-wide one) */
+  descriptionId?: IntlMessageID;
+  /** Social preview image in public/og (falls back to the home one) */
+  ogImage?: string;
   bgImage?: string;
   hideFromNav?: boolean;
   /** Keep the page out of search engines */
@@ -63,6 +67,8 @@ export const pages: Page[] = [
     path: "home",
     titleId: "page.title.home",
     titleSuffix: SITE_NAME,
+    descriptionId: "page.description.home",
+    ogImage: "/og/home.jpg",
     cover: true,
   },
   {
@@ -70,6 +76,8 @@ export const pages: Page[] = [
     path: "hakko-ryu",
     titleId: "page.title.hakko-ryu",
     titleSuffix: SITE_NAME,
+    descriptionId: "page.description.hakko-ryu",
+    ogImage: "/og/hakko-ryu.jpg",
     cover: true,
   },
   {
@@ -77,6 +85,8 @@ export const pages: Page[] = [
     path: "senshinkan",
     titleId: "page.title.senshinkan",
     titleSuffix: SITE_NAME,
+    descriptionId: "page.description.senshinkan",
+    ogImage: "/og/senshinkan.jpg",
     cover: true,
   },
   {
@@ -84,6 +94,8 @@ export const pages: Page[] = [
     path: "dojo",
     titleId: "page.title.dojo",
     titleSuffix: SITE_NAME,
+    descriptionId: "page.description.dojo",
+    ogImage: "/og/dojo.jpg",
     cover: true,
   },
   {
@@ -91,6 +103,8 @@ export const pages: Page[] = [
     component: Schedule,
     titleId: "page.title.schedule",
     titleSuffix: SITE_NAME,
+    descriptionId: "page.description.schedule",
+    ogImage: "/og/schedule.jpg",
     cover: true,
   },
   {
@@ -98,6 +112,8 @@ export const pages: Page[] = [
     component: Contact,
     titleId: "page.title.contact",
     titleSuffix: SITE_NAME,
+    descriptionId: "page.description.contact",
+    ogImage: "/og/contact.jpg",
     cover: true,
   },
   {
@@ -105,6 +121,8 @@ export const pages: Page[] = [
     component: Login,
     titleId: "page.title.login",
     titleSuffix: DOJO_NAME,
+    descriptionId: "page.description.login",
+    ogImage: "/og/login.jpg",
     cover: true,
     noIndex: true,
   },
@@ -155,6 +173,8 @@ export const pages: Page[] = [
     component: PublicEvents,
     titleId: "page.title.events",
     titleSuffix: DOJO_NAME,
+    descriptionId: "page.description.events",
+    ogImage: "/og/events.jpg",
     cover: true,
   },
   {
@@ -179,3 +199,8 @@ export const getPageTitle = (
   page: Pick<Page, "titleId" | "titleSuffix">,
   intl: Pick<IntlShape, "formatMessage">
 ) => `${intl.formatMessage({ id: page.titleId })} - ${page.titleSuffix}`;
+
+export const getPageDescription = (
+  page: Pick<Page, "descriptionId"> | undefined,
+  intl: Pick<IntlShape, "formatMessage">
+) => intl.formatMessage({ id: page?.descriptionId ?? "page.description.default" });
