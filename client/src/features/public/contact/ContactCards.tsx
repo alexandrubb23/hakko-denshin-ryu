@@ -7,12 +7,12 @@ import { Box, Typography } from "@mui/material";
 import MediaItem from "@components/ui/MediaObject/MediaItem";
 import CardGrid from "@components/ui/PageSections/CardGrid";
 import KanjiCard from "@components/ui/PageSections/KanjiCard";
+import SocialLinks from "@components/ui/SocialLinks/SocialLinks";
+import { SENSEI_NAME } from "@constants/contact";
 
 import type { IntlMessageID } from "i18n/messages";
 
-import SocialLinks from "./SocialLinks";
-
-import { contactItemSx } from "./Contact.style";
+import { contactItemSx, socialLinksSx } from "./Contact.style";
 
 interface ContactItem {
   kanji: string;
@@ -37,7 +37,7 @@ const CONTACT_ITEMS: ContactItem[] = [
       title: "page.contact.phone.title",
       description: "page.contact.phone.description",
     },
-    extra: <Typography>Sensei Alexandru Barbulescu</Typography>,
+    extra: <Typography>{SENSEI_NAME}</Typography>,
   },
   {
     kanji: "文", // fumi — a letter
@@ -51,7 +51,7 @@ const CONTACT_ITEMS: ContactItem[] = [
     kanji: "縁", // en — a bond, a connection
     icon: WebAssetIcon,
     localeId: { title: "page.contact.social.title" },
-    extra: <SocialLinks />,
+    extra: <SocialLinks sx={socialLinksSx} />,
   },
 ];
 

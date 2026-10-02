@@ -14,14 +14,11 @@ import Schedule from "@features/public/schedule/Schedule";
 import Senshinkan from "@features/public/senshinkan/Senshinkan";
 import Techniques from "@features/public/techniques/Techniques";
 
+import { DOJO_NAME, SITE_NAME } from "@constants/brand";
 import HakkoRyuRGB from "@features/public/hakko-ryu/HakkoRyu";
 import Home from "@features/public/home/Home";
 import { normalizePath } from "@utils/routes";
 import type { IntlMessageID } from "i18n/messages";
-
-// Brand names appended to every document title (not translated)
-const SITE_NAME = "Hakko Denshin Ryu Jujutsu";
-const DOJO_NAME = "Senshinkan Romania";
 
 export type PagePath =
   | "home"

@@ -1,6 +1,7 @@
 import { Box, Chip, Typography } from "@mui/material";
 
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import TimeRange from "@components/ui/TimeRange/TimeRange";
 import {
   getSessionMinutes,
   type TrainingSession,
@@ -19,9 +20,7 @@ const SessionItem = ({ session }: { session: TrainingSession }) => (
   <Box component="li" sx={sessionSx(session.group)}>
     <Box>
       <Typography sx={sessionTimeSx}>
-        <time dateTime={session.start}>{session.start}</time>
-        {" – "}
-        <time dateTime={session.end}>{session.end}</time>
+        <TimeRange start={session.start} end={session.end} separator=" – " />
       </Typography>
       <Typography sx={sessionDurationSx}>
         <FormattedMessage

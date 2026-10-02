@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import TimeRange from "@components/ui/TimeRange/TimeRange";
 import type { TrainingDaySessions } from "@constants/trainingSchedule";
 import useDateNames from "@hooks/useDateNames";
 import { stripDiacritics } from "@utils/string";
@@ -39,8 +40,7 @@ const WallBoards = ({ days }: { days: TrainingDaySessions[] }) => {
             {sessions.map(({ group, start, end }) => (
               <li key={`${group}-${start}`}>
                 <Typography sx={boardTimeSx}>
-                  <time dateTime={start}>{start}</time>–
-                  <time dateTime={end}>{end}</time>
+                  <TimeRange start={start} end={end} />
                 </Typography>
                 <Typography component="span" sx={boardGroupSx(group)}>
                   <FormattedMessage id={GROUP_LABEL_IDS[group]} />

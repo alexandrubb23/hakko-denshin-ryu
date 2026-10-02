@@ -1,4 +1,4 @@
-import { Box, GlobalStyles } from "@mui/material";
+import { Box } from "@mui/material";
 
 import HomeCover from "./HomeCover";
 import HomeCoverMobile from "./HomeCoverMobile";
@@ -10,12 +10,6 @@ const NARROW_ONLY_SX = { display: { lg: "none" } };
 
 const Home = () => (
   <>
-    {/* The wide cover is exactly one screen tall; the narrow one may scroll */}
-    <GlobalStyles
-      styles={(theme) => ({
-        [theme.breakpoints.up("lg")]: { html: { overflowY: "hidden" } },
-      })}
-    />
     <Box sx={WIDE_ONLY_SX}>
       <HomeCover />
     </Box>

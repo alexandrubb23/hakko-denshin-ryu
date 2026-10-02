@@ -3,6 +3,7 @@ import { renderToString } from "react-dom/server";
 import { createIntl } from "react-intl";
 import { StaticRouter } from "react-router";
 
+import { DOJO_NAME } from "@constants/brand";
 import Providers from "@providers/Providers";
 import useLangStore from "@store/useLangStore";
 import { prefetch } from "@utils/api-requests";
@@ -67,7 +68,7 @@ export async function render(url: string) {
     <meta name="description" content="${description}">
     ${noIndex ? '<meta name="robots" content="noindex, nofollow">' : `<link rel="canonical" href="${pageUrl}">`}
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Senshinkan Romania">
+    <meta property="og:site_name" content="${DOJO_NAME}">
     <meta property="og:title" content="${pageTitle}">
     <meta property="og:description" content="${description}">
     <meta property="og:url" content="${pageUrl}">

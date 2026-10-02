@@ -1,14 +1,10 @@
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import TransitionLink from "@components/ui/TransitionLink/TransitionLink";
-import { authClient } from "@lib/auth-client";
+import useNavItems from "@hooks/useNavItems";
 import { SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { PURPLE } from "@style/tokens";
-import { normalizePath } from "@utils/routes";
 import { mergeSx } from "@utils/sx";
-import type { IntlMessageID } from "i18n/messages";
-import { useLocation } from "react-router";
-import { navPages } from "../../../../pages";
 
 import { ListItemStyle } from "./ListPages.style";
 
@@ -26,38 +22,27 @@ interface Props {
 }
 
 const PageItems = ({ itemSx, getItemSx, onPageChange }: Props) => {
-  const location = useLocation();
-  const { data: session } = authClient.useSession();
+  const items = useNavItems();
 
-  return navPages.map((page, index) => {
-    const to = normalizePath(page.path);
-    const isActive = location.pathname === to;
-
-    const messageId =
-      page.path === "login" && session
-        ? "header.menu.login.authenticated"
-        : (`header.menu.${page.path}` as IntlMessageID);
-
-    return (
-      <ListItemStyle
-        key={page.path}
-        sx={mergeSx(itemSx, getItemSx?.(index, navPages.length))}
+  return items.map(({ path, to, messageId, isActive }, index) => (
+    <ListItemStyle
+      key={path}
+      sx={mergeSx(itemSx, getItemSx?.(index, items.length))}
+    >
+      <Typography
+        variant="body1"
+        sx={{ textAlign: "center", ...(isActive && ACTIVE_ITEM_SX) }}
       >
-        <Typography
-          variant="body1"
-          sx={{ textAlign: "center", ...(isActive && ACTIVE_ITEM_SX) }}
+        <TransitionLink
+          to={to}
+          aria-current={isActive ? "page" : undefined}
+          onClick={onPageChange}
         >
-          <TransitionLink
-            to={to}
-            aria-current={isActive ? "page" : undefined}
-            onClick={onPageChange}
-          >
-            <FormattedMessage id={messageId} />
-          </TransitionLink>
-        </Typography>
-      </ListItemStyle>
-    );
-  });
+          <FormattedMessage id={messageId} />
+        </TransitionLink>
+      </Typography>
+    </ListItemStyle>
+  ));
 };
 
 export default PageItems;

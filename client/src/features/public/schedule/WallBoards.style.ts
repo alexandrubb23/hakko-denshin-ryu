@@ -3,6 +3,7 @@ import { SxProps, Theme } from "@mui/material";
 
 import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW } from "@style/art";
 import { CATEGORY_COLORS } from "@style/categories.tokens";
+import { listResetSx } from "@style/list";
 import {
   PURPLE,
   PURPLE_ALPHA_30,
@@ -11,6 +12,7 @@ import {
 } from "@style/tokens";
 
 import { type ArtRect, rectOnArt } from "@components/ui/ArcNavMenu/moonArt";
+import { mergeSx } from "@utils/sx";
 
 import { BOARDS_MEDIA } from "./facadeArt";
 
@@ -59,12 +61,7 @@ export const boardRuleSx: SxProps<Theme> = {
   backgroundColor: PURPLE_ALPHA_30,
 };
 
-export const boardSessionListSx: SxProps<Theme> = {
-  listStyle: "none",
-  m: 0,
-  p: 0,
-  display: "flex",
-  flexDirection: "column",
+export const boardSessionListSx: SxProps<Theme> = mergeSx(listResetSx, {
   gap: "0.8cqh",
   // Don't inherit the page's (large) body line height
   "& > li": {
@@ -74,7 +71,7 @@ export const boardSessionListSx: SxProps<Theme> = {
     gap: "0.25cqh",
     lineHeight: 1,
   },
-};
+});
 
 export const boardTimeSx: SxProps<Theme> = {
   fontSize: "1.25cqh",

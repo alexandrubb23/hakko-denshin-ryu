@@ -3,6 +3,7 @@ import { SxProps, Theme } from "@mui/material";
 
 import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW } from "@style/art";
 import { CATEGORY_COLORS } from "@style/categories.tokens";
+import { listResetSx } from "@style/list";
 import {
   BACKDROP_BLUR,
   BOARD_FRAME,
@@ -18,6 +19,7 @@ import {
   TEXT_SUBTLE,
   WHITE_ALPHA_65,
 } from "@style/tokens";
+import { mergeSx } from "@utils/sx";
 
 import { BOARDS_MEDIA } from "./facadeArt";
 
@@ -132,14 +134,7 @@ export const dayDividerSx: SxProps<Theme> = {
   my: 2.5,
 };
 
-export const sessionListSx: SxProps<Theme> = {
-  listStyle: "none",
-  m: 0,
-  p: 0,
-  display: "flex",
-  flexDirection: "column",
-  gap: 1.5,
-};
+export const sessionListSx: SxProps<Theme> = mergeSx(listResetSx, { gap: 1.5 });
 
 export const sessionSx = (group: StudentCategory): SxProps<Theme> => ({
   display: "flex",

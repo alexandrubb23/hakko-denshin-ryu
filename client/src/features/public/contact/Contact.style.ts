@@ -11,7 +11,6 @@ export const contactItemSx: SxProps<Theme> = {
 };
 
 export const socialLinksSx: SxProps<Theme> = {
-  display: "flex",
   gap: 2,
   mt: 1,
 };
