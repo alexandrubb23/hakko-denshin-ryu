@@ -6,9 +6,9 @@ import { wideArtFade } from "@components/ui/MoonCover/MoonCover.style";
 export const LANTERN_PATH_MOON_ART: MoonArt = {
   src,
   aspect: 1536 / 1024,
-  moonX: 0.7318,
-  moonY: 0.2227,
-  moonDiameter: 0.172,
+  moonX: 0.7305,
+  moonY: 0.2214,
+  moonDiameter: 0.1783,
 };
 
 // The figure stands near the foot of the art; keep it out of the bottom fade

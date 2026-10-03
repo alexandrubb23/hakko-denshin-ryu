@@ -5,7 +5,7 @@ import type { MoonArt } from "@components/ui/ArcNavMenu/moonArt";
 export const SENSHINKAN_MOON_ART: MoonArt = {
   src,
   aspect: 1536 / 1024,
-  moonX: 0.7542,
-  moonY: 0.2227,
-  moonDiameter: 0.156,
+  moonX: 0.7537,
+  moonY: 0.2222,
+  moonDiameter: 0.1573,
 };

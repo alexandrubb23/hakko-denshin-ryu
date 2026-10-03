@@ -7,9 +7,9 @@ import theme from "@style/theme";
 export const FACADE_MOON_ART: MoonArt = {
   src,
   aspect: 1536 / 1024,
-  moonX: 0.7754,
-  moonY: 0.1538,
-  moonDiameter: 0.138,
+  moonX: 0.7757,
+  moonY: 0.1539,
+  moonDiameter: 0.1372,
 };
 
 // The insides of the three blank boards between the pillars, left to right

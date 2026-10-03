@@ -6,6 +6,6 @@ export const HOME_MOON_ART: MoonArt = {
   src,
   aspect: 1024 / 1536,
   moonX: 0.3022,
-  moonY: 0.4336,
-  moonDiameter: 0.1465,
+  moonY: 0.4364,
+  moonDiameter: 0.1471,
 };

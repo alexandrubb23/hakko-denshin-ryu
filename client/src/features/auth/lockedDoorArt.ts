@@ -6,9 +6,9 @@ import { wideArtFade } from "@components/ui/MoonCover/MoonCover.style";
 export const LOCKED_DOOR_ART: MoonArt = {
   src,
   aspect: 1536 / 1024,
-  moonX: 0.8001,
-  moonY: 0.1494,
-  moonDiameter: 0.105,
+  moonX: 0.8000,
+  moonY: 0.1498,
+  moonDiameter: 0.1125,
   // Lowered less than other covers, so the door stays on screen
   minMoonTop: 0.26,
 };
