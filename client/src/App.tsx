@@ -31,7 +31,7 @@ const StackStyled = styled(Stack, {
 // TODO: Just for testing heroku deployment, remove later
 const App = () => {
   useBodyOverflow();
-  // The public pages only: the dashboard stays dark
+  // App is the public layout route only (see AppRoutes): the dashboard stays dark
   useApplyColorScheme();
 
   const hydrated = useLangStore((state) => state.hydrated);

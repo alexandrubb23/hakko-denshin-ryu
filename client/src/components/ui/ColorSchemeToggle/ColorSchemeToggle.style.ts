@@ -1,16 +1,17 @@
 import type { SxProps, Theme } from "@mui/material";
 
-import { PURPLE, PURPLE_ALPHA_08, PURPLE_ALPHA_50 } from "@style/colorScheme";
+import { outlinedButtonSx } from "@components/ui/PageSections/PageSections.style";
+import { PURPLE_ALPHA_50 } from "@style/colorScheme";
 
-// Square, and outlined like the language switcher beside it
+// The height of MUI's medium Button, i.e. the language switcher beside it
+const SWITCHER_SIZE = 36.5;
+
+// Square, and outlined like the language switcher (MUI's half-alpha border)
 export const toggleSx: SxProps<Theme> = {
-  width: 36.5,
-  height: 36.5,
+  border: "1px solid",
+  ...outlinedButtonSx,
+  borderColor: PURPLE_ALPHA_50,
+  width: SWITCHER_SIZE,
+  height: SWITCHER_SIZE,
   borderRadius: 1,
-  color: PURPLE,
-  border: `1px solid ${PURPLE_ALPHA_50}`,
-  "&:hover": {
-    borderColor: PURPLE,
-    backgroundColor: PURPLE_ALPHA_08,
-  },
 };

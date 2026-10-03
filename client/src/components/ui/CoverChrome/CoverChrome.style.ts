@@ -14,7 +14,7 @@ export const topAccentSx: SxProps<Theme> = {
 };
 
 // Above the cover's own content, which may reach the top corner
-export const langSwitcherSx: SxProps<Theme> = {
+export const coverControlsSx: SxProps<Theme> = {
   position: "absolute",
   zIndex: 3,
   top: { xs: 20, lg: 24 },

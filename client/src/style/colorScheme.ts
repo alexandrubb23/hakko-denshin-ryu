@@ -114,53 +114,61 @@ export {
   MOONLIGHT_ALPHA_45,
 } from "./tokens";
 
-const LIGHT_SELECTOR = '[data-color-scheme="light"]';
-const DARK_SELECTOR = '[data-color-scheme="dark"]';
+export type ColorScheme = "dark" | "light";
+
+/** The attribute that sets an element's scheme (on the root, or on an island) */
+export const SCHEME_ATTR = "data-color-scheme";
+
+const schemeSelector = (scheme: ColorScheme) => `[${SCHEME_ATTR}="${scheme}"]`;
+const LIGHT_SELECTOR = schemeSelector("light");
+const DARK_SELECTOR = schemeSelector("dark");
 
 /** Marks an element as night: it stays dark in the light scheme */
-export const NIGHT = { "data-color-scheme": "dark" } as const;
+export const NIGHT = { [SCHEME_ATTR]: "dark" } as const;
 
 const NIGHT_BLACK = "#000";
 
 /** A night cover on a light page melts into the paper at its foot */
 export const nightCoverSx = {
   [`${LIGHT_SELECTOR} &`]: {
-    background: `linear-gradient(180deg, ${NIGHT_BLACK} 80%, rgb(${PAPER}) 100%)`,
+    background: `linear-gradient(180deg, ${NIGHT_BLACK} 80%, ${LIGHT.DARK_BG} 100%)`,
   },
 } as const;
 
 /** A night band on a light page rises out of the paper and sinks back */
 export const nightBandSx = {
   [`${LIGHT_SELECTOR} &`]: {
-    background: `linear-gradient(180deg, rgb(${PAPER}) 0%, ${dark.DARK_BG} 18%, ${dark.DARK_BG} 82%, rgb(${PAPER}) 100%)`,
+    background: `linear-gradient(180deg, ${LIGHT.DARK_BG} 0%, ${dark.DARK_BG} 18%, ${dark.DARK_BG} 82%, ${LIGHT.DARK_BG} 100%)`,
     borderColor: "transparent",
   },
 } as const;
+
+/** One CSS variable declaration per token, valued by `value` */
+const declareTokens = (value: (token: Token) => string) =>
+  (Object.keys(LIGHT) as Token[])
+    .map((token) => `${varName(token)}: ${value(token)};`)
+    .join("\n    ");
 
 /** Global CSS for the light scheme, for the theme's CssBaseline */
 export const LIGHT_SCHEME_CSS = `
   ${LIGHT_SELECTOR} {
     color-scheme: light;
-    ${(Object.keys(LIGHT) as Token[])
-      .map((token) => `${varName(token)}: ${LIGHT[token]};`)
-      .join("\n    ")}
-    --body-background: rgb(${PAPER});
-    --foreground-color: rgb(${INK});
+    ${declareTokens((token) => LIGHT[token])}
+    --body-background: ${LIGHT.DARK_BG};
+    --foreground-color: ${LIGHT.TEXT_PRIMARY};
     --background-color: rgba(${PAPER},0.6);
   }
   /* Islands of night (the painted covers and bands) inside a light page:
      the variables drop back to their dark fallbacks */
   ${LIGHT_SELECTOR} ${DARK_SELECTOR} {
     color-scheme: dark;
-    ${(Object.keys(LIGHT) as Token[])
-      .map((token) => `${varName(token)}: initial;`)
-      .join("\n    ")}
-    color: #e7e7e7;
+    ${declareTokens(() => "initial")}
+    color: ${dark.BODY_TEXT};
   }
   ${LIGHT_SELECTOR} body,
   ${LIGHT_SELECTOR} a,
   ${LIGHT_SELECTOR} a:hover {
-    color: rgb(${INK});
+    color: ${LIGHT.TEXT_PRIMARY};
   }
   ${LIGHT_SELECTOR} ${DARK_SELECTOR} a,
   ${LIGHT_SELECTOR} ${DARK_SELECTOR} a:hover {

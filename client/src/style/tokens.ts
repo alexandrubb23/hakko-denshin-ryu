@@ -44,6 +44,8 @@ export const PURPLE_ALPHA_50 = "rgba(171,150,255,0.5)";
 export const TEXT_PRIMARY = "#fff";
 export const TEXT_MUTED = "rgba(255,255,255,0.5)";
 export const TEXT_SUBTLE = "rgba(255,255,255,0.35)";
+// The body copy, a touch softer than TEXT_PRIMARY
+export const BODY_TEXT = "#e7e7e7";
 
 // ─── White alpha scale ───────────────────────────────────────────────────────
 export const WHITE_ALPHA_05 = "rgba(255,255,255,0.05)";

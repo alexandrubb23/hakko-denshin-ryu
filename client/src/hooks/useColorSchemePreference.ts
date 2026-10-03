@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
-export type ColorScheme = "dark" | "light";
+import { type ColorScheme, SCHEME_ATTR } from "@style/colorScheme";
+
+export const COLOR_SCHEME_STORAGE_KEY = "color-scheme";
 
 /**
  * The visitor's chosen scheme for the public pages, kept in local storage and
@@ -9,7 +11,7 @@ export type ColorScheme = "dark" | "light";
  * the server's (dark).
  */
 const useColorSchemePreference = () =>
-  useLocalStorage<ColorScheme>("color-scheme", "dark", {
+  useLocalStorage<ColorScheme>(COLOR_SCHEME_STORAGE_KEY, "dark", {
     initializeWithValue: false,
   });
 
@@ -22,10 +24,8 @@ export const useApplyColorScheme = () => {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.dataset.colorScheme = scheme;
-    return () => {
-      delete root.dataset.colorScheme;
-    };
+    root.setAttribute(SCHEME_ATTR, scheme);
+    return () => root.removeAttribute(SCHEME_ATTR);
   }, [scheme]);
 };
 
