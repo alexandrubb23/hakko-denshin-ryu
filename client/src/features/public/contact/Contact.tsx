@@ -1,5 +1,6 @@
 import { Container } from "@mui/material";
 
+import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import MoonCover from "@components/ui/MoonCover/MoonCover";
 import ArtBand from "@components/ui/PageSections/ArtBand";
@@ -12,12 +13,13 @@ import { Routes } from "@lib/routes";
 
 import trainingLowQualityImage from "@assets/images/180-small.jpg";
 import trainingHighQualityImage from "@assets/images/180.webp";
+import elbowLockImage from "@assets/images/212.webp";
 import pathArt from "@assets/images/contact-path.webp";
 
 import ContactCards from "./ContactCards";
 import { CONTACT_MOON_ART } from "./contactArt";
 
-import { scheduleButtonSx } from "./Contact.style";
+import { coverPhotoSx, scheduleButtonSx } from "./Contact.style";
 
 const Contact = () => (
   <>
@@ -28,6 +30,7 @@ const Contact = () => (
       title={<FormattedMessage id="page.contact.title" />}
       compactTitle
       tagline={<FormattedMessage id="page.contact.description" />}
+      aboveTitle={<CoverPhoto src={elbowLockImage} sx={coverPhotoSx} />}
     />
 
     <Container maxWidth="lg">

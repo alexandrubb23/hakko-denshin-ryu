@@ -1,7 +1,7 @@
 import type { EventType } from "@hakko/core";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
+import { type SxProps, type Theme, styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import { outlinedButtonSx } from "@components/ui/PageSections/PageSections.style";
@@ -19,6 +19,15 @@ import {
   PURPLE_ALPHA_06,
   SURFACE_BG,
 } from "@style/tokens";
+
+// ─── Cover photo ──────────────────────────────────────────────────────────────
+
+// Larger than the default, and further left, away from the menu
+export const coverPhotoSx: SxProps<Theme> = {
+  height: "140%",
+  mt: "-40px",
+  mr: "80px",
+};
 
 export const TYPE_COLORS: Record<EventType, string> = {
   seminar: EVENT_SEMINAR_BG,

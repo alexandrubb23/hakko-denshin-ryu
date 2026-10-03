@@ -34,10 +34,10 @@ const TIERS: Tier[] = [
     belt: beltShihansha,
     grade: "dan",
     ranks: [
-      { name: "Kōshi", kanji: "光師", n: 5 },
-      { name: "Kageshi", kanji: "影師", n: 6 },
+      { name: "Shihan", kanji: "師範", n: 5 },
+      { name: "Shihan", kanji: "師範", n: 6 },
       { name: "Kaiden Shihan", kanji: "皆伝師範", n: 7 },
-      { name: "Myōshi Shihan", kanji: "妙師", n: 8 },
+      { name: "Kaiden Shihan San Dai Kichu", kanji: "皆伝師範 三大基柱", n: 8 },
     ],
   },
 ];

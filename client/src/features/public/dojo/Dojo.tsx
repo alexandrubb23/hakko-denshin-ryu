@@ -1,5 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
+import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import MoonCover from "@components/ui/MoonCover/MoonCover";
@@ -13,11 +14,17 @@ import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
 import trainingLowQualityImage from "@assets/images/108-small.jpg";
 import trainingHighQualityImage from "@assets/images/108.webp";
+import bowImage from "@assets/images/264.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import type { IntlMessageID } from "i18n/messages";
 
-import { closingKanjiSx, closingTextSx, offerTextSx } from "./Dojo.style";
+import {
+  closingKanjiSx,
+  closingTextSx,
+  coverPhotoSx,
+  offerTextSx,
+} from "./Dojo.style";
 import { DOJO_MOON_ART } from "./dojoArt";
 
 const OFFERS: { kanji: string; textId: IntlMessageID }[] = [
@@ -36,6 +43,9 @@ const Dojo = () => (
       eyebrow={<FormattedMessage id="page.dojo.hero.eyebrow" />}
       title="Senshinkan"
       tagline={<FormattedMessage id="page.dojo.hero.tagline" />}
+      aboveTitle={
+        <CoverPhoto src={bowImage} aspectRatio="5 / 6" sx={coverPhotoSx} />
+      }
     />
 
     <Container maxWidth="lg">

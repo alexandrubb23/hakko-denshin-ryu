@@ -124,6 +124,8 @@ const menuReach = (art: MoonArt) =>
 export const heroAboveTitleSx: SxProps<Theme> = {
   display: { xs: "none", lg: "block" },
   position: "relative",
+  // Over the art, which reaches this far left on some covers
+  zIndex: 1,
   // No pointer events: the arc menu, later in the cover, stays clickable
   pointerEvents: "none",
   flex: 1,

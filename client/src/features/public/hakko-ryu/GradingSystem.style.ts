@@ -81,9 +81,12 @@ export const gradeSubtitleSx: SxProps<Theme> = {
 // Romaji and grade on the left, the kanji on the right, between hairlines
 export const gradeRankSx: SxProps<Theme> = {
   display: "flex",
+  // A long kanji title drops below the name rather than squeezing it
+  flexWrap: "wrap",
   alignItems: "center",
   justifyContent: "space-between",
-  gap: 2,
+  columnGap: 2,
+  rowGap: 0.5,
   py: 1.5,
   borderTop: `1px solid ${BORDER_COLOR}`,
 };
@@ -105,6 +108,8 @@ export const gradeRankNoteSx: SxProps<Theme> = {
 };
 
 export const gradeRankKanjiSx: SxProps<Theme> = {
+  // Stays right-aligned when it wraps onto its own line
+  ml: "auto",
   fontFamily: KANJI_FONT,
   fontSize: "1.15rem",
   letterSpacing: "0.2em",

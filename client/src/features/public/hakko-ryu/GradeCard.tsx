@@ -63,7 +63,8 @@ const GradeCard = ({
 
     <Box component="ol" sx={listResetSx}>
       {ranks.map((rank) => (
-        <GradeRank key={rank.name} grade={grade} {...rank} />
+        // Names can repeat across ranks (Shihan at 5th and 6th dan)
+        <GradeRank key={rank.n} grade={grade} {...rank} />
       ))}
     </Box>
   </KanjiCard>

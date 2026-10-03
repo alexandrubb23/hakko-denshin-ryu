@@ -1,5 +1,6 @@
 import { Box, Container } from "@mui/material";
 
+import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import MoonCover from "@components/ui/MoonCover/MoonCover";
@@ -9,10 +10,11 @@ import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import PullQuote from "@components/ui/PageSections/PullQuote";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
+import pinImage from "@assets/images/200.webp";
 import clubLowQualityImage from "@assets/images/279-small.webp";
 import clubHighQualityImage from "@assets/images/279.webp";
 
-import { aboutColumnsSx } from "./Senshinkan.style";
+import { aboutColumnsSx, coverPhotoSx } from "./Senshinkan.style";
 import SenshinkanBridge from "./SenshinkanBridge";
 import { SENSHINKAN_MOON_ART } from "./senshinkanArt";
 
@@ -37,6 +39,7 @@ const Senshinkan = () => (
       eyebrow={<FormattedMessage id="page.senshinkan.hero.eyebrow" />}
       title="Senshinkan"
       tagline={<FormattedMessage id="page.senshinkan.hero.tagline" />}
+      aboveTitle={<CoverPhoto src={pinImage} sx={coverPhotoSx} />}
     />
 
     <Container maxWidth="lg">

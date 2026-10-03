@@ -1,5 +1,6 @@
 import { Box, Container } from "@mui/material";
 
+import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import MoonCover from "@components/ui/MoonCover/MoonCover";
@@ -20,7 +21,6 @@ import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import GradingSystem from "./GradingSystem";
 import {
-  coverPhotoSx,
   denshinGridSx,
   denshinKanjiSx,
   gradesIntroSx,
@@ -51,15 +51,7 @@ const HakkoRyu = () => (
       eyebrow={<FormattedMessage id="page.hakko-ryu.hero.eyebrow" />}
       title="Hakko Ryu"
       subtitle={<FormattedMessage id="page.hakko-ryu.hero.subtitle" />}
-      aboveTitle={
-        // Sets the scene for the title below it
-        <Box
-          component="img"
-          src={wristLockHighQualityImage}
-          alt=""
-          sx={coverPhotoSx}
-        />
-      }
+      aboveTitle={<CoverPhoto src={wristLockHighQualityImage} />}
     />
 
     <Container maxWidth="lg">
