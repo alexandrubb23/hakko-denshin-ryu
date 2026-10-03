@@ -33,11 +33,11 @@ const TIERS: Tier[] = [
     subtitleId: "page.hakko-ryu.grades.shihansha.subtitle",
     belt: beltShihansha,
     grade: "dan",
+    // Titles rather than grades; the dan beside each is only a familiar equivalent
     ranks: [
       { name: "Shihan", kanji: "師範", n: 5 },
-      { name: "Shihan", kanji: "師範", n: 6 },
-      { name: "Kaiden Shihan", kanji: "皆伝師範", n: 7 },
-      { name: "Kaiden Shihan San Dai Kichu", kanji: "皆伝師範 三大基柱", n: 8 },
+      { name: "Kaiden Shihan", kanji: "皆伝師範", n: 6 },
+      { name: "Sandai Kichu", kanji: "三大基柱", n: 7 },
     ],
   },
 ];
