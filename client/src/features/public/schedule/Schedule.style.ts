@@ -18,7 +18,7 @@ import {
   TEXT_PRIMARY,
   TEXT_SUBTLE,
   WHITE_ALPHA_65,
-} from "@style/tokens";
+} from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import { BOARDS_MEDIA } from "./facadeArt";

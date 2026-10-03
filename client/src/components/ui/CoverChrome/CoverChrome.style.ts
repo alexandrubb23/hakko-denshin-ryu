@@ -19,4 +19,6 @@ export const langSwitcherSx: SxProps<Theme> = {
   zIndex: 3,
   top: { xs: 20, lg: 24 },
   right: { xs: 20, lg: 32 },
+  display: "flex",
+  gap: 1,
 };

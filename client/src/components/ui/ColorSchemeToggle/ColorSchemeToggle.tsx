@@ -1,38 +1,18 @@
 import DarkModeIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeIcon from "@mui/icons-material/LightModeOutlined";
 import { IconButton, Tooltip } from "@mui/material";
-import { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useLocalStorage } from "usehooks-ts";
 
+import useColorSchemePreference from "@hooks/useColorSchemePreference";
 import { stripDiacritics } from "@utils/string";
 
 import { toggleSx } from "./ColorSchemeToggle.style";
 
-type ColorScheme = "dark" | "light";
-
-/**
- * PROTOTYPE: switches the page between the dark and light schemes (see
- * `@style/colorScheme`). The light scheme lasts only while this is mounted,
- * so it stays on the pages that render it.
- */
+/** Switches the public pages between the dark and light schemes */
 const ColorSchemeToggle = () => {
   const intl = useIntl();
-  // Read after mounting, so the first render matches the server's (dark)
-  const [scheme, setScheme] = useLocalStorage<ColorScheme>(
-    "color-scheme",
-    "dark",
-    { initializeWithValue: false }
-  );
+  const [scheme, setScheme] = useColorSchemePreference();
   const isLight = scheme === "light";
-
-  useEffect(() => {
-    const root = document.documentElement;
-    root.dataset.colorScheme = scheme;
-    return () => {
-      delete root.dataset.colorScheme;
-    };
-  }, [scheme]);
 
   const label = intl.formatMessage({
     id: isLight ? "ui.colorScheme.toDark" : "ui.colorScheme.toLight",
@@ -40,13 +20,17 @@ const ColorSchemeToggle = () => {
 
   return (
     // Rendered in Jarene (the theme's font), which has no diacritic glyphs
-    <Tooltip title={stripDiacritics(label)} placement="left">
+    <Tooltip title={stripDiacritics(label)}>
       <IconButton
         aria-label={label}
         onClick={() => setScheme(isLight ? "dark" : "light")}
         sx={toggleSx}
       >
-        {isLight ? <DarkModeIcon /> : <LightModeIcon />}
+        {isLight ? (
+          <DarkModeIcon fontSize="small" />
+        ) : (
+          <LightModeIcon fontSize="small" />
+        )}
       </IconButton>
     </Tooltip>
   );

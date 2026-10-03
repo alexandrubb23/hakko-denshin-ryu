@@ -1,6 +1,6 @@
 import { CardContent, Skeleton } from "@mui/material";
 
-import { SKELETON_SX } from "@style/tokens";
+import { SKELETON_SX } from "@style/colorScheme";
 
 import {
   CARD_CONTENT_SX,

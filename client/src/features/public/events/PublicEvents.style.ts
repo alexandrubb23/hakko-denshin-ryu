@@ -18,7 +18,10 @@ import {
   PURPLE,
   PURPLE_ALPHA_06,
   SURFACE_BG,
-} from "@style/tokens";
+  TEXT_MUTED,
+  TEXT_PRIMARY,
+  TEXT_SUBTLE,
+} from "@style/colorScheme";
 
 // ─── Cover photo ──────────────────────────────────────────────────────────────
 
@@ -47,6 +50,8 @@ export const EVENT_IMAGE_HEIGHT = 180;
 const cardBase = {
   boxShadow: "none",
   backgroundColor: SURFACE_BG,
+  // Not the theme's text colours: those stay white in the light scheme
+  color: TEXT_PRIMARY,
   border: `1px solid ${BORDER_COLOR}`,
   borderRadius: 8,
   height: "100%",
@@ -79,7 +84,12 @@ export const DetailsTypography = styled(Typography)({
   WebkitLineClamp: 3,
   WebkitBoxOrient: "vertical",
   overflow: "hidden",
+  color: TEXT_MUTED,
 });
+
+export const MUTED_TEXT_SX = { color: TEXT_MUTED } as const;
+
+export const EMPTY_ICON_SX = { fontSize: 56, color: TEXT_SUBTLE } as const;
 
 export const TICKET_BUTTON_SX = {
   ...outlinedButtonSx,

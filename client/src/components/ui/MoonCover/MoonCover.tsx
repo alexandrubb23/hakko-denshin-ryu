@@ -7,6 +7,7 @@ import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
 import { heroReveal } from "@components/ui/FadeIn/heroReveal";
 import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import KanjiRule from "@components/ui/KanjiRule/KanjiRule";
+import { NIGHT } from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import {
@@ -109,8 +110,7 @@ const MoonCover = ({
   onArtBelowMenu = false,
   aboveTitle,
 }: Props) => (
-  // A night painting: stays dark in the light scheme too
-  <Box sx={heroSx} data-color-scheme="dark">
+  <Box sx={heroSx} {...NIGHT}>
     <CoverChrome />
 
     {aboveTitle && (

@@ -15,7 +15,7 @@ import { useIntl } from "react-intl";
 
 import type { Event } from "@api/events";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
-import { PURPLE_ALPHA_30 } from "@style/tokens";
+import { PURPLE_ALPHA_30 } from "@style/colorScheme";
 import { stripDiacritics } from "@utils/string";
 import type { IntlMessageID } from "i18n/messages";
 
@@ -28,6 +28,7 @@ import {
   EventCard as EventCardRoot,
   ICON_SX,
   ImagePlaceholder,
+  MUTED_TEXT_SX,
   TICKET_BUTTON_SX,
   TYPE_COLORS,
 } from "./PublicEvents.style";
@@ -42,7 +43,7 @@ const MetaRow = ({
 }) => (
   <Stack direction="row" alignItems="flex-start" gap={0.75}>
     <Icon sx={ICON_SX} />
-    <Typography variant="caption" color="text.secondary">
+    <Typography variant="caption" sx={MUTED_TEXT_SX}>
       {children}
     </Typography>
   </Stack>
@@ -88,7 +89,7 @@ const EventCard = ({ event }: { event: Event }) => {
           {stripDiacritics(event.location)}
         </MetaRow>
 
-        <DetailsTypography variant="body2" color="text.secondary">
+        <DetailsTypography variant="body2">
           {event.details}
         </DetailsTypography>
 

@@ -1,7 +1,7 @@
 import { SxProps, Theme } from "@mui/material";
 
 import { verticalKanjiSx } from "@style/art";
-import { BORDER_COLOR } from "@style/tokens";
+import { BORDER_COLOR } from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 // ─── Hakko Denshin Ryu (text with a vertical kanji column) ───────────────────

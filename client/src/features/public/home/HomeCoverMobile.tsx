@@ -2,6 +2,7 @@ import ArcNavMenu from "@components/ui/ArcNavMenu/ArcNavMenu";
 import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
 import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import { Box } from "@mui/material";
+import { NIGHT } from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import { motion } from "framer-motion";
@@ -36,7 +37,7 @@ const MOTTO_DELAY = 1;
 
 /** Home cover below `lg`: title, the moon with the arc menu, then the motto */
 const HomeCoverMobile = () => (
-  <Box sx={mergeSx(heroWrapperSx, heroSx)}>
+  <Box sx={mergeSx(heroWrapperSx, heroSx)} {...NIGHT}>
     <CoverChrome />
     <HankoSeal sx={sealPositionSx} />
 
