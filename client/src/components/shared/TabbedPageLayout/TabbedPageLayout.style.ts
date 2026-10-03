@@ -1,5 +1,7 @@
 import { Box, Divider, Paper, Tab, Tabs, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { revealSectionAnchorSx } from "@components/ui/SectionAnchor/SectionAnchor.style";
 import {
   BACKDROP_BLUR,
   BORDER_COLOR,
@@ -55,6 +57,12 @@ export const GroupCard = styled(Box)({
   padding: "12px",
   "@media (min-width:600px)": { padding: "16px" },
 });
+
+/** A linked group card: below sm, it also clears the dashboard's fixed app bar (64px) */
+export const anchoredGroupSx = {
+  ...revealSectionAnchorSx,
+  scrollMarginTop: { xs: 64 + 24, sm: 24 },
+};
 
 export const GroupTitle = styled(Typography)({
   // The title with its copy-link anchor, if any, on the right
