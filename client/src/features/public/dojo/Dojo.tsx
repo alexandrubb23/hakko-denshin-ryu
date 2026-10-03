@@ -12,9 +12,9 @@ import Paragraphs from "@components/ui/PageSections/Paragraphs";
 import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
-import trainingLowQualityImage from "@assets/images/108-small.jpg";
-import trainingHighQualityImage from "@assets/images/108.webp";
 import bowImage from "@assets/images/264.webp";
+import classLowQualityArt from "@assets/images/dojo-class-small.webp";
+import classHighQualityArt from "@assets/images/dojo-class.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import type { IntlMessageID } from "i18n/messages";
@@ -53,8 +53,8 @@ const Dojo = () => (
       <PageSection>
         <PhotoSplit
           photo={{
-            lowQualitySrc: trainingLowQualityImage,
-            highQualitySrc: trainingHighQualityImage,
+            lowQualitySrc: classLowQualityArt,
+            highQualitySrc: classHighQualityArt,
             caption: "洗心",
           }}
         >

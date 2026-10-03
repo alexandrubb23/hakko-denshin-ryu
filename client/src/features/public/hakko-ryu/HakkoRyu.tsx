@@ -13,11 +13,10 @@ import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import PullQuote from "@components/ui/PageSections/PullQuote";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
-import pinLowQualityImage from "@assets/images/200-small.webp";
-import pinHighQualityImage from "@assets/images/200.webp";
-import wristLockLowQualityImage from "@assets/images/53-small.webp";
-import wristLockHighQualityImage from "@assets/images/53.webp";
+import wristLockImage from "@assets/images/53.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
+import suwariArt from "@assets/syllabus/suwari.webp";
+import tachiArt from "@assets/syllabus/tachi.webp";
 
 import GradingSystem from "./GradingSystem";
 import {
@@ -51,17 +50,19 @@ const HakkoRyu = () => (
       eyebrow={<FormattedMessage id="page.hakko-ryu.hero.eyebrow" />}
       title="Hakko Ryu"
       subtitle={<FormattedMessage id="page.hakko-ryu.hero.subtitle" />}
-      aboveTitle={<CoverPhoto src={wristLockHighQualityImage} />}
+      aboveTitle={<CoverPhoto src={wristLockImage} />}
     />
 
     <Container maxWidth="lg">
       {/* ── 01. Origins ──────────────────────────────────────────────────── */}
       <PageSection>
         <PhotoSplit
+          // The kyu program's paintings: the real photos are on the covers
           photo={{
-            lowQualitySrc: wristLockLowQualityImage,
-            highQualitySrc: wristLockHighQualityImage,
+            lowQualitySrc: suwariArt,
+            highQualitySrc: suwariArt,
             caption: "柔よく剛を制す",
+            aspectRatio: "1 / 1",
           }}
         >
           <SectionHeading number="01" title="Hakko Ryu" kanji="八光流" />
@@ -107,9 +108,10 @@ const HakkoRyu = () => (
         <PhotoSplit
           photoFirst
           photo={{
-            lowQualitySrc: pinLowQualityImage,
-            highQualitySrc: pinHighQualityImage,
+            lowQualitySrc: tachiArt,
+            highQualitySrc: tachiArt,
             caption: "崩し",
+            aspectRatio: "1 / 1",
           }}
         >
           <SectionHeading number="04" title="Ju Jutsu" kanji="柔術" />

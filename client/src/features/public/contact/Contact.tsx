@@ -11,10 +11,10 @@ import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import { Routes } from "@lib/routes";
 
-import trainingLowQualityImage from "@assets/images/180-small.jpg";
-import trainingHighQualityImage from "@assets/images/180.webp";
 import elbowLockImage from "@assets/images/212.webp";
 import pathArt from "@assets/images/contact-path.webp";
+import welcomeLowQualityArt from "@assets/images/contact-welcome-small.webp";
+import welcomeHighQualityArt from "@assets/images/contact-welcome.webp";
 
 import ContactCards from "./ContactCards";
 import { CONTACT_MOON_ART } from "./contactArt";
@@ -38,8 +38,8 @@ const Contact = () => (
       <PageSection>
         <PhotoSplit
           photo={{
-            lowQualitySrc: trainingLowQualityImage,
-            highQualitySrc: trainingHighQualityImage,
+            lowQualitySrc: welcomeLowQualityArt,
+            highQualitySrc: welcomeHighQualityArt,
             caption: "稽古",
             aspectRatio: "2 / 3",
           }}
