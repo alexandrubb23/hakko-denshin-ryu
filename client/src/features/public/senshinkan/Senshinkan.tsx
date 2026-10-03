@@ -46,7 +46,7 @@ const Senshinkan = () => (
       {/* ── 01. About Senshinkan ─────────────────────────────────────────── */}
       <PageSection>
         <FadeIn>
-          <SectionHeading number="01" />
+          <SectionHeading id="about" number="01" />
           <PullQuote id="page.senshinkan.about.quote" />
 
           <Box sx={aboutColumnsSx}>
@@ -80,6 +80,7 @@ const Senshinkan = () => (
           }}
         >
           <SectionHeading
+            id="senshinkan-romania"
             number="02"
             title={<FormattedMessage id="page.senshinkan.romania.title" />}
             kanji="洗心館"

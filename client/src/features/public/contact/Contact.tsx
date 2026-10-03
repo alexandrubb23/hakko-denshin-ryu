@@ -45,6 +45,7 @@ const Contact = () => (
           }}
         >
           <SectionHeading
+            id="get-in-touch"
             number="01"
             title={<FormattedMessage id="page.contact.block.touch" />}
             kanji="連絡先"
@@ -57,6 +58,7 @@ const Contact = () => (
     {/* ── 02. Visit the dojo (the lantern path) ────────────────────────── */}
     <ArtBand src={pathArt}>
       <SectionHeading
+        id="visit-the-dojo"
         number="02"
         title={<FormattedMessage id="page.contact.visit.title" />}
         kanji="道場"

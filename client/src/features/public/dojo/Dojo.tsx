@@ -59,6 +59,7 @@ const Dojo = () => (
           }}
         >
           <SectionHeading
+            id="the-dojo"
             number="01"
             title={<FormattedMessage id="page.dojo.title" />}
             kanji="洗心館"
@@ -71,6 +72,7 @@ const Dojo = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
+            id="what-we-offer"
             number="02"
             title={<FormattedMessage id="page.dojo.offer.title" />}
           />
@@ -88,7 +90,7 @@ const Dojo = () => (
 
     {/* ── 03. Closing (moonlit valley band) ────────────────────────────── */}
     <ArtBand src={valleyArt}>
-      <SectionHeading number="03" />
+      <SectionHeading id="closing" number="03" />
       <Typography sx={closingKanjiSx} lang="ja" aria-hidden>
         道
       </Typography>

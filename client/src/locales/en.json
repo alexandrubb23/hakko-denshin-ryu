@@ -254,6 +254,8 @@
   "layout.drawer.signOut": "Sign Out",
   "layout.appBar.openNavigation": "open navigation",
   "ui.tabbedPage.error": "Failed to load data. Please try again.",
+  "ui.sectionAnchor.copy": "Copy link to this section",
+  "ui.sectionAnchor.copied": "Link copied",
   "ui.imageDropZone.placeholder": "Drag & drop or click to select",
   "ui.imageDropZone.hint": "JPEG, PNG or WebP · max {maxSize} MB",
   "ui.avatarUpload.title": "Update Profile Photo",

@@ -56,6 +56,7 @@ const Schedule = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
+            id="training-week"
             number="01"
             title={<FormattedMessage id="page.schedule.week.title" />}
             kanji="稽古"
@@ -82,7 +83,7 @@ const Schedule = () => (
 
     {/* ── 02. Quote (moonlit valley band) ──────────────────────────────── */}
     <ArtBand src={valleyArt}>
-      <SectionHeading number="02" />
+      <SectionHeading id="quote" number="02" />
       <ScheduleQuote />
     </ArtBand>
 

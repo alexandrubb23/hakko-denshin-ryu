@@ -31,6 +31,7 @@ const PublicEvents = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
+            id="upcoming-events"
             number="01"
             title={<FormattedMessage id="page.events.upcoming.title" />}
             kanji="行事"
