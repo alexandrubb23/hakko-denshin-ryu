@@ -9,7 +9,7 @@ import {
   PURPLE_ALPHA_30,
   TEXT_PRIMARY,
   WHITE_ALPHA_60,
-} from "@style/tokens";
+} from "@style/colorScheme";
 
 import { type ArtRect, rectOnArt } from "@components/ui/ArcNavMenu/moonArt";
 import { mergeSx } from "@utils/sx";

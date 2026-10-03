@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from "@mui/material";
 
-import { PURPLE } from "@style/tokens";
+import { PURPLE } from "@style/colorScheme";
 
 /** Thin purple line glowing along the top edge of a cover */
 export const topAccentSx: SxProps<Theme> = {
@@ -14,9 +14,11 @@ export const topAccentSx: SxProps<Theme> = {
 };
 
 // Above the cover's own content, which may reach the top corner
-export const langSwitcherSx: SxProps<Theme> = {
+export const coverControlsSx: SxProps<Theme> = {
   position: "absolute",
   zIndex: 3,
   top: { xs: 20, lg: 24 },
   right: { xs: 20, lg: 32 },
+  display: "flex",
+  gap: 1,
 };

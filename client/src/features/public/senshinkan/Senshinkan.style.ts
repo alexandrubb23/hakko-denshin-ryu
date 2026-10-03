@@ -11,7 +11,7 @@ import {
   DARK_BG_ALPHA_20,
   DARK_BG_ALPHA_55,
   TEXT_MUTED,
-} from "@style/tokens";
+} from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 // ─── Cover photo ──────────────────────────────────────────────────────────────

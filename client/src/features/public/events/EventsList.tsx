@@ -7,7 +7,12 @@ import { useEvents } from "@features/admin/events/hooks/useEvents";
 
 import EventCard from "./EventCard";
 import EventCardSkeleton from "./EventCardSkeleton";
-import { EVENT_CARD_SIZE, EVENTS_LIST_SX } from "./PublicEvents.style";
+import {
+  EMPTY_ICON_SX,
+  EVENT_CARD_SIZE,
+  EVENTS_LIST_SX,
+  MUTED_TEXT_SX,
+} from "./PublicEvents.style";
 
 const SKELETON_COUNT = 3;
 const CARD_STAGGER = 0.06;
@@ -34,11 +39,11 @@ const EventsList = () => {
     </CardGrid>
   ) : (
     <Stack alignItems="center" py={10} gap={1}>
-      <EventNoteIcon sx={{ fontSize: 56, color: "text.disabled" }} />
-      <Typography color="text.secondary" variant="h6">
+      <EventNoteIcon sx={EMPTY_ICON_SX} />
+      <Typography sx={MUTED_TEXT_SX} variant="h6">
         <FormattedMessage id="page.events.empty" />
       </Typography>
-      <Typography color="text.secondary" variant="body2">
+      <Typography sx={MUTED_TEXT_SX} variant="body2">
         <FormattedMessage id="page.events.empty.subtitle" />
       </Typography>
     </Stack>

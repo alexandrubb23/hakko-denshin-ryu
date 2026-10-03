@@ -21,7 +21,7 @@ import {
   TEXT_PRIMARY,
   WHITE_ALPHA_65,
   WHITE_ALPHA_85,
-} from "@style/tokens";
+} from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import { gradeRankNoteSx, gradeSubtitleSx } from "./GradingSystem.style";

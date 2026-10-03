@@ -4,7 +4,7 @@ import { Skeleton, Typography } from "@mui/material";
 
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import useUrlTab from "@hooks/useUrlTab";
-import { SKELETON_SX } from "@style/tokens";
+import { SKELETON_SX } from "@style/colorScheme";
 
 import type { IntlMessageID } from "i18n/messages";
 

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 import PageLoader from "@components/ui/PageLoader/PageLoader";
 import useBodyOverflow from "@hooks/useBodyOverflow";
+import { useApplyColorScheme } from "@hooks/useColorSchemePreference";
 import useMounted from "@hooks/useMounted";
 import useLangStore from "@store/useLangStore";
 import "./App.css";
@@ -30,6 +31,8 @@ const StackStyled = styled(Stack, {
 // TODO: Just for testing heroku deployment, remove later
 const App = () => {
   useBodyOverflow();
+  // App is the public layout route only (see AppRoutes): the dashboard stays dark
+  useApplyColorScheme();
 
   const hydrated = useLangStore((state) => state.hydrated);
   // The server renders the loading screen; the page takes over once the

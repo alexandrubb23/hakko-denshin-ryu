@@ -4,6 +4,9 @@ import Inter from "@assets/fonts/Inter.ttf";
 import Jarene from "@assets/fonts/Jarene.otf";
 import Rubik from "@assets/fonts/Rubik.ttf";
 
+import { LIGHT_SCHEME_CSS } from "./colorScheme";
+import { BODY_TEXT } from "./tokens";
+
 const theme = createTheme({
   breakpoints: {
     values: {
@@ -117,9 +120,10 @@ const theme = createTheme({
           background-color: var(--body-background);
           background-size: cover;
           background-position: center;
-          color: #e7e7e7;
+          color: ${BODY_TEXT};
           font-size: clamp(12px, 3vw, 24px);
         }   
+        ${LIGHT_SCHEME_CSS}
       `,
     },
   },

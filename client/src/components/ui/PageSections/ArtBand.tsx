@@ -1,6 +1,8 @@
 import { Box, Container } from "@mui/material";
 
 import FadeIn from "@components/ui/FadeIn/FadeIn";
+import { NIGHT, nightBandSx } from "@style/colorScheme";
+import { mergeSx } from "@utils/sx";
 
 import { artBandContentSx, artBandSx } from "./PageSections.style";
 
@@ -10,9 +12,12 @@ interface Props {
   children: React.ReactNode;
 }
 
-/** A full-width strip over a painting, its content on the dark left side */
+/**
+ * A full-width strip over a painting, its content on the dark left side; it
+ * stays night in the light scheme
+ */
 const ArtBand = ({ src, children }: Props) => (
-  <Box sx={artBandSx(src)}>
+  <Box sx={mergeSx(artBandSx(src), nightBandSx)} {...NIGHT}>
     <Container maxWidth="lg">
       <Box sx={artBandContentSx}>
         <FadeIn>{children}</FadeIn>

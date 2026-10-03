@@ -6,7 +6,7 @@ import {
   TEXT_PRIMARY,
   WHITE_ALPHA_75,
   WHITE_ALPHA_85,
-} from "./tokens";
+} from "./colorScheme";
 
 import { mergeSx } from "@utils/sx";
 

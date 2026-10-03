@@ -11,6 +11,7 @@ import {
   coverWrapperSx,
   fadeMask,
 } from "@style/art";
+import { nightCoverSx } from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import { COMPACT_ARC_SIZE } from "@components/ui/ArcNavMenu/ArcNavMenu.style";
@@ -44,7 +45,7 @@ export const wideArtFade = (bottom = "black 70%, transparent 100%") =>
   ].join(", ");
 const WIDE_ART_FADE = wideArtFade();
 
-export const heroSx = mergeSx(coverWrapperSx, {
+export const heroSx = mergeSx(coverWrapperSx, nightCoverSx, {
   minHeight: COVER_HEIGHT,
   display: "flex",
   flexDirection: "column",

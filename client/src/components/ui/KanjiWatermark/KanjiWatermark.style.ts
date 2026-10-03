@@ -1,6 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
 
-import { PURPLE } from "@style/tokens";
+import { PURPLE } from "@style/colorScheme";
 
 export const watermarkSx: SxProps<Theme> = {
   fontFamily: "Jarene, serif",

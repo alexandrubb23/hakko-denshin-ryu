@@ -16,7 +16,7 @@ import {
   TEXT_PRIMARY,
   WHITE_ALPHA_45,
   WHITE_ALPHA_75,
-} from "@style/tokens";
+} from "@style/colorScheme";
 
 // Content sections shared by the cover pages (hakko-ryu, dojo, schedule)
 

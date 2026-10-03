@@ -2,7 +2,7 @@ import { SxProps, Theme } from "@mui/material";
 
 import { kanjiCardBodySx } from "@components/ui/PageSections/PageSections.style";
 import { KANJI_FONT, TITLE_GLOW } from "@style/art";
-import { PURPLE } from "@style/tokens";
+import { PURPLE } from "@style/colorScheme";
 
 // ─── Cover photo ──────────────────────────────────────────────────────────────
 

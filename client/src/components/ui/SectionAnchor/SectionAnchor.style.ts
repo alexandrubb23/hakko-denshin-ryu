@@ -1,6 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
 
-import { PURPLE, PURPLE_ALPHA_08, TEXT_MUTED } from "@style/tokens";
+import { PURPLE, PURPLE_ALPHA_08, TEXT_MUTED } from "@style/colorScheme";
 
 export const SECTION_ANCHOR_CLASS = "section-anchor";
 

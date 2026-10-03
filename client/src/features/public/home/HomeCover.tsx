@@ -3,6 +3,7 @@ import ArcNavMenu from "@components/ui/ArcNavMenu/ArcNavMenu";
 import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
 import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import { Box } from "@mui/material";
+import { NIGHT } from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import { motion } from "framer-motion";
@@ -35,7 +36,7 @@ const PAINTINGS = [
 
 /** Wide-screen home cover: moon art with the arc menu, photo and title */
 const HomeCover = () => (
-  <Box sx={mergeSx(heroWrapperSx, heroSx)}>
+  <Box sx={mergeSx(heroWrapperSx, heroSx)} {...NIGHT}>
     <CoverChrome />
 
     <Box sx={gridSx}>

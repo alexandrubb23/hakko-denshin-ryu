@@ -1,7 +1,7 @@
 import type { SxProps, Theme } from "@mui/material";
 
 import { KANJI_FONT } from "@style/art";
-import { PURPLE, PURPLE_ALPHA_08, PURPLE_ALPHA_30 } from "@style/tokens";
+import { PURPLE, PURPLE_ALPHA_08, PURPLE_ALPHA_30 } from "@style/colorScheme";
 
 // Hanko seal look; each layout places and sizes it
 export const sealSx: SxProps<Theme> = {
