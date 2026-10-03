@@ -31,3 +31,7 @@ export const jujutsuNotesSx: SxProps<Theme> = {
   pt: { xs: 4, md: 6 },
   borderTop: `1px solid ${BORDER_COLOR}`,
 };
+
+// ─── Grading system ──────────────────────────────────────────────────────────
+
+export const gradesIntroSx: SxProps<Theme> = { maxWidth: 680 };

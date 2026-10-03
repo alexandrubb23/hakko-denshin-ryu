@@ -18,9 +18,11 @@ import wristLockLowQualityImage from "@assets/images/53-small.webp";
 import wristLockHighQualityImage from "@assets/images/53.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
+import GradingSystem from "./GradingSystem";
 import {
   denshinGridSx,
   denshinKanjiSx,
+  gradesIntroSx,
   jujutsuNotesSx,
 } from "./HakkoRyu.style";
 import { HAKKO_RYU_MOON_ART } from "./hakkoRyuArt";
@@ -137,6 +139,22 @@ const HakkoRyu = () => (
             </KanjiCard>
           ))}
         </CardGrid>
+      </PageSection>
+
+      {/* ── 07. Grading System ───────────────────────────────────────────── */}
+      <PageSection>
+        <FadeIn>
+          <SectionHeading
+            number="07"
+            title={<FormattedMessage id="page.hakko-ryu.grades.title" />}
+            kanji="段級制度"
+          />
+          <Box sx={gradesIntroSx}>
+            <Paragraphs ids={["page.hakko-ryu.grades.intro"]} />
+          </Box>
+        </FadeIn>
+
+        <GradingSystem />
       </PageSection>
     </Container>
   </>
