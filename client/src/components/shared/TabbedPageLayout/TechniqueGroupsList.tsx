@@ -1,9 +1,9 @@
 import type { SxProps } from "@mui/material";
 
 import SectionAnchor from "@components/ui/SectionAnchor/SectionAnchor";
-import { revealSectionAnchorSx } from "@components/ui/SectionAnchor/SectionAnchor.style";
 
 import {
+  anchoredGroupSx,
   GroupCard,
   GroupsGrid,
   GroupTitle,
@@ -40,7 +40,7 @@ function TechniqueGroupsList<T extends TechniqueBase>({
         <GroupCard
           key={group.id}
           id={anchored ? group.id : undefined}
-          sx={anchored ? revealSectionAnchorSx : undefined}
+          sx={anchored ? anchoredGroupSx : undefined}
         >
           <GroupTitle variant="subtitle2">
             {group.name}
