@@ -19,6 +19,7 @@ import wristLockHighQualityImage from "@assets/images/53.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import GradingSystem from "./GradingSystem";
+import Syllabus from "./Syllabus";
 import {
   denshinGridSx,
   denshinKanjiSx,
@@ -155,6 +156,24 @@ const HakkoRyu = () => (
         </FadeIn>
 
         <GradingSystem />
+      </PageSection>
+
+      {/* ── 08. Shodan–Yondan Syllabus ───────────────────────────────────── */}
+      <PageSection>
+        <FadeIn>
+          <SectionHeading
+            number="08 · Hakko Denshin Ryu · 八光伝心流"
+            title={<FormattedMessage id="page.hakko-ryu.syllabus.title" />}
+            kanji="基本技"
+          />
+          <Box sx={gradesIntroSx}>
+            <Paragraphs ids={["page.hakko-ryu.syllabus.subtitle"]} />
+          </Box>
+        </FadeIn>
+
+        <FadeIn>
+          <Syllabus />
+        </FadeIn>
       </PageSection>
     </Container>
   </>

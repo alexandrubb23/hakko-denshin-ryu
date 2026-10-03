@@ -5,6 +5,7 @@ import beltShihansha from "@assets/grades/belt-shihansha.webp";
 import beltYudansha from "@assets/grades/belt-yudansha.webp";
 
 import GradeCard, { Tier } from "./GradeCard";
+import { DAN_RANKS } from "./ranks";
 
 const TIERS: Tier[] = [
   {
@@ -30,12 +31,7 @@ const TIERS: Tier[] = [
     subtitleId: "page.hakko-ryu.grades.yudansha.subtitle",
     belt: beltYudansha,
     grade: "dan",
-    ranks: [
-      { name: "Shodan", kanji: "初段", n: 1 },
-      { name: "Nidan", kanji: "弐段", n: 2 },
-      { name: "Sandan", kanji: "参段", n: 3 },
-      { name: "Yondan", kanji: "四段", n: 4 },
-    ],
+    ranks: DAN_RANKS,
   },
   {
     title: "Shihansha",

@@ -5,7 +5,7 @@ import {
   photoFrameSx,
   sectionNumberSx,
 } from "@components/ui/PageSections/PageSections.style";
-import { KANJI_FONT } from "@style/art";
+import { ART_ZOOM_TRANSITION, KANJI_FONT } from "@style/art";
 import {
   BORDER_COLOR,
   PURPLE_ALPHA_25,
@@ -52,7 +52,7 @@ export const gradeBeltSx: SxProps<Theme> = {
   width: "100%",
   height: "100%",
   borderRadius: "50%",
-  transition: "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
+  transition: ART_ZOOM_TRANSITION,
 };
 
 // "壱 ——" above the title, a smaller kanji take on the section number

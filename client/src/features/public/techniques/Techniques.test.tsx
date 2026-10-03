@@ -2,7 +2,7 @@ import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Suite } from "@api/techniques";
-import { useTechniques } from "@features/public/techniques/useTechniques";
+import { mockTechniquesState } from "@test/mockTechniques";
 import renderUi from "@test/renderUi";
 
 import Techniques from "./Techniques";
@@ -12,8 +12,6 @@ import Techniques from "./Techniques";
 vi.mock("@features/public/techniques/useTechniques", () => ({
   useTechniques: vi.fn(),
 }));
-
-const mockUseTechniques = vi.mocked(useTechniques);
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -81,12 +79,7 @@ const mockSuites: Suite[] = [
 const renderTechniques = (initialUrl = "/") =>
   renderUi(<Techniques />, { initialEntries: [initialUrl] });
 
-const mockSuccess = () =>
-  mockUseTechniques.mockReturnValue({
-    data: mockSuites,
-    isLoading: false,
-    isError: false,
-  } as unknown as ReturnType<typeof useTechniques>);
+const mockSuccess = () => mockTechniquesState({ data: mockSuites });
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
@@ -99,11 +92,7 @@ describe("Techniques page", () => {
 
   describe("loading state", () => {
     beforeEach(() => {
-      mockUseTechniques.mockReturnValue({
-        data: undefined,
-        isLoading: true,
-        isError: false,
-      } as unknown as ReturnType<typeof useTechniques>);
+      mockTechniquesState({ isLoading: true });
 
       renderTechniques();
     });
@@ -129,11 +118,7 @@ describe("Techniques page", () => {
 
   describe("error state", () => {
     beforeEach(() => {
-      mockUseTechniques.mockReturnValue({
-        data: undefined,
-        isLoading: false,
-        isError: true,
-      } as unknown as ReturnType<typeof useTechniques>);
+      mockTechniquesState({ isError: true });
 
       renderTechniques();
     });

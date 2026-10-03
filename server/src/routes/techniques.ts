@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { techniques } from "../data/techniques.js";
 import { ApiRoutes } from "../lib/routes.js";
-import { requireAuth } from "../middleware/requireAuth.js";
 
 const router = Router();
 
-router.get(ApiRoutes.techniques, requireAuth, (_req, res) => {
+// Public: the syllabus is also shown on the public /hakko-ryu page
+router.get(ApiRoutes.techniques, (_req, res) => {
   res.json({ techniques });
 });
 
