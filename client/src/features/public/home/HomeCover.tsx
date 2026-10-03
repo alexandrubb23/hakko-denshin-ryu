@@ -1,6 +1,7 @@
 import img180 from "@assets/images/180.webp";
 import ArcNavMenu from "@components/ui/ArcNavMenu/ArcNavMenu";
 import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
+import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import { Box } from "@mui/material";
 import { mergeSx } from "@utils/sx";
 
@@ -22,9 +23,15 @@ import {
   verticalKanjiSx,
 } from "./HomeCover.style";
 import { heroWrapperSx } from "./cover.style";
-import { HOME_MOON_ART } from "./homeArt";
+import { HOME_MOON_ART, HOME_PETAL_DRIFT } from "./homeArt";
 
-const PAINTINGS = [{ art: HOME_MOON_ART, sx: arcArtSx }];
+const PAINTINGS = [
+  {
+    art: HOME_MOON_ART,
+    sx: arcArtSx,
+    overlay: <FallingPetals drift={HOME_PETAL_DRIFT} />,
+  },
+];
 
 /** Wide-screen home cover: moon art with the arc menu, photo and title */
 const HomeCover = () => (

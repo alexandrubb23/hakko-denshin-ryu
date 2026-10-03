@@ -1,5 +1,6 @@
 import ArcNavMenu from "@components/ui/ArcNavMenu/ArcNavMenu";
 import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
+import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import { Box } from "@mui/material";
 import { mergeSx } from "@utils/sx";
 
@@ -21,9 +22,15 @@ import {
   titleSx,
 } from "./HomeCoverMobile.style";
 import { heroWrapperSx } from "./cover.style";
-import { HOME_MOON_ART } from "./homeArt";
+import { HOME_MOON_ART, HOME_PETAL_DRIFT } from "./homeArt";
 
-const PAINTINGS = [{ art: HOME_MOON_ART, sx: arcArtSx }];
+const PAINTINGS = [
+  {
+    art: HOME_MOON_ART,
+    sx: arcArtSx,
+    overlay: <FallingPetals drift={HOME_PETAL_DRIFT} />,
+  },
+];
 // Reveal the motto while the arc menu is still drawing its rays
 const MOTTO_DELAY = 1;
 

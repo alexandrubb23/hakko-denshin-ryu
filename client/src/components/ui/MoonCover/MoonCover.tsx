@@ -5,6 +5,7 @@ import ArcNavMenu from "@components/ui/ArcNavMenu/ArcNavMenu";
 import type { MoonArt, Painting } from "@components/ui/ArcNavMenu/moonArt";
 import CoverChrome from "@components/ui/CoverChrome/CoverChrome";
 import { heroReveal } from "@components/ui/FadeIn/heroReveal";
+import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import KanjiRule from "@components/ui/KanjiRule/KanjiRule";
 import { mergeSx } from "@utils/sx";
 
@@ -18,6 +19,7 @@ import {
   heroEyebrowSx,
   heroMenuSx,
   heroOnArtSx,
+  heroPetalsSx,
   heroRuleSx,
   heroSubtitleSx,
   heroSx,
@@ -74,11 +76,17 @@ const coverPaintings = (
   wideFade: string | undefined
 ): Painting[] => {
   const artSx = heroArtSx(wideFade);
-  if (!narrowArt) return [{ art, sx: artSx }];
+  // Blossom petals drifting down over the painting
+  const overlay = <FallingPetals sx={heroPetalsSx(art)} />;
+  if (!narrowArt) return [{ art, sx: artSx, overlay }];
 
   return [
-    { art, sx: mergeSx(artSx, wideOnlySx) },
-    { art: narrowArt, sx: mergeSx(artSx, narrowOnlySx) },
+    { art, sx: mergeSx(artSx, wideOnlySx), overlay },
+    {
+      art: narrowArt,
+      sx: mergeSx(artSx, narrowOnlySx),
+      overlay: <FallingPetals />,
+    },
   ];
 };
 

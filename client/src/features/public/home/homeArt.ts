@@ -1,5 +1,6 @@
 import src from "@assets/images/hakko-moon-bg.webp";
 import type { MoonArt } from "@components/ui/ArcNavMenu/moonArt";
+import type { PetalDrift } from "@components/ui/FallingPetals/petals";
 
 // The moon painted in hakko-moon-bg.webp
 export const HOME_MOON_ART: MoonArt = {
@@ -9,3 +10,6 @@ export const HOME_MOON_ART: MoonArt = {
   moonY: 0.4364,
   moonDiameter: 0.1471,
 };
+
+// The blossoms fall from the tree in the painting's upper left, drifting right
+export const HOME_PETAL_DRIFT: PetalDrift = "right";

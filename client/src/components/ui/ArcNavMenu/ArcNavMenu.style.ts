@@ -167,10 +167,9 @@ export const arcItemSx = byDirection(
     })
 );
 
-// The painting, scaled and placed so its moon lies under the menu's moon.
-// It sits behind the menu at z-index -1, so the page places it in a stacking
-// context (e.g. `isolation: isolate`) to keep it above its own background.
-export const artSx = (
+// Where a painting lies: scaled and placed so its moon lies under the menu's
+// moon. Shared by the painting itself and by its overlay.
+export const artFrameSx = (
   art: MoonArt,
   direction: ArcDirection
 ): SxProps<Theme> => {
@@ -181,13 +180,22 @@ export const artSx = (
 
   return {
     position: "absolute",
-    zIndex: -1,
     width,
     height,
     [edge]: `calc(var(--moon-size) / 2 - ${width} * ${fromEdge})`,
     top: `calc(50% - ${height} * ${art.moonY})`,
-    backgroundImage: `url(${art.src})`,
-    backgroundSize: "100% 100%",
     pointerEvents: "none",
   };
 };
+
+// The painting, behind the menu at z-index -1, so the page places it in a
+// stacking context (e.g. `isolation: isolate`) to keep it above its own
+// background
+export const artImageSx = (art: MoonArt): SxProps<Theme> => ({
+  zIndex: -1,
+  backgroundImage: `url(${art.src})`,
+  backgroundSize: "100% 100%",
+});
+
+// A painting's overlay: in the painting's place, but in front of the menu
+export const artOverlaySx: SxProps<Theme> = { zIndex: 2 };

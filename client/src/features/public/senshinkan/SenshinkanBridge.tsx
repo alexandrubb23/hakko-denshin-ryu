@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
 import FadeIn from "@components/ui/FadeIn/FadeIn";
+import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { EASE_OUT } from "@constants/animationsTiming";
 
@@ -35,6 +36,7 @@ const SenshinkanBridge = () => (
         </Typography>
       </Box>
     </FadeIn>
+    <FallingPetals count={36} />
   </Box>
 );
 

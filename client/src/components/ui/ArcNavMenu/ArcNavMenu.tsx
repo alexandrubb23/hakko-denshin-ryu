@@ -11,7 +11,9 @@ import {
   arcItemSx,
   arcListSx,
   arcWrapperSx,
-  artSx,
+  artFrameSx,
+  artImageSx,
+  artOverlaySx,
   moonSx,
   rayGlowSx,
   raysSvgSx,
@@ -53,9 +55,14 @@ const ArcNavMenu = ({
   // Rays re-render the menu on every resize; the art's styles stay the same
   const paintingsSx = useMemo(
     () =>
-      paintings.map((painting) =>
-        mergeSx(artSx(painting.art, direction), painting.sx)
-      ),
+      paintings.map(({ art, sx: paintingSx, overlay }) => {
+        // The painting's `sx` (e.g. its fade) applies to its overlay too
+        const frameSx = mergeSx(artFrameSx(art, direction), paintingSx);
+        return {
+          art: mergeSx(frameSx, artImageSx(art)),
+          overlay: overlay ? mergeSx(frameSx, artOverlaySx) : undefined,
+        };
+      }),
     [paintings, direction]
   );
 
@@ -69,7 +76,7 @@ const ArcNavMenu = ({
       )}
     >
       {paintingsSx.map((paintingSx, i) => (
-        <Box key={i} sx={paintingSx} aria-hidden />
+        <Box key={i} sx={paintingSx.art} aria-hidden />
       ))}
 
       <Box component="svg" sx={raysSvgSx} aria-hidden>
@@ -107,6 +114,15 @@ const ArcNavMenu = ({
       <List ref={listRef} component="nav" sx={arcListSx[direction]}>
         <PageItems getItemSx={arcItemSx[direction]} />
       </List>
+
+      {paintingsSx.map(
+        (paintingSx, i) =>
+          paintingSx.overlay && (
+            <Box key={i} sx={paintingSx.overlay} aria-hidden>
+              {paintings[i].overlay}
+            </Box>
+          )
+      )}
     </Box>
   );
 };
