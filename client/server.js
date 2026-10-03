@@ -89,10 +89,12 @@ app.use("*all", async (req, res) => {
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? "")
-      .replace(`<!--app-html-->`, rendered.html ?? "")
-      .replace(`<!--app-title-->`, rendered.title ?? "");
+      .replace(`<!--app-html-->`, rendered.html ?? "");
 
-    res.status(200).set({ "Content-Type": "text/html" }).send(html);
+    res
+      .status(rendered.status ?? 200)
+      .set({ "Content-Type": "text/html" })
+      .send(html);
   } catch (e) {
     vite?.ssrFixStacktrace(e);
     console.error(e.stack);

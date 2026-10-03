@@ -2,14 +2,14 @@ import AdminRoute from "@components/AdminRoute";
 import ProtectedRoute from "@components/ProtectedRoute";
 import DashboardLayout from "@components/ui/DashboardLayout/DashboardLayout";
 import StudentDetail from "@features/admin/students/components/StudentDetail";
+import NotFound from "@features/public/not-found/NotFound";
+import useDocumentTitle from "@hooks/useDocumentTitle";
 import useScrollToTop from "@hooks/useScrollToTop";
 import { useViewTransitionCommit } from "@hooks/useViewTransitionNavigate";
 import { normalizePath } from "@utils/routes";
-import { useEffect } from "react";
-import { useIntl } from "react-intl";
 import { Route, Routes, useLocation } from "react-router";
 import App from "./App";
-import { findPage, getPageTitle, pages } from "./pages";
+import { findPage, pages } from "./pages";
 
 interface AppRoutesProps {
   initialLoaderData: any;
@@ -17,14 +17,10 @@ interface AppRoutesProps {
 
 export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
   const { pathname } = useLocation();
-  const intl = useIntl();
   useScrollToTop();
   useViewTransitionCommit();
 
-  useEffect(() => {
-    const page = findPage(pathname);
-    if (page) document.title = getPageTitle(page, intl);
-  }, [pathname, intl]);
+  useDocumentTitle(findPage(pathname));
 
   const standalonePages = pages.filter((p) => p.standalone);
   const publicPages = pages.filter((p) => !p.protected && !p.standalone);
@@ -50,6 +46,7 @@ export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
             element={<Component data={initialLoaderData} />}
           />
         ))}
+        <Route path="*" element={<NotFound />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>

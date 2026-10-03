@@ -11,6 +11,7 @@ import { mergeSx } from "@utils/sx";
 import {
   heroAboveTitleContentSx,
   heroAboveTitleSx,
+  heroActionsSx,
   heroArtSx,
   heroCompactTitleSx,
   heroContentSx,
@@ -43,6 +44,8 @@ interface Props {
   subtitle?: React.ReactNode;
   /** A sentence of prose under the kanji rule */
   tagline?: React.ReactNode;
+  /** Buttons under the tagline, e.g. a link on to another page */
+  actions?: React.ReactNode;
   /** A smaller title, for longer titles or art that holds content */
   compactTitle?: boolean;
   /** Mask for the art on wide screens, built with `wideArtFade` */
@@ -91,6 +94,7 @@ const MoonCover = ({
   title,
   subtitle,
   tagline,
+  actions,
   compactTitle = false,
   wideArtFade,
   onArt,
@@ -130,6 +134,7 @@ const MoonCover = ({
         )}
         <KanjiRule sx={heroRuleSx} />
         {tagline && <Typography sx={heroTaglineSx}>{tagline}</Typography>}
+        {actions && <Box sx={heroActionsSx}>{actions}</Box>}
       </motion.div>
     </Box>
 

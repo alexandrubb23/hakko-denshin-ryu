@@ -202,3 +202,11 @@ export const heroTaglineSx = mergeSx(coverTaglineSx, {
   // Keep clear of the painting on the right
   maxWidth: { lg: 560 },
 });
+
+export const heroActionsSx: SxProps<Theme> = {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: { xs: "center", lg: "flex-start" },
+  gap: 2,
+  mt: { xs: 4, md: 5 },
+};

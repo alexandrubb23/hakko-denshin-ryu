@@ -8,27 +8,32 @@ import { IntlProvider } from "react-intl";
 import useLangStore from "@store/useLangStore";
 import { messages } from "../i18n/messages";
 import theme from "../style/theme";
+import { type ServerResponse, ServerResponseContext } from "./ServerResponse";
 
 interface Props {
   cache: EmotionCache;
+  /** Server renders only: collects the HTTP status the pages ask for */
+  response?: ServerResponse;
 }
 
 const queryClient = new QueryClient();
 
-const Providers = ({ children, cache }: PropsWithChildren<Props>) => {
+const Providers = ({ children, cache, response }: PropsWithChildren<Props>) => {
   const lang = useLangStore((state) => state.lang);
 
   return (
-    <CacheProvider value={cache}>
-      <IntlProvider locale={lang} messages={messages[lang]}>
-        <QueryClientProvider client={queryClient}>
-          <MuiThemeProvider theme={theme}>
-            <CssBaseline />
-            {children}
-          </MuiThemeProvider>
-        </QueryClientProvider>
-      </IntlProvider>
-    </CacheProvider>
+    <ServerResponseContext.Provider value={response ?? null}>
+      <CacheProvider value={cache}>
+        <IntlProvider locale={lang} messages={messages[lang]}>
+          <QueryClientProvider client={queryClient}>
+            <MuiThemeProvider theme={theme}>
+              <CssBaseline />
+              {children}
+            </MuiThemeProvider>
+          </QueryClientProvider>
+        </IntlProvider>
+      </CacheProvider>
+    </ServerResponseContext.Provider>
   );
 };
 

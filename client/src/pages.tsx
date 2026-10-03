@@ -17,7 +17,7 @@ import Techniques from "@features/public/techniques/Techniques";
 import { DOJO_NAME, SITE_NAME } from "@constants/brand";
 import HakkoRyuRGB from "@features/public/hakko-ryu/HakkoRyu";
 import Home from "@features/public/home/Home";
-import { normalizePath } from "@utils/routes";
+import { normalizePath, trimTrailingSlash } from "@utils/routes";
 import type { IntlMessageID } from "i18n/messages";
 
 export type PagePath =
@@ -185,19 +185,37 @@ export const pages: Page[] = [
   },
 ] as const;
 
+/** What the document title is built from */
+export type PageTitle = Pick<Page, "titleId" | "titleSuffix">;
+
+/** Everything about a page that shapes its head and chrome, not its content */
+export type PageMeta = PageTitle &
+  Pick<Page, "descriptionId" | "ogImage" | "noIndex" | "cover" | "protected">;
+
+/** The page served at any path no page answers to */
+export const NOT_FOUND_PAGE: PageMeta = {
+  titleId: "page.title.not-found",
+  titleSuffix: SITE_NAME,
+  noIndex: true,
+  cover: true,
+};
+
 /** Pages listed in the site menus (header, mobile drawer, home arc) */
 export const navPages = pages.filter((page) => !page.hideFromNav);
 
 /** The page served at `pathname` (e.g. "/" or "/hakko-ryu"), if any */
-export const findPage = (pathname: string) =>
-  pages.find((page) => normalizePath(page.path) === pathname);
+export const findPage = (pathname: string) => {
+  const path = trimTrailingSlash(pathname);
+  return pages.find((page) => normalizePath(page.path) === path);
+};
 
 export const getPageTitle = (
-  page: Pick<Page, "titleId" | "titleSuffix">,
+  page: PageTitle,
   intl: Pick<IntlShape, "formatMessage">
 ) => `${intl.formatMessage({ id: page.titleId })} - ${page.titleSuffix}`;
 
 export const getPageDescription = (
   page: Pick<Page, "descriptionId"> | undefined,
   intl: Pick<IntlShape, "formatMessage">
-) => intl.formatMessage({ id: page?.descriptionId ?? "page.description.default" });
+) =>
+  intl.formatMessage({ id: page?.descriptionId ?? "page.description.default" });

@@ -5,13 +5,20 @@ import { StaticRouter } from "react-router";
 
 import { DOJO_NAME } from "@constants/brand";
 import Providers from "@providers/Providers";
+import type { ServerResponse } from "@providers/ServerResponse";
 import useLangStore from "@store/useLangStore";
 import { prefetch } from "@utils/api-requests";
 import { normalizePath } from "@utils/routes";
 import { AppRoutes } from "./AppRoutes";
 import createEmotionCache from "./createEmotionCache";
 import { messages } from "./i18n/messages";
-import { findPage, getPageDescription, getPageTitle } from "./pages";
+import {
+  NOT_FOUND_PAGE,
+  type PageMeta,
+  findPage,
+  getPageDescription,
+  getPageTitle,
+} from "./pages";
 
 // Public origin used for canonical and social preview URLs
 const SITE_URL = (process.env.SITE_URL ?? "https://senshinkan.ro").replace(
@@ -38,28 +45,32 @@ export async function render(url: string) {
   const normalizedPathname = normalizePath(rawPathname);
   const search = rawSearch ? `?${rawSearch}` : "";
 
-  const page = findPage(normalizedPathname);
-  // The language preference lives in localStorage, so the server always
-  // renders with the store's default language (the client updates the title
-  // after hydration if the user picked another language).
-  const lang = useLangStore.getState().lang;
-  const intl = createIntl({ locale: lang, messages: messages[lang] });
-  const title = page ? getPageTitle(page, intl) : "Default Title";
-  const noIndex = page?.protected || page?.noIndex;
-  const description = escapeHtml(getPageDescription(page, intl));
-  const pageTitle = escapeHtml(title);
-  const pageUrl = `${SITE_URL}${normalizedPathname}`;
-  const image = `${SITE_URL}${page?.ogImage ?? DEFAULT_OG_IMAGE}`;
-
   const loaderData = await prefetch(normalizedPathname);
 
+  // The rendered pages set the status, e.g. the not-found page's 404
+  const response: ServerResponse = { status: 200 };
   const html = renderToString(
-    <Providers cache={cache}>
+    <Providers cache={cache} response={response}>
       <StaticRouter location={`${normalizedPathname}${search}`}>
         <AppRoutes initialLoaderData={loaderData} />
       </StaticRouter>
     </Providers>
   );
+
+  // The router, not the path, decides a page is missing
+  const meta: PageMeta | undefined =
+    response.status === 404 ? NOT_FOUND_PAGE : findPage(normalizedPathname);
+  // The language preference lives in localStorage, so the server always
+  // renders with the store's default language (the client updates the title
+  // after hydration if the user picked another language).
+  const lang = useLangStore.getState().lang;
+  const intl = createIntl({ locale: lang, messages: messages[lang] });
+
+  const pageTitle = escapeHtml(meta ? getPageTitle(meta, intl) : DOJO_NAME);
+  const noIndex = meta?.protected || meta?.noIndex;
+  const description = escapeHtml(getPageDescription(meta, intl));
+  const pageUrl = `${SITE_URL}${normalizedPathname}`;
+  const image = `${SITE_URL}${meta?.ogImage ?? DEFAULT_OG_IMAGE}`;
 
   const emotionChunks = extractCriticalToChunks(html);
   const styles = constructStyleTagsFromChunks(emotionChunks);
@@ -88,5 +99,5 @@ export async function render(url: string) {
     ${styles}
   `;
 
-  return { html, head, title };
+  return { html, head, status: response.status };
 }
