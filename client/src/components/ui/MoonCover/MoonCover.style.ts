@@ -117,6 +117,18 @@ export const heroOnArtSx =
 const menuReach = (art: MoonArt) =>
   `calc(${artWidth(art, COVER_HEIGHT)} * ${(1 - art.moonX).toFixed(4)} + ${COVER_HEIGHT} * ${(art.moonDiameter / 2).toFixed(4)} + ${WIDE_ARC_RADIUS} + ${WIDE_ARC_GAP} + ${MENU_LABELS_WIDTH})`;
 
+// The petals over the art: on wide screens they start at the menu's labels,
+// clear of the photo and title on the art's dark side, and fade in there.
+// The art is flush right, so the menu reaches this far into it from its right.
+export const heroPetalsSx =
+  (art: MoonArt): SxProps<Theme> =>
+  (theme) => ({
+    [theme.breakpoints.up("lg")]: {
+      left: `calc(100% - ${menuReach(art)})`,
+      ...fadeMask("linear-gradient(90deg, transparent 0%, black 120px)"),
+    },
+  });
+
 // The dark space above the title, between the cover's top and its content;
 // wide screens only. It takes only the room left over: its content is laid
 // over it (`heroAboveTitleContentSx`), so even a large photo can't grow the
@@ -202,3 +214,11 @@ export const heroTaglineSx = mergeSx(coverTaglineSx, {
   // Keep clear of the painting on the right
   maxWidth: { lg: 560 },
 });
+
+export const heroActionsSx: SxProps<Theme> = {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: { xs: "center", lg: "flex-start" },
+  gap: 2,
+  mt: { xs: 4, md: 5 },
+};

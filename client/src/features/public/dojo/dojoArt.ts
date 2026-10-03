@@ -6,6 +6,6 @@ export const DOJO_MOON_ART: MoonArt = {
   src,
   aspect: 1536 / 1024,
   moonX: 0.8512,
-  moonY: 0.3057,
-  moonDiameter: 0.114,
+  moonY: 0.3054,
+  moonDiameter: 0.1122,
 };

@@ -210,6 +210,7 @@
   "page.title.techniques": "Techniques",
   "page.title.kyu-program": "Kyu Program",
   "page.title.events": "Events",
+  "page.title.not-found": "Page Not Found",
   "page.description.default": "Hakko Denshin Ryu Jujutsu at Senshinkan Romania — traditional Japanese jujutsu training for kids and adults.",
   "page.description.home": "Senshinkan Romania — the place where you purify your mind and heart through Hakko Denshin Ryu Jujutsu, a traditional Japanese martial art.",
   "page.description.hakko-ryu": "Hakko Ryu, the Eighth Light: the jujutsu founded in 1941 by Okuyama Ryuho — its history, principles and techniques.",
@@ -450,5 +451,9 @@
   "page.schedule.quote.moral": "Things happen with or without you. All you have to do is take part – step onto the tatami.",
   "page.schedule.cta.title": "Come train with us",
   "page.schedule.cta.description": "Questions about the schedule or ready to start? Get in touch and we'll help you find the right class.",
-  "page.schedule.cta.button": "Contact us"
+  "page.schedule.cta.button": "Contact us",
+  "page.not-found.hero.eyebrow": "404 · Senshinkan",
+  "page.not-found.title": "This path leads nowhere",
+  "page.not-found.hero.tagline": "The page you are looking for doesn't exist or has moved. Follow the lanterns back to the dojo.",
+  "page.not-found.button": "Back to the home page"
 }

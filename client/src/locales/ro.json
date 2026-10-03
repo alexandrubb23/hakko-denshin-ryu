@@ -210,6 +210,7 @@
   "page.title.techniques": "Tehnici",
   "page.title.kyu-program": "Program Kyu",
   "page.title.events": "Evenimente",
+  "page.title.not-found": "Pagină negăsită",
   "page.description.default": "Hakko Denshin Ryu Jujutsu la Senshinkan România — antrenamente de jujutsu tradițional japonez pentru copii și adulți.",
   "page.description.home": "Senshinkan România — locul în care îți purifici mintea și inima prin Hakko Denshin Ryu Jujutsu, o artă marțială tradițională japoneză.",
   "page.description.hakko-ryu": "Hakko Ryu, „A opta lumină”: stilul de jujutsu fondat în 1941 de Okuyama Ryuho — istoria, principiile și tehnicile sale.",
@@ -450,5 +451,9 @@
   "page.schedule.quote.moral": "Lucrurile se întâmplă cu sau fără tine. Tot ce trebuie să faci este să participi – pășește pe tatami.",
   "page.schedule.cta.title": "Vino la antrenament",
   "page.schedule.cta.description": "Ai întrebări despre program sau vrei să începi? Scrie-ne și te ajutăm să găsești grupa potrivită.",
-  "page.schedule.cta.button": "Contacteaza-ne"
+  "page.schedule.cta.button": "Contacteaza-ne",
+  "page.not-found.hero.eyebrow": "404 · Senshinkan",
+  "page.not-found.title": "Aceasta cale nu duce nicaieri",
+  "page.not-found.hero.tagline": "Pagina pe care o cauți nu există sau a fost mutată. Urmează felinarele înapoi spre dojo.",
+  "page.not-found.button": "Inapoi la pagina principala"
 }

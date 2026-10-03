@@ -43,6 +43,11 @@ export const rectOnArt = ({ left, top, width, height }: ArtRect) =>
 export interface Painting {
   art: MoonArt;
   sx?: SxProps<Theme>;
+  /**
+   * Laid exactly over the painting, in front of the menu, and shown, faded
+   * and clipped as the painting is, e.g. petals drifting down over it
+   */
+  overlay?: React.ReactNode;
 }
 
 /** CSS width of the art when it is `height` tall */
