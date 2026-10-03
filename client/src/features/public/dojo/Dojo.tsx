@@ -1,5 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
+import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import MoonCover from "@components/ui/MoonCover/MoonCover";
@@ -11,13 +12,19 @@ import Paragraphs from "@components/ui/PageSections/Paragraphs";
 import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
-import trainingLowQualityImage from "@assets/images/108-small.jpg";
-import trainingHighQualityImage from "@assets/images/108.webp";
+import bowImage from "@assets/images/264.webp";
+import classLowQualityArt from "@assets/images/dojo-class-small.webp";
+import classHighQualityArt from "@assets/images/dojo-class.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import type { IntlMessageID } from "i18n/messages";
 
-import { closingKanjiSx, closingTextSx, offerTextSx } from "./Dojo.style";
+import {
+  closingKanjiSx,
+  closingTextSx,
+  coverPhotoSx,
+  offerTextSx,
+} from "./Dojo.style";
 import { DOJO_MOON_ART } from "./dojoArt";
 
 const OFFERS: { kanji: string; textId: IntlMessageID }[] = [
@@ -36,6 +43,9 @@ const Dojo = () => (
       eyebrow={<FormattedMessage id="page.dojo.hero.eyebrow" />}
       title="Senshinkan"
       tagline={<FormattedMessage id="page.dojo.hero.tagline" />}
+      aboveTitle={
+        <CoverPhoto src={bowImage} aspectRatio="5 / 6" sx={coverPhotoSx} />
+      }
     />
 
     <Container maxWidth="lg">
@@ -43,12 +53,13 @@ const Dojo = () => (
       <PageSection>
         <PhotoSplit
           photo={{
-            lowQualitySrc: trainingLowQualityImage,
-            highQualitySrc: trainingHighQualityImage,
+            lowQualitySrc: classLowQualityArt,
+            highQualitySrc: classHighQualityArt,
             caption: "洗心",
           }}
         >
           <SectionHeading
+            id="the-dojo"
             number="01"
             title={<FormattedMessage id="page.dojo.title" />}
             kanji="洗心館"
@@ -61,6 +72,7 @@ const Dojo = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
+            id="what-we-offer"
             number="02"
             title={<FormattedMessage id="page.dojo.offer.title" />}
           />
@@ -78,7 +90,7 @@ const Dojo = () => (
 
     {/* ── 03. Closing (moonlit valley band) ────────────────────────────── */}
     <ArtBand src={valleyArt}>
-      <SectionHeading number="03" />
+      <SectionHeading id="closing" number="03" />
       <Typography sx={closingKanjiSx} lang="ja" aria-hidden>
         道
       </Typography>

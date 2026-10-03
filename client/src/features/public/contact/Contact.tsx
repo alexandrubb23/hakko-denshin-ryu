@@ -1,5 +1,6 @@
 import { Container } from "@mui/material";
 
+import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import MoonCover from "@components/ui/MoonCover/MoonCover";
 import ArtBand from "@components/ui/PageSections/ArtBand";
@@ -10,14 +11,15 @@ import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import { Routes } from "@lib/routes";
 
-import trainingLowQualityImage from "@assets/images/180-small.jpg";
-import trainingHighQualityImage from "@assets/images/180.webp";
+import elbowLockImage from "@assets/images/212.webp";
 import pathArt from "@assets/images/contact-path.webp";
+import welcomeLowQualityArt from "@assets/images/contact-welcome-small.webp";
+import welcomeHighQualityArt from "@assets/images/contact-welcome.webp";
 
 import ContactCards from "./ContactCards";
 import { CONTACT_MOON_ART } from "./contactArt";
 
-import { scheduleButtonSx } from "./Contact.style";
+import { coverPhotoSx, scheduleButtonSx } from "./Contact.style";
 
 const Contact = () => (
   <>
@@ -28,6 +30,7 @@ const Contact = () => (
       title={<FormattedMessage id="page.contact.title" />}
       compactTitle
       tagline={<FormattedMessage id="page.contact.description" />}
+      aboveTitle={<CoverPhoto src={elbowLockImage} sx={coverPhotoSx} />}
     />
 
     <Container maxWidth="lg">
@@ -35,13 +38,14 @@ const Contact = () => (
       <PageSection>
         <PhotoSplit
           photo={{
-            lowQualitySrc: trainingLowQualityImage,
-            highQualitySrc: trainingHighQualityImage,
+            lowQualitySrc: welcomeLowQualityArt,
+            highQualitySrc: welcomeHighQualityArt,
             caption: "稽古",
             aspectRatio: "2 / 3",
           }}
         >
           <SectionHeading
+            id="get-in-touch"
             number="01"
             title={<FormattedMessage id="page.contact.block.touch" />}
             kanji="連絡先"
@@ -54,6 +58,7 @@ const Contact = () => (
     {/* ── 02. Visit the dojo (the lantern path) ────────────────────────── */}
     <ArtBand src={pathArt}>
       <SectionHeading
+        id="visit-the-dojo"
         number="02"
         title={<FormattedMessage id="page.contact.visit.title" />}
         kanji="道場"

@@ -76,6 +76,7 @@ function TabbedContent<TTab extends TabBase>({
           <TechniqueGroupsList
             groups={activeItem.groups as GroupItem<TechniqueOf<TTab>>[]}
             getTechniqueSx={getTechniqueItemSx}
+            anchored
           />
         </ContentCard>
       )}

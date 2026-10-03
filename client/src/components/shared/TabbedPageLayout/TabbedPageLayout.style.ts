@@ -57,6 +57,11 @@ export const GroupCard = styled(Box)({
 });
 
 export const GroupTitle = styled(Typography)({
+  // The title with its copy-link anchor, if any, on the right
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 8,
   color: WHITE_ALPHA_85,
   fontWeight: 700,
   letterSpacing: 0.5,

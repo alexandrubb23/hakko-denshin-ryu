@@ -1,5 +1,8 @@
+import { useRef } from "react";
 import { useLocation, useNavigationType } from "react-router";
 import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
+
+import { scrollToHash } from "@utils/scroll";
 
 // Where the user was on each history entry, keyed by `location.key`
 const scrollPositions = new Map<string, number>();
@@ -7,13 +10,16 @@ const scrollPositions = new Map<string, number>();
 const PASSIVE = { passive: true };
 
 /**
- * Opens every new page at its top, and back / forward (POP) navigations where
- * the user left that page. The app restores scroll itself: left to the
- * browser, a reload reopens the page wherever the user had scrolled.
+ * Opens every new page at its top, or at the section of its #hash, and back /
+ * forward (POP) navigations where the user left that page. The app restores
+ * scroll itself: left to the browser, a reload reopens the page wherever the
+ * user had scrolled.
  */
 const useScrollToTop = () => {
-  const { key, pathname } = useLocation();
+  const { key, pathname, hash } = useLocation();
   const navigationType = useNavigationType();
+  // The page the scroll was last set for
+  const scrolledPath = useRef<string | null>(null);
 
   useIsomorphicLayoutEffect(() => {
     history.scrollRestoration = "manual";
@@ -28,10 +34,16 @@ const useScrollToTop = () => {
 
   // Before paint, so neither the page nor its view transition shows the old
   // scroll position. A reload is a POP with nothing saved, so it opens at the
-  // top; query-string changes on the same page keep the scroll
+  // top. Only a new page scrolls: a query-string change on the same page (e.g.
+  // a tab recorded in the URL) keeps the scroll, though it changes the
+  // navigation type to REPLACE
   useIsomorphicLayoutEffect(() => {
-    const top = navigationType === "POP" ? (scrollPositions.get(key) ?? 0) : 0;
-    window.scrollTo({ top, left: 0, behavior: "instant" });
+    if (scrolledPath.current === pathname) return;
+    scrolledPath.current = pathname;
+    const saved =
+      navigationType === "POP" ? scrollPositions.get(key) : undefined;
+    if (saved === undefined && hash) return scrollToHash(hash);
+    window.scrollTo({ top: saved ?? 0, left: 0, behavior: "instant" });
   }, [pathname, navigationType]);
 };
 

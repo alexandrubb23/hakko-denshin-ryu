@@ -23,6 +23,11 @@ import { mergeSx } from "@utils/sx";
 
 import { BOARDS_MEDIA } from "./facadeArt";
 
+// ─── Cover photo ──────────────────────────────────────────────────────────────
+
+// In the cover's dark corner, clear of the painted temple
+export const coverPhotoSx: SxProps<Theme> = { mr: "160px" };
+
 // ─── Group summary ────────────────────────────────────────────────────────────
 
 const glassSx = {

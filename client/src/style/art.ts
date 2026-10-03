@@ -22,6 +22,10 @@ export const TITLE_GLOW = `0 0 40px ${PURPLE_ALPHA_30}`;
 
 export const COVER_HEIGHT = "100dvh";
 
+// The slow settle of round art zooming on hover (belts, practice thumbs)
+export const ART_ZOOM_TRANSITION =
+  "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
+
 // Narrow screens: the art floats mid-cover; fade every edge into the page
 export const NARROW_COVER_ART_FADE = [
   "linear-gradient(180deg, transparent 0%, black 20%, black 72%, transparent 100%)",

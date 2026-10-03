@@ -1,5 +1,6 @@
 import { Box, Container } from "@mui/material";
 
+import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import MoonCover from "@components/ui/MoonCover/MoonCover";
@@ -11,6 +12,7 @@ import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import { getSessionsByDay } from "@constants/trainingSchedule";
 import { STUDENT_CATEGORIES } from "@hakko/core";
 
+import senseiImage from "@assets/images/180.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 import { HAKKO_RYU_MOON_ART } from "@features/public/hakko-ryu/hakkoRyuArt";
 
@@ -21,7 +23,7 @@ import ScheduleCta from "./ScheduleCta";
 import ScheduleQuote from "./ScheduleQuote";
 import WallBoards from "./WallBoards";
 
-import { timetableSx } from "./Schedule.style";
+import { coverPhotoSx, timetableSx } from "./Schedule.style";
 
 // Seconds between one card fading in and the next
 const GROUP_STAGGER = 0.05;
@@ -44,6 +46,9 @@ const Schedule = () => (
       compactTitle
       wideArtFade={FACADE_WIDE_FADE}
       onArt={FITS_BOARDS && <WallBoards days={DAYS} />}
+      aboveTitle={
+        <CoverPhoto src={senseiImage} aspectRatio="2 / 3" sx={coverPhotoSx} />
+      }
     />
 
     <Container maxWidth="lg">
@@ -51,6 +56,7 @@ const Schedule = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
+            id="training-week"
             number="01"
             title={<FormattedMessage id="page.schedule.week.title" />}
             kanji="稽古"
@@ -77,7 +83,7 @@ const Schedule = () => (
 
     {/* ── 02. Quote (moonlit valley band) ──────────────────────────────── */}
     <ArtBand src={valleyArt}>
-      <SectionHeading number="02" />
+      <SectionHeading id="quote" number="02" />
       <ScheduleQuote />
     </ArtBand>
 

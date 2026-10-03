@@ -15,3 +15,6 @@ export const getInitials = (name?: string): string =>
  */
 export const stripDiacritics = (value?: string | null): string =>
   value ? value.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
+
+/** 1 → "01" */
+export const padNumber = (n: number) => String(n).padStart(2, "0");

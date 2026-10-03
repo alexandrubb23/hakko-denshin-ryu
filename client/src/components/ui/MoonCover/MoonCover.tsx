@@ -9,6 +9,8 @@ import KanjiRule from "@components/ui/KanjiRule/KanjiRule";
 import { mergeSx } from "@utils/sx";
 
 import {
+  heroAboveTitleContentSx,
+  heroAboveTitleSx,
   heroArtSx,
   heroCompactTitleSx,
   heroContentSx,
@@ -54,6 +56,12 @@ interface Props {
   onArt?: React.ReactNode;
   /** Below `lg`, show `onArt` under the menu rather than hiding it */
   onArtBelowMenu?: boolean;
+  /**
+   * Fills the empty dark space above the title on wide screens, laid against
+   * the arc menu's labels (hidden on narrow ones, where the title sits under
+   * the menu), e.g. a photo as tall as the space
+   */
+  aboveTitle?: React.ReactNode;
 }
 
 // The cover's art; a narrow painting takes over below `lg`
@@ -87,9 +95,20 @@ const MoonCover = ({
   wideArtFade,
   onArt,
   onArtBelowMenu = false,
+  aboveTitle,
 }: Props) => (
   <Box sx={heroSx}>
     <CoverChrome />
+
+    {aboveTitle && (
+      <Box sx={heroAboveTitleSx}>
+        <Box sx={heroAboveTitleContentSx(art)}>
+          <motion.div {...heroReveal} style={{ height: "100%" }}>
+            {aboveTitle}
+          </motion.div>
+        </Box>
+      </Box>
+    )}
 
     <Box sx={heroContentSx}>
       <Box sx={heroVerticalKanjiSx} lang="ja" aria-hidden>

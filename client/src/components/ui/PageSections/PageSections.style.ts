@@ -48,9 +48,24 @@ export const sectionNumberSx: SxProps<Theme> = {
   },
 };
 
+// The title with its copy-link anchor on the right, sized like the title
+export const sectionTitleRowSx: SxProps<Theme> = {
+  display: "flex",
+  alignItems: "center",
+  gap: 1,
+  fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
+};
+
+// The display font draws its letters high in the line, above room for
+// descenders: lifts the anchor level with them
+export const sectionTitleAnchorSx: SxProps<Theme> = {
+  position: "relative",
+  top: "-0.1em",
+};
+
 export const sectionTitleSx: SxProps<Theme> = {
   fontFamily: DISPLAY_FONT,
-  fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
+  fontSize: "inherit",
   fontWeight: 400,
   lineHeight: 1.15,
   color: TEXT_PRIMARY,

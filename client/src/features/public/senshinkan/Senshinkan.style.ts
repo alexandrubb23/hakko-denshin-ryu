@@ -14,6 +14,12 @@ import {
 } from "@style/tokens";
 import { mergeSx } from "@utils/sx";
 
+// ─── Cover photo ──────────────────────────────────────────────────────────────
+
+// Keeps the raised hand clear of the menu's labels: `ml` places the photo
+// when it's wider than the space, `mr` when it fits
+export const coverPhotoSx: SxProps<Theme> = { ml: "50px", mr: "100px" };
+
 // ─── 01. About (two columns of text) ──────────────────────────────────────────
 
 export const aboutColumnsSx: SxProps<Theme> = {
