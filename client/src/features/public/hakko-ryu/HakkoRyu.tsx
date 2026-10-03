@@ -19,14 +19,16 @@ import wristLockHighQualityImage from "@assets/images/53.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 
 import GradingSystem from "./GradingSystem";
-import Syllabus from "./Syllabus";
 import {
+  coverPhotoSx,
   denshinGridSx,
   denshinKanjiSx,
   gradesIntroSx,
   jujutsuNotesSx,
 } from "./HakkoRyu.style";
 import { HAKKO_RYU_MOON_ART } from "./hakkoRyuArt";
+import KyuProgramSection from "./KyuProgramSection";
+import Syllabus from "./Syllabus";
 
 const COMPANIONS = [
   {
@@ -49,6 +51,15 @@ const HakkoRyu = () => (
       eyebrow={<FormattedMessage id="page.hakko-ryu.hero.eyebrow" />}
       title="Hakko Ryu"
       subtitle={<FormattedMessage id="page.hakko-ryu.hero.subtitle" />}
+      aboveTitle={
+        // Sets the scene for the title below it
+        <Box
+          component="img"
+          src={wristLockHighQualityImage}
+          alt=""
+          sx={coverPhotoSx}
+        />
+      }
     />
 
     <Container maxWidth="lg">
@@ -158,11 +169,29 @@ const HakkoRyu = () => (
         <GradingSystem />
       </PageSection>
 
-      {/* ── 08. Shodan–Yondan Syllabus ───────────────────────────────────── */}
+      {/* ── 08. Kyu Program ──────────────────────────────────────────────── */}
       <PageSection>
         <FadeIn>
           <SectionHeading
-            number="08 · Hakko Denshin Ryu · 八光伝心流"
+            number="08 · Mudansha · 無段者"
+            title={<FormattedMessage id="page.hakko-ryu.kyu.title" />}
+            kanji="五級 — 一級"
+          />
+          <Box sx={gradesIntroSx}>
+            <Paragraphs ids={["page.hakko-ryu.kyu.subtitle"]} />
+          </Box>
+        </FadeIn>
+
+        <FadeIn>
+          <KyuProgramSection />
+        </FadeIn>
+      </PageSection>
+
+      {/* ── 09. Shodan–Yondan Syllabus ───────────────────────────────────── */}
+      <PageSection>
+        <FadeIn>
+          <SectionHeading
+            number="09 · Hakko Denshin Ryu · 八光伝心流"
             title={<FormattedMessage id="page.hakko-ryu.syllabus.title" />}
             kanji="基本技"
           />

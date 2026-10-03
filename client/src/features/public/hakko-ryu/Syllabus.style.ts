@@ -29,7 +29,7 @@ import { gradeRankNoteSx, gradeSubtitleSx } from "./GradingSystem.style";
 // ─── Grade tabs ───────────────────────────────────────────────────────────────
 
 // Hairline tabs, the active one underlined in purple
-export const syllabusTabsSx: SxProps<Theme> = {
+export const programTabsSx: SxProps<Theme> = {
   mt: 4,
   mb: { xs: 4, md: 5 },
   borderBottom: `1px solid ${BORDER_COLOR}`,
@@ -49,8 +49,10 @@ export const syllabusTabsSx: SxProps<Theme> = {
   },
 };
 
-export const syllabusTabKanjiSx: SxProps<Theme> = {
-  display: "block",
+export const programTabKanjiSx: SxProps<Theme> = {
+  display: "flex",
+  alignItems: "center",
+  gap: 1,
   fontFamily: KANJI_FONT,
   fontSize: { xs: "1.1rem", md: "1.4rem" },
   letterSpacing: "0.2em",
@@ -58,18 +60,42 @@ export const syllabusTabKanjiSx: SxProps<Theme> = {
   mb: 0.5,
 };
 
-export const syllabusErrorSx: SxProps<Theme> = { color: TEXT_MUTED, mt: 4 };
+// A small round belt before the tab's kanji
+export const programTabBeltSx: SxProps<Theme> = {
+  width: { xs: 22, md: 26 },
+  height: { xs: 22, md: 26 },
+  borderRadius: "50%",
+};
+
+export const programErrorSx: SxProps<Theme> = { color: TEXT_MUTED, mt: 4 };
 
 // ─── Grade header: title on the left, kanji · dan · count on the right ───────
 
 export const gradeHeaderSx: SxProps<Theme> = {
   display: "flex",
   flexWrap: "wrap",
-  alignItems: "baseline",
+  alignItems: "center",
   justifyContent: "space-between",
   columnGap: 3,
   rowGap: 1,
   mb: 3,
+};
+
+// The title, after its round belt when it has one
+export const gradeHeadingSx: SxProps<Theme> = {
+  display: "flex",
+  alignItems: "center",
+  gap: { xs: 2, md: 3 },
+};
+
+export const gradeBeltSx: SxProps<Theme> = {
+  flexShrink: 0,
+  width: { xs: 72, md: 96 },
+  height: { xs: 72, md: 96 },
+  borderRadius: "50%",
+  outline: `1px solid ${PURPLE_ALPHA_25}`,
+  outlineOffset: 6,
+  boxShadow: `0 0 40px ${PURPLE_ALPHA_25}`,
 };
 
 export const gradeTitleSx = mergeSx(kanjiCardTitleSx, { mb: 0 });
@@ -87,7 +113,8 @@ export const gradeMetaKanjiSx: SxProps<Theme> = {
 // A kanji card, opening like an accordion
 export const categorySx = mergeSx(kanjiCardSx, {
   height: "auto",
-  p: 0,
+  // Same breakpoints as the card's padding, or its media queries win
+  p: { xs: 0, md: 0 },
   mb: 1.5,
   color: TEXT_PRIMARY,
   "&::before": { display: "none" },
@@ -183,7 +210,7 @@ export const categoryArtSx = (src: string): SxProps<Theme> => ({
     [
       "linear-gradient(90deg, transparent 0%, black 60%)",
       "linear-gradient(180deg, transparent 0%, black 20%, black 80%, transparent 100%)",
-    ].join(", "),
+    ].join(", ")
   ),
 });
 
@@ -225,3 +252,38 @@ export const techniqueKanjiSx: SxProps<Theme> = {
   color: WHITE_ALPHA_65,
   whiteSpace: "nowrap",
 };
+
+// ─── Kyu program: kihon waza and their henka ──────────────────────────────────
+
+// Henka (variations) step back behind the kihon waza they vary
+export const henkaSx: SxProps<Theme> = {
+  "& .technique-name": { color: TEXT_MUTED },
+  "& .technique-kanji": { opacity: 0.6 },
+};
+
+export const henkaTagSx = mergeSx(gradeRankNoteSx, {
+  display: "inline",
+  ml: 1.5,
+  color: PURPLE_ALPHA_50,
+});
+
+export const legendSx: SxProps<Theme> = {
+  display: "flex",
+  gap: 3,
+  mb: 3,
+};
+
+export const legendItemSx = mergeSx(gradeRankNoteSx, {
+  display: "flex",
+  alignItems: "center",
+  gap: 1,
+  mt: 0,
+});
+
+export const legendDotSx = (kihon: boolean): SxProps<Theme> => ({
+  width: 8,
+  height: 8,
+  borderRadius: "50%",
+  backgroundColor: kihon ? PURPLE : "transparent",
+  border: `1px solid ${kihon ? PURPLE : PURPLE_ALPHA_50}`,
+});

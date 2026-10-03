@@ -1,3 +1,4 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
@@ -5,15 +6,12 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import type { BodyPositionGroup } from "@api/techniques";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { listResetSx } from "@style/list";
 import { padNumber } from "@utils/string";
 import { mergeSx } from "@utils/sx";
 
-import { practiceArt, splitName, titleCase } from "./syllabusData";
 import {
   categoryArtSx,
   categoryCountSx,
@@ -26,14 +24,22 @@ import {
   categorySummarySx,
   categorySx,
   categoryThumbSx,
+  henkaSx,
+  henkaTagSx,
   techniqueKanjiSx,
   techniqueNameSx,
   techniqueNumberSx,
   techniqueSx,
 } from "./Syllabus.style";
+import {
+  type ProgramGroup,
+  practiceArt,
+  splitName,
+  titleCase,
+} from "./syllabusData";
 
 interface Props {
-  group: BodyPositionGroup;
+  group: ProgramGroup;
   /** Its first technique's number within the grade */
   start: number;
   expanded: boolean;
@@ -105,15 +111,35 @@ const SyllabusCategory = ({ group, start, expanded, onToggle }: Props) => {
         >
           {group.techniques.map((technique, i) => {
             const name = splitName(technique.name);
+            // Only the kyu program tells kihon waza from their henka
+            const isHenka = technique.isKihon === false;
             return (
-              <Box component="li" key={technique.number} sx={techniqueSx}>
+              <Box
+                component="li"
+                key={technique.number}
+                sx={mergeSx(techniqueSx, isHenka && henkaSx)}
+              >
                 <Typography component="span" sx={techniqueNumberSx}>
                   {padNumber(start + i)}
                 </Typography>
-                <Typography component="span" sx={techniqueNameSx}>
+                <Typography
+                  component="span"
+                  className="technique-name"
+                  sx={techniqueNameSx}
+                >
                   {name.romaji}
+                  {isHenka && (
+                    <Box component="span" sx={henkaTagSx}>
+                      Henka
+                    </Box>
+                  )}
                 </Typography>
-                <Typography component="span" sx={techniqueKanjiSx} lang="ja">
+                <Typography
+                  component="span"
+                  className="technique-kanji"
+                  sx={techniqueKanjiSx}
+                  lang="ja"
+                >
                   {name.kanji}
                 </Typography>
               </Box>

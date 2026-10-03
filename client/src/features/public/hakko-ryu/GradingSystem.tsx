@@ -5,7 +5,7 @@ import beltShihansha from "@assets/grades/belt-shihansha.webp";
 import beltYudansha from "@assets/grades/belt-yudansha.webp";
 
 import GradeCard, { Tier } from "./GradeCard";
-import { DAN_RANKS } from "./ranks";
+import { DAN_RANKS, KYU_RANKS } from "./ranks";
 
 const TIERS: Tier[] = [
   {
@@ -15,14 +15,7 @@ const TIERS: Tier[] = [
     subtitleId: "page.hakko-ryu.grades.mudansha.subtitle",
     belt: beltMudansha,
     grade: "kyu",
-    ranks: [
-      { name: "Rokkyū", kanji: "六級", n: 6 },
-      { name: "Gokyū", kanji: "五級", n: 5 },
-      { name: "Yonkyū", kanji: "四級", n: 4 },
-      { name: "Sankyū", kanji: "三級", n: 3 },
-      { name: "Nikyū", kanji: "二級", n: 2 },
-      { name: "Ikkyū", kanji: "一級", n: 1 },
-    ],
+    ranks: KYU_RANKS,
   },
   {
     title: "Yudansha",

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useLocation, useNavigationType } from "react-router";
 import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
 
@@ -14,6 +15,8 @@ const PASSIVE = { passive: true };
 const useScrollToTop = () => {
   const { key, pathname } = useLocation();
   const navigationType = useNavigationType();
+  // The page the scroll was last set for
+  const scrolledPath = useRef<string | null>(null);
 
   useIsomorphicLayoutEffect(() => {
     history.scrollRestoration = "manual";
@@ -28,8 +31,12 @@ const useScrollToTop = () => {
 
   // Before paint, so neither the page nor its view transition shows the old
   // scroll position. A reload is a POP with nothing saved, so it opens at the
-  // top; query-string changes on the same page keep the scroll
+  // top. Only a new page scrolls: a query-string change on the same page (e.g.
+  // a tab recorded in the URL) keeps the scroll, though it changes the
+  // navigation type to REPLACE
   useIsomorphicLayoutEffect(() => {
+    if (scrolledPath.current === pathname) return;
+    scrolledPath.current = pathname;
     const top = navigationType === "POP" ? (scrollPositions.get(key) ?? 0) : 0;
     window.scrollTo({ top, left: 0, behavior: "instant" });
   }, [pathname, navigationType]);

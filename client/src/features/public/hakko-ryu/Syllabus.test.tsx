@@ -138,4 +138,14 @@ describe("Syllabus", () => {
       expect(screen.getByText("01")).toBeInTheDocument();
     });
   });
+  it("opens on the grade named in the URL", () => {
+    mockTechniquesState({ data: mockSuites });
+    renderUi(<Syllabus />, { initialEntries: ["/hakko-ryu?grade=nidan-gi"] });
+
+    expect(screen.getByRole("tab", { name: /Nidan/ })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
+    expect(screen.getByText("Nidan Kihon Waza")).toBeInTheDocument();
+  });
 });

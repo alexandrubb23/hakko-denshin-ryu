@@ -22,16 +22,18 @@ interface Props extends Rank {
   grade: Grade;
 }
 
+/** "6th kyu", "1st dan"… */
+export const RankOrdinal = ({ grade, n }: { grade: Grade; n: number }) => (
+  <FormattedMessage id={`page.hakko-ryu.grades.${grade}`} values={{ n }} />
+);
+
 /** One rank: its romaji and ordinal grade beside its kanji */
 const GradeRank = ({ name, kanji, n, grade }: Props) => (
   <Box component="li" sx={gradeRankSx}>
     <Box>
       <Typography sx={gradeRankNameSx}>{name}</Typography>
       <Typography sx={gradeRankNoteSx}>
-        <FormattedMessage
-          id={`page.hakko-ryu.grades.${grade}`}
-          values={{ n }}
-        />
+        <RankOrdinal grade={grade} n={n} />
       </Typography>
     </Box>
     <Typography sx={gradeRankKanjiSx} lang="ja">

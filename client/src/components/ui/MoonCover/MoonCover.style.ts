@@ -20,6 +20,12 @@ import {
   menuOnArt,
 } from "@components/ui/ArcNavMenu/moonArt";
 
+// The arc menu's size on wide screens
+const WIDE_ARC_RADIUS = "clamp(90px, 16dvh, 160px)";
+const WIDE_ARC_GAP = "40px";
+// Room for the menu's longest labels (e.g. "Autentificare"), left of its arc
+const MENU_LABELS_WIDTH = "110px";
+
 // Wide screens: the art is one screen tall and flush right. A moon painted
 // high up is lowered, with the art, so the arc menu has room above it.
 const MIN_MOON_TOP = 0.3; // of the screen height
@@ -60,8 +66,8 @@ export const heroMenuSx =
     mb: onArtBelowMenu ? 4 : "clamp(200px, 62vw, 340px)",
     [theme.breakpoints.up("lg")]: {
       ...menuOnArt(art, "left", COVER_HEIGHT, wideArtTop(art)),
-      "--arc-radius": "clamp(90px, 16dvh, 160px)",
-      "--arc-gap": "40px",
+      "--arc-radius": WIDE_ARC_RADIUS,
+      "--arc-gap": WIDE_ARC_GAP,
       "--arc-item-size": "clamp(1.1rem, 2.6dvh, 1.6rem)",
       m: 0,
     },
@@ -103,6 +109,40 @@ export const heroOnArtSx =
       pointerEvents: "none",
     },
   });
+
+/**
+ * How far from the cover's right edge the arc menu reaches on wide screens:
+ * the moon's centre on the art, then its radius, the arc and the labels
+ */
+const menuReach = (art: MoonArt) =>
+  `calc(${artWidth(art, COVER_HEIGHT)} * ${(1 - art.moonX).toFixed(4)} + ${COVER_HEIGHT} * ${(art.moonDiameter / 2).toFixed(4)} + ${WIDE_ARC_RADIUS} + ${WIDE_ARC_GAP} + ${MENU_LABELS_WIDTH})`;
+
+// The dark space above the title, between the cover's top and its content;
+// wide screens only. It takes only the room left over: its content is laid
+// over it (`heroAboveTitleContentSx`), so even a large photo can't grow the
+// cover and push the title down
+export const heroAboveTitleSx: SxProps<Theme> = {
+  display: { xs: "none", lg: "block" },
+  position: "relative",
+  // No pointer events: the arc menu, later in the cover, stays clickable
+  pointerEvents: "none",
+  flex: 1,
+  minHeight: 0,
+  mt: 10,
+  mb: 2,
+};
+
+// Fills the space from the cover's left edge up to the menu's labels, its
+// content against the menu
+export const heroAboveTitleContentSx = (art: MoonArt): SxProps<Theme> => ({
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: menuReach(art),
+  display: "flex",
+  justifyContent: "flex-end",
+});
 
 export const heroContentSx: SxProps<Theme> = {
   position: "relative",
