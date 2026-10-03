@@ -4,6 +4,8 @@ import Inter from "@assets/fonts/Inter.ttf";
 import Jarene from "@assets/fonts/Jarene.otf";
 import Rubik from "@assets/fonts/Rubik.ttf";
 
+import { LIGHT_SCHEME_CSS } from "./colorScheme";
+
 const theme = createTheme({
   breakpoints: {
     values: {
@@ -120,6 +122,7 @@ const theme = createTheme({
           color: #e7e7e7;
           font-size: clamp(12px, 3vw, 24px);
         }   
+        ${LIGHT_SCHEME_CSS}
       `,
     },
   },

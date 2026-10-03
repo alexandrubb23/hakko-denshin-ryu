@@ -109,7 +109,8 @@ const MoonCover = ({
   onArtBelowMenu = false,
   aboveTitle,
 }: Props) => (
-  <Box sx={heroSx}>
+  // A night painting: stays dark in the light scheme too
+  <Box sx={heroSx} data-color-scheme="dark">
     <CoverChrome />
 
     {aboveTitle && (

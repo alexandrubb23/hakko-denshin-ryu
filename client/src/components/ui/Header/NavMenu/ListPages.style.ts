@@ -1,6 +1,6 @@
 import { ListItem, styled } from "@mui/material";
 
-import { PURPLE } from "@style/tokens";
+import { PURPLE } from "@style/colorScheme";
 
 export const ListItemStyle = styled(ListItem)({
   cursor: "pointer",

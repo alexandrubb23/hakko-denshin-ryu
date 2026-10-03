@@ -3,7 +3,7 @@ import TransitionLink from "@components/ui/TransitionLink/TransitionLink";
 import useNavItems from "@hooks/useNavItems";
 import { SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
-import { PURPLE } from "@style/tokens";
+import { PURPLE } from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import { ListItemStyle } from "./ListPages.style";

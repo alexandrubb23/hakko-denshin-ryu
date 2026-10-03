@@ -6,7 +6,7 @@ import {
   MOONLIGHT_ALPHA_25,
   MOONLIGHT_ALPHA_45,
   PURPLE_ALPHA_30,
-} from "@style/tokens";
+} from "@style/colorScheme";
 
 import {
   type ArcDirection,

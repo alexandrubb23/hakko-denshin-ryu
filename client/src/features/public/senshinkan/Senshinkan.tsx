@@ -1,5 +1,6 @@
 import { Box, Container } from "@mui/material";
 
+import ColorSchemeToggle from "@components/ui/ColorSchemeToggle/ColorSchemeToggle";
 import CoverPhoto from "@components/ui/CoverPhoto/CoverPhoto";
 import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
@@ -33,6 +34,9 @@ const richText = {
 
 const Senshinkan = () => (
   <>
+    {/* PROTOTYPE: light mode, tried on this page only */}
+    <ColorSchemeToggle />
+
     <MoonCover
       art={SENSHINKAN_MOON_ART}
       kanji="洗心館"

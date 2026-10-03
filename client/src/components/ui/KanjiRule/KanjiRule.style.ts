@@ -1,7 +1,7 @@
 import type { SxProps, Theme } from "@mui/material";
 
 import { KANJI_FONT } from "@style/art";
-import { PURPLE_ALPHA_50, TEXT_MUTED } from "@style/tokens";
+import { PURPLE_ALPHA_50, TEXT_MUTED } from "@style/colorScheme";
 
 export const kanjiRuleSx: SxProps<Theme> = {
   display: "flex",

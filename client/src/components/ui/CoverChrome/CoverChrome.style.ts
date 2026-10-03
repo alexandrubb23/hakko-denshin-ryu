@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from "@mui/material";
 
-import { PURPLE } from "@style/tokens";
+import { PURPLE } from "@style/colorScheme";
 
 /** Thin purple line glowing along the top edge of a cover */
 export const topAccentSx: SxProps<Theme> = {

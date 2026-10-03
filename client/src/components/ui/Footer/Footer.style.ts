@@ -16,7 +16,7 @@ import {
   TEXT_SUBTLE,
   WHITE_ALPHA_10,
   WHITE_ALPHA_75,
-} from "@style/tokens";
+} from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 // ─── Frame ────────────────────────────────────────────────────────────────────

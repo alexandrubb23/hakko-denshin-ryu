@@ -257,6 +257,8 @@
   "ui.tabbedPage.error": "Nu am putut încărca datele. Te rugăm să încerci din nou.",
   "ui.sectionAnchor.copy": "Copiază linkul către această secțiune",
   "ui.sectionAnchor.copied": "Link copiat",
+  "ui.colorScheme.toLight": "Comută la modul luminos",
+  "ui.colorScheme.toDark": "Comută la modul întunecat",
   "ui.imageDropZone.placeholder": "Trage imaginea aici sau apasă pentru a o alege",
   "ui.imageDropZone.hint": "JPEG, PNG sau WebP · maximum {maxSize} MB",
   "ui.avatarUpload.title": "Schimba fotografia de profil",
