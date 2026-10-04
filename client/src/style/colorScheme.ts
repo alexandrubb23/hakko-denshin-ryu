@@ -25,6 +25,8 @@ const LIGHT = {
   BORDER_HOVER: `rgba(${VIOLET},0.55)`,
   SURFACE_BG: "rgba(255,255,255,0.55)",
   SURFACE_BG_02: "rgba(255,255,255,0.25)",
+  // A whitewashed board in the painted frame
+  BOARD_BG: "rgba(255,252,245,0.85)",
 
   PURPLE_ALPHA_04: `rgba(${VIOLET},0.04)`,
   PURPLE_ALPHA_05: `rgba(${VIOLET},0.05)`,
@@ -75,6 +77,7 @@ export const BORDER_COLOR = themed("BORDER_COLOR");
 export const BORDER_HOVER = themed("BORDER_HOVER");
 export const SURFACE_BG = themed("SURFACE_BG");
 export const SURFACE_BG_02 = themed("SURFACE_BG_02");
+export const BOARD_BG = themed("BOARD_BG");
 export const PURPLE_ALPHA_04 = themed("PURPLE_ALPHA_04");
 export const PURPLE_ALPHA_05 = themed("PURPLE_ALPHA_05");
 export const PURPLE_ALPHA_06 = themed("PURPLE_ALPHA_06");

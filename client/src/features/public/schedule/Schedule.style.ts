@@ -3,9 +3,9 @@ import { SxProps, Theme } from "@mui/material";
 
 import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW } from "@style/art";
 import { CATEGORY_COLORS } from "@style/categories.tokens";
-import { listResetSx } from "@style/list";
 import {
   BACKDROP_BLUR,
+  BOARD_BG,
   BOARD_FRAME,
   BORDER_COLOR,
   BORDER_HOVER,
@@ -19,6 +19,7 @@ import {
   TEXT_SUBTLE,
   WHITE_ALPHA_65,
 } from "@style/colorScheme";
+import { listResetSx } from "@style/list";
 import { mergeSx } from "@utils/sx";
 
 import { BOARDS_MEDIA } from "./facadeArt";
@@ -84,8 +85,7 @@ export const timetableSx: SxProps<Theme> = {
   [BOARDS_MEDIA]: { display: "none" },
 };
 
-// Like the boards on the painted dojo front: a dark panel in a thin frame
-const BOARD_BG = "rgba(19,19,34,0.92)";
+// Like the boards on the painted dojo front: a panel in a thin frame
 
 export const dayCardSx: SxProps<Theme> = {
   position: "relative",
