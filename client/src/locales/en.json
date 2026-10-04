@@ -259,6 +259,8 @@
   "ui.sectionAnchor.copied": "Link copied",
   "ui.colorScheme.toLight": "Switch to light mode",
   "ui.colorScheme.toDark": "Switch to dark mode",
+  "ui.coverControls.show": "Show display settings",
+  "ui.coverControls.hide": "Hide display settings",
   "ui.imageDropZone.placeholder": "Drag & drop or click to select",
   "ui.imageDropZone.hint": "JPEG, PNG or WebP · max {maxSize} MB",
   "ui.avatarUpload.title": "Update Profile Photo",
