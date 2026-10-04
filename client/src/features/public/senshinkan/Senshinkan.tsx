@@ -9,6 +9,7 @@ import Paragraphs from "@components/ui/PageSections/Paragraphs";
 import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import PullQuote from "@components/ui/PageSections/PullQuote";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
+import { hombuRichText } from "@constants/hombuRichText";
 
 import pinImage from "@assets/images/200.webp";
 import clubLowQualityImage from "@assets/images/279-small.webp";
@@ -17,19 +18,6 @@ import clubHighQualityImage from "@assets/images/279.webp";
 import { aboutColumnsSx, coverPhotoSx } from "./Senshinkan.style";
 import SenshinkanBridge from "./SenshinkanBridge";
 import { SENSHINKAN_MOON_ART } from "./senshinkanArt";
-
-// Rich-text tag for messages linking to the Hombu Dojo website
-const richText = {
-  link: (chunks: React.ReactNode) => (
-    <a
-      href="https://hakkodenshinryu.net/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {chunks}
-    </a>
-  ),
-};
 
 const Senshinkan = () => (
   <>
@@ -91,7 +79,7 @@ const Senshinkan = () => (
               "page.senshinkan.romania.p2",
               "page.senshinkan.romania.p3",
             ]}
-            values={richText}
+            values={hombuRichText}
           />
         </PhotoSplit>
       </PageSection>

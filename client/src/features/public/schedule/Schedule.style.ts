@@ -27,7 +27,7 @@ import { BOARDS_MEDIA } from "./facadeArt";
 // ─── Cover photo ──────────────────────────────────────────────────────────────
 
 // In the cover's dark corner, clear of the painted temple
-export const coverPhotoSx: SxProps<Theme> = { mr: "160px" };
+export const coverPhotoSx: SxProps<Theme> = { ml: 0, mr: "210px" };
 
 // ─── Group summary ────────────────────────────────────────────────────────────
 
