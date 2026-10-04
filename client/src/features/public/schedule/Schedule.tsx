@@ -12,7 +12,7 @@ import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import { getSessionsByDay } from "@constants/trainingSchedule";
 import { STUDENT_CATEGORIES } from "@hakko/core";
 
-import senseiImage from "@assets/images/180.webp";
+import coverImage from "@assets/images/17.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 import { HAKKO_RYU_MOON_ART } from "@features/public/hakko-ryu/hakkoRyuArt";
 
@@ -46,9 +46,7 @@ const Schedule = () => (
       compactTitle
       wideArtFade={FACADE_WIDE_FADE}
       onArt={FITS_BOARDS && <WallBoards days={DAYS} />}
-      aboveTitle={
-        <CoverPhoto src={senseiImage} aspectRatio="2 / 3" sx={coverPhotoSx} />
-      }
+      aboveTitle={<CoverPhoto src={coverImage} sx={coverPhotoSx} />}
     />
 
     <Container maxWidth="lg">
