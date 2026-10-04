@@ -27,7 +27,7 @@ const TIERS: Tier[] = [
     ranks: DAN_RANKS,
   },
   {
-    title: "Shihansha",
+    title: "Shihan",
     kanji: "師範者",
     index: "参",
     subtitleId: "page.hakko-ryu.grades.shihansha.subtitle",

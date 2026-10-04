@@ -140,7 +140,9 @@ describe("Syllabus", () => {
   });
   it("opens on the grade named in the URL", () => {
     mockTechniquesState({ data: mockSuites });
-    renderUi(<Syllabus />, { initialEntries: ["/hakko-ryu?grade=nidan-gi"] });
+    renderUi(<Syllabus />, {
+      initialEntries: ["/hakko-denshin-ryu?grade=nidan-gi"],
+    });
 
     expect(screen.getByRole("tab", { name: /Nidan/ })).toHaveAttribute(
       "aria-selected",

@@ -22,7 +22,7 @@ import type { IntlMessageID } from "i18n/messages";
 
 export type PagePath =
   | "home"
-  | "hakko-ryu"
+  | "hakko-denshin-ryu"
   | "senshinkan"
   | "dojo"
   | "schedule"
@@ -70,7 +70,7 @@ export const pages: Page[] = [
   },
   {
     component: HakkoRyuRGB,
-    path: "hakko-ryu",
+    path: "hakko-denshin-ryu",
     titleId: "page.title.hakko-ryu",
     titleSuffix: SITE_NAME,
     descriptionId: "page.description.hakko-ryu",
@@ -203,7 +203,7 @@ export const NOT_FOUND_PAGE: PageMeta = {
 /** Pages listed in the site menus (header, mobile drawer, home arc) */
 export const navPages = pages.filter((page) => !page.hideFromNav);
 
-/** The page served at `pathname` (e.g. "/" or "/hakko-ryu"), if any */
+/** The page served at `pathname` (e.g. "/" or "/hakko-denshin-ryu"), if any */
 export const findPage = (pathname: string) => {
   const path = trimTrailingSlash(pathname);
   return pages.find((page) => normalizePath(page.path) === path);

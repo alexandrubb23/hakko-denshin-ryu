@@ -1,6 +1,6 @@
 export const Routes = {
   home: "/",
-  hakkoRyu: "/hakko-ryu",
+  hakkoRyu: "/hakko-denshin-ryu",
   senshinkan: "/senshinkan",
   dojo: "/dojo",
   schedule: "/schedule",
