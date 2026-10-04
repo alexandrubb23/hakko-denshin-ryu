@@ -28,7 +28,7 @@ const TIERS: Tier[] = [
   },
   {
     title: "Shihan",
-    kanji: "師範者",
+    kanji: "師範",
     index: "参",
     subtitleId: "page.hakko-ryu.grades.shihansha.subtitle",
     belt: beltShihansha,
