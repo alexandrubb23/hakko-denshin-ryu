@@ -4,6 +4,7 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import KanjiWatermark from "@components/ui/KanjiWatermark/KanjiWatermark";
 import { DOJO_KANJI, DOJO_NAME, SITE_NAME } from "@constants/brand";
+import { hombuRichText } from "@constants/hombuRichText";
 
 import {
   backToTopSx,
@@ -38,7 +39,8 @@ const Footer = () => (
             <FormattedMessage id="footer.copyrights" />
           </Typography>
           <Typography sx={bottomTextSx}>
-            {SITE_NAME} · <FormattedMessage id="footer.affiliation" />
+            {SITE_NAME} ·{" "}
+            <FormattedMessage id="footer.affiliation" values={hombuRichText} />
           </Typography>
         </Box>
         <Button
