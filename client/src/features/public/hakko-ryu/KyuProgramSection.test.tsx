@@ -134,7 +134,7 @@ describe("KyuProgramSection", () => {
   it("opens on the level named in the URL", () => {
     mockState({ data: mockLevels });
     renderUi(<KyuProgramSection />, {
-      initialEntries: ["/hakko-ryu?level=1er-kyu"],
+      initialEntries: ["/hakko-denshin-ryu?level=1er-kyu"],
     });
 
     expect(screen.getByRole("tab", { name: /1st Kyu/ })).toHaveAttribute(

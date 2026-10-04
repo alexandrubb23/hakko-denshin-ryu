@@ -18,14 +18,14 @@ export const data: Data = {
       menu: {
         en: {
           home: "Home",
-          "hakko-ryu": "Hakko Ryu",
+          "hakko-denshin-ryu": "Hakko Denshin Ryu",
           senshinkan: "Senshinkan",
           dojo: "Dojo",
           contact: "Contact",
         },
         ro: {
           home: "Acasă",
-          "hakko-ryu": "Hakko Ryu",
+          "hakko-denshin-ryu": "Hakko Denshin Ryu",
           senshinkan: "Senshinkan",
           dojo: "Dojo",
           contact: "Contact",
