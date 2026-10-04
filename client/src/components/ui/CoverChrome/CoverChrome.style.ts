@@ -12,13 +12,3 @@ export const topAccentSx: SxProps<Theme> = {
   background: `linear-gradient(90deg, transparent 0%, ${PURPLE} 50%, transparent 100%)`,
   zIndex: 3,
 };
-
-// Above the cover's own content, which may reach the top corner
-export const coverControlsSx: SxProps<Theme> = {
-  position: "absolute",
-  zIndex: 3,
-  top: { xs: 20, lg: 24 },
-  right: { xs: 20, lg: 32 },
-  display: "flex",
-  gap: 1,
-};
