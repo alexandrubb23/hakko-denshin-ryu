@@ -19,6 +19,8 @@ export const DARK_BG_GRADIENT =
 
 // ─── Painted boards (the dojo front on /schedule, the door on /login) ────────
 export const BOARD_FRAME = "rgba(150,132,138,0.7)";
+// The timetable cards drawn like those boards
+export const BOARD_BG = "rgba(19,19,34,0.92)";
 
 // ─── Borders & surfaces ──────────────────────────────────────────────────────
 export const BORDER_COLOR = "rgba(171,150,255,0.2)";
