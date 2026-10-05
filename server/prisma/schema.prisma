@@ -188,10 +188,23 @@ model Event {
   updatedAt    DateTime             @updatedAt
   deletedAt    DateTime?
   participants EventParticipation[]
+  sessions     EventSession[]
 
   @@index([status])
   @@index([startDate])
   @@map("event")
+}
+
+/// One day/time slot of an event; startDate/endDate on Event summarise these
+model EventSession {
+  id       String    @id @default(cuid())
+  eventId  String
+  startsAt DateTime
+  endsAt   DateTime?
+  event    Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, startsAt])
+  @@map("event_session")
 }
 
 model EventParticipation {

@@ -28,6 +28,22 @@ export default defineConfig({
   use: {
     baseURL: TEST_CLIENT_URL,
     trace: "on-first-retry",
+    // The app defaults to Romanian; the specs assert on English copy, so
+    // pre-seed the persisted language store (see client/src/store/useLangStore.ts).
+    storageState: {
+      cookies: [],
+      origins: [
+        {
+          origin: TEST_CLIENT_URL,
+          localStorage: [
+            {
+              name: "lang-storage",
+              value: JSON.stringify({ state: { lang: "en" }, version: 0 }),
+            },
+          ],
+        },
+      ],
+    },
   },
 
   projects: [

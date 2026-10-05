@@ -1,8 +1,8 @@
+import type { SvgIconComponent } from "@mui/icons-material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import type { SvgIconComponent } from "@mui/icons-material";
 import {
   Button,
   CardContent,
@@ -19,7 +19,7 @@ import { PURPLE_ALPHA_30 } from "@style/colorScheme";
 import { stripDiacritics } from "@utils/string";
 import type { IntlMessageID } from "i18n/messages";
 
-import { formatEventDate } from "./formatEventDate";
+import { formatEventSessions } from "./formatEventDate";
 import {
   CARD_CONTENT_SX,
   chipSx,
@@ -83,15 +83,17 @@ const EventCard = ({ event }: { event: Event }) => {
         </Typography>
 
         <MetaRow icon={CalendarMonthIcon}>
-          {formatEventDate(intl.locale, event.startDate, event.endDate)}
+          {formatEventSessions(intl.locale, event.sessions).map((line, index) => (
+            <span key={index} style={{ display: "block" }}>
+              {line}
+            </span>
+          ))}
         </MetaRow>
         <MetaRow icon={LocationOnIcon}>
           {stripDiacritics(event.location)}
         </MetaRow>
 
-        <DetailsTypography variant="body2">
-          {event.details}
-        </DetailsTypography>
+        <DetailsTypography variant="body2">{event.details}</DetailsTypography>
 
         {event.ticketUrl && (
           <Button
