@@ -12,10 +12,7 @@ const Students = () => {
 
   return (
     <Box className="py-8">
-      <StudentsHeader
-        count={students?.length}
-        onAdd={() => setModalOpen(true)}
-      />
+      <StudentsHeader students={students} onAdd={() => setModalOpen(true)} />
       <CreateStudentModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}

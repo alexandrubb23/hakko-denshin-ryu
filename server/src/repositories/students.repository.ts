@@ -96,8 +96,8 @@ export const softDeleteStudentRank = (rankEntryId: string) =>
 
 // ─── Students ─────────────────────────────────────────────────────────────────
 
-export const findAllStudents = () =>
-  prisma.user.findMany({
+export const findAllStudents = async () => {
+  const students = await prisma.user.findMany({
     where: { role: Role.student, deletedAt: null },
     select: {
       id: true,
@@ -107,9 +107,26 @@ export const findAllStudents = () =>
       category: true,
       createdAt: true,
       image: true,
+      studentRanks: {
+        where: { deletedAt: null },
+        orderBy: { rank: { order: "desc" } },
+        take: 1,
+        select: {
+          awardedAt: true,
+          rank: { select: { name: true, belt: true } },
+        },
+      },
     },
     orderBy: { name: "asc" },
   });
+
+  return students.map(({ studentRanks: [topRank], ...student }) => ({
+    ...student,
+    currentRank: topRank
+      ? { ...topRank.rank, awardedAt: topRank.awardedAt }
+      : null,
+  }));
+};
 
 export const findStudentWithDetails = (id: string) =>
   prisma.user.findUnique({
