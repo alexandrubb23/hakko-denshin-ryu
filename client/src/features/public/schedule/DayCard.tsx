@@ -5,6 +5,7 @@ import type { TrainingDaySessions } from "@constants/trainingSchedule";
 import useDateNames from "@hooks/useDateNames";
 import { stripDiacritics } from "@utils/string";
 
+import DayBoard from "./DayBoard";
 import { DAY_KANJI } from "./dayKanji";
 import SessionItem from "./SessionItem";
 
@@ -14,6 +15,7 @@ import {
   dayKanjiSx,
   dayMetaSx,
   dayNameSx,
+  lanternOnCardSx,
   sessionListSx,
 } from "./Schedule.style";
 
@@ -22,7 +24,12 @@ const DayCard = ({ day, sessions }: TrainingDaySessions) => {
   const { DAY_NAMES } = useDateNames();
 
   return (
-    <Box component="article" sx={dayCardSx}>
+    <DayBoard
+      day={day}
+      sx={dayCardSx}
+      lanternHeight="76px"
+      lanternSx={lanternOnCardSx}
+    >
       <Typography sx={dayKanjiSx} lang="ja" aria-hidden>
         {DAY_KANJI[day]}
       </Typography>
@@ -44,7 +51,7 @@ const DayCard = ({ day, sessions }: TrainingDaySessions) => {
           />
         ))}
       </Box>
-    </Box>
+    </DayBoard>
   );
 };
 

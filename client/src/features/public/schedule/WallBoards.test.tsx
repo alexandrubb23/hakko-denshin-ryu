@@ -1,5 +1,5 @@
 import { screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { getSessionsByDay } from "@constants/trainingSchedule";
 import renderUi from "@test/renderUi";
@@ -35,5 +35,39 @@ describe("WallBoards", () => {
     const thursday = getBoard("Thursday");
     expect(thursday.getAllByRole("listitem", { hidden: true })).toHaveLength(1);
     expect(thursday.queryByText("Kids")).not.toBeInTheDocument();
+  });
+
+  describe("today's lantern", () => {
+    afterEach(() => vi.useRealTimers());
+
+    it("lights only the lantern over today's board", () => {
+      vi.useFakeTimers({ now: new Date(2026, 9, 8), toFake: ["Date"] });
+      renderUi(<WallBoards days={getSessionsByDay()} />);
+      const thursday = getBoard("Thursday");
+      expect(
+        thursday.getByRole("img", { name: "Training today", hidden: true })
+      ).toBeInTheDocument();
+      expect(
+        screen.getAllByRole("img", { name: "Training today", hidden: true })
+      ).toHaveLength(1);
+      expect(
+        screen
+          .getAllByRole("article", { hidden: true })
+          .filter((board) => board.getAttribute("aria-current") === "date")
+      ).toHaveLength(1);
+    });
+
+    it("hangs an unlit lantern on every board on a day without training", () => {
+      vi.useFakeTimers({ now: new Date(2026, 9, 5), toFake: ["Date"] });
+      renderUi(<WallBoards days={getSessionsByDay()} />);
+      for (const day of ["Tuesday", "Thursday", "Saturday"]) {
+        expect(
+          getBoard(day).getAllByRole("presentation", { hidden: true })
+        ).not.toHaveLength(0);
+      }
+      expect(
+        screen.queryByRole("img", { name: "Training today", hidden: true })
+      ).not.toBeInTheDocument();
+    });
   });
 });

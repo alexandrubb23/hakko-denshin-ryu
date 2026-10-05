@@ -6,6 +6,7 @@ import type { TrainingDaySessions } from "@constants/trainingSchedule";
 import useDateNames from "@hooks/useDateNames";
 import { stripDiacritics } from "@utils/string";
 
+import DayBoard from "./DayBoard";
 import { DAY_KANJI } from "./dayKanji";
 import { FACADE_BOARDS } from "./facadeArt";
 import { GROUP_LABEL_IDS } from "./groupLabels";
@@ -17,6 +18,7 @@ import {
   boardSessionListSx,
   boardSx,
   boardTimeSx,
+  lanternOnBoardSx,
   wallSx,
 } from "./WallBoards.style";
 
@@ -27,7 +29,13 @@ const WallBoards = ({ days }: { days: TrainingDaySessions[] }) => {
   return (
     <Box sx={wallSx}>
       {days.map(({ day, sessions }, i) => (
-        <Box key={day} component="article" sx={boardSx(FACADE_BOARDS[i])}>
+        <DayBoard
+          key={day}
+          day={day}
+          sx={boardSx(FACADE_BOARDS[i])}
+          lanternHeight="6cqh"
+          lanternSx={lanternOnBoardSx}
+        >
           <Box sx={boardKanjiSx} lang="ja" aria-hidden>
             {DAY_KANJI[day]}
           </Box>
@@ -48,7 +56,7 @@ const WallBoards = ({ days }: { days: TrainingDaySessions[] }) => {
               </li>
             ))}
           </Box>
-        </Box>
+        </DayBoard>
       ))}
     </Box>
   );

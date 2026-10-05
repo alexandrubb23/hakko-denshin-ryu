@@ -466,6 +466,7 @@
   "page.schedule.group.senior": "Adulti",
   "page.schedule.group.summary": "{count, plural, one {# antrenament} few {# antrenamente} other {# de antrenamente}} pe săptămână · {hours} h",
   "page.schedule.day.sessions": "{count, plural, one {# antrenament} few {# antrenamente} other {# de antrenamente}}",
+  "page.schedule.day.today": "Azi avem antrenament",
   "page.schedule.duration": "{minutes} min",
   "page.schedule.quote.text": "„Vorbele sunt doar opinii. Actiunea este singurul adevar.”",
   "page.schedule.quote.moral": "Lucrurile se întâmplă cu sau fără tine. Tot ce trebuie să faci este să participi – pășește pe tatami.",

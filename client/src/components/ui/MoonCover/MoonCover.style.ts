@@ -147,6 +147,9 @@ export const heroAboveTitleSx: SxProps<Theme> = {
   mb: 2,
 };
 
+// Under the art instead, which paints at z-index -1
+export const heroAboveTitleBehindArtSx: SxProps<Theme> = { zIndex: -2 };
+
 // Fills the space from the cover's left edge up to the menu's labels, its
 // content against the menu
 export const heroAboveTitleContentSx = (art: MoonArt): SxProps<Theme> => ({

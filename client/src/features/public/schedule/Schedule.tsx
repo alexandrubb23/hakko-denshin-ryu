@@ -47,6 +47,8 @@ const Schedule = () => (
       wideArtFade={FACADE_WIDE_FADE}
       onArt={FITS_BOARDS && <WallBoards days={DAYS} />}
       aboveTitle={<CoverPhoto src={coverImage} sx={coverPhotoSx} />}
+      // The photo reaches the dojo's roof: tuck it behind the painting
+      aboveTitleBehindArt
     />
 
     <Container maxWidth="lg">

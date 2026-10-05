@@ -11,6 +11,7 @@ import { NIGHT } from "@style/colorScheme";
 import { mergeSx } from "@utils/sx";
 
 import {
+  heroAboveTitleBehindArtSx,
   heroAboveTitleContentSx,
   heroAboveTitleSx,
   heroActionsSx,
@@ -68,6 +69,8 @@ interface Props {
    * the menu), e.g. a photo as tall as the space
    */
   aboveTitle?: React.ReactNode;
+  /** Lay `aboveTitle` under the art rather than over it, where they meet */
+  aboveTitleBehindArt?: boolean;
 }
 
 // The cover's art; a narrow painting takes over below `lg`
@@ -109,12 +112,18 @@ const MoonCover = ({
   onArt,
   onArtBelowMenu = false,
   aboveTitle,
+  aboveTitleBehindArt = false,
 }: Props) => (
   <Box sx={heroSx} {...NIGHT}>
     <CoverChrome />
 
     {aboveTitle && (
-      <Box sx={heroAboveTitleSx}>
+      <Box
+        sx={mergeSx(
+          heroAboveTitleSx,
+          aboveTitleBehindArt && heroAboveTitleBehindArtSx
+        )}
+      >
         <Box sx={heroAboveTitleContentSx(art)}>
           <motion.div {...heroReveal} style={{ height: "100%" }}>
             {aboveTitle}
