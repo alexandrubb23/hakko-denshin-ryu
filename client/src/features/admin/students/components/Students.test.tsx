@@ -1,8 +1,9 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Student } from "@api/students";
 import { useStudents } from "@features/admin/students/hooks/useStudents";
+import { exportStudentsPdf } from "@features/admin/students/utils/exportStudentsPdf";
 import createModalMock from "@test/createModalMock";
 import renderUi from "@test/renderUi";
 
@@ -10,6 +11,10 @@ import Students from "./Students";
 
 vi.mock("@features/admin/students/hooks/useStudents", () => ({
   useStudents: vi.fn(),
+}));
+
+vi.mock("@features/admin/students/utils/exportStudentsPdf", () => ({
+  exportStudentsPdf: vi.fn(),
 }));
 
 vi.mock("./CreateStudentModal", () => ({
@@ -57,6 +62,7 @@ vi.mock("./DeleteStudentModal", () => ({
 }));
 
 const mockUseStudents = vi.mocked(useStudents);
+const mockExportStudentsPdf = vi.mocked(exportStudentsPdf);
 
 const mockStudents: Student[] = [
   {
@@ -64,16 +70,24 @@ const mockStudents: Student[] = [
     name: "John Doe",
     email: "john@example.com",
     emailVerified: true,
+    category: "senior",
     createdAt: "2024-01-15T00:00:00.000Z",
     image: null,
+    currentRank: {
+      name: "5 Kyu",
+      belt: "yellow",
+      awardedAt: "2024-07-01T00:00:00.000Z",
+    },
   },
   {
     id: "2",
     name: "Jane Smith",
     email: "jane@example.com",
     emailVerified: false,
+    category: null,
     createdAt: "2024-02-20T00:00:00.000Z",
     image: null,
+    currentRank: null,
   },
 ];
 
@@ -122,7 +136,7 @@ describe("Students page", () => {
 
     it("renders the Add Student button", () => {
       expect(
-        screen.getByRole("button", { name: /add student/i }),
+        screen.getByRole("button", { name: /add student/i })
       ).toBeInTheDocument();
     });
   });
@@ -219,13 +233,13 @@ describe("Students page", () => {
 
     it("renders the Add Student button", () => {
       expect(
-        screen.getByRole("button", { name: /add student/i }),
+        screen.getByRole("button", { name: /add student/i })
       ).toBeInTheDocument();
     });
 
     it("does not show the modal by default", () => {
       expect(
-        screen.queryByTestId("create-student-modal"),
+        screen.queryByTestId("create-student-modal")
       ).not.toBeInTheDocument();
     });
 
@@ -238,7 +252,7 @@ describe("Students page", () => {
 
     it("does not show the edit modal by default", () => {
       expect(
-        screen.queryByTestId("edit-student-modal"),
+        screen.queryByTestId("edit-student-modal")
       ).not.toBeInTheDocument();
     });
 
@@ -251,7 +265,7 @@ describe("Students page", () => {
 
     it("does not show the delete modal by default", () => {
       expect(
-        screen.queryByTestId("delete-student-modal"),
+        screen.queryByTestId("delete-student-modal")
       ).not.toBeInTheDocument();
     });
   });
@@ -278,7 +292,7 @@ describe("Students page", () => {
 
       fireEvent.click(screen.getByTestId("create-student-modal-backdrop"));
       expect(
-        screen.queryByTestId("create-student-modal"),
+        screen.queryByTestId("create-student-modal")
       ).not.toBeInTheDocument();
     });
 
@@ -288,7 +302,7 @@ describe("Students page", () => {
 
       fireEvent.keyDown(document, { key: "Escape" });
       expect(
-        screen.queryByTestId("create-student-modal"),
+        screen.queryByTestId("create-student-modal")
       ).not.toBeInTheDocument();
     });
   });
@@ -318,7 +332,7 @@ describe("Students page", () => {
       });
       fireEvent.click(firstEditBtn);
       expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
-        mockStudents[0].name,
+        mockStudents[0].name
       );
     });
 
@@ -328,7 +342,7 @@ describe("Students page", () => {
       });
       fireEvent.click(editButtons[1]);
       expect(screen.getByTestId("editing-student-name")).toHaveTextContent(
-        mockStudents[1].name,
+        mockStudents[1].name
       );
     });
 
@@ -341,7 +355,7 @@ describe("Students page", () => {
 
       fireEvent.click(screen.getByRole("button", { name: /close modal/i }));
       expect(
-        screen.queryByTestId("edit-student-modal"),
+        screen.queryByTestId("edit-student-modal")
       ).not.toBeInTheDocument();
     });
   });
@@ -371,7 +385,7 @@ describe("Students page", () => {
       });
       fireEvent.click(firstDeleteBtn);
       expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
-        mockStudents[0].name,
+        mockStudents[0].name
       );
     });
 
@@ -381,7 +395,7 @@ describe("Students page", () => {
       });
       fireEvent.click(deleteButtons[1]);
       expect(screen.getByTestId("deleting-student-name")).toHaveTextContent(
-        mockStudents[1].name,
+        mockStudents[1].name
       );
     });
 
@@ -393,11 +407,68 @@ describe("Students page", () => {
       expect(screen.getByTestId("delete-student-modal")).toBeInTheDocument();
 
       fireEvent.click(
-        screen.getByRole("button", { name: /close delete modal/i }),
+        screen.getByRole("button", { name: /close delete modal/i })
       );
       expect(
-        screen.queryByTestId("delete-student-modal"),
+        screen.queryByTestId("delete-student-modal")
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("PDF export", () => {
+    const exportButton = () =>
+      screen.getByRole("button", { name: /export pdf/i });
+
+    it("is disabled while students are loading", () => {
+      mockUseStudents.mockReturnValue({
+        data: undefined,
+        isLoading: true,
+        isError: false,
+      } as unknown as ReturnType<typeof useStudents>);
+      renderStudents();
+      expect(exportButton()).toBeDisabled();
+    });
+
+    it("is disabled when there are no students", () => {
+      mockUseStudents.mockReturnValue({
+        data: [],
+        isLoading: false,
+        isError: false,
+      } as unknown as ReturnType<typeof useStudents>);
+      renderStudents();
+      expect(exportButton()).toBeDisabled();
+    });
+
+    describe("with students", () => {
+      beforeEach(() => {
+        mockUseStudents.mockReturnValue({
+          data: mockStudents,
+          isLoading: false,
+          isError: false,
+        } as unknown as ReturnType<typeof useStudents>);
+        renderStudents();
+      });
+
+      it("exports every student when clicked", async () => {
+        mockExportStudentsPdf.mockResolvedValue();
+        fireEvent.click(exportButton());
+        await waitFor(() =>
+          expect(mockExportStudentsPdf).toHaveBeenCalledWith(
+            mockStudents,
+            expect.anything()
+          )
+        );
+        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+      });
+
+      it("shows an error when the export fails", async () => {
+        mockExportStudentsPdf.mockRejectedValue(new Error("boom"));
+        fireEvent.click(exportButton());
+        expect(
+          await screen.findByText(/pdf could not be generated/i)
+        ).toBeInTheDocument();
+        expect(exportButton()).toBeEnabled();
+      });
     });
   });
 });

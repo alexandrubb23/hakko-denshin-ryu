@@ -11,6 +11,7 @@ interface PageHeaderProps {
   addIcon: ReactNode;
   addLabel: string;
   onAdd: () => void;
+  actions?: ReactNode;
 }
 
 const PageHeader = ({
@@ -20,6 +21,7 @@ const PageHeader = ({
   addIcon,
   addLabel,
   onAdd,
+  actions,
 }: PageHeaderProps) => (
   <Stack
     direction={{ xs: "column", sm: "row" }}
@@ -43,19 +45,22 @@ const PageHeader = ({
       )}
     </Stack>
     <Box flexGrow={1} />
-    <Button
-      variant="contained"
-      startIcon={addIcon}
-      onClick={onAdd}
-      sx={{
-        backgroundColor: PURPLE,
-        color: DARK_BG,
-        fontWeight: 700,
-        "&:hover": { backgroundColor: PURPLE_HOVER },
-      }}
-    >
-      {addLabel}
-    </Button>
+    <Stack direction="row" alignItems="center" gap={1.5} flexWrap="wrap">
+      {actions}
+      <Button
+        variant="contained"
+        startIcon={addIcon}
+        onClick={onAdd}
+        sx={{
+          backgroundColor: PURPLE,
+          color: DARK_BG,
+          fontWeight: 700,
+          "&:hover": { backgroundColor: PURPLE_HOVER },
+        }}
+      >
+        {addLabel}
+      </Button>
+    </Stack>
   </Stack>
 );
 
