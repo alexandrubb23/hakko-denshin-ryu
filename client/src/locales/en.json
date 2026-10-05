@@ -466,6 +466,7 @@
   "page.schedule.group.senior": "Seniors",
   "page.schedule.group.summary": "{count, plural, one {# session} other {# sessions}} per week · {hours} h",
   "page.schedule.day.sessions": "{count, plural, one {# session} other {# sessions}}",
+  "page.schedule.day.today": "Training today",
   "page.schedule.duration": "{minutes} min",
   "page.schedule.quote.text": "\"Words are but opinions. Action is the only truth.\"",
   "page.schedule.quote.moral": "Things happen with or without you. All you have to do is take part – step onto the tatami.",

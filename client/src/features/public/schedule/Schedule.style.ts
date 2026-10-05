@@ -100,6 +100,9 @@ export const dayCardSx: SxProps<Theme> = {
   "&:hover": { borderColor: BORDER_HOVER },
 };
 
+// Hung from the top of the frame, between the day's name and its kanji
+export const lanternOnCardSx: SxProps<Theme> = { top: 0, left: "62%" };
+
 export const dayKanjiSx: SxProps<Theme> = {
   fontFamily: KANJI_FONT,
   fontSize: "3.5rem",

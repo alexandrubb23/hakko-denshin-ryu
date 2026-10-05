@@ -3,13 +3,13 @@ import { SxProps, Theme } from "@mui/material";
 
 import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW } from "@style/art";
 import { CATEGORY_COLORS } from "@style/categories.tokens";
-import { listResetSx } from "@style/list";
 import {
   PURPLE,
   PURPLE_ALPHA_30,
   TEXT_PRIMARY,
   WHITE_ALPHA_60,
 } from "@style/colorScheme";
+import { listResetSx } from "@style/list";
 
 import { type ArtRect, rectOnArt } from "@components/ui/ArcNavMenu/moonArt";
 import { mergeSx } from "@utils/sx";
@@ -36,6 +36,12 @@ export const boardSx = (board: ArtRect): SxProps<Theme> => ({
   // The layer over the art passes clicks through; keep the times selectable
   pointerEvents: "auto",
 });
+
+// Hung from the eave, just clear of the board's painted frame
+export const lanternOnBoardSx: SxProps<Theme> = {
+  left: "50%",
+  bottom: "calc(100% + 0.6cqh)",
+};
 
 export const boardKanjiSx: SxProps<Theme> = {
   fontFamily: KANJI_FONT,
