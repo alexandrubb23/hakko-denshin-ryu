@@ -3,7 +3,7 @@ import { useLocalStorage } from "usehooks-ts";
 
 import { type ColorScheme, SCHEME_ATTR } from "@style/colorScheme";
 
-export const COLOR_SCHEME_STORAGE_KEY = "color-scheme";
+const COLOR_SCHEME_STORAGE_KEY = "color-scheme";
 
 /**
  * The visitor's chosen scheme for the public pages, kept in local storage and

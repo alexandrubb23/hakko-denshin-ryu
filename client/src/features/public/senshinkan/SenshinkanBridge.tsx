@@ -5,6 +5,7 @@ import FadeIn from "@components/ui/FadeIn/FadeIn";
 import FallingPetals from "@components/ui/FallingPetals/FallingPetals";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import { EASE_OUT } from "@constants/animationsTiming";
+import { NIGHT } from "@style/colorScheme";
 
 import {
   bridgeCiteSx,
@@ -15,7 +16,7 @@ import {
 
 /** The old ways joined the new: a cited quote over the moonlit garden */
 const SenshinkanBridge = () => (
-  <Box component="figure" sx={bridgeSx}>
+  <Box component="figure" sx={bridgeSx} {...NIGHT}>
     <FadeIn>
       <Typography component="blockquote" sx={bridgeQuoteSx}>
         <FormattedMessage id="page.senshinkan.bridge.quote" />
