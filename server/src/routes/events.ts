@@ -72,17 +72,9 @@ router.post(
   requireAuth,
   requireRole(Role.admin),
   async (req, res) => {
-    const { ticketUrl, endDate, ...rest } = validate(
-      createEventSchema,
-      req.body
-    );
+    const { ticketUrl, ...rest } = validate(createEventSchema, req.body);
 
-    const event = await createEvent({
-      ...rest,
-      startDate: new Date(rest.startDate),
-      endDate: endDate ? new Date(endDate) : null,
-      ticketUrl: ticketUrl || null,
-    });
+    const event = await createEvent({ ...rest, ticketUrl: ticketUrl || null });
 
     res.status(201).json({ event });
   }
@@ -96,15 +88,10 @@ router.put(
     const id = requireId(req);
     await requireEvent(id, true);
 
-    const { ticketUrl, endDate, startDate, ...rest } = validate(
-      updateEventSchema,
-      req.body
-    );
+    const { ticketUrl, ...rest } = validate(updateEventSchema, req.body);
 
     const updated = await updateEvent(id, {
       ...rest,
-      startDate: new Date(startDate),
-      endDate: endDate ? new Date(endDate) : null,
       ticketUrl: ticketUrl || null,
     });
 

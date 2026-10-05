@@ -24,7 +24,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useIntl } from "react-intl";
-import { z } from "zod";
 
 import { eventsApi, type Event } from "@api/events";
 import ErrorAlert from "@components/shared/ErrorAlert";
@@ -37,8 +36,17 @@ import ImageDropZone, {
 } from "@components/ui/ImageDropZone/ImageDropZone";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 import ModalTitle from "@components/ui/ModalTitle/ModalTitle";
+import EventSessionsField from "@features/admin/events/components/EventSessionsField";
 import { useCreateEvent } from "@features/admin/events/hooks/useCreateEvent";
 import { useUpdateEvent } from "@features/admin/events/hooks/useUpdateEvent";
+import {
+  EMPTY_SESSION,
+  eventFormSchema,
+  INVALID_DATE_TIME,
+  toSessionFormValues,
+  toSessionInput,
+  type EventFormValues,
+} from "@features/admin/events/utils/eventFormSchema";
 import {
   EVENT_STATUS_LABEL_IDS,
   EVENT_TYPE_LABEL_IDS,
@@ -63,55 +71,6 @@ const fieldSx: SxProps<Theme> = {
   },
   "& .MuiInputLabel-root.Mui-focused": { color: PURPLE },
 };
-
-/** datetime-local input produces "YYYY-MM-DDTHH:MM" — no timezone suffix */
-const datetimeLocalRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
-const INVALID_DATE_TIME = "Invalid date/time";
-const datetimeLocalString = z
-  .string()
-  .regex(datetimeLocalRegex, INVALID_DATE_TIME);
-
-/**
- * Form-level schema: validates datetime-local strings (browser format).
- * The shared @hakko/core schemas validate UTC ISO strings — those are used
- * only after conversion, on the server side.
- */
-const eventFormSchema = z
-  .object({
-    name: z.string().trim().min(2, "Name must be at least 2 characters"),
-    type: z.enum(EventTypeValues),
-    status: z.enum(EventStatusValues),
-    startDate: datetimeLocalString,
-    endDate: z.union([datetimeLocalString, z.literal("")]),
-    location: z
-      .string()
-      .trim()
-      .min(2, "Location must be at least 2 characters"),
-    details: z
-      .string()
-      .trim()
-      .min(10, "Details must be at least 10 characters"),
-    ticketUrl: z.string().url("Invalid ticket URL").or(z.literal("")),
-  })
-  .refine(
-    (data) => {
-      if (!data.endDate) return true;
-      return new Date(data.endDate) > new Date(data.startDate);
-    },
-    { message: "End date must be after start date", path: ["endDate"] },
-  );
-
-type EventFormValues = z.infer<typeof eventFormSchema>;
-
-/** Convert UTC ISO string → datetime-local input value (browser local time) */
-const toDatetimeLocal = (iso: string): string => {
-  const d = new Date(iso);
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-};
-
-/** Convert datetime-local string → UTC ISO string */
-const toUtcIso = (local: string): string => new Date(local).toISOString();
 
 export const EventFormMode = {
   create: "create",
@@ -181,6 +140,7 @@ const EventForm = (props: EventFormProps) => {
 
   const {
     register,
+    getValues,
     handleSubmit,
     reset: resetForm,
     control,
@@ -190,6 +150,7 @@ const EventForm = (props: EventFormProps) => {
     defaultValues: {
       status: "draft",
       type: "seminar",
+      sessions: [EMPTY_SESSION],
     },
   });
 
@@ -199,8 +160,9 @@ const EventForm = (props: EventFormProps) => {
       name: event?.name ?? "",
       type: event?.type ?? "seminar",
       status: event?.status ?? "draft",
-      startDate: event?.startDate ? toDatetimeLocal(event.startDate) : "",
-      endDate: event?.endDate ? toDatetimeLocal(event.endDate) : "",
+      sessions: event?.sessions.length
+        ? toSessionFormValues(event.sessions)
+        : [EMPTY_SESSION],
       location: event?.location ?? "",
       details: event?.details ?? "",
       ticketUrl: event?.ticketUrl ?? "",
@@ -215,7 +177,7 @@ const EventForm = (props: EventFormProps) => {
     setImageValidationError(null);
     if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
       setImageValidationError(
-        intl.formatMessage({ id: "admin.events.form.image.invalidType" }),
+        intl.formatMessage({ id: "admin.events.form.image.invalidType" })
       );
       return;
     }
@@ -223,8 +185,8 @@ const EventForm = (props: EventFormProps) => {
       setImageValidationError(
         intl.formatMessage(
           { id: "admin.events.form.image.tooLarge" },
-          { size: MAX_IMAGE_SIZE_MB },
-        ),
+          { size: MAX_IMAGE_SIZE_MB }
+        )
       );
       return;
     }
@@ -246,8 +208,7 @@ const EventForm = (props: EventFormProps) => {
       name: values.name,
       type: values.type as CreateEventInput["type"],
       status: values.status as CreateEventInput["status"],
-      startDate: toUtcIso(values.startDate),
-      endDate: values.endDate ? toUtcIso(values.endDate) : undefined,
+      sessions: values.sessions.map(toSessionInput),
       location: values.location,
       details: values.details,
       ticketUrl: values.ticketUrl || undefined,
@@ -366,32 +327,14 @@ const EventForm = (props: EventFormProps) => {
             </Box>
           </Stack>
 
-          <Stack direction={{ xs: "column", sm: "row" }} gap={2}>
-            <TextField
-              label={intl.formatMessage({
-                id: "admin.events.form.startDate.label",
-              })}
-              type="datetime-local"
-              fullWidth
-              slotProps={{ inputLabel: { shrink: true } }}
-              {...register("startDate")}
-              error={!!errors.startDate}
-              helperText={fieldError(errors.startDate?.message)}
-              sx={fieldSx}
-            />
-            <TextField
-              label={intl.formatMessage({
-                id: "admin.events.form.endDate.label",
-              })}
-              type="datetime-local"
-              fullWidth
-              slotProps={{ inputLabel: { shrink: true } }}
-              {...register("endDate")}
-              error={!!errors.endDate}
-              helperText={fieldError(errors.endDate?.message)}
-              sx={fieldSx}
-            />
-          </Stack>
+          <EventSessionsField
+            control={control}
+            register={register}
+            getValues={getValues}
+            errors={errors}
+            fieldSx={fieldSx}
+            fieldError={fieldError}
+          />
 
           <TextField
             label={intl.formatMessage({ id: "common.location" })}

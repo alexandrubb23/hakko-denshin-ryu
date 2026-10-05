@@ -1,3 +1,4 @@
+import type { EventSessionInput } from "@hakko/core";
 import { Prisma } from "../generated/prisma/browser.js";
 import { EventStatus } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
@@ -14,6 +15,10 @@ const EVENT_PUBLIC_SELECT = {
   ticketUrl: true,
   image: true,
   createdAt: true,
+  sessions: {
+    select: { id: true, startsAt: true, endsAt: true },
+    orderBy: { startsAt: "asc" },
+  },
 } as const;
 
 const PARTICIPANT_SELECT = {
@@ -31,7 +36,10 @@ export const findPublishedEvents = () =>
   });
 
 export const findEventById = (id: string) =>
-  prisma.event.findUnique({ where: { id } });
+  prisma.event.findUnique({
+    where: { id },
+    include: { sessions: EVENT_PUBLIC_SELECT.sessions },
+  });
 
 export const findAdminEvents = () =>
   prisma.event.findMany({
@@ -40,11 +48,56 @@ export const findAdminEvents = () =>
     orderBy: { startDate: "desc" },
   });
 
-export const createEvent = (data: Prisma.EventCreateInput) =>
-  prisma.event.create({ data, select: EVENT_PUBLIC_SELECT });
+type EventWriteData = Omit<
+  Prisma.EventCreateInput,
+  "startDate" | "endDate" | "sessions" | "participants"
+> & { sessions: EventSessionInput[] };
 
-export const updateEvent = (id: string, data: Prisma.EventUpdateInput) =>
-  prisma.event.update({ where: { id }, data, select: EVENT_PUBLIC_SELECT });
+/**
+ * Sessions are the source of truth; the event's own startDate/endDate are a
+ * summary (earliest start, latest finish) kept for sorting and filtering.
+ */
+const toSessionRows = (sessions: EventSessionInput[]) => {
+  const rows = sessions
+    .map((s) => ({
+      startsAt: new Date(s.startsAt),
+      endsAt: s.endsAt ? new Date(s.endsAt) : null,
+    }))
+    .sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
+
+  const startDate = rows[0].startsAt;
+  const latest = Math.max(
+    ...rows.map((r) => (r.endsAt ?? r.startsAt).getTime())
+  );
+  const endDate = latest > startDate.getTime() ? new Date(latest) : null;
+
+  return { rows, startDate, endDate };
+};
+
+export const createEvent = ({ sessions, ...data }: EventWriteData) => {
+  const { rows, startDate, endDate } = toSessionRows(sessions);
+  return prisma.event.create({
+    data: { ...data, startDate, endDate, sessions: { create: rows } },
+    select: EVENT_PUBLIC_SELECT,
+  });
+};
+
+export const updateEvent = (
+  id: string,
+  { sessions, ...data }: EventWriteData
+) => {
+  const { rows, startDate, endDate } = toSessionRows(sessions);
+  return prisma.event.update({
+    where: { id },
+    data: {
+      ...data,
+      startDate,
+      endDate,
+      sessions: { deleteMany: {}, create: rows },
+    },
+    select: EVENT_PUBLIC_SELECT,
+  });
+};
 
 export const softDeleteEvent = (id: string) =>
   prisma.event.update({ where: { id }, data: { deletedAt: new Date() } });

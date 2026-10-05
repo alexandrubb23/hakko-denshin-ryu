@@ -10,7 +10,10 @@ const ERROR_MESSAGE_IDS: Record<string, IntlMessageID> = {
     "error.validation.password.invite",
   "Category must be 'kid' or 'senior'": "error.validation.category",
   "Details must be at least 10 characters": "error.validation.details.min10",
+  "Add at least one date": "error.validation.sessions.min",
+  "An event can have at most 31 dates": "error.validation.sessions.max",
   "End date must be after start date": "error.validation.endDate",
+  "End time must be after start time": "error.validation.endTime",
   "Invalid ISO date-time string (expected UTC ISO 8601)":
     "error.validation.dateTime",
   "Invalid email address": "error.validation.email",

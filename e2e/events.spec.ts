@@ -9,8 +9,9 @@ function newEvent() {
   const ts = Date.now();
   return {
     name: `E2E Event ${ts}`,
-    startDate: "2099-06-15T10:00",
-    endDate: "2099-06-16T18:00",
+    date: "2099-06-15",
+    startTime: "10:00",
+    endTime: "18:00",
     location: `Dojo ${ts}`,
     details: `E2E test event details for ${ts}`,
   };
@@ -30,8 +31,10 @@ async function createEventViaUI(
   await dialog.waitFor({ state: "visible" });
 
   await dialog.getByLabel("Event Name").fill(event.name);
-  await dialog.getByLabel("Start Date & Time").fill(event.startDate);
-  await dialog.getByLabel("End Date & Time (optional)").fill(event.endDate);
+  const session = dialog.getByTestId("event-session").first();
+  await session.getByLabel("Date", { exact: true }).fill(event.date);
+  await session.getByLabel("Start", { exact: true }).fill(event.startTime);
+  await session.getByLabel("End (optional)").fill(event.endTime);
   await dialog.getByLabel("Location").fill(event.location);
   await dialog.getByLabel("Details").fill(event.details);
 
@@ -83,6 +86,44 @@ test.describe("Events Management", () => {
     await expect(
       adminPage.getByRole("cell", { name: updatedName })
     ).toBeVisible();
+  });
+
+  test("should save an event spanning several days", async ({ adminPage }) => {
+    const event = newEvent();
+    await adminPage.getByRole("button", { name: "Add Event" }).click();
+    const dialog = adminPage.getByRole("dialog");
+    await dialog.waitFor({ state: "visible" });
+
+    await dialog.getByLabel("Event Name").fill(event.name);
+    const first = dialog.getByTestId("event-session").first();
+    await first.getByLabel("Date", { exact: true }).fill("2099-10-23");
+    await first.getByLabel("Start", { exact: true }).fill("18:30");
+    await first.getByLabel("End (optional)").fill("20:30");
+
+    // "Add date" suggests the next day with the same times
+    await dialog.getByRole("button", { name: "Add date" }).click();
+    const second = dialog.getByTestId("event-session").nth(1);
+    await expect(second.getByLabel("Date", { exact: true })).toHaveValue(
+      "2099-10-24"
+    );
+    await second.getByLabel("Start", { exact: true }).fill("10:00");
+    await second.getByLabel("End (optional)").fill("13:00");
+
+    await dialog.getByLabel("Location").fill(event.location);
+    await dialog.getByLabel("Details").fill(event.details);
+    await dialog.getByRole("button", { name: "Create Event" }).click();
+    await dialog.waitFor({ state: "hidden" });
+
+    const row = adminPage.getByRole("row").filter({ hasText: event.name });
+    await row.getByRole("button", { name: "Edit event" }).click();
+    await dialog.waitFor({ state: "visible" });
+
+    const sessions = dialog.getByTestId("event-session");
+    await expect(sessions).toHaveCount(2);
+    await expect(
+      sessions.nth(1).getByLabel("Start", { exact: true })
+    ).toHaveValue("10:00");
+    await dialog.getByRole("button", { name: "Cancel" }).click();
   });
 
   test("should delete an event and remove it from the table", async ({

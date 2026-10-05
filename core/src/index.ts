@@ -20,8 +20,8 @@ export { daysInMonth, toUtcDate } from "./utils/date.js";
 export { PERIOD_VALUES, type Period } from "./constants/period.js";
 
 export {
-  STUDENT_CATEGORIES,
   isStudentCategory,
+  STUDENT_CATEGORIES,
   type StudentCategory,
 } from "./constants/categories.js";
 
@@ -35,11 +35,13 @@ export {
 
 export {
   createEventSchema,
+  eventSessionSchema,
   EventStatusValues,
   EventTypeValues,
   updateEventSchema,
   upsertEventParticipationSchema,
   type CreateEventInput,
+  type EventSessionInput,
   type EventStatus,
   type EventType,
   type UpdateEventInput,
