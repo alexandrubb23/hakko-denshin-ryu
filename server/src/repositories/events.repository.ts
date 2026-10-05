@@ -27,7 +27,7 @@ export const findPublishedEvents = () =>
   prisma.event.findMany({
     where: { status: EventStatus.published, deletedAt: null },
     select: EVENT_PUBLIC_SELECT,
-    orderBy: { startDate: "asc" },
+    orderBy: { startDate: "desc" },
   });
 
 export const findEventById = (id: string) =>
@@ -37,7 +37,7 @@ export const findAdminEvents = () =>
   prisma.event.findMany({
     where: { deletedAt: null },
     select: { ...EVENT_PUBLIC_SELECT, updatedAt: true },
-    orderBy: { startDate: "asc" },
+    orderBy: { startDate: "desc" },
   });
 
 export const createEvent = (data: Prisma.EventCreateInput) =>
