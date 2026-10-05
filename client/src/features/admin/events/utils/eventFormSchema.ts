@@ -32,7 +32,10 @@ export const eventFormSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
   type: z.enum(EventTypeValues),
   status: z.enum(EventStatusValues),
-  sessions: z.array(sessionFormSchema).min(1, "Add at least one date"),
+  sessions: z
+    .array(sessionFormSchema)
+    .min(1, "Add at least one date")
+    .max(31, "An event can have at most 31 dates"),
   location: z.string().trim().min(2, "Location must be at least 2 characters"),
   details: z.string().trim().min(10, "Details must be at least 10 characters"),
   ticketUrl: z.string().url("Invalid ticket URL").or(z.literal("")),

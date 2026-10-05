@@ -13,6 +13,28 @@ const toStored = (row: Parameters<typeof toSessionInput>[0], id = "s1") => {
 };
 
 describe("eventFormSchema", () => {
+  it("rejects more than 31 sessions, like the API does", () => {
+    const sessions = Array.from({ length: 32 }, (_, i) => ({
+      date: `2026-10-${String((i % 28) + 1).padStart(2, "0")}`,
+      startTime: "10:00",
+      endTime: "",
+    }));
+    const result = eventFormSchema.safeParse({
+      name: "Seminar",
+      type: "seminar",
+      status: "draft",
+      sessions,
+      location: "Bucuresti",
+      details: "Ten chars at least",
+      ticketUrl: "",
+    });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["sessions"],
+      message: "An event can have at most 31 dates",
+    });
+  });
+
   it("round-trips form rows through the API shape", () => {
     const rows = [
       { date: "2026-10-23", startTime: "18:30", endTime: "20:30" },

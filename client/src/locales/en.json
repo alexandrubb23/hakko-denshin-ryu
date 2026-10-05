@@ -296,7 +296,7 @@
   "admin.events.form.session.start.label": "Start",
   "admin.events.form.session.end.label": "End (optional)",
   "admin.events.form.session.add": "Add date",
-  "admin.events.form.session.remove": "Remove date",
+  "admin.events.form.session.remove": "Remove date {number}",
   "admin.events.form.ticketUrl.label": "Ticket URL (optional)",
   "admin.events.form.image.label": "Event Image (optional)",
   "admin.events.form.image.alt": "Current event image",

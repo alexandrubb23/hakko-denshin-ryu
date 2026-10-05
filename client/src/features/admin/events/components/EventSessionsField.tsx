@@ -108,9 +108,10 @@ const EventSessionsField = ({
                 sx={timeField(1)}
               />
               <IconButton
-                aria-label={intl.formatMessage({
-                  id: "admin.events.form.session.remove",
-                })}
+                aria-label={intl.formatMessage(
+                  { id: "admin.events.form.session.remove" },
+                  { number: index + 1 }
+                )}
                 onClick={() => remove(index)}
                 disabled={fields.length === 1}
                 sx={{ alignSelf: { xs: "flex-end", sm: "center" } }}

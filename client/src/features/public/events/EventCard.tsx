@@ -83,8 +83,8 @@ const EventCard = ({ event }: { event: Event }) => {
         </Typography>
 
         <MetaRow icon={CalendarMonthIcon}>
-          {formatEventSessions(intl.locale, event.sessions).map((line) => (
-            <span key={line} style={{ display: "block" }}>
+          {formatEventSessions(intl.locale, event.sessions).map((line, index) => (
+            <span key={index} style={{ display: "block" }}>
               {line}
             </span>
           ))}
