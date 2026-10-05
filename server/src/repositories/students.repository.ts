@@ -344,7 +344,7 @@ export const findStudentEvents = async (userId: string) => {
         take: 1,
       },
     },
-    orderBy: { startDate: "asc" },
+    orderBy: { startDate: "desc" },
   });
 
   return events.map(({ participants, ...event }) => ({
