@@ -106,7 +106,7 @@ export const WHITE_ALPHA_90 = themed("WHITE_ALPHA_90");
 
 export const SKELETON_SX: SxProps<Theme> = {
   bgcolor: PURPLE_ALPHA_12,
-} as const;
+};
 
 // The same in both schemes: painted moonlight and boards, and the blur
 export {
@@ -125,6 +125,7 @@ export const SCHEME_ATTR = "data-color-scheme";
 const schemeSelector = (scheme: ColorScheme) => `[${SCHEME_ATTR}="${scheme}"]`;
 const LIGHT_SELECTOR = schemeSelector("light");
 const DARK_SELECTOR = schemeSelector("dark");
+const NIGHT_ISLAND = `${LIGHT_SELECTOR} ${DARK_SELECTOR}`;
 
 /** Marks an element as night: it stays dark in the light scheme */
 export const NIGHT = { [SCHEME_ATTR]: "dark" } as const;
@@ -138,10 +139,13 @@ export const nightCoverSx = {
   },
 } as const;
 
+/** Where a band (and its painting) has faded fully in, and starts fading out */
+export const BAND_FADE = { in: "18%", out: "82%" } as const;
+
 /** A night band on a light page rises out of the paper and sinks back */
 export const nightBandSx = {
   [`${LIGHT_SELECTOR} &`]: {
-    background: `linear-gradient(180deg, ${LIGHT.DARK_BG} 0%, ${dark.DARK_BG} 18%, ${dark.DARK_BG} 82%, ${LIGHT.DARK_BG} 100%)`,
+    background: `linear-gradient(180deg, ${LIGHT.DARK_BG} 0%, ${dark.DARK_BG} ${BAND_FADE.in}, ${dark.DARK_BG} ${BAND_FADE.out}, ${LIGHT.DARK_BG} 100%)`,
     borderColor: "transparent",
   },
 } as const;
@@ -163,7 +167,7 @@ export const LIGHT_SCHEME_CSS = `
   }
   /* Islands of night (the painted covers and bands) inside a light page:
      the variables drop back to their dark fallbacks */
-  ${LIGHT_SELECTOR} ${DARK_SELECTOR} {
+  ${NIGHT_ISLAND} {
     color-scheme: dark;
     ${declareTokens(() => "initial")}
     color: ${dark.BODY_TEXT};
@@ -173,8 +177,8 @@ export const LIGHT_SCHEME_CSS = `
   ${LIGHT_SELECTOR} a:hover {
     color: ${LIGHT.TEXT_PRIMARY};
   }
-  ${LIGHT_SELECTOR} ${DARK_SELECTOR} a,
-  ${LIGHT_SELECTOR} ${DARK_SELECTOR} a:hover {
+  ${NIGHT_ISLAND} a,
+  ${NIGHT_ISLAND} a:hover {
     color: white;
   }
 `;

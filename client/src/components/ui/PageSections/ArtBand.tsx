@@ -1,8 +1,7 @@
 import { Box, Container } from "@mui/material";
 
 import FadeIn from "@components/ui/FadeIn/FadeIn";
-import { NIGHT, nightBandSx } from "@style/colorScheme";
-import { mergeSx } from "@utils/sx";
+import { NIGHT } from "@style/colorScheme";
 
 import { artBandContentSx, artBandSx } from "./PageSections.style";
 
@@ -17,7 +16,7 @@ interface Props {
  * stays night in the light scheme
  */
 const ArtBand = ({ src, children }: Props) => (
-  <Box sx={mergeSx(artBandSx(src), nightBandSx)} {...NIGHT}>
+  <Box sx={artBandSx(src)} {...NIGHT}>
     <Container maxWidth="lg">
       <Box sx={artBandContentSx}>
         <FadeIn>{children}</FadeIn>

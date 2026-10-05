@@ -2,6 +2,7 @@ import { SxProps, Theme } from "@mui/material";
 
 import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW, fadeMask } from "@style/art";
 import {
+  BAND_FADE,
   BORDER_COLOR,
   BORDER_HOVER,
   DARK_BG,
@@ -16,7 +17,9 @@ import {
   TEXT_PRIMARY,
   WHITE_ALPHA_45,
   WHITE_ALPHA_75,
+  nightBandSx,
 } from "@style/colorScheme";
+import { mergeSx } from "@utils/sx";
 
 // Content sections shared by the cover pages (hakko-ryu, dojo, schedule)
 
@@ -131,30 +134,35 @@ export const photoCaptionSx: SxProps<Theme> = {
 
 // ─── Art band: a full-width strip over a painting ─────────────────────────────
 
-export const artBandSx = (src: string): SxProps<Theme> => ({
-  position: "relative",
-  overflow: "hidden",
-  mx: -2,
-  mb: { xs: 10, md: 16 },
-  py: { xs: 8, md: 14 },
-  backgroundColor: DARK_BG,
-  borderTop: `1px solid ${BORDER_COLOR}`,
-  borderBottom: `1px solid ${BORDER_COLOR}`,
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    inset: 0,
-    backgroundImage: `url(${src})`,
-    backgroundSize: "cover",
-    // The paintings keep their subject around 75% of the width and their
-    // left side dark for the text
-    backgroundPosition: "75% 30%",
-    opacity: { xs: 0.35, md: 0.7 },
-    ...fadeMask(
-      "linear-gradient(180deg, transparent 0%, black 18%, black 82%, transparent 100%)"
-    ),
-  },
-});
+// Stays night in the light scheme (mark the element with `NIGHT`)
+export const artBandSx = (src: string): SxProps<Theme> =>
+  mergeSx(
+    {
+      position: "relative",
+      overflow: "hidden",
+      mx: -2,
+      mb: { xs: 10, md: 16 },
+      py: { xs: 8, md: 14 },
+      backgroundColor: DARK_BG,
+      borderTop: `1px solid ${BORDER_COLOR}`,
+      borderBottom: `1px solid ${BORDER_COLOR}`,
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        backgroundImage: `url(${src})`,
+        backgroundSize: "cover",
+        // The paintings keep their subject around 75% of the width and their
+        // left side dark for the text
+        backgroundPosition: "75% 30%",
+        opacity: { xs: 0.35, md: 0.7 },
+        ...fadeMask(
+          `linear-gradient(180deg, transparent 0%, black ${BAND_FADE.in}, black ${BAND_FADE.out}, transparent 100%)`,
+        ),
+      },
+    },
+    nightBandSx,
+  );
 
 export const artBandContentSx: SxProps<Theme> = {
   position: "relative",
@@ -223,6 +231,17 @@ export const outlinedButtonSx = {
 };
 
 export const linkButtonSx: SxProps<Theme> = { ...outlinedButtonSx, px: 3 };
+
+// ─── Cover controls (scheme toggle, language switcher) ────────────────────────
+
+/** Their height: MUI's medium Button, i.e. the language switcher */
+export const CONTROL_SIZE = 36.5;
+
+// MUI's outlined look (a half-alpha border) in the scheme's purple
+export const controlOutlineSx = {
+  ...outlinedButtonSx,
+  borderColor: PURPLE_ALPHA_50,
+};
 
 // ─── Pull quote, e.g. on an art band ──────────────────────────────────────────
 

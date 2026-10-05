@@ -1,5 +1,6 @@
 import type { SxProps, Theme } from "@mui/material";
 
+import { CONTROL_SIZE } from "@components/ui/PageSections/PageSections.style";
 import { DARK_BG, PURPLE, PURPLE_ALPHA_30 } from "@style/colorScheme";
 
 // Solid night (both uses are marked night): art and text behind would show
@@ -25,15 +26,13 @@ export const pinnedSx: SxProps<Theme> = {
 
 // The handle that peeks out of the right edge on phones
 const HANDLE_WIDTH = 32;
-// The scheme toggle's and language switcher's height (MUI's medium Button)
-const CONTROL_HEIGHT = 37;
 const CONTROLS_PY = 8;
 // The tray's lift off the bottom edge, clear of the home indicator
 const TRAY_BOTTOM = 24;
 const TRAY_EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 /** Room the page keeps at its foot, so the open tray covers nothing there */
-export const TRAY_CLEARANCE = `calc(${TRAY_BOTTOM + CONTROL_HEIGHT + 2 * CONTROLS_PY + 16}px + env(safe-area-inset-bottom))`;
+export const TRAY_CLEARANCE = `calc(${TRAY_BOTTOM + CONTROL_SIZE + 2 * CONTROLS_PY + 16}px + env(safe-area-inset-bottom))`;
 
 const trayMotionSx = {
   transition: `transform 0.35s ${TRAY_EASE}`,
