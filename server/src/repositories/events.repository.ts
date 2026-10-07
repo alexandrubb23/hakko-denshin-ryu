@@ -2,10 +2,12 @@ import type { EventSessionInput } from "@hakko/core";
 import { Prisma } from "../generated/prisma/browser.js";
 import { EventStatus } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
+import { firstFreeSlug, slugify } from "../utils/slug.js";
 
 const EVENT_PUBLIC_SELECT = {
   id: true,
   name: true,
+  slug: true,
   type: true,
   status: true,
   startDate: true,
@@ -50,8 +52,27 @@ export const findAdminEvents = () =>
 
 type EventWriteData = Omit<
   Prisma.EventCreateInput,
-  "startDate" | "endDate" | "sessions" | "participants"
+  "slug" | "startDate" | "endDate" | "sessions" | "participants"
 > & { sessions: EventSessionInput[] };
+
+/**
+ * A slug for `name` no other event holds (deleted ones included, as the
+ * column is unique): "taikai-2026", else "taikai-2026-2", and so on
+ */
+const uniqueEventSlug = async (name: string, excludeId?: string) => {
+  const base = slugify(name, "event");
+  const taken = await prisma.event.findMany({
+    where: {
+      OR: [{ slug: base }, { slug: { startsWith: `${base}-` } }],
+      ...(excludeId && { id: { not: excludeId } }),
+    },
+    select: { slug: true },
+  });
+  return firstFreeSlug(
+    base,
+    taken.map((event) => event.slug)
+  );
+};
 
 /**
  * Sessions are the source of truth; the event's own startDate/endDate are a
@@ -74,23 +95,34 @@ const toSessionRows = (sessions: EventSessionInput[]) => {
   return { rows, startDate, endDate };
 };
 
-export const createEvent = ({ sessions, ...data }: EventWriteData) => {
+export const createEvent = async ({ sessions, ...data }: EventWriteData) => {
   const { rows, startDate, endDate } = toSessionRows(sessions);
+  const slug = await uniqueEventSlug(data.name);
   return prisma.event.create({
-    data: { ...data, startDate, endDate, sessions: { create: rows } },
+    data: { ...data, slug, startDate, endDate, sessions: { create: rows } },
     select: EVENT_PUBLIC_SELECT,
   });
 };
 
-export const updateEvent = (
+/** A renamed event gets a slug for its new name; its old links stop working */
+export const updateEvent = async (
   id: string,
   { sessions, ...data }: EventWriteData
 ) => {
   const { rows, startDate, endDate } = toSessionRows(sessions);
+  const current = await prisma.event.findUniqueOrThrow({
+    where: { id },
+    select: { name: true },
+  });
+  const slug =
+    current.name === data.name
+      ? undefined
+      : await uniqueEventSlug(data.name, id);
   return prisma.event.update({
     where: { id },
     data: {
       ...data,
+      slug,
       startDate,
       endDate,
       sessions: { deleteMany: {}, create: rows },

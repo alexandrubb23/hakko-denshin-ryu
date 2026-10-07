@@ -4,6 +4,7 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
+  Box,
   Button,
   CardContent,
   CardMedia,
@@ -15,6 +16,8 @@ import { useIntl } from "react-intl";
 
 import type { Event } from "@api/events";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
+import TransitionLink from "@components/ui/TransitionLink/TransitionLink";
+import { Routes } from "@lib/routes";
 import { PURPLE_ALPHA_30 } from "@style/colorScheme";
 import { stripDiacritics } from "@utils/string";
 import type { IntlMessageID } from "i18n/messages";
@@ -22,6 +25,8 @@ import type { IntlMessageID } from "i18n/messages";
 import { formatEventSessions } from "./formatEventDate";
 import {
   CARD_CONTENT_SX,
+  CARD_LINK_CLASS,
+  CARD_LINK_SX,
   chipSx,
   DetailsTypography,
   EVENT_IMAGE_HEIGHT,
@@ -49,7 +54,10 @@ const MetaRow = ({
   </Stack>
 );
 
-/** One upcoming event: image, type, name, when, where and a ticket link */
+/**
+ * One upcoming event: image, type, name, when, where and a ticket link.
+ * The name's link stretches over the card, so the card opens the event.
+ */
 const EventCard = ({ event }: { event: Event }) => {
   const intl = useIntl();
 
@@ -79,15 +87,24 @@ const EventCard = ({ event }: { event: Event }) => {
         />
 
         <Typography variant="h6" fontWeight={700} lineHeight={1.3}>
-          {stripDiacritics(event.name)}
+          <Box
+            component={TransitionLink}
+            to={Routes.eventDetail(event.slug)}
+            className={CARD_LINK_CLASS}
+            sx={CARD_LINK_SX}
+          >
+            {stripDiacritics(event.name)}
+          </Box>
         </Typography>
 
         <MetaRow icon={CalendarMonthIcon}>
-          {formatEventSessions(intl.locale, event.sessions).map((line, index) => (
-            <span key={index} style={{ display: "block" }}>
-              {line}
-            </span>
-          ))}
+          {formatEventSessions(intl.locale, event.sessions).map(
+            (line, index) => (
+              <span key={index} style={{ display: "block" }}>
+                {line}
+              </span>
+            )
+          )}
         </MetaRow>
         <MetaRow icon={LocationOnIcon}>
           {stripDiacritics(event.location)}

@@ -13,6 +13,7 @@ export const Routes = {
   techniques: "/techniques",
   kyuProgram: "/kyu-program",
   events: "/events",
+  eventDetail: (slug: string) => `/events/${slug}`,
   adminEvents: "/admin/events",
 } as const;
 

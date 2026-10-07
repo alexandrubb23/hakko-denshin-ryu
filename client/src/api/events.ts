@@ -19,6 +19,8 @@ export interface EventSession {
 export interface Event {
   id: string;
   name: string;
+  /** URL-safe name, unique across events: /events/:slug */
+  slug: string;
   type: EventType;
   status: EventStatus;
   startDate: string;

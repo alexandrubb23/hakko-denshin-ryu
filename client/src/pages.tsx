@@ -1,5 +1,6 @@
 import React from "react";
 import type { IntlShape } from "react-intl";
+import { matchPath } from "react-router";
 
 import Events from "@features/admin/events/components/Events";
 import Students from "@features/admin/students/components/Students";
@@ -8,6 +9,7 @@ import SetPassword from "@features/auth/SetPassword";
 import Dashboard from "@features/dashboard/Dashboard";
 import Contact from "@features/public/contact/Contact";
 import Dojo from "@features/public/dojo/Dojo";
+import EventDetail from "@features/public/events/EventDetail";
 import PublicEvents from "@features/public/events/PublicEvents";
 import KyuProgram from "@features/public/kyu-program/KyuProgram";
 import Schedule from "@features/public/schedule/Schedule";
@@ -17,7 +19,7 @@ import Techniques from "@features/public/techniques/Techniques";
 import { DOJO_NAME, SITE_NAME } from "@constants/brand";
 import HakkoRyuRGB from "@features/public/hakko-ryu/HakkoRyu";
 import Home from "@features/public/home/Home";
-import { normalizePath, trimTrailingSlash } from "@utils/routes";
+import { normalizePath } from "@utils/routes";
 import type { IntlMessageID } from "i18n/messages";
 
 export type PagePath =
@@ -34,6 +36,7 @@ export type PagePath =
   | "techniques"
   | "kyu-program"
   | "events"
+  | "events/:slug"
   | "admin/events";
 
 export interface Page {
@@ -175,6 +178,18 @@ export const pages: Page[] = [
     cover: true,
   },
   {
+    path: "events/:slug",
+    component: EventDetail,
+    titleId: "page.title.event",
+    titleSuffix: DOJO_NAME,
+    descriptionId: "page.description.events",
+    ogImage: "/og/events.jpg",
+    cover: true,
+    hideFromNav: true,
+    // Every id renders the same placeholder until the page shows the event
+    noIndex: true,
+  },
+  {
     path: "admin/events",
     component: Events,
     titleId: "page.title.events",
@@ -203,11 +218,9 @@ export const NOT_FOUND_PAGE: PageMeta = {
 /** Pages listed in the site menus (header, mobile drawer, home arc) */
 export const navPages = pages.filter((page) => !page.hideFromNav);
 
-/** The page served at `pathname` (e.g. "/" or "/hakko-denshin-ryu"), if any */
-export const findPage = (pathname: string) => {
-  const path = trimTrailingSlash(pathname);
-  return pages.find((page) => normalizePath(page.path) === path);
-};
+/** The page served at `pathname` (e.g. "/" or "/events/taikai-2026"), if any */
+export const findPage = (pathname: string) =>
+  pages.find((page) => matchPath(normalizePath(page.path), pathname));
 
 export const getPageTitle = (
   page: PageTitle,

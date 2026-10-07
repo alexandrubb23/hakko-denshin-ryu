@@ -59,16 +59,33 @@ const cardBase = {
 
 export const SkeletonCard = styled(Card)(cardBase);
 
+// The event's name links to it; its hit area stretches over the whole card
+export const CARD_LINK_CLASS = "event-card-link";
+const CARD_LINK_FOCUSED = `&:has(.${CARD_LINK_CLASS}:focus-visible)`;
+
 export const EventCard = styled(Card)({
   ...cardBase,
+  position: "relative",
   display: "flex",
   flexDirection: "column",
   transition: "border-color 0.2s, transform 0.2s",
-  "&:hover": {
+  [`&:hover, ${CARD_LINK_FOCUSED}`]: {
     borderColor: BORDER_HOVER,
     transform: "translateY(-2px)",
   },
+  // Keyboard focus on the name rings the whole card it stands for
+  [CARD_LINK_FOCUSED]: {
+    outline: `2px solid ${PURPLE}`,
+    outlineOffset: 2,
+  },
 });
+
+export const CARD_LINK_SX = {
+  color: "inherit",
+  textDecoration: "none",
+  "&:focus-visible": { outline: "none" },
+  "&::after": { content: '""', position: "absolute", inset: 0 },
+} as const;
 
 export const ImagePlaceholder = styled(Box)({
   height: EVENT_IMAGE_HEIGHT,
@@ -94,6 +111,9 @@ export const EMPTY_ICON_SX = { fontSize: 56, color: TEXT_SUBTLE } as const;
 export const TICKET_BUTTON_SX = {
   ...outlinedButtonSx,
   mt: "auto",
+  // Above the card's stretched link, so it still opens the tickets
+  position: "relative",
+  zIndex: 1,
 } as const;
 
 export const CARD_CONTENT_SX = {
