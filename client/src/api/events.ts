@@ -61,8 +61,9 @@ class EventsApi extends Http {
     return data.events;
   }
 
-  async fetchEvent(id: string): Promise<Event> {
-    const { data } = await this.http.get(ApiRoutes.event(id));
+  /** A published event, by its slug; 404 when there is none */
+  async fetchEvent(slug: string): Promise<Event> {
+    const { data } = await this.http.get(ApiRoutes.event(slug));
     return data.event;
   }
 

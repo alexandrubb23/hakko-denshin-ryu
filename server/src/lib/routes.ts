@@ -10,7 +10,7 @@ export const ApiRoutes = {
   techniques: "/api/techniques",
   kyuProgram: "/api/kyu-program",
   events: "/api/events",
-  event: "/api/events/:id",
+  event: "/api/events/:slug",
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: "/api/admin/students/:id",

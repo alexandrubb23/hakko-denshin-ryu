@@ -157,11 +157,11 @@ export const artBandSx = (src: string): SxProps<Theme> =>
         backgroundPosition: "75% 30%",
         opacity: { xs: 0.35, md: 0.7 },
         ...fadeMask(
-          `linear-gradient(180deg, transparent 0%, black ${BAND_FADE.in}, black ${BAND_FADE.out}, transparent 100%)`,
+          `linear-gradient(180deg, transparent 0%, black ${BAND_FADE.in}, black ${BAND_FADE.out}, transparent 100%)`
         ),
       },
     },
-    nightBandSx,
+    nightBandSx
   );
 
 export const artBandContentSx: SxProps<Theme> = {
@@ -175,14 +175,19 @@ export const cardGridSx: SxProps<Theme> = { mt: 4 };
 
 // ─── Kanji cards ──────────────────────────────────────────────────────────────
 
+// The cards' framed, softly lit surface
+export const cardSurfaceSx = {
+  borderRadius: 3,
+  border: `1px solid ${BORDER_COLOR}`,
+  background: `linear-gradient(160deg, ${SURFACE_BG} 0%, ${SURFACE_BG_02} 100%)`,
+} as const;
+
 export const kanjiCardSx: SxProps<Theme> = {
   position: "relative",
   overflow: "hidden",
   height: "100%",
   p: { xs: 3.5, md: 5 },
-  borderRadius: 3,
-  border: `1px solid ${BORDER_COLOR}`,
-  background: `linear-gradient(160deg, ${SURFACE_BG} 0%, ${SURFACE_BG_02} 100%)`,
+  ...cardSurfaceSx,
   transition: "border-color 0.3s ease, background-color 0.3s ease",
   "&:hover": {
     borderColor: BORDER_HOVER,

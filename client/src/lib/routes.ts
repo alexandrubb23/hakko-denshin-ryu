@@ -26,7 +26,7 @@ export const ApiRoutes = {
   techniques: "/api/techniques",
   kyuProgram: "/api/kyu-program",
   events: "/api/events",
-  event: (id: string) => `/api/events/${id}`,
+  event: (slug: string) => `/api/events/${encodeURIComponent(slug)}`,
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: (id: string) => `/api/admin/students/${id}`,

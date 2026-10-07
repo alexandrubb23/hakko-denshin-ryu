@@ -18,3 +18,7 @@ export const stripDiacritics = (value?: string | null): string =>
 
 /** 1 → "01" */
 export const padNumber = (n: number) => String(n).padStart(2, "0");
+
+/** "vineri" → "Vineri" */
+export const capitalize = (value: string) =>
+  value.charAt(0).toLocaleUpperCase() + value.slice(1);

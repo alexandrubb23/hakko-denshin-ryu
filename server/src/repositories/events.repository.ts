@@ -23,6 +23,12 @@ const EVENT_PUBLIC_SELECT = {
   },
 } as const;
 
+// What the public may see: published and not deleted
+const PUBLISHED_WHERE = {
+  status: EventStatus.published,
+  deletedAt: null,
+} as const;
+
 const PARTICIPANT_SELECT = {
   id: true,
   attended: true,
@@ -32,9 +38,16 @@ const PARTICIPANT_SELECT = {
 
 export const findPublishedEvents = () =>
   prisma.event.findMany({
-    where: { status: EventStatus.published, deletedAt: null },
+    where: PUBLISHED_WHERE,
     select: EVENT_PUBLIC_SELECT,
     orderBy: { startDate: "desc" },
+  });
+
+/** A published, not deleted event, by its slug */
+export const findPublishedEventBySlug = (slug: string) =>
+  prisma.event.findFirst({
+    where: { ...PUBLISHED_WHERE, slug },
+    select: EVENT_PUBLIC_SELECT,
   });
 
 export const findEventById = (id: string) =>

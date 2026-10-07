@@ -11,7 +11,6 @@ export const useUpdateEvent = (id: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "events"] });
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      queryClient.invalidateQueries({ queryKey: ["admin", "events", id] });
     },
   });
 };

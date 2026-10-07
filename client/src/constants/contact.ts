@@ -16,8 +16,13 @@ export const PHONE_HREF = `tel:${PHONE}`;
 
 export const EMAIL_HREF = "mailto:contact@senshinkan.ro";
 
-export const MAP_URL =
-  "https://www.google.com/maps/search/?api=1&query=Aleea+Paradisul+Verde+2,+Corbeanca,+Romania";
+/** Google Maps, searching for `place` */
+export const mapSearchUrl = (place: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
+
+export const MAP_URL = mapSearchUrl(
+  "Aleea Paradisul Verde 2, Corbeanca, Romania"
+);
 
 export const SOCIAL_LINKS = [
   {

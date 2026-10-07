@@ -2,10 +2,8 @@ import type { SvgIconComponent } from "@mui/icons-material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
   Box,
-  Button,
   CardContent,
   CardMedia,
   Chip,
@@ -15,13 +13,12 @@ import {
 import { useIntl } from "react-intl";
 
 import type { Event } from "@api/events";
-import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import TransitionLink from "@components/ui/TransitionLink/TransitionLink";
 import { Routes } from "@lib/routes";
 import { PURPLE_ALPHA_30 } from "@style/colorScheme";
 import { stripDiacritics } from "@utils/string";
-import type { IntlMessageID } from "i18n/messages";
 
+import { formatEventType } from "./eventType";
 import { formatEventSessions } from "./formatEventDate";
 import {
   CARD_CONTENT_SX,
@@ -37,6 +34,7 @@ import {
   TICKET_BUTTON_SX,
   TYPE_COLORS,
 } from "./PublicEvents.style";
+import TicketsButton from "./TicketsButton";
 
 /** An icon followed by a line of muted caption text */
 const MetaRow = ({
@@ -79,9 +77,7 @@ const EventCard = ({ event }: { event: Event }) => {
 
       <CardContent sx={CARD_CONTENT_SX}>
         <Chip
-          label={intl.formatMessage({
-            id: `page.events.type.${event.type}` as IntlMessageID,
-          })}
+          label={formatEventType(intl, event.type)}
           size="small"
           sx={chipSx(TYPE_COLORS[event.type] ?? TYPE_COLORS.other)}
         />
@@ -113,18 +109,11 @@ const EventCard = ({ event }: { event: Event }) => {
         <DetailsTypography variant="body2">{event.details}</DetailsTypography>
 
         {event.ticketUrl && (
-          <Button
-            component="a"
+          <TicketsButton
             href={event.ticketUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="outlined"
             size="small"
-            endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
             sx={TICKET_BUTTON_SX}
-          >
-            <FormattedMessage id="page.events.get.tickets" />
-          </Button>
+          />
         )}
       </CardContent>
     </EventCardRoot>

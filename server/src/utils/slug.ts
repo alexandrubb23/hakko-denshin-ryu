@@ -13,6 +13,12 @@ export const slugify = (text: string, fallback = "item") =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "") || fallback;
 
+// What slugify makes: lowercase words joined by single hyphens
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Whether `value` has the shape of a slug made by `slugify` */
+export const isSlug = (value: string) => SLUG_PATTERN.test(value);
+
 /**
  * The first of `base`, `base-2`, `base-3`… not in `taken`
  */
