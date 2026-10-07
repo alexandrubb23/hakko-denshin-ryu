@@ -1,14 +1,13 @@
 import { SxProps, Theme } from "@mui/material";
 
 import { PAGE_TRANSITION_DURATION } from "@constants/animationsTiming";
+import { REDUCED_MOTION, moonlitPathArt } from "@style/art";
 import { DARK_BG, PURPLE_ALPHA_08 } from "@style/tokens";
 
-// The ensō is painted round a square; the moon, painted with its halo and
-// rays, sits in its empty centre
-const MOON_SCALE = 0.62; // of the ensō's size
-
-// The ensō's turn and the moon's breath share one rhythm
+// The painting's breath
 const LOADER_CYCLE = "2.8s";
+
+const PATH_ART_SIZE = "clamp(220px, 46vmin, 420px)";
 
 export const loaderScreenSx = (visible: boolean): SxProps<Theme> => ({
   position: "fixed",
@@ -24,37 +23,21 @@ export const loaderScreenSx = (visible: boolean): SxProps<Theme> => ({
   pointerEvents: visible ? "auto" : "none",
 });
 
-export const moonLoaderSx = (size: string): SxProps<Theme> => ({
-  position: "relative",
-  width: size,
-  height: size,
-  flexShrink: 0,
-});
-
-export const ensoSx: SxProps<Theme> = {
-  position: "absolute",
-  inset: 0,
-  width: "100%",
-  height: "100%",
-  // The stroke's bright head leads, its faded tail trails behind
-  animation: `ensoSpin ${LOADER_CYCLE} linear infinite`,
-  "@keyframes ensoSpin": { to: { rotate: "360deg" } },
-  // Still turning, so the page reads as loading, but gently
-  "@media (prefers-reduced-motion: reduce)": { animationDuration: "8s" },
+export const pathLoaderSx: SxProps<Theme> = {
+  display: "flex",
+  px: 3,
 };
 
-export const moonSx: SxProps<Theme> = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  width: `${MOON_SCALE * 100}%`,
-  height: `${MOON_SCALE * 100}%`,
-  translate: "-50% -50%",
-  // The painted halo breathes
-  animation: `loaderMoonGlow ${LOADER_CYCLE} ease-in-out infinite`,
-  "@keyframes loaderMoonGlow": {
+export const pathArtSx = (loaded: boolean): SxProps<Theme> => ({
+  ...moonlitPathArt(PATH_ART_SIZE, "42%"),
+  // Fades in once decoded, so it never pops onto the screen
+  opacity: loaded ? 1 : 0,
+  transition: "opacity 0.8s ease-in-out",
+  // The moonlight breathes
+  animation: `loaderPathGlow ${LOADER_CYCLE} ease-in-out infinite`,
+  "@keyframes loaderPathGlow": {
     "0%, 100%": { filter: "brightness(1)" },
     "50%": { filter: "brightness(1.15)" },
   },
-  "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-};
+  [REDUCED_MOTION]: { animation: "none" },
+});

@@ -1,17 +1,18 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 
 import { PAGE_TRANSITION_DURATION } from "@constants/animationsTiming";
+import { NIGHT_BLACK } from "@style/tokens";
 
-import MoonLoader from "./MoonLoader";
 import { loaderScreenSx } from "./PageLoader.style";
+import PathLoader from "./PathLoader";
 
 interface Props {
   loading: boolean;
+  /** Plays on the screen in place of the path loader, e.g. the intro */
+  children?: ReactNode;
 }
-
-// The dark scheme's body background (see the theme's CssBaseline)
-const NIGHT_BODY_BACKGROUND = "#000";
 
 /**
  * Keeps the body dark while the loader is on screen, so the page fades in
@@ -22,7 +23,7 @@ const useNightBody = (active: boolean) => {
   useEffect(() => {
     if (!active) return;
     const { style } = document.body;
-    style.setProperty("--body-background", NIGHT_BODY_BACKGROUND);
+    style.setProperty("--body-background", NIGHT_BLACK);
 
     return () => {
       style.transition = `background-color ${PAGE_TRANSITION_DURATION}ms ease-in-out`;
@@ -38,7 +39,8 @@ const useNightBody = (active: boolean) => {
  * A full-screen loading screen over the page; once `loading` ends it fades
  * out while the page fades in, then leaves the DOM.
  */
-const PageLoader = ({ loading }: Props) => {
+const PageLoader = ({ loading, children }: Props) => {
+  const intl = useIntl();
   const [faded, setFaded] = useState(false);
   const shown = !(faded && !loading);
   useNightBody(shown);
@@ -48,12 +50,14 @@ const PageLoader = ({ loading }: Props) => {
   return (
     <Box
       sx={loaderScreenSx(loading)}
+      role="status"
+      aria-label={intl.formatMessage({ id: "common.loading" })}
       aria-hidden={!loading}
       onTransitionEnd={(e) => {
         if (e.target === e.currentTarget) setFaded(!loading);
       }}
     >
-      <MoonLoader />
+      {children || <PathLoader />}
     </Box>
   );
 };

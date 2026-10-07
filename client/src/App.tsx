@@ -3,9 +3,11 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 
+import Intro from "@components/ui/Intro/Intro";
 import PageLoader from "@components/ui/PageLoader/PageLoader";
 import useBodyOverflow from "@hooks/useBodyOverflow";
 import { useApplyColorScheme } from "@hooks/useColorSchemePreference";
+import useIntro from "@hooks/useIntro";
 import useMounted from "@hooks/useMounted";
 import useLangStore from "@store/useLangStore";
 import "./App.css";
@@ -38,7 +40,11 @@ const App = () => {
   // The server renders the loading screen; the page takes over once the
   // client has mounted, so the first client render matches the server's
   const mounted = useMounted();
-  const ready = hydrated && mounted;
+  // A session's first visit opens on the intro
+  const intro = useIntro();
+  const ready = hydrated && mounted && intro.done;
+  // Its lines wait for the visitor's language, not the server's
+  const showIntro = intro.play && hydrated;
 
   useEffect(() => {
     AOS.init({
@@ -48,7 +54,9 @@ const App = () => {
 
   return (
     <>
-      <PageLoader loading={!ready} />
+      <PageLoader loading={!ready}>
+        {showIntro && <Intro onEnd={intro.finish} />}
+      </PageLoader>
       <StackStyled hydrated={ready}>
         <Header />
         <Content />
