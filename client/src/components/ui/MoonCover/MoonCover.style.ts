@@ -169,6 +169,11 @@ export const heroContentSx: SxProps<Theme> = {
   // a menu link's hover scale animates beneath it, and the title flashes as
   // the layer comes and goes
   willChange: "transform",
+  // It lies over the arc menu's labels on wide screens (the title block is as
+  // wide as its widest line, e.g. the buttons): only its links and buttons
+  // take the pointer, so the menu stays clickable around them
+  pointerEvents: { lg: "none" },
+  "& a, & button": { pointerEvents: "auto" },
   width: "100%",
   maxWidth: "lg",
   mx: "auto",
