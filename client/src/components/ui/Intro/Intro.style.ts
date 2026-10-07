@@ -103,7 +103,10 @@ export const introLineSx = (visible: boolean): SxProps<Theme> => ({
   fontFamily: DISPLAY_FONT,
   textTransform: "uppercase",
   fontSize: "clamp(1.1rem, 2.6vw, 2.2rem)",
-  letterSpacing: visible ? "0.12em" : "0.32em",
+  // On a phone the wide spacing wraps a line that fits once settled, so it
+  // would jump between two lines and one as it comes and goes: there the
+  // letters hold still
+  letterSpacing: { xs: "0.12em", sm: visible ? "0.12em" : "0.32em" },
   color: WHITE_ALPHA_85,
   textShadow: `0 0 32px ${PURPLE_ALPHA_30}, 0 2px 12px ${NIGHT_BLACK}`,
   p: 0,
