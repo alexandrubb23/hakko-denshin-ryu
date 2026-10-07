@@ -11,13 +11,18 @@ import {
   introKanjiSx,
   introLineSx,
   introNameSx,
+  introQuoteSx,
+  introQuoteTitleSx,
   introSkipSx,
   introSx,
   introTextSx,
   introTitleSx,
   letterboxSx,
 } from "./Intro.style";
-import useIntroTimeline from "./useIntroTimeline";
+import useIntroTimeline, {
+  INTRO_LINES,
+  type IntroWords,
+} from "./useIntroTimeline";
 
 interface Props {
   /** Called when the intro has played out, or been skipped */
@@ -26,15 +31,17 @@ interface Props {
 
 /**
  * The welcome on a session's first visit: the lone practitioner's moonlit
- * path draws into view between cinematic bars, two lines and the dojo's name
- * rise in turn, then the scene is walked into as the page fades in.
+ * path draws into view between cinematic bars, a quote rises mid-screen, then
+ * two lines and the dojo's name rise in turn below, then the scene is walked
+ * into as the page fades in.
  */
 const Intro = ({ onEnd }: Props) => {
   const intl = useIntl();
-  const { stage, beat, skipShown, skip } = useIntroTimeline(onEnd);
-
   // Jarene has no Romanian diacritics
   const line = (id: string) => stripDiacritics(intl.formatMessage({ id }));
+  // The words as shown, and as timed: each held long enough to be read
+  const textOf = (words: IntroWords) => line(`intro.${words}`);
+  const { stage, beat, skipShown, skip } = useIntroTimeline(onEnd, textOf);
 
   const titleShown = beat === "title";
 
@@ -44,13 +51,18 @@ const Intro = ({ onEnd }: Props) => {
       <Box sx={letterboxSx("top", stage)} />
       <Box sx={letterboxSx("bottom", stage)} />
 
+      <Box sx={introQuoteSx} aria-hidden>
+        <Typography sx={introQuoteTitleSx(beat === "quote")}>
+          {textOf("quote")}
+        </Typography>
+      </Box>
+
       <Box sx={introTextSx} aria-hidden>
-        <Typography sx={introLineSx(beat === "line1")}>
-          {line("intro.line1")}
-        </Typography>
-        <Typography sx={introLineSx(beat === "line2")}>
-          {line("intro.line2")}
-        </Typography>
+        {INTRO_LINES.map((id) => (
+          <Typography key={id} sx={introLineSx(beat === id)}>
+            {textOf(id)}
+          </Typography>
+        ))}
         <Box sx={introTitleSx(titleShown)}>
           <Typography sx={introKanjiSx}>{DOJO_KANJI}</Typography>
           <Typography sx={introNameSx(titleShown)}>Senshinkan</Typography>

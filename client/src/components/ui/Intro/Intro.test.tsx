@@ -1,14 +1,22 @@
-import { act, fireEvent, screen } from "@testing-library/react";
+import { act, fireEvent, renderHook, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import renderUi from "@test/renderUi";
+import { messages } from "../../../i18n/messages";
 
 import Intro from "./Intro";
-import {
+import useIntroTimeline, {
   EXIT_HANDOFF,
-  INTRO_DURATION,
+  INTRO_WORDS,
+  type IntroBeat,
+  introTimeline,
+  type IntroWords,
   SKIP_SHOWN_AT,
 } from "./useIntroTimeline";
+
+// The intro times itself by the words it shows, here in English
+const textOf = (words: IntroWords) => messages.en[`intro.${words}`];
+const INTRO_DURATION = introTimeline(textOf).duration;
 
 const skipButton = () => screen.getByRole("button", { name: "Skip intro" });
 
@@ -68,6 +76,17 @@ describe("Intro", () => {
     fireEvent.keyDown(window, { key: "Escape" });
     act(() => vi.advanceTimersByTime(EXIT_HANDOFF));
     expect(onEnd).toHaveBeenCalledOnce();
+  });
+
+  it("opens on the quote, then shows each line in turn, then the title", () => {
+    const { result } = renderHook(() => useIntroTimeline(vi.fn(), textOf));
+    const seen: IntroBeat[] = [];
+    for (let t = 0; t < INTRO_DURATION; t += 100) {
+      act(() => vi.advanceTimersByTime(100));
+      const { beat } = result.current;
+      if (beat !== "none" && beat !== seen.at(-1)) seen.push(beat);
+    }
+    expect(seen).toEqual([...INTRO_WORDS, "title"]);
   });
 
   it("shows its lines in the visitor's language", () => {
