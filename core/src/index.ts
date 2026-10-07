@@ -47,3 +47,10 @@ export {
   type UpdateEventInput,
   type UpsertEventParticipationInput,
 } from "./schemas/events.js";
+
+export {
+  calendarDescription,
+  calendarSessionEnd,
+  compactUtc,
+  DEFAULT_SESSION_MINUTES,
+} from "./utils/calendar.js";

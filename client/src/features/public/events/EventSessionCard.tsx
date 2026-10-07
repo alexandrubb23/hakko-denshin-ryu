@@ -1,4 +1,5 @@
 import { Box, Divider, Typography } from "@mui/material";
+import type { ReactNode } from "react";
 import { useIntl } from "react-intl";
 
 import type { EventSession } from "@api/events";
@@ -21,13 +22,15 @@ interface Props {
   session: EventSession;
   /** 1 for the event's first session */
   number: number;
+  /** Adds just this session to a calendar */
+  calendar?: ReactNode;
 }
 
 /**
  * One day of the event: which day, its date and its hours, under the
  * weekday's kanji. A session running over several days says when it ends.
  */
-const EventSessionCard = ({ session, number }: Props) => {
+const EventSessionCard = ({ session, number, calendar }: Props) => {
   const intl = useIntl();
   const { weekday, weekdayName, date, startTime, endTime, endDate, minutes } =
     describeSession(intl.locale, session);
@@ -71,6 +74,7 @@ const EventSessionCard = ({ session, number }: Props) => {
           )}
         </Typography>
       )}
+      {calendar}
     </Box>
   );
 };

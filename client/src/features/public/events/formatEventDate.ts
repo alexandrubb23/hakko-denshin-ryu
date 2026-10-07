@@ -13,7 +13,7 @@ const TIME_OPTIONS: Intl.DateTimeFormatOptions = {
 const DATE_TIME_OPTIONS = { ...DATE_OPTIONS, ...TIME_OPTIONS };
 
 /** The dojo-local calendar date, as "2026-10-23" (en-CA writes it so) */
-const dojoDate = (date: Date) =>
+export const dojoDate = (date: Date) =>
   date.toLocaleDateString("en-CA", { timeZone: TIME_ZONE });
 
 const sameDojoDay = (a: Date, b: Date) => dojoDate(a) === dojoDate(b);
@@ -59,7 +59,7 @@ const WEEKDAY_INDEX: Record<string, number> = {
 };
 
 /** When the last session ends (or, without an end, starts) */
-const lastMoment = (sessions: SessionTimes[]) =>
+export const lastMoment = (sessions: SessionTimes[]) =>
   new Date(
     Math.max(
       ...sessions.map(({ startsAt, endsAt }) =>

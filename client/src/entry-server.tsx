@@ -9,6 +9,7 @@ import type { ServerResponse } from "@providers/ServerResponse";
 import useLangStore from "@store/useLangStore";
 import { prefetch } from "@utils/api-requests";
 import { normalizePath } from "@utils/routes";
+import { escapeHtml } from "@utils/string";
 import { AppRoutes } from "./AppRoutes";
 import createEmotionCache from "./createEmotionCache";
 import { messages } from "./i18n/messages";
@@ -26,13 +27,6 @@ const SITE_URL = (process.env.SITE_URL ?? "https://senshinkan.ro").replace(
   ""
 );
 const DEFAULT_OG_IMAGE = "/og/home.jpg";
-
-const escapeHtml = (value: string) =>
-  value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 
 export async function render(url: string) {
   const cache = createEmotionCache();

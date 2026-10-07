@@ -16,6 +16,7 @@ import { SKELETON_SX } from "@style/colorScheme";
 import { isNotFoundError } from "@utils/getServerError";
 import { stripDiacritics } from "@utils/string";
 
+import AddToCalendar from "./AddToCalendar";
 import {
   SESSION_CARD_SIZE,
   descriptionSx,
@@ -99,7 +100,12 @@ const EventContent = ({ event }: { event: Event }) => {
         )}
         title={stripDiacritics(event.name)}
         tagline={`${formatEventSpan(intl.locale, event.sessions)} · ${event.location}`}
-        action={event.ticketUrl && <TicketsButton href={event.ticketUrl} />}
+        action={
+          <>
+            {event.ticketUrl && <TicketsButton href={event.ticketUrl} />}
+            <AddToCalendar event={event} />
+          </>
+        }
       />
 
       <Container maxWidth="lg">
@@ -144,6 +150,16 @@ const EventContent = ({ event }: { event: Event }) => {
                 key={session.id}
                 session={session}
                 number={index + 1}
+                // Of several sessions, each can be added on its own
+                calendar={
+                  event.sessions.length > 1 && (
+                    <AddToCalendar
+                      event={event}
+                      session={session}
+                      size="small"
+                    />
+                  )
+                }
               />
             ))}
           </CardGrid>

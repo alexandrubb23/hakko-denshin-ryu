@@ -6,12 +6,14 @@ import {
   kanjiCardKanjiSx,
   kanjiCardSx,
   kanjiCardTitleSx,
+  linkButtonSx,
   photoFrameSx,
 } from "@components/ui/PageSections/PageSections.style";
 import { DISPLAY_FONT } from "@style/art";
 import {
   BORDER_COLOR,
   BORDER_HOVER,
+  DARK_BG,
   PURPLE,
   PURPLE_ALPHA_12,
   PURPLE_ALPHA_30,
@@ -151,3 +153,42 @@ export const sessionNoteSx: SxProps<Theme> = {
 
 // Programme cards: three to a row on wide screens
 export const SESSION_CARD_SIZE = { xs: 12, sm: 6, md: 4 } as const;
+
+// ─── Add to calendar ──────────────────────────────────────────────────────────
+
+// Outlined like the cover's other buttons; a quiet text button on the cards
+export const calendarButtonSx = (size: "small" | "medium"): SxProps<Theme> =>
+  size === "small"
+    ? {
+        color: PURPLE,
+        alignSelf: "flex-start",
+        mt: 2,
+        ml: -1,
+        "&:hover": { backgroundColor: PURPLE_ALPHA_12 },
+      }
+    : linkButtonSx;
+
+// Above the cover's pinned controls, like a menu
+export const calendarPopperSx: SxProps<Theme> = { zIndex: "modal" };
+
+// Paper in the light scheme, night in the dark: the themed tokens, and the
+// text set here as the theme's own text stays white
+export const calendarMenuSx: SxProps<Theme> = {
+  backgroundColor: DARK_BG,
+  backgroundImage: "none",
+  border: `1px solid ${BORDER_COLOR}`,
+  boxShadow: `0 12px 32px ${PURPLE_ALPHA_12}`,
+  color: TEXT_PRIMARY,
+  "& .MuiMenuItem-root": { color: TEXT_PRIMARY },
+  "& .MuiMenuItem-root:hover, & .MuiMenuItem-root.Mui-focusVisible": {
+    backgroundColor: PURPLE_ALPHA_12,
+  },
+  "& .MuiListItemText-secondary": { color: TEXT_MUTED },
+};
+
+export const calendarMenuIconSx: SxProps<Theme> = {
+  color: PURPLE,
+  // Level with the label, above the hint
+  alignSelf: "flex-start",
+  mt: 0.75,
+};

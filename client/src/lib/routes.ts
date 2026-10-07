@@ -17,6 +17,9 @@ export const Routes = {
   adminEvents: "/admin/events",
 } as const;
 
+const apiEventPath = (slug: string) =>
+  `/api/events/${encodeURIComponent(slug)}`;
+
 export const ApiRoutes = {
   me: "/api/me",
   meImage: "/api/me/image",
@@ -26,7 +29,12 @@ export const ApiRoutes = {
   techniques: "/api/techniques",
   kyuProgram: "/api/kyu-program",
   events: "/api/events",
-  event: (slug: string) => `/api/events/${encodeURIComponent(slug)}`,
+  event: apiEventPath,
+  /** iCalendar file of the event's sessions, or of the one given */
+  eventCalendar: (slug: string, sessionId?: string) =>
+    `${apiEventPath(slug)}/calendar.ics${
+      sessionId ? `?session=${encodeURIComponent(sessionId)}` : ""
+    }`,
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: (id: string) => `/api/admin/students/${id}`,
