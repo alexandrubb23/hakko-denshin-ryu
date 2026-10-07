@@ -22,6 +22,8 @@ export const TITLE_GLOW = `0 0 40px ${PURPLE_ALPHA_30}`;
 
 export const COVER_HEIGHT = "100dvh";
 
+export const REDUCED_MOTION = "@media (prefers-reduced-motion: reduce)";
+
 // The slow settle of round art zooming on hover (belts, practice thumbs)
 export const ART_ZOOM_TRANSITION =
   "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
@@ -38,6 +40,19 @@ export const fadeMask = (gradient: string) => ({
   maskComposite: "intersect",
   WebkitMaskImage: gradient,
   WebkitMaskComposite: "source-in",
+});
+
+/**
+ * The moonlit path painting (loader and intro): a square of `size` whose
+ * edges dissolve into the night from `clearTo` of the way out
+ */
+export const moonlitPathArt = (size: string, clearTo: string) => ({
+  width: size,
+  height: size,
+  flexShrink: 0,
+  ...fadeMask(
+    `radial-gradient(circle at 50% 46%, black ${clearTo}, transparent 70%)`
+  ),
 });
 
 /** The cover box; each layout adds its own height and layout on top */

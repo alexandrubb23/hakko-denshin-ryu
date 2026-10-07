@@ -5,7 +5,7 @@ import Jarene from "@assets/fonts/Jarene.otf";
 import Rubik from "@assets/fonts/Rubik.ttf";
 
 import { LIGHT_SCHEME_CSS } from "./colorScheme";
-import { BODY_TEXT } from "./tokens";
+import { BODY_TEXT, NIGHT_BLACK } from "./tokens";
 
 const theme = createTheme({
   breakpoints: {
@@ -93,7 +93,7 @@ const theme = createTheme({
           --hamburger-margin: 18px;
           --animation-timing: .5s ease-in-out;
           --hamburger-height: calc(var(--bar-height) * 3 + var(--hamburger-gap) * 2);
-          --body-background: #000;
+          --body-background: ${NIGHT_BLACK};
         }
         @font-face {
           font-family: 'Jarene';

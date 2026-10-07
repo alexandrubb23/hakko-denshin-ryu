@@ -10,6 +10,8 @@ export const MOONLIGHT_ALPHA_25 = "rgba(255,244,214,0.25)";
 export const MOONLIGHT_ALPHA_45 = "rgba(255,244,214,0.45)";
 
 // ─── Dark backgrounds ────────────────────────────────────────────────────────
+// The night sky behind the loader and the dark scheme's body
+export const NIGHT_BLACK = "#000";
 export const DARK_BG = "#0a0619";
 export const DARK_BG_ALPHA_20 = "rgba(10,6,25,0.2)";
 export const DARK_BG_ALPHA_45 = "rgba(10,6,25,0.45)";

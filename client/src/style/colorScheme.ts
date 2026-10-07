@@ -130,12 +130,10 @@ const NIGHT_ISLAND = `${LIGHT_SELECTOR} ${DARK_SELECTOR}`;
 /** Marks an element as night: it stays dark in the light scheme */
 export const NIGHT = { [SCHEME_ATTR]: "dark" } as const;
 
-const NIGHT_BLACK = "#000";
-
 /** A night cover on a light page melts into the paper at its foot */
 export const nightCoverSx = {
   [`${LIGHT_SELECTOR} &`]: {
-    background: `linear-gradient(180deg, ${NIGHT_BLACK} 80%, ${LIGHT.DARK_BG} 100%)`,
+    background: `linear-gradient(180deg, ${dark.NIGHT_BLACK} 80%, ${LIGHT.DARK_BG} 100%)`,
   },
 } as const;
 
