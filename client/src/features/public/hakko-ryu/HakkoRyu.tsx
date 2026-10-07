@@ -12,6 +12,8 @@ import Paragraphs from "@components/ui/PageSections/Paragraphs";
 import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import PullQuote from "@components/ui/PageSections/PullQuote";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
+import SectionNav from "@components/ui/SectionNav/SectionNav";
+import type { SectionNavSection } from "@components/ui/SectionNav/sections";
 
 import wristLockImage from "@assets/images/53.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
@@ -42,8 +44,27 @@ const COMPANIONS = [
   },
 ] as const;
 
+// The page's chapters, in page order: their headings and the section nav
+const SECTIONS = {
+  origins: { id: "origins", title: "Hakko Ryu" },
+  denshin: { id: "hakko-denshin-ryu", title: "Hakko Denshin Ryu Jujutsu" },
+  philosophy: { id: "philosophy", titleId: "page.hakko-ryu.philosophy.title" },
+  jujutsu: { id: "ju-jutsu", title: "Ju Jutsu" },
+  companions: {
+    id: "companion-practices",
+    titleId: "page.hakko-ryu.companion.title",
+  },
+  grades: { id: "grading-system", titleId: "page.hakko-ryu.grades.title" },
+  kyu: { id: "kyu-program", titleId: "page.hakko-ryu.kyu.title" },
+  syllabus: { id: "syllabus", titleId: "page.hakko-ryu.syllabus.title" },
+} as const satisfies Record<string, SectionNavSection>;
+
+const SECTION_LIST = Object.values(SECTIONS);
+
 const HakkoRyu = () => (
   <>
+    <SectionNav sections={SECTION_LIST} />
+
     <MoonCover
       art={HAKKO_RYU_MOON_ART}
       kanji="八光流"
@@ -66,9 +87,9 @@ const HakkoRyu = () => (
           }}
         >
           <SectionHeading
-            id="origins"
+            id={SECTIONS.origins.id}
             number="01"
-            title="Hakko Ryu"
+            title={SECTIONS.origins.title}
             kanji="八光流"
           />
           <Paragraphs
@@ -81,9 +102,9 @@ const HakkoRyu = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
-            id="hakko-denshin-ryu"
+            id={SECTIONS.denshin.id}
             number="02"
-            title="Hakko Denshin Ryu Jujutsu"
+            title={SECTIONS.denshin.title}
           />
           <Box sx={denshinGridSx}>
             <Box sx={denshinKanjiSx} lang="ja" aria-hidden>
@@ -99,7 +120,7 @@ const HakkoRyu = () => (
 
     {/* ── 03. Philosophy (moonlit valley band) ─────────────────────────── */}
     <ArtBand src={valleyArt}>
-      <SectionHeading id="philosophy" number="03" />
+      <SectionHeading id={SECTIONS.philosophy.id} number="03" />
       <PullQuote id="page.hakko-ryu.philosophy.quote" />
 
       <Paragraphs
@@ -124,9 +145,9 @@ const HakkoRyu = () => (
           }}
         >
           <SectionHeading
-            id="ju-jutsu"
+            id={SECTIONS.jujutsu.id}
             number="04"
-            title="Ju Jutsu"
+            title={SECTIONS.jujutsu.title}
             kanji="柔術"
           />
           <Paragraphs
@@ -147,9 +168,9 @@ const HakkoRyu = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
-            id="companion-practices"
+            id={SECTIONS.companions.id}
             number="05 & 06"
-            title={<FormattedMessage id="page.hakko-ryu.companion.title" />}
+            title={<FormattedMessage id={SECTIONS.companions.titleId} />}
           />
         </FadeIn>
 
@@ -166,9 +187,9 @@ const HakkoRyu = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
-            id="grading-system"
+            id={SECTIONS.grades.id}
             number="07"
-            title={<FormattedMessage id="page.hakko-ryu.grades.title" />}
+            title={<FormattedMessage id={SECTIONS.grades.titleId} />}
             kanji="段級制度"
           />
           <Box sx={gradesIntroSx}>
@@ -183,9 +204,9 @@ const HakkoRyu = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
-            id="kyu-program"
+            id={SECTIONS.kyu.id}
             number="08 · Mudansha · 無段者"
-            title={<FormattedMessage id="page.hakko-ryu.kyu.title" />}
+            title={<FormattedMessage id={SECTIONS.kyu.titleId} />}
             kanji="五級 — 一級"
           />
           <Box sx={gradesIntroSx}>
@@ -202,9 +223,9 @@ const HakkoRyu = () => (
       <PageSection>
         <FadeIn>
           <SectionHeading
-            id="syllabus"
+            id={SECTIONS.syllabus.id}
             number="09 · Hakko Denshin Ryu · 八光伝心流"
-            title={<FormattedMessage id="page.hakko-ryu.syllabus.title" />}
+            title={<FormattedMessage id={SECTIONS.syllabus.titleId} />}
             kanji="基本技"
           />
           <Box sx={gradesIntroSx}>

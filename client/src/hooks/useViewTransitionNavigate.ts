@@ -1,11 +1,10 @@
 import { useCallback, useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 
+import { prefersReducedMotion } from "@style/art";
+
 // Ends the view transition in flight, once its page has rendered
 let finishTransition: (() => void) | null = null;
-
-const prefersReducedMotion = () =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /**
  * Navigates inside a view transition: elements named alike on both pages

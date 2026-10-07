@@ -22,7 +22,26 @@ export const TITLE_GLOW = `0 0 40px ${PURPLE_ALPHA_30}`;
 
 export const COVER_HEIGHT = "100dvh";
 
-export const REDUCED_MOTION = "@media (prefers-reduced-motion: reduce)";
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+export const REDUCED_MOTION = `@media ${REDUCED_MOTION_QUERY}`;
+
+/** The same, for motion started from script (scrolling, view transitions) */
+export const prefersReducedMotion = () =>
+  window.matchMedia(REDUCED_MOTION_QUERY).matches;
+
+// The settle of controls sliding in and out of the screen's edge
+const SLIDE_EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+
+/** Slides with `SLIDE_EASE`, plus any `extra` transitions; still if reduced */
+export const slideMotionSx = (...extra: string[]) =>
+  ({
+    transition: [`transform 0.35s ${SLIDE_EASE}`, ...extra].join(", "),
+    [REDUCED_MOTION]: { transition: "none" },
+  }) as const;
+
+// Lifts the floating controls off the paper and the painted bands
+export const CONTROL_SHADOW = "0 4px 16px rgba(0,0,0,0.25)";
 
 // The slow settle of round art zooming on hover (belts, practice thumbs)
 export const ART_ZOOM_TRANSITION =

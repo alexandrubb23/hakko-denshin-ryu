@@ -1,13 +1,14 @@
 import type { SxProps, Theme } from "@mui/material";
 
 import { CONTROL_SIZE } from "@components/ui/PageSections/PageSections.style";
+import { CONTROL_SHADOW, slideMotionSx } from "@style/art";
 import { DARK_BG, PURPLE, PURPLE_ALPHA_30 } from "@style/colorScheme";
 
 // Solid night (both uses are marked night): art and text behind would show
 // through any see-through glass. The shadow lifts it off a light page.
 const panelSx = {
   bgcolor: DARK_BG,
-  boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+  boxShadow: CONTROL_SHADOW,
 } as const;
 
 // Stays in the corner while scrolling, above the page but below the loader
@@ -29,15 +30,11 @@ const HANDLE_WIDTH = 32;
 const CONTROLS_PY = 8;
 // The tray's lift off the bottom edge, clear of the home indicator
 const TRAY_BOTTOM = 24;
-const TRAY_EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 /** Room the page keeps at its foot, so the open tray covers nothing there */
 export const TRAY_CLEARANCE = `calc(${TRAY_BOTTOM + CONTROL_SIZE + 2 * CONTROLS_PY + 16}px + env(safe-area-inset-bottom))`;
 
-const trayMotionSx = {
-  transition: `transform 0.35s ${TRAY_EASE}`,
-  "@media (prefers-reduced-motion: reduce)": { transition: "none" },
-} as const;
+const trayMotionSx = slideMotionSx();
 
 /** Hidden: fully past the edge; peeking: only the handle; open: all of it */
 export type TrayState = "hidden" | "peeking" | "open";

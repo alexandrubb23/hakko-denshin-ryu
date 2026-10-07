@@ -5,10 +5,10 @@ import {
   ClickAwayListener,
   GlobalStyles,
 } from "@mui/material";
-import { useId, useRef, useState } from "react";
+import { useId } from "react";
 import { useIntl } from "react-intl";
-import { useDebounceCallback, useEventListener } from "usehooks-ts";
 
+import usePeekingDisclosure from "@hooks/usePeekingDisclosure";
 import { NIGHT } from "@style/colorScheme";
 
 import {
@@ -21,11 +21,6 @@ import {
 } from "./CoverControls.style";
 import CoverControlsSet from "./CoverControlsSet";
 
-// How long the handle lingers once the page stops scrolling
-const PEEK_DURATION = 3000;
-
-const PASSIVE = { passive: true };
-
 /**
  * The cover controls on phones, hidden until the page scrolls: then an arrow
  * handle peeks out of the right edge, and slides back a while after the
@@ -36,30 +31,13 @@ const PASSIVE = { passive: true };
 const CoverControlsTray = () => {
   const intl = useIntl();
   const controlsId = useId();
-  const handleRef = useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = useState(false);
-  const [peeking, setPeeking] = useState(false);
-  const settlePeek = useDebounceCallback(setPeeking, PEEK_DURATION);
-
-  // Show the handle, and hide it once the page has been still for a while
-  const peek = () => {
-    setPeeking(true);
-    settlePeek(false);
-  };
-
-  useEventListener("scroll", peek, undefined, PASSIVE);
-
-  const close = () => {
-    setOpen(false);
-    // Leave the handle up a moment, rather than whisking it away
-    peek();
-  };
-
-  useEventListener("keydown", (event) => {
-    if (!open || event.key !== "Escape") return;
-    close();
-    handleRef.current?.focus();
-  });
+  const {
+    triggerRef: handleRef,
+    open,
+    peeking,
+    dismiss,
+    toggle,
+  } = usePeekingDisclosure();
 
   const state: TrayState = open ? "open" : peeking ? "peeking" : "hidden";
 
@@ -72,7 +50,7 @@ const CoverControlsTray = () => {
           "#footer": { paddingBottom: `calc(32px + ${TRAY_CLEARANCE})` },
         }}
       />
-      <ClickAwayListener onClickAway={() => open && close()}>
+      <ClickAwayListener onClickAway={dismiss}>
         <Box sx={traySx(state)} {...NIGHT}>
           <ButtonBase
             ref={handleRef}
@@ -81,7 +59,7 @@ const CoverControlsTray = () => {
             aria-label={intl.formatMessage({
               id: open ? "ui.coverControls.hide" : "ui.coverControls.show",
             })}
-            onClick={() => (open ? close() : setOpen(true))}
+            onClick={toggle}
             sx={trayHandleSx}
           >
             <ChevronLeftIcon sx={trayChevronSx(open)} />
