@@ -1,4 +1,4 @@
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import GroupIcon from "@mui/icons-material/Group";
@@ -71,7 +71,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
 
   if (isError) {
     return (
-      <Typography color="error" mt={4}>
+      <Typography color="error" sx={{ mt: 4 }}>
         <FormattedMessage id="admin.events.table.error" />
       </Typography>
     );
@@ -84,7 +84,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
         sx={{ p: 6, textAlign: "center", backgroundColor: SURFACE_BG }}
       >
         <EventNoteIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
-        <Typography color="text.secondary">
+        <Typography sx={{ color: "text.secondary" }}>
           <FormattedMessage id="admin.events.table.empty" />
         </Typography>
       </Paper>
@@ -158,8 +158,7 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                     <TableCell align="right">
                       <Stack
                         direction="row"
-                        gap={0.5}
-                        justifyContent="flex-end"
+                        sx={{ gap: 0.5, justifyContent: "flex-end" }}
                       >
                         {Array.from({ length: 3 }).map((_, j) => (
                           <Skeleton
@@ -189,15 +188,17 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                       }}
                     >
                       <TableCell>
-                        <Typography variant="body2" fontWeight={600}>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
                           {event.name}
                         </Typography>
                       </TableCell>
                       <TableCell>
                         <Typography
                           variant="body2"
-                          color="text.secondary"
-                          sx={{ textTransform: "capitalize" }}
+                          sx={{
+                            color: "text.secondary",
+                            textTransform: "capitalize",
+                          }}
                         >
                           {EVENT_TYPE_LABEL_IDS[event.type]
                             ? intl.formatMessage({
@@ -225,15 +226,18 @@ const EventsTable = ({ events, isLoading, isError }: EventsTableProps) => {
                         />
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.secondary" }}
+                        >
                           {formatDate(event.startDate, intl.locale)}
                         </Typography>
                       </TableCell>
                       <TableCell>
                         <Typography
                           variant="body2"
-                          color="text.secondary"
                           sx={{
+                            color: "text.secondary",
                             maxWidth: 160,
                             overflow: "hidden",
                             textOverflow: "ellipsis",

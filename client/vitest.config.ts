@@ -2,7 +2,7 @@ import react from "@vitejs/plugin-react";
 import path from "node:path";
 import { defineConfig } from "vitest/config";
 
-const r = (...segments: string[]) => path.resolve(__dirname, ...segments);
+const r = (...segments: string[]) => path.resolve(import.meta.dirname, ...segments);
 
 export default defineConfig({
   plugins: [react()],

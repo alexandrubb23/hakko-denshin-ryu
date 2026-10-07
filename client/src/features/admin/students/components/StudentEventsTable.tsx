@@ -68,15 +68,14 @@ const StudentEventsTable = ({ events, isLoading }: Props) => {
               }}
             >
               <TableCell>
-                <Typography variant="body2" fontWeight={600}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
                   {event.name}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography
                   variant="body2"
-                  color="text.secondary"
-                  sx={{ textTransform: "capitalize" }}
+                  sx={{ color: "text.secondary", textTransform: "capitalize" }}
                 >
                   {EVENT_TYPE_LABEL_IDS[event.type]
                     ? intl.formatMessage({
@@ -86,15 +85,15 @@ const StudentEventsTable = ({ events, isLoading }: Props) => {
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {formatDate(event.startDate, intl.locale)}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography
                   variant="body2"
-                  color="text.secondary"
                   sx={{
+                    color: "text.secondary",
                     maxWidth: 160,
                     overflow: "hidden",
                     textOverflow: "ellipsis",

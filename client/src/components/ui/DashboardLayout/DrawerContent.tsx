@@ -111,8 +111,8 @@ const DrawerContent = ({ onClose, onSignOut }: DrawerContentProps) => {
             <Box className="flex flex-col items-center gap-2">
               <Link to="/">
                 <Box className="flex flex-col items-center gap-1">
-                  <Box component="img" src={LogoIcon} height={40} />
-                  <Typography variant="body2" fontWeight={700}>
+                  <Box component="img" src={LogoIcon} sx={{ height: 40 }} />
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
                     Senshinkan
                   </Typography>
                 </Box>

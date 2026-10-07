@@ -21,14 +21,10 @@ const Logo = () => {
     >
       <Link to="/">
         <Box className="flex flex-col justify-center items-center gap-1.5">
-          <Box component="img" src={LogoIcon} height={50} />
+          <Box component="img" src={LogoIcon} sx={{ height: 50 }} />
           <Typography
             variant="h1"
-            sx={{
-              fontWeight: "bold",
-              fontSize: "1rem !important",
-              padding: 0,
-            }}
+            sx={{ fontWeight: "bold", fontSize: "1rem !important", padding: 0 }}
           >
             Senshinkan
           </Typography>

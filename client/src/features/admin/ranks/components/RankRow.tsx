@@ -1,4 +1,4 @@
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
@@ -31,17 +31,20 @@ const RankRow = ({ entry, onEdit, onDelete, readOnly }: Props) => {
         <BeltImage belt={entry.rank.belt} />
       </TableCell>
       <TableCell>
-        <Typography variant="body2" fontWeight={600} color="text.primary">
+        <Typography
+          variant="body2"
+          sx={{ fontWeight: 600, color: "text.primary" }}
+        >
           {entry.rank.name}
         </Typography>
       </TableCell>
       <TableCell>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {new Date(entry.awardedAt).toLocaleDateString(intl.locale)}
         </Typography>
       </TableCell>
       <TableCell>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {entry.notes ?? "—"}
         </Typography>
       </TableCell>

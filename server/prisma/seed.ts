@@ -1,10 +1,10 @@
 import { hashPassword } from "@better-auth/utils/password";
 import { RANKS } from "@hakko/core";
 import "dotenv/config";
-import { PrismaClient } from "../src/generated/prisma/client.js";
 import { Role } from "../src/generated/prisma/enums.js";
+import { createPrismaClient } from "../src/lib/createPrismaClient.js";
 
-const prisma = new PrismaClient();
+const prisma = createPrismaClient();
 
 async function seedRanks() {
   for (const rank of RANKS) {

@@ -39,7 +39,10 @@ const DashboardStudentLinks = () => (
           <CardActionArea component={Link} to={to} sx={CARD_ACTION_SX}>
             <StyledCardContent>
               <Icon sx={ICON_SX} />
-              <Typography variant="body2" fontWeight={600} textAlign="center">
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 600, textAlign: "center" }}
+              >
                 <FormattedMessage id={label} />
               </Typography>
             </StyledCardContent>

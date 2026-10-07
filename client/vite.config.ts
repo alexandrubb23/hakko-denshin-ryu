@@ -13,7 +13,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@hakko/core': path.resolve(__dirname, '../core/src'),
+      '@hakko/core': path.resolve(import.meta.dirname, '../core/src'),
       '@assets': '/src/assets',
       '@api': '/src/api',
       '@components': '/src/components',

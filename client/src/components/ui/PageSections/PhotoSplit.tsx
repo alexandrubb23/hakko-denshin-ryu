@@ -17,8 +17,8 @@ interface Props {
 
 /** Text and a photo side by side */
 const PhotoSplit = ({ photo, photoFirst = false, children }: Props) => (
-  <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
-    <Grid size={HALF} order={{ md: photoFirst ? 1 : 0 }}>
+  <Grid container spacing={{ xs: 5, md: 8 }} sx={{ alignItems: "center" }}>
+    <Grid size={HALF} sx={{ order: { md: photoFirst ? 1 : 0 } }}>
       <FadeIn delay={photoFirst ? SECOND_DELAY : 0}>{children}</FadeIn>
     </Grid>
 

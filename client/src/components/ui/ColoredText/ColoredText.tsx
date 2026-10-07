@@ -6,7 +6,7 @@ interface ColoredTextProps {
 }
 
 const ColoredText = ({ text, color }: ColoredTextProps) => (
-  <Box component="span" color={color}>
+  <Box component="span" sx={{ color: color }}>
     {text}
   </Box>
 );

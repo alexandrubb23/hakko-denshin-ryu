@@ -1,4 +1,4 @@
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlined";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import {
   Box,
@@ -79,9 +79,11 @@ const StudentCard = ({
         <Stack spacing={3}>
           <Stack
             direction={{ xs: "column", sm: "row" }}
-            alignItems={{ xs: "center", sm: "center" }}
             spacing={2.5}
-            sx={{ textAlign: { xs: "center", sm: "left" } }}
+            sx={{
+              alignItems: { xs: "center", sm: "center" },
+              textAlign: { xs: "center", sm: "left" },
+            }}
           >
             <StudentAvatar
               studentId={user?.id ?? ""}
@@ -96,7 +98,7 @@ const StudentCard = ({
                 isLoading={isLoading}
                 skeletonWidth={180}
                 variant="h5"
-                fontWeight={700}
+                sx={{ fontWeight: 700 }}
               >
                 {stripDiacritics(user?.name)}
               </SkeletonText>
@@ -104,8 +106,7 @@ const StudentCard = ({
                 isLoading={isLoading}
                 skeletonWidth={220}
                 variant="body2"
-                color="text.secondary"
-                mt={0.5}
+                sx={{ color: "text.secondary", mt: 0.5 }}
               >
                 {user?.email}
               </SkeletonText>
@@ -122,10 +123,9 @@ const StudentCard = ({
           <Stack spacing={2}>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="center"
+              sx={{ justifyContent: "space-between", alignItems: "center" }}
             >
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 <FormattedMessage id="admin.students.card.emailVerification" />
               </Typography>
               {isLoading ? (
@@ -164,10 +164,9 @@ const StudentCard = ({
 
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="center"
+              sx={{ justifyContent: "space-between", alignItems: "center" }}
             >
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 <FormattedMessage id="admin.students.card.memberSince" />
               </Typography>
               <SkeletonText

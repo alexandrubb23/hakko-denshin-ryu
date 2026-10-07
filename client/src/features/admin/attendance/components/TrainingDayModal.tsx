@@ -63,11 +63,15 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
     <ModalDialog open={open} onClose={onClose} maxWidth="sm">
       <ModalTitle>
         <FitnessCenterIcon fontSize="small" />
-        <Stack flex={1}>
-          <Typography fontWeight={700} component="span">
+        <Stack sx={{ flex: 1 }}>
+          <Typography component="span" sx={{ fontWeight: 700 }}>
             <FormattedMessage id="admin.attendance.trainingDay.title" />
           </Typography>
-          <Typography variant="caption" color="text.secondary" component="span">
+          <Typography
+            variant="caption"
+            component="span"
+            sx={{ color: "text.secondary" }}
+          >
             {displayDate}
           </Typography>
         </Stack>
@@ -92,7 +96,7 @@ const TrainingDayModal = ({ open, date, onClose }: Props) => {
             const hasRecord = recordMap.has(student.id);
             const attended = recordMap.get(student.id) ?? false;
             return (
-              <Stack direction="row" gap={1}>
+              <Stack direction="row" sx={{ gap: 1 }}>
                 <YesButton
                   size="small"
                   variant={attended ? "contained" : "outlined"}

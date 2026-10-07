@@ -33,8 +33,8 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
       <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
         <Typography
           variant="caption"
-          color="text.secondary"
           sx={{
+            color: "text.secondary",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             fontSize: "0.65rem",
@@ -43,7 +43,7 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
           <FormattedMessage id="admin.students.rank.current" />
         </Typography>
         {isLoading ? (
-          <Box mt={0.75}>
+          <Box sx={{ mt: 0.75 }}>
             <Skeleton
               variant="rectangular"
               width={96}
@@ -58,12 +58,12 @@ const StudentCurrentRank = ({ latestRank, isLoading }: Props) => {
             <Skeleton width={90} height={16} sx={{ ...SKELETON_SX, mt: 0.5 }} />
           </Box>
         ) : latestRank ? (
-          <Box mt={0.75}>
+          <Box sx={{ mt: 0.75 }}>
             <BeltImage belt={latestRank.rank.belt} />
-            <Typography variant="body2" fontWeight={600} mt={0.75}>
+            <Typography variant="body2" sx={{ fontWeight: 600, mt: 0.75 }}>
               {latestRank.rank.name}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
               <FormattedMessage
                 id="admin.students.rank.since"
                 values={{ date: intl.formatDate(latestRank.awardedAt) }}

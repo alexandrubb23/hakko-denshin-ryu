@@ -8,7 +8,8 @@
 import { readFileSync } from "fs";
 import path from "path";
 
-import { PrismaClient } from "../server/src/generated/prisma/client.js";
+import type { PrismaClient } from "../server/src/generated/prisma/client.js";
+import { createPrismaClient } from "../server/src/lib/createPrismaClient.js";
 import { Role } from "../server/src/generated/prisma/enums.js";
 import { hashToken } from "../server/src/lib/token.js";
 import { expect, submitLoginForm, test } from "./fixtures";
@@ -34,8 +35,7 @@ function createTestPrismaClient(): PrismaClient {
       .replace(/^["']|["']$/g, "");
     vars[key] = val;
   }
-  process.env.DATABASE_URL = vars["DATABASE_URL"];
-  return new PrismaClient();
+  return createPrismaClient({ connectionString: vars["DATABASE_URL"] });
 }
 
 function generateTokenPair(): { plainToken: string; tokenHash: string } {

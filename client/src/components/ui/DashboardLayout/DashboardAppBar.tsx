@@ -47,8 +47,8 @@ const DashboardAppBar = ({ onMenuClick }: Props) => {
         ) : (
           <Link to="/">
             <Box className="flex items-center gap-2">
-              <Box component="img" src={LogoIcon} height={32} />
-              <Typography variant="body2" fontWeight={700}>
+              <Box component="img" src={LogoIcon} sx={{ height: 32 }} />
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>
                 Senshinkan
               </Typography>
             </Box>

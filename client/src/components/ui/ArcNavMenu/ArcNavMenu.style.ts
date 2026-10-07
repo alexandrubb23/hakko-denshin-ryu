@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material";
+import type { CSSObject } from "@mui/material/styles";
 
 import {
   DARK_BG,
@@ -55,7 +56,7 @@ export const arcWrapperSx = (
   gap: "var(--arc-gap)",
 
   // Light up a link's ray while the link is hovered (or is the current page)
-  ...Object.fromEntries(
+  ...Object.fromEntries<CSSObject>(
     Array.from({ length: itemCount }, (_, i) => [
       `&:has(li:nth-of-type(${i + 1}):hover, li:nth-of-type(${i + 1}) [aria-current="page"]) line:nth-of-type(${i + 1})`,
       {

@@ -9,7 +9,7 @@ interface Props {
 }
 
 const NextRankButton = ({ onClick }: Props) => (
-  <Box mt={1.5}>
+  <Box sx={{ mt: 1.5 }}>
     <Button
       size="small"
       variant="outlined"

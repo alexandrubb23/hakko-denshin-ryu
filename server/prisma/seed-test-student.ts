@@ -1,15 +1,17 @@
-import "dotenv/config";
 import { hashPassword } from "@better-auth/utils/password";
-import { PrismaClient } from "../src/generated/prisma/client.js";
+import "dotenv/config";
 import { Role } from "../src/generated/prisma/enums.js";
+import { createPrismaClient } from "../src/lib/createPrismaClient.js";
 
 const STUDENT_EMAIL = "student@test.com";
 const STUDENT_PASSWORD = "student-test-password-123";
 
-const prisma = new PrismaClient();
+const prisma = createPrismaClient();
 
 async function main() {
-  const existing = await prisma.user.findUnique({ where: { email: STUDENT_EMAIL } });
+  const existing = await prisma.user.findUnique({
+    where: { email: STUDENT_EMAIL },
+  });
   if (existing) {
     console.log(`Test student already exists: ${STUDENT_EMAIL}`);
     return;

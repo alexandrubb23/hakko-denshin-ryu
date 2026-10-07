@@ -38,7 +38,7 @@ const EventsList = () => {
       ))}
     </CardGrid>
   ) : (
-    <Stack alignItems="center" py={10} gap={1}>
+    <Stack sx={{ alignItems: "center", py: 10, gap: 1 }}>
       <EventNoteIcon sx={EMPTY_ICON_SX} />
       <Typography sx={MUTED_TEXT_SX} variant="h6">
         <FormattedMessage id="page.events.empty" />

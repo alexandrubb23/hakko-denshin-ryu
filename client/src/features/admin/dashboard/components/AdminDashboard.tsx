@@ -19,7 +19,7 @@ const AdminDashboard = () => {
         isLoading={isPending}
         skeletonWidth="60%"
         variant="h5"
-        fontWeight={700}
+        sx={{ fontWeight: 700 }}
       >
         {intl.formatMessage(
           { id: "admin.dashboard.welcome" },

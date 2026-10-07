@@ -1,4 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
+import type { CSSObject } from "@mui/material/styles";
 
 // How long the light takes to come on, before it starts flickering
 const LIGHT_UP = "1.2s";
@@ -63,7 +64,7 @@ export const lightSx = ({
       ? `${name} ${FLICKER_CYCLE} linear ${LIGHT_UP} infinite`
       : "none",
   },
-  [`@keyframes ${name}`]: Object.fromEntries(
+  [`@keyframes ${name}`]: Object.fromEntries<CSSObject>(
     Object.entries(FLICKER_LEVELS).map(([at, level]) => [at, style(level)])
   ),
   "@media (prefers-reduced-motion: reduce)": {

@@ -56,11 +56,15 @@ const EventParticipantsModal = ({ open, event, onClose }: Props) => {
     <ModalDialog open={open} onClose={onClose} maxWidth="sm">
       <ModalTitle>
         <GroupIcon fontSize="small" />
-        <Stack flex={1}>
-          <Typography fontWeight={700} component="span">
+        <Stack sx={{ flex: 1 }}>
+          <Typography component="span" sx={{ fontWeight: 700 }}>
             <FormattedMessage id="admin.events.participants.title" />
           </Typography>
-          <Typography variant="caption" color="text.secondary" component="span">
+          <Typography
+            variant="caption"
+            component="span"
+            sx={{ color: "text.secondary" }}
+          >
             {stripDiacritics(event.name)}
           </Typography>
         </Stack>

@@ -55,12 +55,15 @@ const ImageDropZone = ({
         onClick={() => inputRef.current?.click()}
       >
         <CloudUploadIcon sx={{ fontSize: 36, color: PURPLE }} />
-        <Typography variant="body2" color="text.secondary" textAlign="center">
+        <Typography
+          variant="body2"
+          sx={{ color: "text.secondary", textAlign: "center" }}
+        >
           {selectedFile
             ? selectedFile.name
             : intl.formatMessage({ id: "ui.imageDropZone.placeholder" })}
         </Typography>
-        <Typography variant="caption" color="text.disabled">
+        <Typography variant="caption" sx={{ color: "text.disabled" }}>
           {hint ??
             intl.formatMessage(
               { id: "ui.imageDropZone.hint" },

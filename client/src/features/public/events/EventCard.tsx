@@ -44,7 +44,7 @@ const MetaRow = ({
   icon: SvgIconComponent;
   children: React.ReactNode;
 }) => (
-  <Stack direction="row" alignItems="flex-start" gap={0.75}>
+  <Stack direction="row" sx={{ alignItems: "flex-start", gap: 0.75 }}>
     <Icon sx={ICON_SX} />
     <Typography variant="caption" sx={MUTED_TEXT_SX}>
       {children}
@@ -82,7 +82,7 @@ const EventCard = ({ event }: { event: Event }) => {
           sx={chipSx(TYPE_COLORS[event.type] ?? TYPE_COLORS.other)}
         />
 
-        <Typography variant="h6" fontWeight={700} lineHeight={1.3}>
+        <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.3 }}>
           <Box
             component={TransitionLink}
             to={Routes.eventDetail(event.slug)}

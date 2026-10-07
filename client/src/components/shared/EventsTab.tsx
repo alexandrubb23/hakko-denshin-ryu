@@ -15,7 +15,7 @@ interface Props {
 const EventsTab = ({ events, isLoading, isError }: Props) => {
   if (isError) {
     return (
-      <Typography color="error" mt={4}>
+      <Typography color="error" sx={{ mt: 4 }}>
         <FormattedMessage id="shared.events.error" />
       </Typography>
     );
@@ -28,7 +28,7 @@ const EventsTab = ({ events, isLoading, isError }: Props) => {
         sx={{ p: 6, textAlign: "center", backgroundColor: SURFACE_BG, mt: 3 }}
       >
         <EventNoteIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
-        <Typography color="text.secondary">
+        <Typography sx={{ color: "text.secondary" }}>
           <FormattedMessage id="shared.events.empty" />
         </Typography>
       </Paper>

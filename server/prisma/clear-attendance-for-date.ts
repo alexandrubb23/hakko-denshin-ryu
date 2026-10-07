@@ -7,9 +7,9 @@
  *   CLEAR_DATE — the date to clear in YYYY-MM-DD format (e.g. "2025-05-06")
  */
 import "dotenv/config";
-import { PrismaClient } from "../src/generated/prisma/client.js";
+import { createPrismaClient } from "../src/lib/createPrismaClient.js";
 
-const prisma = new PrismaClient();
+const prisma = createPrismaClient();
 
 async function main() {
   const rawDate = process.env.CLEAR_DATE;

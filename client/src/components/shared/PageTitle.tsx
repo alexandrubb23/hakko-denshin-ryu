@@ -1,9 +1,11 @@
 import { Typography, TypographyProps } from "@mui/material";
 
+import { mergeSx } from "@utils/sx";
+
 type PageTitleProps = Omit<TypographyProps, "variant" | "fontWeight">;
 
-const PageTitle = ({ children, ...props }: PageTitleProps) => (
-  <Typography variant="h4" fontWeight={700} {...props}>
+const PageTitle = ({ children, sx, ...props }: PageTitleProps) => (
+  <Typography variant="h4" {...props} sx={mergeSx({ fontWeight: 700 }, sx)}>
     {children}
   </Typography>
 );

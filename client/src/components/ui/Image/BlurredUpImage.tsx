@@ -3,6 +3,7 @@ import { Box, styled, type SxProps, type Theme } from "@mui/material";
 import useProgressiveImg, {
   type UseProgressiveImg,
 } from "@hooks/useProgressiveImg";
+import { mergeSx } from "@utils/sx";
 
 type BlurredUpImageProps = UseProgressiveImg & {
   sx?: SxProps<Theme>;
@@ -51,10 +52,7 @@ const BlurredUpImage = ({
   return (
     <Box
       data-aos={!blur ? animate : "none"}
-      sx={{
-        ...(sx || {}),
-      }}
-      margin="auto"
+      sx={mergeSx({ margin: "auto" }, sx)}
     >
       <BoxStyled
         blur={blur}

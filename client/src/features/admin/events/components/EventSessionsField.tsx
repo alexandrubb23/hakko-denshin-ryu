@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlined";
 import {
   Box,
   Button,
@@ -57,22 +57,20 @@ const EventSessionsField = ({
     <Box>
       <Typography
         variant="caption"
-        color="text.secondary"
-        sx={{ mb: 1, display: "block" }}
+        sx={{ color: "text.secondary", mb: 1, display: "block" }}
       >
         <FormattedMessage id="admin.events.form.sessions.label" />
       </Typography>
 
-      <Stack gap={2}>
+      <Stack sx={{ gap: 2 }}>
         {fields.map((field, index) => {
           const rowError = errors.sessions?.[index];
           return (
             <Stack
               key={field.id}
               direction={{ xs: "column", sm: "row" }}
-              gap={1.5}
-              alignItems={{ sm: "flex-start" }}
               data-testid="event-session"
+              sx={{ gap: 1.5, alignItems: { sm: "flex-start" } }}
             >
               <TextField
                 label={intl.formatMessage({

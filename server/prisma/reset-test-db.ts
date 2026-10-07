@@ -1,7 +1,7 @@
 import "dotenv/config";
-import { PrismaClient } from "../src/generated/prisma/client.js";
+import { createPrismaClient } from "../src/lib/createPrismaClient.js";
 
-const prisma = new PrismaClient();
+const prisma = createPrismaClient();
 
 async function main() {
   // Delete in dependency order to respect FK constraints

@@ -25,11 +25,9 @@ const PageHeader = ({
 }: PageHeaderProps) => (
   <Stack
     direction={{ xs: "column", sm: "row" }}
-    alignItems={{ xs: "flex-start", sm: "center" }}
-    gap={1.5}
-    mb={3}
+    sx={{ alignItems: { xs: "flex-start", sm: "center" }, gap: 1.5, mb: 3 }}
   >
-    <Stack direction="row" alignItems="center" gap={1.5}>
+    <Stack direction="row" sx={{ alignItems: "center", gap: 1.5 }}>
       <Box sx={{ color: PURPLE, fontSize: 32, display: "flex" }}>{icon}</Box>
       <PageTitle>{title}</PageTitle>
       {count !== undefined && (
@@ -44,8 +42,11 @@ const PageHeader = ({
         />
       )}
     </Stack>
-    <Box flexGrow={1} />
-    <Stack direction="row" alignItems="center" gap={1.5} flexWrap="wrap">
+    <Box sx={{ flexGrow: 1 }} />
+    <Stack
+      direction="row"
+      sx={{ alignItems: "center", gap: 1.5, flexWrap: "wrap" }}
+    >
       {actions}
       <Button
         variant="contained"

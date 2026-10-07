@@ -269,12 +269,11 @@ const EventForm = (props: EventFormProps) => {
             sx={fieldSx}
           />
 
-          <Stack direction={{ xs: "column", sm: "row" }} gap={2}>
-            <Box flex={1}>
+          <Stack direction={{ xs: "column", sm: "row" }} sx={{ gap: 2 }}>
+            <Box sx={{ flex: 1 }}>
               <Typography
                 variant="caption"
-                color="text.secondary"
-                sx={{ mb: 0.5, display: "block" }}
+                sx={{ color: "text.secondary", mb: 0.5, display: "block" }}
               >
                 <FormattedMessage id="common.type" />
               </Typography>
@@ -298,11 +297,10 @@ const EventForm = (props: EventFormProps) => {
               />
             </Box>
 
-            <Box flex={1}>
+            <Box sx={{ flex: 1 }}>
               <Typography
                 variant="caption"
-                color="text.secondary"
-                sx={{ mb: 0.5, display: "block" }}
+                sx={{ color: "text.secondary", mb: 0.5, display: "block" }}
               >
                 <FormattedMessage id="common.status" />
               </Typography>
@@ -372,8 +370,7 @@ const EventForm = (props: EventFormProps) => {
           <Box>
             <Typography
               variant="caption"
-              color="text.secondary"
-              sx={{ mb: 0.5, display: "block" }}
+              sx={{ color: "text.secondary", mb: 0.5, display: "block" }}
             >
               <FormattedMessage id="admin.events.form.image.label" />
             </Typography>

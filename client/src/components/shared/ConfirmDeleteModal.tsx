@@ -1,4 +1,4 @@
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlined";
 import { Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
@@ -57,7 +57,7 @@ const ConfirmDeleteModal = ({
       <StyledDialogContent>
         <MessageBox hasError={Boolean(error)}>
           <WarningIcon />
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {message}
           </Typography>
         </MessageBox>

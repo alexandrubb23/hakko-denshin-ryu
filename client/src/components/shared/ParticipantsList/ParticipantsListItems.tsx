@@ -29,12 +29,12 @@ const ParticipantsListItems = ({ students, renderAction }: Props) => (
           </StyledListItemAvatar>
           <StyledListItemText
             primary={
-              <Typography variant="body2" fontWeight={600}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {student.name}
               </Typography>
             }
             secondary={
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" sx={{ color: "text.secondary" }}>
                 {student.email}
               </Typography>
             }

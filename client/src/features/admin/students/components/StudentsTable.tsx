@@ -1,5 +1,5 @@
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import PeopleIcon from "@mui/icons-material/People";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
@@ -62,7 +62,7 @@ const StudentsTable = ({
 
   if (isError) {
     return (
-      <Typography color="error" mt={4}>
+      <Typography color="error" sx={{ mt: 4 }}>
         <FormattedMessage id="admin.students.table.error" />
       </Typography>
     );
@@ -74,14 +74,10 @@ const StudentsTable = ({
     return (
       <Paper
         elevation={0}
-        sx={{
-          p: 6,
-          textAlign: "center",
-          backgroundColor: SURFACE_BG,
-        }}
+        sx={{ p: 6, textAlign: "center", backgroundColor: SURFACE_BG }}
       >
         <PeopleIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
-        <Typography color="text.secondary">
+        <Typography sx={{ color: "text.secondary" }}>
           <FormattedMessage id="admin.students.table.empty" />
         </Typography>
       </Paper>
@@ -162,14 +158,13 @@ const StudentsTable = ({
                   <Typography
                     component="span"
                     variant="body2"
-                    fontWeight={600}
-                    sx={{ verticalAlign: "middle" }}
+                    sx={{ fontWeight: 600, verticalAlign: "middle" }}
                   >
                     {student.name}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {student.email}
                   </Typography>
                 </TableCell>
@@ -184,7 +179,7 @@ const StudentsTable = ({
                       category={student.category}
                     />
                   ) : (
-                    <Typography variant="body2" color="text.disabled">
+                    <Typography variant="body2" sx={{ color: "text.disabled" }}>
                       —
                     </Typography>
                   )}
@@ -213,7 +208,7 @@ const StudentsTable = ({
                   </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {intl.formatDate(student.createdAt)}
                   </Typography>
                 </TableCell>

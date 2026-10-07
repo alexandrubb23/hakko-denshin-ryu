@@ -17,8 +17,8 @@ const ParticipantsList = ({ students, isLoading, renderAction }: Props) => {
 
   if (!students?.length) {
     return (
-      <Box p={4} textAlign="center">
-        <Typography color="text.secondary">
+      <Box sx={{ p: 4, textAlign: "center" }}>
+        <Typography sx={{ color: "text.secondary" }}>
           <FormattedMessage id="shared.participants.empty" />
         </Typography>
       </Box>
