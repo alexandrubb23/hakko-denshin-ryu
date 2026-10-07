@@ -1,6 +1,6 @@
 import React from "react";
 import type { IntlShape } from "react-intl";
-import { matchPath } from "react-router";
+import { type Params, matchPath } from "react-router";
 
 import Events from "@features/admin/events/components/Events";
 import Students from "@features/admin/students/components/Students";
@@ -10,13 +10,14 @@ import Dashboard from "@features/dashboard/Dashboard";
 import Contact from "@features/public/contact/Contact";
 import Dojo from "@features/public/dojo/Dojo";
 import EventDetail from "@features/public/events/EventDetail";
+import { fetchEventHead } from "@features/public/events/eventHead";
 import PublicEvents from "@features/public/events/PublicEvents";
 import KyuProgram from "@features/public/kyu-program/KyuProgram";
 import Schedule from "@features/public/schedule/Schedule";
 import Senshinkan from "@features/public/senshinkan/Senshinkan";
 import Techniques from "@features/public/techniques/Techniques";
 
-import { DOJO_NAME, SITE_NAME } from "@constants/brand";
+import { DOJO_NAME, SITE_NAME, brandedTitle } from "@constants/brand";
 import HakkoRyuRGB from "@features/public/hakko-ryu/HakkoRyu";
 import Home from "@features/public/home/Home";
 import { normalizePath } from "@utils/routes";
@@ -39,6 +40,14 @@ export type PagePath =
   | "events/:slug"
   | "admin/events";
 
+/** A page's own head tags, read from what it shows (e.g. its event) */
+export interface PageHead {
+  title: string;
+  description: string;
+  /** Absolute; when absent, the page's `ogImage` */
+  image?: string;
+}
+
 export interface Page {
   path: PagePath;
   /** Translation ID of the document title (without the brand suffix) */
@@ -50,6 +59,8 @@ export interface Page {
   ogImage?: string;
   bgImage?: string;
   hideFromNav?: boolean;
+  /** The page keeps the document title itself, e.g. naming what it loads */
+  ownTitle?: boolean;
   /** Keep the page out of search engines */
   noIndex?: boolean;
   /** The page opens on a moon cover with its own arc menu, so it has no header */
@@ -58,6 +69,8 @@ export interface Page {
   adminOnly?: boolean;
   standalone?: boolean;
   loader?: () => Promise<unknown>;
+  /** Server-side, the head tags taken from what the page shows */
+  head?: (params: Params, locale: string) => Promise<PageHead>;
   component: React.FC<{ data: any }>;
 }
 
@@ -186,6 +199,9 @@ export const pages: Page[] = [
     ogImage: "/og/events.jpg",
     cover: true,
     hideFromNav: true,
+    // Named after the event: by the server, then by the page once it loads
+    head: ({ slug = "" }, locale) => fetchEventHead(slug, locale),
+    ownTitle: true,
     // Every id renders the same placeholder until the page shows the event
     noIndex: true,
   },
@@ -218,14 +234,22 @@ export const NOT_FOUND_PAGE: PageMeta = {
 /** Pages listed in the site menus (header, mobile drawer, home arc) */
 export const navPages = pages.filter((page) => !page.hideFromNav);
 
+/** The page served at `pathname`, and the params its path reads from it */
+export const matchPage = (pathname: string) => {
+  for (const page of pages) {
+    const match = matchPath(normalizePath(page.path), pathname);
+    if (match) return { page, params: match.params };
+  }
+  return undefined;
+};
+
 /** The page served at `pathname` (e.g. "/" or "/events/taikai-2026"), if any */
-export const findPage = (pathname: string) =>
-  pages.find((page) => matchPath(normalizePath(page.path), pathname));
+export const findPage = (pathname: string) => matchPage(pathname)?.page;
 
 export const getPageTitle = (
   page: PageTitle,
   intl: Pick<IntlShape, "formatMessage">
-) => `${intl.formatMessage({ id: page.titleId })} - ${page.titleSuffix}`;
+) => brandedTitle(intl.formatMessage({ id: page.titleId }), page.titleSuffix);
 
 export const getPageDescription = (
   page: Pick<Page, "descriptionId"> | undefined,

@@ -19,6 +19,7 @@ import {
 } from "./EventDetail.style";
 import { formatEventType } from "./eventType";
 import { countEventDays, formatEventSpan } from "./formatEventDate";
+import ShareEvent from "./ShareEvent";
 import TicketsButton from "./TicketsButton";
 
 interface FactProps {
@@ -44,7 +45,7 @@ const Fact = ({ icon, label, value, note }: FactProps) => (
   </Box>
 );
 
-/** The event at a glance: what, when and where, and its tickets */
+/** The event at a glance: what, when and where, its tickets and sharing */
 const EventFacts = ({ event }: { event: Event }) => {
   const intl = useIntl();
 
@@ -80,6 +81,8 @@ const EventFacts = ({ event }: { event: Event }) => {
       />
 
       {event.ticketUrl && <TicketsButton href={event.ticketUrl} />}
+
+      <ShareEvent event={event} />
     </Box>
   );
 };

@@ -6,9 +6,10 @@ import {
 
 import type { Event, EventSession } from "@api/events";
 import { API_URL } from "@api/http";
-import { ApiRoutes, Routes } from "@lib/routes";
+import { ApiRoutes } from "@lib/routes";
 import { escapeHtml } from "@utils/string";
 
+import { eventPageUrl } from "./eventMeta";
 import { dojoDate, lastMoment } from "./formatEventDate";
 
 /** A span of whole dojo-local days, `end` excluded: "2025-05-29"–"2025-06-01" */
@@ -141,7 +142,7 @@ export const calendarLinks = (
   session: EventSession | undefined,
   origin: string
 ): Record<CalendarKey, string> => {
-  const pageUrl = `${origin}${Routes.eventDetail(event.slug)}`;
+  const pageUrl = eventPageUrl(origin, event.slug);
   const entry = session
     ? sessionCalendarEntry(event, session, pageUrl)
     : eventCalendarEntry(event, pageUrl);

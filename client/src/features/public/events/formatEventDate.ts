@@ -81,6 +81,12 @@ export const formatEventSpan = (
     lastMoment(sessions)
   );
 
+/** When and where: "29–31 May 2025 · Belgium" */
+export const formatEventWhenWhere = (
+  locale: string,
+  event: { sessions: SessionTimes[]; location: string }
+): string => `${formatEventSpan(locale, event.sessions)} · ${event.location}`;
+
 /** Calendar days the event spans, first and last included */
 export const countEventDays = (sessions: SessionTimes[]): number => {
   const first = Date.parse(dojoDate(new Date(sessions[0].startsAt)));

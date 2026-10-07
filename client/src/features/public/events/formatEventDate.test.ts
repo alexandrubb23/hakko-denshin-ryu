@@ -6,6 +6,7 @@ import {
   formatDuration,
   formatEventSessions,
   formatEventSpan,
+  formatEventWhenWhere,
 } from "./formatEventDate";
 
 // 18:30–20:30 Fri, 10:00–13:00 Sat in Bucharest (UTC+3 in October)
@@ -41,6 +42,14 @@ describe("formatEventSessions", () => {
     expect(formatEventSessions("en-GB", [CAMP])).toEqual([
       "20 Jul 2025, 08:00 – 25 Jul 2025, 18:00",
     ]);
+  });
+});
+
+describe("formatEventWhenWhere", () => {
+  it("shows the event's days, then its place", () => {
+    expect(
+      formatEventWhenWhere("en-GB", { sessions: WEEKEND, location: "Iasi" })
+    ).toBe("23–24 Oct 2026 · Iasi");
   });
 });
 

@@ -2,7 +2,6 @@ import { SxProps, Theme } from "@mui/material";
 
 import { sectionNumberSx } from "@components/ui/PageSections/PageSections.style";
 import { DISPLAY_FONT, KANJI_FONT, TITLE_GLOW } from "@style/art";
-import { listResetSx } from "@style/list";
 import {
   BORDER_COLOR,
   BORDER_HOVER,
@@ -17,6 +16,7 @@ import {
   WHITE_ALPHA_10,
   WHITE_ALPHA_75,
 } from "@style/colorScheme";
+import { listResetSx } from "@style/list";
 import { mergeSx } from "@utils/sx";
 
 // ─── Frame ────────────────────────────────────────────────────────────────────
@@ -106,21 +106,6 @@ export const brandTaglineSx: SxProps<Theme> = {
 export const socialListSx: SxProps<Theme> = {
   gap: 1.5,
   mt: 3,
-};
-
-export const socialLinkSx: SxProps<Theme> = {
-  display: "grid",
-  placeItems: "center",
-  width: 40,
-  height: 40,
-  borderRadius: "50%",
-  border: `1px solid ${BORDER_COLOR}`,
-  color: PURPLE,
-  transition: "border-color 0.3s ease, background-color 0.3s ease",
-  "&:hover, &:focus-visible": {
-    borderColor: BORDER_HOVER,
-    backgroundColor: PURPLE_ALPHA_08,
-  },
 };
 
 // ─── Columns ──────────────────────────────────────────────────────────────────

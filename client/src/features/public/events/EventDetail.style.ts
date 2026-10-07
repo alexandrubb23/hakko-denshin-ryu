@@ -9,6 +9,7 @@ import {
   linkButtonSx,
   photoFrameSx,
 } from "@components/ui/PageSections/PageSections.style";
+import { roundIconLinkSx } from "@components/ui/SocialLinks/SocialLinks.style";
 import { DISPLAY_FONT } from "@style/art";
 import {
   BORDER_COLOR,
@@ -124,7 +125,6 @@ export const sessionWeekdaySx: SxProps<Theme> = mergeSx(kanjiCardTitleSx, {
 
 export const sessionDateSx: SxProps<Theme> = {
   color: TEXT_MUTED,
-  padding: 0,
 };
 
 export const sessionDividerSx: SxProps<Theme> = {
@@ -191,4 +191,38 @@ export const calendarMenuIconSx: SxProps<Theme> = {
   // Level with the label, above the hint
   alignSelf: "flex-start",
   mt: 0.75,
+};
+
+// ─── Share ────────────────────────────────────────────────────────────────────
+
+// The foot of the facts panel, under a rule
+export const shareSx: SxProps<Theme> = {
+  borderTop: `1px solid ${BORDER_COLOR}`,
+  pt: 2.5,
+};
+
+export const shareRowSx: SxProps<Theme> = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: 1.5,
+  mt: 1.5,
+};
+
+// The round social links, also as buttons
+export const shareButtonSx: SxProps<Theme> = mergeSx(roundIconLinkSx, {
+  p: 0,
+  background: "none",
+  cursor: "pointer",
+  font: "inherit",
+  // Purple whether link or button: outranks the light scheme's ink for links
+  "&&, &&:hover": { color: PURPLE },
+  "&:focus-visible": { outline: `2px solid ${PURPLE}`, outlineOffset: 2 },
+});
+
+// Room kept for the notice, so the panel doesn't jump when it shows
+export const shareNoticeSx: SxProps<Theme> = {
+  minHeight: "1.5em",
+  mt: 1,
+  fontSize: "0.85rem",
+  color: TEXT_MUTED,
 };

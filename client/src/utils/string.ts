@@ -30,3 +30,11 @@ export const padNumber = (n: number) => String(n).padStart(2, "0");
 /** "vineri" → "Vineri" */
 export const capitalize = (value: string) =>
   value.charAt(0).toLocaleUpperCase() + value.slice(1);
+
+/** At most `length` characters on one line, cut at a word: "Two days of…" */
+export const truncate = (text: string, length: number) => {
+  const flat = text.replace(/\s+/g, " ").trim();
+  if (flat.length <= length) return flat;
+  const lastSpace = flat.slice(0, length).lastIndexOf(" ");
+  return `${flat.slice(0, lastSpace > 0 ? lastSpace : length).trimEnd()}…`;
+};

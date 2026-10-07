@@ -11,6 +11,8 @@ import LinkButton from "@components/ui/PageSections/LinkButton";
 import PageSection from "@components/ui/PageSections/PageSection";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import NotFound from "@features/public/not-found/NotFound";
+import useCurrentPage from "@hooks/useCurrentPage";
+import useDocumentTitle from "@hooks/useDocumentTitle";
 import { Routes } from "@lib/routes";
 import { SKELETON_SX } from "@style/colorScheme";
 import { isNotFoundError } from "@utils/getServerError";
@@ -24,10 +26,11 @@ import {
   posterSx,
 } from "./EventDetail.style";
 import EventFacts from "./EventFacts";
+import { eventTitle } from "./eventMeta";
 import { EVENTS_MOON_ART } from "./eventsArt";
 import EventSessionCard from "./EventSessionCard";
 import { formatEventType } from "./eventType";
-import { formatEventSpan } from "./formatEventDate";
+import { formatEventWhenWhere } from "./formatEventDate";
 import { useEventBySlug } from "./hooks/useEventBySlug";
 import TicketsButton from "./TicketsButton";
 
@@ -99,7 +102,7 @@ const EventContent = ({ event }: { event: Event }) => {
           { type }
         )}
         title={stripDiacritics(event.name)}
-        tagline={`${formatEventSpan(intl.locale, event.sessions)} · ${event.location}`}
+        tagline={formatEventWhenWhere(intl.locale, event)}
         action={
           <>
             {event.ticketUrl && <TicketsButton href={event.ticketUrl} />}
@@ -181,10 +184,17 @@ const LoadingCover = () => (
 /** One event, opened from its card at /events/:slug */
 const EventDetail = () => {
   const { slug = "" } = useParams();
+  const page = useCurrentPage();
   const { data: event, error, isError } = useEventBySlug(slug);
+  const notFound = isNotFoundError(error);
+
+  // Named after the event once it loads; the not-found page names itself,
+  // and while loading the title stays (the server already named the event)
+  const failed = isError && !notFound;
+  useDocumentTitle(event ? eventTitle(event) : failed ? page : undefined);
 
   if (event) return <EventContent event={event} />;
-  if (isNotFoundError(error)) return <NotFound />;
+  if (notFound) return <NotFound />;
   if (isError) {
     return (
       <EventCover
