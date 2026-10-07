@@ -12,8 +12,11 @@ export const INTRO_LINES = ["line1", "line2"] as const;
 export const INTRO_WORDS = ["quote", ...INTRO_LINES] as const;
 export type IntroWords = (typeof INTRO_WORDS)[number];
 
+/** The words, then the dojo's name, in the order they're shown */
+export const INTRO_BEATS = [...INTRO_WORDS, "title"] as const;
+
 /** Which words are on screen */
-export type IntroBeat = "none" | IntroWords | "title";
+export type IntroBeat = "none" | (typeof INTRO_BEATS)[number];
 
 // The intro's timeline, in ms from its start
 const SHOWN_AT = 80;
@@ -56,6 +59,8 @@ const useIntroTimeline = (
   const [{ beats, exitAt }] = useState(() => introTimeline(textOf));
   const [stage, setStage] = useState<IntroStage>("dark");
   const [beat, setBeat] = useState<IntroBeat>("none");
+  // The latest words shown, kept through the pauses between them
+  const [reached, setReached] = useState<IntroBeat>("none");
   const [skipShown, setSkipShown] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const exited = useRef(false);
@@ -82,7 +87,12 @@ const useIntroTimeline = (
     timers.current = [
       setTimeout(() => setStage("shown"), SHOWN_AT),
       setTimeout(() => setSkipShown(true), SKIP_SHOWN_AT),
-      ...beats.map(([at, next]) => setTimeout(() => setBeat(next), at)),
+      ...beats.map(([at, next]) =>
+        setTimeout(() => {
+          setBeat(next);
+          if (next !== "none") setReached(next);
+        }, at)
+      ),
       setTimeout(exit, exitAt),
     ];
     return () => timers.current.forEach(clearTimeout);
@@ -93,7 +103,7 @@ const useIntroTimeline = (
     if (e.key === "Escape") exit();
   });
 
-  return { stage, beat, skipShown, skip: exit };
+  return { stage, beat, reached, skipShown, skip: exit };
 };
 
 export default useIntroTimeline;

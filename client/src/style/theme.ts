@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material";
 
+import InterItalic from "@assets/fonts/Inter-Italic.ttf";
 import Inter from "@assets/fonts/Inter.ttf";
 import Jarene from "@assets/fonts/Jarene.otf";
 import Rubik from "@assets/fonts/Rubik.ttf";
@@ -115,6 +116,13 @@ const theme = createTheme({
           font-display: swap;
           font-weight: 400;
           src: local('Inter'), url(${Inter}) format('opentype');
+        }
+        @font-face {
+          font-family: 'Inter';
+          font-style: italic;
+          font-display: swap;
+          font-weight: 400;
+          src: local('Inter Italic'), url(${InterItalic}) format('opentype');
         }
         body {
           background-color: var(--body-background);

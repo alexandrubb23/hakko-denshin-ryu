@@ -16,6 +16,14 @@ import {
   WHITE_ALPHA_85,
 } from "@style/tokens";
 
+import {
+  PAINTING,
+  WALK_CELL,
+  WALK_FEET_Y,
+  WALK_STOPS,
+  type WalkStop,
+} from "./walkSheet";
+
 // The intro is always on the night background, so its text keeps the dark
 // scheme's colours in either scheme
 
@@ -44,8 +52,10 @@ const ART_TRANSFORM: Record<IntroStage, string> = {
   exit: "scale(1.7)",
 };
 
+/** The painting and its walker, moved together as one scene */
 export const introArtSx = (stage: IntroStage): SxProps<Theme> => ({
   ...moonlitPathArt(ART_SIZE, "38%"),
+  position: "relative",
   transform: ART_TRANSFORM[stage],
   transformOrigin: "50% 62%",
   opacity: stage === "shown" ? 1 : 0,
@@ -56,6 +66,40 @@ export const introArtSx = (stage: IntroStage): SxProps<Theme> => ({
       ? "transform 1.8s cubic-bezier(0.4, 0, 0.6, 0.6), opacity 1.6s ease-in, filter 1.2s ease-in"
       : "transform 11s cubic-bezier(0.2, 0.6, 0.2, 1), opacity 3s ease-out",
   [REDUCED_MOTION]: { transform: "none", filter: "none" },
+});
+
+export const introPlateSx: SxProps<Theme> = {
+  display: "block",
+  width: "100%",
+  height: "100%",
+};
+
+const percentOf = (px: number, of: number) => `${(px / of) * 100}%`;
+
+/** One stop up the path, fading in and away as he's seen there */
+export const introWalkStopSx = (
+  { x, y, scale }: WalkStop,
+  visible: boolean
+): SxProps<Theme> => ({
+  position: "absolute",
+  left: percentOf(x - WALK_CELL.width / 2, PAINTING),
+  top: percentOf(y - WALK_FEET_Y, PAINTING),
+  width: percentOf(WALK_CELL.width, PAINTING),
+  height: percentOf(WALK_CELL.height, PAINTING),
+  overflow: "hidden",
+  transform: `scale(${scale})`,
+  transformOrigin: `50% ${percentOf(WALK_FEET_Y, WALK_CELL.height)}`,
+  opacity: visible ? 1 : 0,
+  transition: `opacity ${BEAT_FADE}ms ease-in-out`,
+});
+
+/** The walk sheet, showing the drawing of the stop at `index` */
+export const introWalkSheetSx = (index: number): SxProps<Theme> => ({
+  display: "block",
+  width: `${WALK_STOPS.length * 100}%`,
+  height: "100%",
+  maxWidth: "none",
+  transform: `translateX(${percentOf(-index, WALK_STOPS.length)})`,
 });
 
 /** Cinematic bars that close in over the top and bottom, then open again */

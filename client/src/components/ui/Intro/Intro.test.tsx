@@ -7,12 +7,13 @@ import { messages } from "../../../i18n/messages";
 import Intro from "./Intro";
 import useIntroTimeline, {
   EXIT_HANDOFF,
-  INTRO_WORDS,
+  INTRO_BEATS,
   type IntroBeat,
   introTimeline,
   type IntroWords,
   SKIP_SHOWN_AT,
 } from "./useIntroTimeline";
+import { WALK_STOPS } from "./walkSheet";
 
 // The intro times itself by the words it shows, here in English
 const textOf = (words: IntroWords) => messages.en[`intro.${words}`];
@@ -86,7 +87,33 @@ describe("Intro", () => {
       const { beat } = result.current;
       if (beat !== "none" && beat !== seen.at(-1)) seen.push(beat);
     }
-    expect(seen).toEqual([...INTRO_WORDS, "title"]);
+    expect(seen).toEqual(INTRO_BEATS);
+  });
+
+  it("keeps the latest words reached through the pause after them", () => {
+    const { beats } = introTimeline(textOf);
+    const [, [quoteGoneAt]] = beats;
+    const { result } = renderHook(() => useIntroTimeline(vi.fn(), textOf));
+    expect(result.current.reached).toBe("none");
+
+    act(() => vi.advanceTimersByTime(quoteGoneAt));
+    expect(result.current.beat).toBe("none");
+    expect(result.current.reached).toBe("quote");
+  });
+
+  it("has a stop up the path for each beat", () => {
+    expect(WALK_STOPS).toHaveLength(INTRO_BEATS.length);
+  });
+
+  it("shows the practitioner at each of his stops up the empty path", () => {
+    const { container } = renderUi(<Intro onEnd={vi.fn()} />);
+    const art = [...container.querySelectorAll("img")].map((img) =>
+      img.getAttribute("src")
+    );
+    expect(art).toEqual([
+      expect.stringContaining("loader-path-empty"),
+      ...WALK_STOPS.map(() => expect.stringContaining("intro-walk")),
+    ]);
   });
 
   it("shows its lines in the visitor's language", () => {
