@@ -14,6 +14,7 @@ import useActiveAnchors from "@hooks/useActiveAnchors";
 import { prefersReducedMotion } from "@style/art";
 
 import {
+  ROW,
   tocDotSx,
   tocListSx,
   tocRailSx,
@@ -36,9 +37,6 @@ interface Props {
   /** Called when a row is followed */
   onNavigate?: () => void;
 }
-
-/** The rows, in order: what the line is measured against */
-const ROW = "a[href]";
 
 const rowsOf = (element: HTMLElement) =>
   element.querySelectorAll<HTMLAnchorElement>(ROW);
@@ -81,7 +79,8 @@ const TocList = ({ rows, onNavigate }: Props) => {
   });
 
   // Brings the row being read to the list's middle: at once the first time,
-  // smoothly after. Not while hidden (a closed panel), which has no layout.
+  // smoothly after. Not while hidden (a closed panel), which has no layout;
+  // `spans` is remeasured once it shows, which brings this round again.
   useEffect(() => {
     const area = areaRef.current;
     if (!area || area.clientHeight === 0 || !current) return;
@@ -98,7 +97,7 @@ const TocList = ({ rows, onNavigate }: Props) => {
         scrolledRef.current && !prefersReducedMotion() ? "smooth" : "instant",
     });
     scrolledRef.current = true;
-  }, [ids, current]);
+  }, [ids, current, spans]);
 
   const thumb =
     range && spans.length === rows.length

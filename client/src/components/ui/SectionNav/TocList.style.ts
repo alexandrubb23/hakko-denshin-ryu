@@ -16,7 +16,10 @@ import theme from "@style/theme";
 const LINE_X = 8;
 const DOT_SIZE = 4;
 
-const THUMB_TRANSITION = `${theme.transitions.duration.shortest}ms ${theme.transitions.easing.easeInOut}`;
+/** The rows, in order: what the line is measured against */
+export const ROW = "a[href]";
+
+const THUMB_TRANSITION =`${theme.transitions.duration.shortest}ms ${theme.transitions.easing.easeInOut}`;
 
 // Scrolls on its own, without a scrollbar; its ends fade out, so a row cut
 // by the edge reads as more to scroll to
@@ -43,9 +46,9 @@ export const tocListSx: SxProps<Theme> = {
   display: "flex",
   flexDirection: "column",
 
-  "& a[href]": { color: TEXT_MUTED },
-  "@media (hover: hover)": { "& a[href]:hover": { color: TEXT_PRIMARY } },
-  '& a[href][data-active="true"]': { color: PURPLE },
+  [`& ${ROW}`]: { color: TEXT_MUTED },
+  "@media (hover: hover)": { [`& ${ROW}:hover`]: { color: TEXT_PRIMARY } },
+  [`& ${ROW}[data-active="true"]`]: { color: PURPLE },
 };
 
 // The faint line along every row
@@ -90,7 +93,7 @@ export const tocRowSx: SxProps<Theme> = {
   fontSize: "0.875rem",
   lineHeight: 1.43,
   overflowWrap: "anywhere",
-  transition: "color 150ms ease",
+  transition: `color ${theme.transitions.duration.shortest}ms ease`,
   "&:first-of-type": { pt: 0 },
   "&:last-of-type": { pb: 0 },
 };
