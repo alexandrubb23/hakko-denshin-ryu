@@ -5,6 +5,8 @@ import type {
   UpdateEventInput,
   UpsertEventParticipationInput,
 } from "@hakko/core";
+import type { AxiosRequestConfig } from "axios";
+
 import { ApiRoutes } from "@lib/routes";
 
 import { Http } from "./http";
@@ -19,6 +21,8 @@ export interface EventSession {
 export interface Event {
   id: string;
   name: string;
+  /** URL-safe name, unique across events: /events/:slug */
+  slug: string;
   type: EventType;
   status: EventStatus;
   startDate: string;
@@ -59,8 +63,12 @@ class EventsApi extends Http {
     return data.events;
   }
 
-  async fetchEvent(id: string): Promise<Event> {
-    const { data } = await this.http.get(ApiRoutes.event(id));
+  /** A published event, by its slug; 404 when there is none */
+  async fetchEvent(
+    slug: string,
+    config?: Pick<AxiosRequestConfig, "timeout">
+  ): Promise<Event> {
+    const { data } = await this.http.get(ApiRoutes.event(slug), config);
     return data.event;
   }
 

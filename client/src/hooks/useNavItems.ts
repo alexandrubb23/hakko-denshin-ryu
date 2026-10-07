@@ -1,4 +1,4 @@
-import { useLocation } from "react-router";
+import { matchPath, useLocation } from "react-router";
 
 import { authClient } from "@lib/auth-client";
 import { normalizePath } from "@utils/routes";
@@ -28,7 +28,8 @@ const useNavItems = (): NavItem[] => {
         page.path === "login" && session
           ? "header.menu.login.authenticated"
           : (`header.menu.${page.path}` as IntlMessageID),
-      isActive: pathname === to,
+      // Nested pages (e.g. one event) keep their section marked
+      isActive: !!matchPath({ path: to, end: to === "/" }, pathname),
     };
   });
 };

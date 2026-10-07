@@ -1,11 +1,5 @@
-import { useLocation } from "react-router";
+import useCurrentPage from "./useCurrentPage";
 
-import { pages } from "../pages";
-const useBackgroundImage = () => {
-  const { pathname } = useLocation();
-
-  const path = pathname === "/" ? "home" : pathname;
-  return pages.find((page) => page.path === path)?.bgImage;
-};
+const useBackgroundImage = () => useCurrentPage()?.bgImage;
 
 export default useBackgroundImage;

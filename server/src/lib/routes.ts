@@ -10,7 +10,8 @@ export const ApiRoutes = {
   techniques: "/api/techniques",
   kyuProgram: "/api/kyu-program",
   events: "/api/events",
-  event: "/api/events/:id",
+  event: "/api/events/:slug",
+  eventCalendar: "/api/events/:slug/calendar.ics",
   adminRanks: "/api/admin/ranks",
   adminStudents: "/api/admin/students",
   adminStudent: "/api/admin/students/:id",
@@ -32,4 +33,5 @@ export const ApiRoutes = {
 
 export const ClientRoutes = {
   setPassword: "/set-password",
+  eventDetail: (slug: string) => `/events/${slug}`,
 } as const;

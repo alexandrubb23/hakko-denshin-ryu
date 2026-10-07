@@ -3,24 +3,25 @@ import ProtectedRoute from "@components/ProtectedRoute";
 import DashboardLayout from "@components/ui/DashboardLayout/DashboardLayout";
 import StudentDetail from "@features/admin/students/components/StudentDetail";
 import NotFound from "@features/public/not-found/NotFound";
+import useCurrentPage from "@hooks/useCurrentPage";
 import useDocumentTitle from "@hooks/useDocumentTitle";
 import useScrollToTop from "@hooks/useScrollToTop";
 import { useViewTransitionCommit } from "@hooks/useViewTransitionNavigate";
 import { normalizePath } from "@utils/routes";
-import { Route, Routes, useLocation } from "react-router";
+import { Route, Routes } from "react-router";
 import App from "./App";
-import { findPage, pages } from "./pages";
+import { pages } from "./pages";
 
 interface AppRoutesProps {
   initialLoaderData: any;
 }
 
 export const AppRoutes = ({ initialLoaderData }: AppRoutesProps) => {
-  const { pathname } = useLocation();
   useScrollToTop();
   useViewTransitionCommit();
 
-  useDocumentTitle(findPage(pathname));
+  const page = useCurrentPage();
+  useDocumentTitle(page?.ownTitle ? undefined : page);
 
   const standalonePages = pages.filter((p) => p.standalone);
   const publicPages = pages.filter((p) => !p.protected && !p.standalone);

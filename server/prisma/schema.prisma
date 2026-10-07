@@ -176,6 +176,8 @@ model StudentAttendance {
 model Event {
   id           String               @id @default(cuid())
   name         String
+  /// URL-safe form of the name, e.g. "taikai-2026"; /events/:slug
+  slug         String               @unique
   type         EventType
   status       EventStatus          @default(draft)
   startDate    DateTime

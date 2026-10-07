@@ -4,10 +4,11 @@ import {
   upsertEventParticipationSchema,
 } from "@hakko/core";
 import { Router } from "express";
-import { EventStatus, Role } from "../generated/prisma/enums.js";
+import { env } from "../env.js";
+import { Role } from "../generated/prisma/enums.js";
 import { uploadEventImage } from "../lib/cloudinary.js";
 import { HttpNotFoundError } from "../lib/http-errors.js";
-import { ApiRoutes } from "../lib/routes.js";
+import { ApiRoutes, ClientRoutes } from "../lib/routes.js";
 import { validate } from "../lib/validate.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
@@ -17,27 +18,33 @@ import {
   findAdminEvents,
   findEventById,
   findEventParticipants,
+  findPublishedEventBySlug,
   findPublishedEvents,
   softDeleteEvent,
   updateEvent,
   updateEventImage,
   upsertEventParticipation,
 } from "../repositories/events.repository.js";
+import { buildEventCalendar } from "../utils/ical.js";
 import { requireFile, requireId } from "../utils/request.js";
+import { isSlug } from "../utils/slug.js";
 import { requireStudent } from "../utils/student.js";
 
 const router = Router();
 
-const requireEvent = async (id: string, adminView = false) => {
+/** Any not deleted event, published or not, for the admin routes */
+const requireEvent = async (id: string) => {
   const event = await findEventById(id);
   if (!event || event.deletedAt !== null) {
     throw new HttpNotFoundError("Event not found");
   }
+  return event;
+};
 
-  if (!adminView && event.status !== EventStatus.published) {
-    throw new HttpNotFoundError("Event not found");
-  }
-
+/** A published, not deleted event, by its slug */
+const requirePublishedEvent = async (slug: string) => {
+  const event = isSlug(slug) ? await findPublishedEventBySlug(slug) : null;
+  if (!event) throw new HttpNotFoundError("Event not found");
   return event;
 };
 
@@ -48,11 +55,31 @@ router.get(ApiRoutes.events, async (_req, res) => {
   res.json({ events });
 });
 
+// The public event page; a malformed slug 404s like an unknown one
 router.get(ApiRoutes.event, async (req, res) => {
-  const id = requireId(req);
-  const event = await requireEvent(id);
-  const { deletedAt: _d, updatedAt: _u, ...rest } = event;
-  res.json({ event: rest });
+  const event = await requirePublishedEvent(req.params.slug);
+  res.json({ event });
+});
+
+// The event's sessions for calendar apps, or just `?session=<id>`
+router.get(ApiRoutes.eventCalendar, async (req, res) => {
+  const event = await requirePublishedEvent(req.params.slug);
+  const { session } = req.query;
+  const sessions =
+    typeof session === "string"
+      ? event.sessions.filter(({ id }) => id === session)
+      : event.sessions;
+  if (!sessions.length) throw new HttpNotFoundError("Session not found");
+
+  const calendar = buildEventCalendar({
+    ...event,
+    pageUrl: `${env.CLIENT_URL}${ClientRoutes.eventDetail(event.slug)}`,
+    sessions,
+  });
+  res
+    .type("text/calendar; charset=utf-8")
+    .attachment(`${event.slug}.ics`)
+    .send(calendar);
 });
 
 // ─── Admin routes ─────────────────────────────────────────────────────────────
@@ -86,7 +113,7 @@ router.put(
   requireRole(Role.admin),
   async (req, res) => {
     const id = requireId(req);
-    await requireEvent(id, true);
+    await requireEvent(id);
 
     const { ticketUrl, ...rest } = validate(updateEventSchema, req.body);
 
@@ -105,7 +132,7 @@ router.delete(
   requireRole(Role.admin),
   async (req, res) => {
     const id = requireId(req);
-    await requireEvent(id, true);
+    await requireEvent(id);
     await softDeleteEvent(id);
     res.status(204).end();
   }
@@ -118,7 +145,7 @@ router.post(
   uploadMiddleware,
   async (req, res) => {
     const id = requireId(req);
-    const event = await requireEvent(id, true);
+    const event = await requireEvent(id);
 
     const file = requireFile(req);
 
@@ -139,7 +166,7 @@ router.get(
   requireRole(Role.admin),
   async (req, res) => {
     const id = requireId(req);
-    await requireEvent(id, true);
+    await requireEvent(id);
     const participants = await findEventParticipants(id);
     res.json({ participants });
   }
@@ -151,7 +178,7 @@ router.post(
   requireRole(Role.admin),
   async (req, res) => {
     const id = requireId(req);
-    await requireEvent(id, true);
+    await requireEvent(id);
 
     const { userId, attended } = validate(
       upsertEventParticipationSchema,

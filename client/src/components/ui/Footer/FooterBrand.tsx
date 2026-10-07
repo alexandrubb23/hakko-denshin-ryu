@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import LogoIcon from "@assets/images/logo.webp";
 import FormattedMessage from "@components/ui/FormattedMessage/FormattedMessage";
 import SocialLinks from "@components/ui/SocialLinks/SocialLinks";
+import { roundIconLinkSx } from "@components/ui/SocialLinks/SocialLinks.style";
 import TransitionLink from "@components/ui/TransitionLink/TransitionLink";
 import { DOJO_KANJI, DOJO_NAME } from "@constants/brand";
 import { Routes } from "@lib/routes";
@@ -13,7 +14,6 @@ import {
   brandLogoSx,
   brandNameSx,
   brandTaglineSx,
-  socialLinkSx,
   socialListSx,
 } from "./Footer.style";
 
@@ -36,7 +36,7 @@ const FooterBrand = () => (
     <Typography sx={brandTaglineSx}>
       <FormattedMessage id="page.home.subtitle" />
     </Typography>
-    <SocialLinks sx={socialListSx} linkSx={socialLinkSx} />
+    <SocialLinks sx={socialListSx} linkSx={roundIconLinkSx} />
   </Box>
 );
 

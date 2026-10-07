@@ -35,7 +35,7 @@ const DeleteRankModal = ({ studentId, entry, open, onClose }: Props) => {
       onError: (err) =>
         setError(
           translateError(getServerError(err)) ??
-            intl.formatMessage({ id: "admin.ranks.delete.error" }),
+            intl.formatMessage({ id: "admin.ranks.delete.error" })
         ),
     });
   };
@@ -48,9 +48,13 @@ const DeleteRankModal = ({ studentId, entry, open, onClose }: Props) => {
         <FormattedMessage
           id="admin.ranks.delete.message"
           values={{
-            name: <strong style={{ color: "white" }}>{entry.rank.name}</strong>,
+            name: (
+              <strong key="name" style={{ color: "white" }}>
+                {entry.rank.name}
+              </strong>
+            ),
             date: (
-              <strong style={{ color: "white" }}>
+              <strong key="date" style={{ color: "white" }}>
                 {new Date(entry.awardedAt).toLocaleDateString(intl.locale)}
               </strong>
             ),

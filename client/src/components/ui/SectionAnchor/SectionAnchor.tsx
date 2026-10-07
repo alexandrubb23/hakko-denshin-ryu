@@ -1,10 +1,10 @@
 import CheckIcon from "@mui/icons-material/Check";
 import LinkIcon from "@mui/icons-material/Link";
 import { IconButton, Tooltip, type SxProps, type Theme } from "@mui/material";
-import { useState } from "react";
 import { useIntl } from "react-intl";
-import { useTimeout } from "usehooks-ts";
 
+import useTransientState from "@hooks/useTransientState";
+import { copyToClipboard } from "@utils/clipboard";
 import { stripDiacritics } from "@utils/string";
 import { mergeSx } from "@utils/sx";
 
@@ -30,9 +30,7 @@ interface Props {
  */
 const SectionAnchor = ({ id, sx }: Props) => {
   const intl = useIntl();
-  const [copied, setCopied] = useState(false);
-
-  useTimeout(() => setCopied(false), copied ? COPIED_MS : null);
+  const [copied, showCopied] = useTransientState<true>(COPIED_MS);
 
   const handleClick = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -40,12 +38,8 @@ const SectionAnchor = ({ id, sx }: Props) => {
     url.hash = id;
     // The address bar shows the link too, should the clipboard be unavailable
     history.replaceState(history.state, "", url);
-    try {
-      await navigator.clipboard.writeText(url.href);
-      setCopied(true);
-    } catch {
-      // Insecure context or permission denied: the address bar has the link
-    }
+    // Otherwise (insecure context, permission denied) the address bar has it
+    if (await copyToClipboard(url.href)) showCopied(true);
   };
 
   return (
