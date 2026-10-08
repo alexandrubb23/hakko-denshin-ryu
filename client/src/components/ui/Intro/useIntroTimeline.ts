@@ -5,12 +5,12 @@ import { getQuoteDisplayTime } from "@utils/time";
 
 import { BEAT_FADE, type IntroStage } from "./Intro.style";
 
-/** The lines shown in turn below the quote, each keyed `intro.<line>` */
-export const INTRO_LINES = ["line1", "line2"] as const;
-
-/** The words shown in turn before the title: the quote mid-screen, then the lines */
-export const INTRO_WORDS = ["quote", ...INTRO_LINES] as const;
+/** The words shown in turn before the title, each keyed `intro.<words>` */
+export const INTRO_WORDS = ["quote", "line1", "line2"] as const;
 export type IntroWords = (typeof INTRO_WORDS)[number];
+
+/** The words long enough to wrap onto more than one line */
+export const WRAPPING_WORDS: IntroWords = "quote";
 
 /** The words, then the dojo's name, in the order they're shown */
 export const INTRO_BEATS = [...INTRO_WORDS, "title"] as const;

@@ -13,8 +13,6 @@ import {
   introLineSx,
   introNameSx,
   introPlateSx,
-  introQuoteSx,
-  introQuoteTitleSx,
   introSkipSx,
   introSx,
   introTextSx,
@@ -25,8 +23,9 @@ import {
 } from "./Intro.style";
 import useIntroTimeline, {
   INTRO_BEATS,
-  INTRO_LINES,
+  INTRO_WORDS,
   type IntroWords,
+  WRAPPING_WORDS,
 } from "./useIntroTimeline";
 import { WALK_STOPS } from "./walkSheet";
 
@@ -37,10 +36,9 @@ interface Props {
 
 /**
  * The welcome on a session's first visit: the lone practitioner's moonlit
- * path draws into view between cinematic bars; a quote rises mid-screen, then
- * two lines and the dojo's name rise in turn below, the practitioner seen
- * further up the path with each, then the scene is walked into as the page
- * fades in.
+ * path draws into view between cinematic bars; a quote, two lines and the
+ * dojo's name rise in turn at the bottom, the practitioner seen further up the
+ * path with each, then the scene is walked into as the page fades in.
  */
 const Intro = ({ onEnd }: Props) => {
   const intl = useIntl();
@@ -52,8 +50,8 @@ const Intro = ({ onEnd }: Props) => {
     onEnd,
     textOf
   );
-  // He stands at the first stop from the start until the lines begin, then
-  // is seen at each next stop with its words, the last held with the name
+  // He stands at the first stop from the start through the quote, then is
+  // seen at each next stop with its words, the last held with the name
   const atStop = (i: number) =>
     i === 0
       ? reached === "none" || reached === INTRO_BEATS[0]
@@ -85,16 +83,13 @@ const Intro = ({ onEnd }: Props) => {
       <Box sx={letterboxSx("top", stage)} />
       <Box sx={letterboxSx("bottom", stage)} />
 
-      <Box sx={introQuoteSx} aria-hidden>
-        <Typography sx={introQuoteTitleSx(beat === "quote")}>
-          {textOf("quote")}
-        </Typography>
-      </Box>
-
       <Box sx={introTextSx} aria-hidden>
-        {INTRO_LINES.map((id) => (
-          <Typography key={id} sx={introLineSx(beat === id)}>
-            {textOf(id)}
+        {INTRO_WORDS.map((words) => (
+          <Typography
+            key={words}
+            sx={introLineSx(beat === words, words === WRAPPING_WORDS)}
+          >
+            {textOf(words)}
           </Typography>
         ))}
         <Box sx={introTitleSx(titleShown)}>

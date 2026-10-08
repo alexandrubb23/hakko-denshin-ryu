@@ -117,7 +117,7 @@ export const letterboxSx = (
   transition: "height 1.2s cubic-bezier(0.65, 0, 0.35, 1)",
 });
 
-const textLayerSx = {
+export const introTextSx: SxProps<Theme> = {
   position: "absolute",
   left: 0,
   right: 0,
@@ -127,37 +127,32 @@ const textLayerSx = {
   px: 3,
   textAlign: "center",
   pointerEvents: "none",
-} as const;
-
-export const introTextSx: SxProps<Theme> = {
-  ...textLayerSx,
   bottom: `calc(${LETTERBOX_HEIGHT} + clamp(32px, 9dvh, 96px))`,
-  // The lines and the title share one spot, one fading out before the next
+  // The words and the title share one spot, one fading out before the next
   "& > *": { gridArea: "1 / 1" },
-};
-
-/** The opening quote, alone in the middle of the screen */
-export const introQuoteSx: SxProps<Theme> = {
-  ...textLayerSx,
-  top: 0,
-  bottom: 0,
 };
 
 /** How long a beat takes to drift in (and away), in ms */
 export const BEAT_FADE = 1200;
-
-const BEAT_FADE_TRANSITION = `opacity ${BEAT_FADE}ms ease-in-out, filter ${BEAT_FADE}ms ease-in-out`;
 
 /** Each beat drifts in out of a blur, letters settling together, then away */
 const beatSx = (visible: boolean): SxProps<Theme> => ({
   opacity: visible ? 1 : 0,
   filter: visible ? "blur(0)" : "blur(8px)",
   transform: visible ? "translateY(0)" : "translateY(12px)",
-  transition: `${BEAT_FADE_TRANSITION}, transform 1.6s ease-out, letter-spacing 2.6s ease-out`,
+  transition: `opacity ${BEAT_FADE}ms ease-in-out, filter ${BEAT_FADE}ms ease-in-out, transform 1.6s ease-out, letter-spacing 2.6s ease-out`,
   [REDUCED_MOTION]: { filter: "none", transform: "none" },
 });
 
-export const introLineSx = (visible: boolean): SxProps<Theme> => ({
+/**
+ * One of the words at the bottom. Those too long for one line (`wraps`) are
+ * set in a fixed block of even lines, their letters held still, as settling
+ * letters would shift words between the lines.
+ */
+export const introLineSx = (
+  visible: boolean,
+  wraps: boolean
+): SxProps<Theme> => ({
   ...beatSx(visible),
   fontFamily: DISPLAY_FONT,
   textTransform: "uppercase",
@@ -165,32 +160,13 @@ export const introLineSx = (visible: boolean): SxProps<Theme> => ({
   // On a phone the wide spacing wraps a line that fits once settled, so it
   // would jump between two lines and one as it comes and goes: there the
   // letters hold still
-  letterSpacing: { xs: "0.12em", sm: visible ? "0.12em" : "0.32em" },
+  letterSpacing: {
+    xs: "0.12em",
+    sm: visible || wraps ? "0.12em" : "0.32em",
+  },
+  ...(wraps && { maxWidth: "32em", textWrap: "balance" }),
   color: WHITE_ALPHA_85,
   textShadow: `0 0 32px ${PURPLE_ALPHA_30}, 0 2px 12px ${NIGHT_BLACK}`,
-  p: 0,
-});
-
-/**
- * The opening quote, set as a film's title card: large and widely spaced, it
- * fades in a touch close and slowly settles back while it's read, then drifts
- * on towards the viewer as it fades away
- */
-export const introQuoteTitleSx = (visible: boolean): SxProps<Theme> => ({
-  ...beatSx(visible),
-  transform: visible ? "scale(1)" : "scale(1.08)",
-  transition: `${BEAT_FADE_TRANSITION}, transform 7s cubic-bezier(0.2, 0.6, 0.2, 1)`,
-  fontFamily: DISPLAY_FONT,
-  textTransform: "uppercase",
-  fontSize: "clamp(1.6rem, 4.8vw, 4.2rem)",
-  lineHeight: 1.25,
-  // It wraps, so the spacing holds still rather than shifting its lines
-  letterSpacing: "0.1em",
-  // A few balanced lines rather than one long one
-  maxWidth: "17em",
-  textWrap: "balance",
-  color: TEXT_PRIMARY,
-  textShadow: `0 0 48px ${PURPLE_ALPHA_30}, 0 2px 16px ${NIGHT_BLACK}`,
   p: 0,
 });
 
