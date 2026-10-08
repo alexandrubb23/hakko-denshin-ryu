@@ -1,5 +1,7 @@
 import { useCallback, useLayoutEffect, useState } from "react";
 
+import { getSearchParams } from "@utils/routes";
+
 const WELCOMED_KEY = "intro-seen";
 
 // `?intro` in the address plays it again, e.g. to show it off
@@ -35,9 +37,7 @@ const useIntro = () => {
   const [done, setDone] = useState(false);
 
   useLayoutEffect(() => {
-    const replay = new URLSearchParams(window.location.search).has(
-      REPLAY_PARAM
-    );
+    const replay = getSearchParams().has(REPLAY_PARAM);
     if (!replay && (wasWelcomed() || navigator.webdriver)) setDone(true);
     else setPlay(true);
   }, []);

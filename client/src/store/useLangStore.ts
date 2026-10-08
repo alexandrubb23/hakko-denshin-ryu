@@ -1,7 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type Lang = "ro" | "en";
+import { getSearchParams } from "@utils/routes";
+
+const LANGS = ["ro", "en"] as const;
+export type Lang = (typeof LANGS)[number];
+
+const isLang = (value: string | null): value is Lang =>
+  LANGS.includes(value as Lang);
 
 interface LangStore {
   lang: Lang;
@@ -11,7 +17,7 @@ interface LangStore {
   setHydrated: () => void;
 }
 
-const DEFAULT_LANG = "ro";
+const DEFAULT_LANG: Lang = "ro";
 export const LANG_STORAGE_KEY = "lang-storage";
 
 const useLangStore = create<LangStore>()(
@@ -27,10 +33,15 @@ const useLangStore = create<LangStore>()(
     {
       name: LANG_STORAGE_KEY,
       onRehydrateStorage: () => (state) => {
+        // A `?lang=ro|en` link picks the language, and it's saved like a
+        // switcher click. Applied before `hydrated` so nothing shows in the
+        // stored language first.
+        const queryLang = getSearchParams().get("lang");
+        if (isLang(queryLang)) state?.setLang(queryLang);
         state?.setHydrated();
       },
-    },
-  ),
+    }
+  )
 );
 
 export default useLangStore;

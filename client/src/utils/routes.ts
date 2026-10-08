@@ -7,3 +7,7 @@ export const normalizePath = (path: string) => {
   const normalized = trimmed === "home" ? "/" : trimmed;
   return normalized === "/" ? normalized : `/${normalized}`;
 };
+
+/** The current address's query parameters; browser only */
+export const getSearchParams = () =>
+  new URLSearchParams(window.location.search);
