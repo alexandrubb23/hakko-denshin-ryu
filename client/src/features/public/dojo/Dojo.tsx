@@ -12,6 +12,7 @@ import Paragraphs from "@components/ui/PageSections/Paragraphs";
 import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
+import bowLowQualityImage from "@assets/images/264-small.webp";
 import bowImage from "@assets/images/264.webp";
 import classLowQualityArt from "@assets/images/dojo-class-small.webp";
 import classHighQualityArt from "@assets/images/dojo-class.webp";
@@ -44,7 +45,12 @@ const Dojo = () => (
       title="Senshinkan"
       tagline={<FormattedMessage id="page.dojo.hero.tagline" />}
       aboveTitle={
-        <CoverPhoto src={bowImage} aspectRatio="5 / 6" sx={coverPhotoSx} />
+        <CoverPhoto
+          src={bowImage}
+          lowQualitySrc={bowLowQualityImage}
+          aspectRatio="5 / 6"
+          sx={coverPhotoSx}
+        />
       }
     />
 

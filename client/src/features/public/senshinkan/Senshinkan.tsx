@@ -11,6 +11,7 @@ import PullQuote from "@components/ui/PageSections/PullQuote";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import { hombuRichText } from "@constants/hombuRichText";
 
+import pinLowQualityImage from "@assets/images/200-small.webp";
 import pinImage from "@assets/images/200.webp";
 import clubLowQualityImage from "@assets/images/279-small.webp";
 import clubHighQualityImage from "@assets/images/279.webp";
@@ -27,7 +28,13 @@ const Senshinkan = () => (
       eyebrow={<FormattedMessage id="page.senshinkan.hero.eyebrow" />}
       title="Senshinkan"
       tagline={<FormattedMessage id="page.senshinkan.hero.tagline" />}
-      aboveTitle={<CoverPhoto src={pinImage} sx={coverPhotoSx} />}
+      aboveTitle={
+        <CoverPhoto
+          src={pinImage}
+          lowQualitySrc={pinLowQualityImage}
+          sx={coverPhotoSx}
+        />
+      }
     />
 
     <Container maxWidth="lg">

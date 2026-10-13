@@ -15,6 +15,7 @@ import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import SectionNav from "@components/ui/SectionNav/SectionNav";
 import type { SectionNavSection } from "@components/ui/SectionNav/sections";
 
+import wristLockLowQualityImage from "@assets/images/53-small.webp";
 import wristLockImage from "@assets/images/53.webp";
 import valleyArt from "@assets/images/hakko-ryu-valley.webp";
 import suwariArt from "@assets/syllabus/suwari.webp";
@@ -71,7 +72,12 @@ const HakkoRyu = () => (
       eyebrow={<FormattedMessage id="page.hakko-ryu.hero.eyebrow" />}
       title="Hakko Ryu"
       subtitle={<FormattedMessage id="page.hakko-ryu.hero.subtitle" />}
-      aboveTitle={<CoverPhoto src={wristLockImage} />}
+      aboveTitle={
+        <CoverPhoto
+          src={wristLockImage}
+          lowQualitySrc={wristLockLowQualityImage}
+        />
+      }
     />
 
     <Container maxWidth="lg">

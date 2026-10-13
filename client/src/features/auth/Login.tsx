@@ -6,6 +6,7 @@ import MoonCover from "@components/ui/MoonCover/MoonCover";
 import { authClient } from "@lib/auth-client";
 import { Routes } from "@lib/routes";
 
+import coverLowQualityImage from "@assets/images/26-small.webp";
 import coverImage from "@assets/images/26.webp";
 
 import LoginForm from "./LoginForm";
@@ -34,7 +35,13 @@ const Login = () => {
       wideArtFade={LOCKED_DOOR_FADE}
       onArt={<LoginForm />}
       onArtBelowMenu
-      aboveTitle={<CoverPhoto src={coverImage} sx={coverPhotoSx} />}
+      aboveTitle={
+        <CoverPhoto
+          src={coverImage}
+          lowQualitySrc={coverLowQualityImage}
+          sx={coverPhotoSx}
+        />
+      }
     />
   );
 };

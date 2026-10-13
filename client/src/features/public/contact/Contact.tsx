@@ -11,6 +11,7 @@ import PhotoSplit from "@components/ui/PageSections/PhotoSplit";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 import { Routes } from "@lib/routes";
 
+import coverLowQualityImage from "@assets/images/7-small.webp";
 import coverImage from "@assets/images/7.webp";
 import pathArt from "@assets/images/contact-path.webp";
 import welcomeLowQualityArt from "@assets/images/contact-welcome-small.webp";
@@ -30,7 +31,13 @@ const Contact = () => (
       title={<FormattedMessage id="page.contact.title" />}
       compactTitle
       tagline={<FormattedMessage id="page.contact.description" />}
-      aboveTitle={<CoverPhoto src={coverImage} sx={coverPhotoSx} />}
+      aboveTitle={
+        <CoverPhoto
+          src={coverImage}
+          lowQualitySrc={coverLowQualityImage}
+          sx={coverPhotoSx}
+        />
+      }
     />
 
     <Container maxWidth="lg">

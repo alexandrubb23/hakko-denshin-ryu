@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export type UseProgressiveImg = {
   lowQualitySrc: string;
+  /** Empty to stay on `lowQualitySrc`, e.g. while the image is hidden */
   highQualitySrc: string;
 };
 
@@ -15,8 +16,10 @@ const useProgressiveImg = ({
   lowQualitySrc,
   highQualitySrc,
 }: UseProgressiveImg): [src: string, BlurImg] => {
-  const [src, setSrc] = useState(lowQualitySrc);
-  const [isBlurred, setIsBlurred] = useState(!loaded.has(highQualitySrc));
+  // A cached image shows straight away, without a frame of its placeholder
+  const cached = loaded.has(highQualitySrc);
+  const [src, setSrc] = useState(cached ? highQualitySrc : lowQualitySrc);
+  const [isBlurred, setIsBlurred] = useState(!cached);
 
   useEffect(() => {
     if (!lowQualitySrc || !highQualitySrc) {

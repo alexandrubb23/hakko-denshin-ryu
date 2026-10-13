@@ -134,8 +134,11 @@ export const heroPetalsSx =
 // wide screens only. It takes only the room left over: its content is laid
 // over it (`heroAboveTitleContentSx`), so even a large photo can't grow the
 // cover and push the title down
+// The breakpoint from which the cover shows `aboveTitle`
+export const ABOVE_TITLE_FROM = "lg";
+
 export const heroAboveTitleSx: SxProps<Theme> = {
-  display: { xs: "none", lg: "block" },
+  display: { xs: "none", [ABOVE_TITLE_FROM]: "block" },
   position: "relative",
   // Over the art, which reaches this far left on some covers
   zIndex: 1,

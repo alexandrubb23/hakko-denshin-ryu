@@ -7,6 +7,7 @@ import MoonCover from "@components/ui/MoonCover/MoonCover";
 import PageSection from "@components/ui/PageSections/PageSection";
 import SectionHeading from "@components/ui/PageSections/SectionHeading";
 
+import clubLowQualityImage from "@assets/images/279-small.webp";
 import clubImage from "@assets/images/279.webp";
 
 import { EVENTS_MOON_ART } from "./eventsArt";
@@ -22,7 +23,12 @@ const PublicEvents = () => (
       title={<FormattedMessage id="page.events.title" />}
       tagline={<FormattedMessage id="page.events.hero.tagline" />}
       aboveTitle={
-        <CoverPhoto src={clubImage} aspectRatio="2 / 3" sx={coverPhotoSx} />
+        <CoverPhoto
+          src={clubImage}
+          lowQualitySrc={clubLowQualityImage}
+          aspectRatio="2 / 3"
+          sx={coverPhotoSx}
+        />
       }
     />
 

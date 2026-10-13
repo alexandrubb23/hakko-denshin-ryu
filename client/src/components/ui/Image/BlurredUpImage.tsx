@@ -5,6 +5,8 @@ import useProgressiveImg, {
 } from "@hooks/useProgressiveImg";
 import { mergeSx } from "@utils/sx";
 
+import { blurUpStyle } from "./blurUp.style";
+
 type BlurredUpImageProps = UseProgressiveImg & {
   sx?: SxProps<Theme>;
   className?: string;
@@ -21,17 +23,15 @@ const BoxStyled = styled(Box, {
   src: string;
   alt?: string;
 }>(({ blur }) => ({
+  ...blurUpStyle(blur),
   backfaceVisibility: "hidden",
-  filter: blur ? "blur(10px)" : "none",
   height: "100%",
   maxHeight: "100vh",
   MozBackfaceVisibility: "hidden",
   objectFit: "cover",
   objectPosition: "center",
-  transition: blur ? "none" : "filter 0.3s ease-out",
   WebkitBackfaceVisibility: "hidden",
   width: "100%",
-  willChange: "filter",
 }));
 
 const BlurredUpImage = ({
