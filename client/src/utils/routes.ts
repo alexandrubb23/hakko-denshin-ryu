@@ -8,6 +8,10 @@ export const normalizePath = (path: string) => {
   return normalized === "/" ? normalized : `/${normalized}`;
 };
 
+/** The page's address search engines index: "https://senshinkan.ro/dojo" */
+export const canonicalUrl = (siteUrl: string, path: string) =>
+  `${siteUrl}${normalizePath(path)}`;
+
 /** The current address's query parameters; browser only */
 export const getSearchParams = () =>
   new URLSearchParams(window.location.search);

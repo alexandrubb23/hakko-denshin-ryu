@@ -234,6 +234,15 @@ export const NOT_FOUND_PAGE: PageMeta = {
 /** Pages listed in the site menus (header, mobile drawer, home arc) */
 export const navPages = pages.filter((page) => !page.hideFromNav);
 
+/** Whether search engines must keep the page out of their results */
+export const isNoIndex = (meta: Pick<PageMeta, "protected" | "noIndex">) =>
+  Boolean(meta.protected || meta.noIndex);
+
+/** Pages search engines may index, each at one fixed address */
+export const indexedPages = pages.filter(
+  (page) => !isNoIndex(page) && !page.path.includes(":")
+);
+
 /** The page served at `pathname`, and the params its path reads from it */
 export const matchPage = (pathname: string) => {
   for (const page of pages) {

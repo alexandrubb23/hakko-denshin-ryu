@@ -65,6 +65,33 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+/** @returns {Promise<typeof import('./src/entry-server.js')>} */
+const loadEntryServer = () =>
+  isProduction
+    ? import("./dist/server/entry-server.js")
+    : vite.ssrLoadModule("/src/entry-server.jsx");
+
+/** Answers a failed request with a 500, with the stack in development */
+const sendServerError = (res, e) => {
+  vite?.ssrFixStacktrace(e);
+  console.error(e.stack);
+  if (isProduction) {
+    res.status(500).send("Internal Server Error");
+  } else {
+    res.status(500).end(e.stack);
+  }
+};
+
+// The pages search engines may index, for Google Search Console
+app.get("/sitemap.xml", async (_req, res) => {
+  try {
+    const { sitemap } = await loadEntryServer();
+    res.type("application/xml").send(sitemap());
+  } catch (e) {
+    sendServerError(res, e);
+  }
+});
+
 // Serve HTML
 app.use("*all", async (req, res) => {
   try {
@@ -72,18 +99,14 @@ app.use("*all", async (req, res) => {
 
     /** @type {string} */
     let template;
-    /** @type {import('./src/entry-server.js').render} */
-    let render;
     if (!isProduction) {
       // Always read fresh template in development
       template = await fs.readFile("./index.html", "utf-8");
       template = await vite.transformIndexHtml(url, template);
-
-      render = (await vite.ssrLoadModule("/src/entry-server.jsx")).render;
     } else {
       template = templateHtml;
-      render = (await import("./dist/server/entry-server.js")).render;
     }
+    const { render } = await loadEntryServer();
 
     const rendered = await render(url);
 
@@ -96,13 +119,7 @@ app.use("*all", async (req, res) => {
       .set({ "Content-Type": "text/html" })
       .send(html);
   } catch (e) {
-    vite?.ssrFixStacktrace(e);
-    console.error(e.stack);
-    if (isProduction) {
-      res.status(500).send("Internal Server Error");
-    } else {
-      res.status(500).end(e.stack);
-    }
+    sendServerError(res, e);
   }
 });
 

@@ -8,7 +8,7 @@ import Providers from "@providers/Providers";
 import type { ServerResponse } from "@providers/ServerResponse";
 import useLangStore from "@store/useLangStore";
 import { prefetch } from "@utils/api-requests";
-import { normalizePath } from "@utils/routes";
+import { canonicalUrl, normalizePath } from "@utils/routes";
 import { escapeHtml } from "@utils/string";
 import { AppRoutes } from "./AppRoutes";
 import createEmotionCache from "./createEmotionCache";
@@ -20,8 +20,10 @@ import {
   findPage,
   getPageDescription,
   getPageTitle,
+  isNoIndex,
   matchPage,
 } from "./pages";
+import { renderSitemap } from "./sitemap";
 
 // Public origin used for canonical and social preview URLs
 const SITE_URL = (process.env.SITE_URL ?? "https://senshinkan.ro").replace(
@@ -29,6 +31,8 @@ const SITE_URL = (process.env.SITE_URL ?? "https://senshinkan.ro").replace(
   ""
 );
 const DEFAULT_OG_IMAGE = "/og/home.jpg";
+
+export const sitemap = () => renderSitemap(SITE_URL);
 
 /** The head tags the page at `pathname` takes from what it shows, if any */
 const fetchPageHead = async (
@@ -107,8 +111,8 @@ export async function render(url: string) {
     image,
     imageMeta,
   } = resolveHead(meta, response.status === 200 ? pageHead : null, intl);
-  const noIndex = meta?.protected || meta?.noIndex;
-  const pageUrl = `${SITE_URL}${normalizedPathname}`;
+  const noIndex = meta ? isNoIndex(meta) : false;
+  const pageUrl = canonicalUrl(SITE_URL, rawPathname);
 
   const emotionChunks = extractCriticalToChunks(html);
   const styles = constructStyleTagsFromChunks(emotionChunks);

@@ -6,3 +6,6 @@ Disallow: /kyu-program
 Disallow: /admin/
 Disallow: /login
 Disallow: /set-password
+
+# The domain must match the client's SITE_URL
+Sitemap: https://senshinkan.ro/sitemap.xml
